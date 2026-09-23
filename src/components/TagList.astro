@@ -1,0 +1,64 @@
+---
+interface Props {
+  tags: readonly string[];
+  size?: 'sm' | 'md';
+}
+
+const { tags, size = 'md' } = Astro.props;
+---
+
+<ul class:list={['tag-list', `tag-list--${size}`]} aria-label="标签">
+  {tags.map((tag) => (
+    <li>
+      <a class="tag-list__item" href={`/tags/${tag}/`}>
+        <span class="tag-list__hash" aria-hidden="true">#</span>{tag}
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .tag-list {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .tag-list li { margin: 0; }
+
+  .tag-list__item {
+    display: inline-block;
+    padding: 0 var(--space-3);
+    height: 26px;
+    line-height: 24px;
+    color: var(--text-secondary);
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-default);
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+  }
+
+  .tag-list--sm .tag-list__item {
+    height: 22px;
+    line-height: 20px;
+    font-size: 0.75rem;
+    padding: 0 var(--space-2);
+  }
+
+  .tag-list__item:hover {
+    color: var(--accent-hover);
+    background: var(--accent-subtle);
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+
+  .tag-list__hash {
+    color: var(--text-muted);
+    margin-right: 1px;
+  }
+</style>

@@ -1,0 +1,208 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import TagList from '../components/TagList.astro';
+import { SITE, FEATURED_TAGS } from '../consts';
+import { getSortedPosts, getAllTags } from '../utils';
+
+const allPosts = await getSortedPosts();
+const featured = allPosts.filter((p) => p.data.featured);
+const recent = allPosts.slice(0, 6);
+const tagMap = await getAllTags();
+const popularTags = [...tagMap.entries()]
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 10)
+  .map(([tag]) => tag);
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="container container--narrow">
+      <p class="hero__eyebrow">{SITE.titleEn}</p>
+      <h1 class="hero__title">{SITE.title}</h1>
+      <p class="hero__lead">
+        一个散户的 <span class="up">实战复盘</span> 与 <span class="down">指标笔记</span>。
+        只记录真实下过的单、走过的弯路、以及仍然有效的思考方式。
+      </p>
+      <p class="hero__notice">
+        ⚠️ 本站仅作学习交流，<strong>不构成任何投资建议</strong>。
+      </p>
+    </div>
+  </section>
+
+  {featured.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <header class="section__header">
+          <h2>精选文章</h2>
+          <span class="section__divider" aria-hidden="true"></span>
+        </header>
+        <div class="grid grid--featured">
+          {featured.map((post) => <PostCard post={post} />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section">
+    <div class="container">
+      <header class="section__header">
+        <h2>最新发布</h2>
+        <a class="section__more" href="/posts/">查看全部 →</a>
+      </header>
+      {recent.length === 0 ? (
+        <p class="empty">暂无文章。运行 <code>npm run dev</code> 后，在 <code>src/content/posts/</code> 下添加 Markdown 即可。</p>
+      ) : (
+        <div class="grid">
+          {recent.map((post) => <PostCard post={post} />)}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container container--narrow">
+      <header class="section__header">
+        <h2>按主题浏览</h2>
+      </header>
+      <div class="tag-cloud">
+        {[...FEATURED_TAGS, ...popularTags.filter((t) => !FEATURED_TAGS.includes(t as never))]
+          .slice(0, 10)
+          .map((tag) => (
+            <a class="tag-cloud__chip" href={`/tags/${tag}/`}>
+              # {tag}
+              <span class="tag-cloud__count">{tagMap.get(tag) ?? 0}</span>
+            </a>
+          ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: var(--space-12) 0 var(--space-16);
+    text-align: center;
+  }
+
+  .hero__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 0 0 var(--space-3);
+  }
+
+  .hero__title {
+    margin: 0 0 var(--space-4);
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .hero__lead {
+    margin: 0 auto var(--space-4);
+    max-width: 36em;
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .hero__notice {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .section {
+    margin: var(--space-16) 0;
+  }
+
+  .section__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+  }
+
+  .section__header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  .section__divider {
+    flex: 1;
+    height: 1px;
+    background: var(--border-default);
+  }
+
+  .section__more {
+    font-size: 0.9375rem;
+    color: var(--accent);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .grid--featured {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+
+  .empty {
+    padding: var(--space-8);
+    text-align: center;
+    color: var(--text-muted);
+    background: var(--bg-subtle);
+    border-radius: var(--radius-lg);
+    border: 1px dashed var(--border-default);
+  }
+
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+  }
+
+  .tag-cloud__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: 999px;
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    transition: all var(--transition-fast);
+  }
+
+  .tag-cloud__chip:hover {
+    color: var(--accent-hover);
+    border-color: var(--accent);
+    background: var(--accent-subtle);
+    text-decoration: none;
+    transform: translateY(-1px);
+  }
+
+  .tag-cloud__count {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background: var(--bg-subtle);
+    padding: 0 var(--space-2);
+    border-radius: 999px;
+    min-width: 24px;
+    text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .hero__title { font-size: 2.25rem; }
+    .hero { padding: var(--space-8) 0 var(--space-12); }
+  }
+</style>

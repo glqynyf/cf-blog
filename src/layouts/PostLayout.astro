@@ -1,0 +1,125 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import TagList from '../components/TagList.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  tags: readonly string[];
+  minutesRead?: string;
+}
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  tags,
+  minutesRead,
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="container container--narrow">
+    <header class="post-header">
+      <h1 class="post-header__title">{title}</h1>
+      {description && <p class="post-header__lead">{description}</p>}
+      <div class="post-header__meta">
+        <FormattedDate date={pubDate} />
+        {updatedDate && (
+          <span class="post-header__meta-sep">·</span>
+          <span>更新于 <FormattedDate date={updatedDate} /></span>
+        )}
+        {minutesRead && (
+          <>
+            <span class="post-header__meta-sep">·</span>
+            <span>{minutesRead} 阅读</span>
+          </>
+        )}
+      </div>
+      {tags && tags.length > 0 && (
+        <div class="post-header__tags">
+          <TagList tags={tags} />
+        </div>
+      )}
+    </header>
+
+    <div class="prose post-content">
+      <slot />
+    </div>
+
+    <footer class="post-footer">
+      <hr />
+      <p class="post-footer__notice">
+        ⚠️ 本文为个人投资复盘与学习记录，<strong>不构成任何投资建议</strong>。入市有风险，决策需谨慎。
+      </p>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .post-header {
+    margin-bottom: var(--space-12);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--border-default);
+  }
+
+  .post-header__title {
+    margin: 0 0 var(--space-3);
+    font-size: 2.25rem;
+    line-height: 1.25;
+  }
+
+  .post-header__lead {
+    margin: 0 0 var(--space-4);
+    color: var(--text-secondary);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  .post-header__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    margin-bottom: var(--space-4);
+  }
+
+  .post-header__meta-sep {
+    color: var(--border-strong);
+  }
+
+  .post-header__tags {
+    margin-top: var(--space-3);
+  }
+
+  .post-content {
+    margin: var(--space-8) 0;
+  }
+
+  .post-footer__notice {
+    margin-top: var(--space-8);
+    padding: var(--space-4);
+    background: var(--bg-subtle);
+    border-left: 3px solid var(--up);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+  }
+
+  .post-footer__notice strong {
+    color: var(--up);
+  }
+
+  @media (max-width: 640px) {
+    .post-header__title {
+      font-size: 1.75rem;
+    }
+  }
+</style>

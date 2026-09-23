@@ -1,0 +1,80 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getAllTags, getSortedPosts } from '../../utils';
+
+export async function getStaticPaths() {
+  const tagMap = await getAllTags();
+  return [...tagMap.keys()].map((tag) => ({
+    params: { tag },
+  }));
+}
+
+const { tag } = Astro.params;
+const allPosts = await getSortedPosts();
+const posts = allPosts.filter((p) => p.data.tags.includes(tag!));
+---
+
+<BaseLayout
+  title={`#${tag}`}
+  description={`所有标签为「${tag}」的文章，共 ${posts.length} 篇。`}
+>
+  <section class="container container--narrow">
+    <header class="page-header">
+      <a class="page-header__back" href="/tags/">← 所有标签</a>
+      <h1># {tag}</h1>
+      <p class="page-header__lead">共 {posts.length} 篇文章。</p>
+    </header>
+
+    <div class="post-list">
+      {posts.map((post) => <PostCard post={post} />)}
+    </div>
+
+    {posts.length === 0 && (
+      <p class="empty">这个标签下还没有文章。</p>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    margin-bottom: var(--space-12);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--border-default);
+  }
+
+  .page-header__back {
+    display: inline-block;
+    margin-bottom: var(--space-3);
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .page-header__back:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .page-header h1 {
+    margin: 0 0 var(--space-3);
+    font-size: 2rem;
+    color: var(--accent);
+  }
+
+  .page-header__lead {
+    margin: 0;
+    color: var(--text-muted);
+  }
+
+  .post-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .empty {
+    text-align: center;
+    padding: var(--space-12);
+    color: var(--text-muted);
+  }
+</style>

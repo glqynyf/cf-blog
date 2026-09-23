@@ -1,0 +1,164 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '' } = Astro.props;
+
+const navItems = [
+  { href: '/', label: '首页' },
+  { href: '/posts', label: '文章' },
+  { href: '/tags', label: '标签' },
+  { href: '/about', label: '关于' },
+];
+
+function isActive(href: string): boolean {
+  if (href === '/') return currentPath === '/' || currentPath === '';
+  return currentPath.startsWith(href);
+}
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="site-brand" href="/">
+      <span class="site-brand__mark" aria-hidden="true">📈</span>
+      <span class="site-brand__text">
+        <span class="site-brand__title">盘面札记</span>
+        <span class="site-brand__subtitle">Trading Notes</span>
+      </span>
+    </a>
+
+    <nav class="site-nav" aria-label="主导航">
+      <ul class="site-nav__list">
+        {navItems.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class:list={['site-nav__link', { 'is-active': isActive(item.href) }]}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <ThemeToggle />
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg-page) 92%, transparent);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--border-default);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    height: 64px;
+  }
+
+  .site-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--text-primary);
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .site-brand:hover {
+    text-decoration: none;
+  }
+
+  .site-brand__mark {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .site-brand__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .site-brand__title {
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .site-brand__subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .site-nav {
+    flex: 1;
+  }
+
+  .site-nav__list {
+    display: flex;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .site-nav__list li { margin: 0; }
+
+  .site-nav__link {
+    display: inline-block;
+    padding: var(--space-2) var(--space-3);
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    text-decoration: none;
+  }
+
+  .site-nav__link:hover {
+    color: var(--text-primary);
+    background: var(--bg-subtle);
+    text-decoration: none;
+  }
+
+  .site-nav__link.is-active {
+    color: var(--accent);
+    background: var(--accent-subtle);
+  }
+
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 640px) {
+    .site-header__inner {
+      height: 56px;
+      gap: var(--space-3);
+    }
+
+    .site-brand__subtitle { display: none; }
+    .site-nav__link { padding: var(--space-2); font-size: 0.875rem; }
+  }
+</style>

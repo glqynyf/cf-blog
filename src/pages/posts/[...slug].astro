@@ -1,0 +1,38 @@
+---
+import { getCollection, render } from 'astro:content';
+import PostLayout from '../../layouts/PostLayout.astro';
+import { estimateMinutes } from '../../utils';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => {
+    return import.meta.env.DEV || data.draft !== true;
+  });
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, remarkPluginFrontmatter } = await render(post);
+
+// remarkPluginFrontmatter 可能包含 readingTime 等扩展信息
+const minutesRead = remarkPluginFrontmatter?.minutesRead ?? estimateMinutes(post.body);
+
+const minutesLabel = (() => {
+  if (typeof minutesRead === 'number') return `${minutesRead} 分钟`;
+  if (typeof minutesRead === 'string') return minutesRead;
+  return estimateMinutes(post.body);
+})();
+---
+
+<PostLayout
+  title={post.data.title}
+  description={post.data.summary}
+  pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
+  tags={post.data.tags}
+  minutesRead={minutesLabel}
+>
+  <Content />
+</PostLayout>

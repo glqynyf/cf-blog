@@ -1,0 +1,57 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <p class="site-footer__copy">
+      © {year} 盘面札记 · 仅记录个人思路，不构成任何投资建议
+    </p>
+    <p class="site-footer__meta">
+      <a href="/rss.xml">RSS</a>
+      <span aria-hidden="true">·</span>
+      <a href="/sitemap-index.xml">Sitemap</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-24);
+    padding: var(--space-12) 0;
+    border-top: 1px solid var(--border-default);
+    background: var(--bg-surface);
+  }
+
+  .site-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .site-footer__copy,
+  .site-footer__meta {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .site-footer__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .site-footer__meta a {
+    color: var(--text-secondary);
+  }
+
+  .site-footer__meta a:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+</style>

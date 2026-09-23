@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAllTags } from '../../utils';
+
+const tagMap = await getAllTags();
+const tags = [...tagMap.entries()].sort((a, b) => {
+  if (b[1] !== a[1]) return b[1] - a[1];
+  return a[0].localeCompare(b[0], 'zh-CN');
+});
+---
+
+<BaseLayout title="标签" description="按主题浏览所有内容。">
+  <section class="container container--narrow">
+    <header class="page-header">
+      <h1>标签</h1>
+      <p class="page-header__lead">共 {tags.length} 个主题。</p>
+    </header>
+
+    {tags.length === 0 ? (
+      <p class="empty">还没有任何标签。</p>
+    ) : (
+      <ul class="tag-grid">
+        {tags.map(([tag, count]) => (
+          <li>
+            <a class="tag-grid__item" href={`/tags/${tag}/`}>
+              <span class="tag-grid__name"># {tag}</span>
+              <span class="tag-grid__count">{count}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    margin-bottom: var(--space-12);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--border-default);
+  }
+
+  .page-header h1 {
+    margin: 0 0 var(--space-3);
+    font-size: 2rem;
+  }
+
+  .page-header__lead {
+    margin: 0;
+    color: var(--text-muted);
+  }
+
+  .tag-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--space-3);
+  }
+
+  .tag-grid li { margin: 0; }
+
+  .tag-grid__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    transition: all var(--transition-fast);
+  }
+
+  .tag-grid__item:hover {
+    border-color: var(--accent);
+    background: var(--accent-subtle);
+    text-decoration: none;
+    transform: translateY(-1px);
+  }
+
+  .tag-grid__name {
+    font-weight: 500;
+  }
+
+  .tag-grid__count {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    background: var(--bg-subtle);
+    padding: 0 var(--space-2);
+    border-radius: 999px;
+    min-width: 28px;
+    text-align: center;
+  }
+
+  .empty {
+    text-align: center;
+    padding: var(--space-12);
+    color: var(--text-muted);
+  }
+</style>

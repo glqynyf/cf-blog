@@ -1,0 +1,105 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from './FormattedDate.astro';
+import TagList from './TagList.astro';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const { title, summary, pubDate, tags } = post.data;
+---
+
+<article class="post-card">
+  <a class="post-card__link" href={`/posts/${post.slug}/`}>
+    <header class="post-card__header">
+      <h3 class="post-card__title">{title}</h3>
+      <FormattedDate date={pubDate} class="post-card__date" />
+    </header>
+    {summary && <p class="post-card__summary">{summary}</p>}
+    {tags && tags.length > 0 && (
+      <div class="post-card__tags">
+        <TagList tags={tags} size="sm" />
+      </div>
+    )}
+    <span class="post-card__cta" aria-hidden="true">阅读全文 →</span>
+  </a>
+</article>
+
+<style>
+  .post-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
+  }
+
+  .post-card:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .post-card__link {
+    display: block;
+    padding: var(--space-6);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .post-card__link:hover {
+    text-decoration: none;
+  }
+
+  .post-card__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .post-card__title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.4;
+  }
+
+  .post-card__date {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .post-card__summary {
+    margin: 0 0 var(--space-4);
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .post-card__tags {
+    margin-bottom: var(--space-4);
+  }
+
+  .post-card__cta {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .post-card:hover .post-card__cta {
+    color: var(--accent-hover);
+  }
+</style>
