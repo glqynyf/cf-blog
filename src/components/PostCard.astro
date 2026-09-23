@@ -12,7 +12,7 @@ const { title, summary, pubDate, tags } = post.data;
 ---
 
 <article class="post-card">
-  <a class="post-card__link" href={`/posts/${post.slug}/`}>
+  <a class="post-card__link" href={`/posts/${post.id}/`}>
     <header class="post-card__header">
       <h3 class="post-card__title">{title}</h3>
       <FormattedDate date={pubDate} class="post-card__date" />

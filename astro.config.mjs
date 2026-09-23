@@ -19,7 +19,8 @@ export default defineConfig({
   markdown: {
     shikiConfig: {
       theme: 'github-light',
-      langs: ['bash', 'python', 'javascript', 'typescript', 'json', 'yaml', 'md'],
+      // 不指定 langs：Shiki 默认已经覆盖 bash/python/js/ts/json/yaml 等常用语言
+      // 如需扩展冷门语言，再用 shiki/bundle/web 的导入式 API
       wrap: true,
     },
   },
