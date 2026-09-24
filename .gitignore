@@ -29,3 +29,5 @@ pnpm-debug.log*
 
 # misc
 *.log
+# 临时视频资料
+*.mp4
