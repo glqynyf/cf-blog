@@ -154,6 +154,24 @@
 }
 
 /* ==========================================================================
+   Shiki 代码块（双主题）
+   astro.config.mjs 配置了 themes: { light, dark }，
+   Shiki 会输出 --shiki-light / --shiki-dark 变量，
+   这里按站点主题切换 token 颜色与背景。
+   ========================================================================== */
+.astro-code,
+.astro-code span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+}
+
+:root[data-theme="dark"] .astro-code,
+:root[data-theme="dark"] .astro-code span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
+}
+
+/* ==========================================================================
    Reset & Base
    ========================================================================== */
 *,
