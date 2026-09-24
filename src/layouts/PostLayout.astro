@@ -3,6 +3,12 @@ import BaseLayout from './BaseLayout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import TagList from '../components/TagList.astro';
 
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
 interface Props {
   title: string;
   description?: string;
@@ -10,6 +16,8 @@ interface Props {
   updatedDate?: Date;
   tags: readonly string[];
   minutesRead?: string;
+  /** 从文章 Markdown 提取出的标题列表（Astro render() 返回的 headings） */
+  headings?: Heading[];
 }
 
 const {
@@ -19,48 +27,192 @@ const {
   updatedDate,
   tags,
   minutesRead,
+  headings = [],
 } = Astro.props;
+
+// 只显示 h2 / h3：h1 是文章标题本身，h4+ 太深不利于快速定位
+const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const showToc = tocItems.length >= 2;
 ---
 
 <BaseLayout title={title} description={description}>
-  <article class="container container--narrow">
-    <header class="post-header">
-      <h1 class="post-header__title">{title}</h1>
-      {description && <p class="post-header__lead">{description}</p>}
-      <div class="post-header__meta">
-        <FormattedDate date={pubDate} />
-        {updatedDate && (
-          <span class="post-header__meta-sep">·</span>
-          <span>更新于 <FormattedDate date={updatedDate} /></span>
-        )}
-        {minutesRead && (
-          <>
+  <div class:list={['post-layout', { 'post-layout--with-toc': showToc }]}>
+    {showToc && (
+      <aside class="post-toc" aria-label="文章目录">
+        <nav class="post-toc__inner">
+          <p class="post-toc__title">本页目录</p>
+          <ol class="post-toc__list">
+            {tocItems.map((heading) => (
+              <li
+                class:list={[
+                  'post-toc__item',
+                  `post-toc__item--depth-${heading.depth}`,
+                ]}
+              >
+                <a
+                  href={`#${heading.slug}`}
+                  class="post-toc__link"
+                  data-toc-link={heading.slug}
+                >
+                  {heading.text}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      </aside>
+    )}
+
+    <article class="post-article">
+      <header class="post-header">
+        <h1 class="post-header__title">{title}</h1>
+        {description && <p class="post-header__lead">{description}</p>}
+        <div class="post-header__meta">
+          <FormattedDate date={pubDate} />
+          {updatedDate && (
             <span class="post-header__meta-sep">·</span>
-            <span>{minutesRead} 阅读</span>
-          </>
-        )}
-      </div>
-      {tags && tags.length > 0 && (
-        <div class="post-header__tags">
-          <TagList tags={tags} />
+            <span>更新于 <FormattedDate date={updatedDate} /></span>
+          )}
+          {minutesRead && (
+            <>
+              <span class="post-header__meta-sep">·</span>
+              <span>{minutesRead} 阅读</span>
+            </>
+          )}
         </div>
-      )}
-    </header>
+        {tags && tags.length > 0 && (
+          <div class="post-header__tags">
+            <TagList tags={tags} />
+          </div>
+        )}
+      </header>
 
-    <div class="prose post-content">
-      <slot />
-    </div>
+      <div class="prose post-content">
+        <slot />
+      </div>
 
-    <footer class="post-footer">
-      <hr />
-      <p class="post-footer__notice">
-        ⚠️ 本文为个人投资复盘与学习记录，<strong>不构成任何投资建议</strong>。入市有风险，决策需谨慎。
-      </p>
-    </footer>
-  </article>
+      <footer class="post-footer">
+        <hr />
+        <p class="post-footer__notice">
+          ⚠️ 本文为个人投资复盘与学习记录，<strong>不构成任何投资建议</strong>。入市有风险，决策需谨慎。
+        </p>
+      </footer>
+    </article>
+  </div>
 </BaseLayout>
 
 <style>
+  /* ==============================
+     整体布局：左目录 + 右正文
+     ============================== */
+  .post-layout {
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+  }
+
+  .post-layout--with-toc {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: var(--space-8);
+    justify-content: center;
+    align-items: start;
+  }
+
+  /* ==============================
+     左侧目录（sticky 跟随）
+     ============================== */
+  .post-toc {
+    position: sticky;
+    top: 96px;
+    align-self: start;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    /* 滚动条美化 */
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+
+  .post-toc::-webkit-scrollbar {
+    width: 4px;
+  }
+  .post-toc::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 999px;
+  }
+
+  .post-toc__inner {
+    padding: var(--space-4) var(--space-4) var(--space-4) 0;
+    border-left: 1px solid var(--border-default);
+    padding-left: var(--space-4);
+  }
+
+  .post-toc__title {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .post-toc__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: toc-counter;
+  }
+
+  .post-toc__item {
+    margin: 0;
+  }
+
+  .post-toc__item--depth-3 {
+    padding-left: var(--space-4);
+  }
+
+  .post-toc__link {
+    display: block;
+    padding: var(--space-2) 0;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    margin-left: calc(-1 * var(--space-4));
+    padding-left: calc(var(--space-3));
+    transition: color var(--transition-fast),
+      border-color var(--transition-fast);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .post-toc__link:hover {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    text-decoration: none;
+  }
+
+  .post-toc__link.is-active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* ==============================
+     文章主区域
+     ============================== */
+  .post-article {
+    min-width: 0;
+    max-width: var(--container-narrow);
+  }
+
+  /* 在宽屏 + 有目录时，让文章本身不再受 container--narrow 限制，由 grid 控制宽度 */
+  .post-layout--with-toc .post-article {
+    max-width: none;
+  }
+
   .post-header {
     margin-bottom: var(--space-12);
     padding-bottom: var(--space-6);
@@ -122,4 +274,75 @@ const {
       font-size: 1.75rem;
     }
   }
+
+  /* ==============================
+     响应式：≤1024px 隐藏左侧目录
+     ============================== */
+  @media (max-width: 1024px) {
+    .post-layout--with-toc {
+      grid-template-columns: 1fr;
+    }
+    .post-toc {
+      display: none;
+    }
+  }
 </style>
+
+<script>
+  /**
+   * 滚动时高亮当前章节的目录项
+   * - 使用 IntersectionObserver 监听所有 h2/h3
+   * - 当前可见的章节 → 在 TOC 里标记 is-active
+   */
+  function initTocHighlight() {
+    const tocLinks = document.querySelectorAll<HTMLAnchorElement>(
+      '[data-toc-link]'
+    );
+    if (tocLinks.length === 0) return;
+
+    const items = Array.from(tocLinks)
+      .map((link) => {
+        const slug = link.getAttribute('data-toc-link');
+        return { slug, link, el: slug ? document.getElementById(slug) : null };
+      })
+      .filter(
+        (item): item is { slug: string; link: HTMLAnchorElement; el: HTMLElement } =>
+          item.el !== null
+      );
+
+    if (items.length === 0) return;
+
+    function clearActive() {
+      items.forEach(({ link }) => link.classList.remove('is-active'));
+    }
+
+    function setActive(slug: string) {
+      clearActive();
+      const target = items.find((i) => i.slug === slug);
+      target?.link.classList.add('is-active');
+    }
+
+    // 视口顶部预留 96px（让出 sticky header），底边留 60%，
+    // 进入这个区域视为"当前在读"的章节
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // 找出当前所有"在读"项里位置最高的那个
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible.length > 0) {
+          const id = visible[0].target.id;
+          setActive(id);
+        }
+      },
+      {
+        rootMargin: '-96px 0px -60% 0px',
+        threshold: 0,
+      }
+    );
+
+    items.forEach(({ el }) => observer.observe(el));
+  }
+
+  initTocHighlight();
+</script>
