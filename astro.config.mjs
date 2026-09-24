@@ -5,9 +5,9 @@ import sitemap from '@astrojs/sitemap';
 
 // Cloudflare Pages 部署配置
 // 输出目录保持默认 dist/，Cloudflare Pages 会自动识别
-// 站点 URL 在部署到正式域名后填入，用于 sitemap 和 RSS 的绝对链接
+// 站点 URL 用真实自定义域名（影响 og:image / canonical / RSS 的绝对链接生成）
 export default defineConfig({
-  site: 'https://example.pages.dev',
+  site: 'https://stock-blog.duckuno.com',
   trailingSlash: 'ignore',
   build: {
     format: 'directory',
