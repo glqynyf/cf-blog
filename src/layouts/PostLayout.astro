@@ -18,6 +18,8 @@ interface Props {
   minutesRead?: string;
   /** 从文章 Markdown 提取出的标题列表（Astro render() 返回的 headings） */
   headings?: Heading[];
+  /** 文章专属 OG 图（社交分享预览） */
+  ogImage?: string;
 }
 
 const {
@@ -28,6 +30,7 @@ const {
   tags,
   minutesRead,
   headings = [],
+  ogImage,
 } = Astro.props;
 
 // 只显示 h2 / h3：h1 是文章标题本身，h4+ 太深不利于快速定位
@@ -35,7 +38,7 @@ const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const showToc = tocItems.length >= 2;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} ogImage={ogImage}>
   <div class:list={['post-layout', { 'post-layout--with-toc': showToc }]}>
     {showToc && (
       <aside class="post-toc" aria-label="文章目录">

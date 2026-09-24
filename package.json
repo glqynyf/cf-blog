@@ -9,7 +9,9 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "og:gen": "python3 scripts/generate-og-images.py",
+    "og:gen:one": "python3 scripts/generate-og-images.py"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
