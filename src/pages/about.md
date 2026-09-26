@@ -36,8 +36,8 @@ description: 关于这个博客和作者本人的一些介绍。
 
 ## 如何联系
 
-- 邮箱：[hello@example.com](mailto:hello@example.com)
-- GitHub：[github.com/your-username](https://github.com/your-username)
+- 邮箱：[service@duckuno.com](mailto:service@duckuno.com)
+- GitHub：[github.com/glqynyf/cf-blog](https://github.com/glqynyf/cf-blog)
 
 也可以通过页面底部的 **RSS** 订阅更新。
 
