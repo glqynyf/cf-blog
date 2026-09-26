@@ -44,6 +44,10 @@ featured: true
 
 ## 二、第一类公式：PE 与 PEG（成熟股与成长股）
 
+![图 1：周期股 PE 陷阱——景气顶利润暴增时 PE 看似便宜，反而是顶部信号](/images/posts/five-valuation-models-no-dcf-myth-01.png)
+
+![图 2：PEG 矩阵——把静态 PE 升级为含增长率的动态视角](/images/posts/five-valuation-models-no-dcf-myth-02.png)
+
 ### 市盈率（PE）的逻辑与陷阱
 
 今天要拆的第一类公式，也是全网被误用最严重、坑散户最多的工具——**市盈率（PE）**。
@@ -119,6 +123,8 @@ PB 的底层逻辑是：**假如今天这家公司清算不干了，把账面上
 ---
 
 ## 四、第三类公式：PS + 40 法则 + LTV/CAC（亏损的科技公司）
+
+![图 3：40 法则——增长率 + 利润率 ≥ 40% = 健康 SaaS 公司](/images/posts/five-valuation-models-no-dcf-myth-03.png)
 
 如果你听到这儿觉得已经够硬核了，别急，更颠覆认知的还在后面。
 
@@ -203,6 +209,8 @@ EBITDA 代表什么？**代表这家公司在抛开资本结构（借了多少�
 
 ## 六、第五类公式：DCF 与巴菲特的所有者收益
 
+![图 4：DCF 的致命软肋——折现率/永续增长率微调，估值大幅变化](/images/posts/five-valuation-models-no-dcf-myth-04.png)
+
 最后我们终于来到了**估值皇冠上的明珠**——也是几乎所有金融教科书的终点——**第五类公式，自由现金流折现模型（DCF）**。
 
 ### DCF 的优雅逻辑
@@ -258,6 +266,8 @@ DCF 的底层哲学其实很优雅：**任何一家企业、任何一项资产�
 ---
 
 ## 八、把五把尺子装进你的工具箱
+
+![图 5：五把尺子适用场景矩阵——不同行业用不同的估值公式，多把尺子交叉验证](/images/posts/five-valuation-models-no-dcf-myth-05.png)
 
 今天我们一口气拆解了：
 
