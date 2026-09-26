@@ -179,20 +179,22 @@ def fig3_prospect_theory():
     ax.fill_between(x, v, where=(x < 0), color=UP, alpha=0.10)
     ax.fill_between(x, v, where=(x > 0), color=ACCENT, alpha=0.10)
 
-    # 关键点：+1000 vs -1000
-    ax.scatter([1000], [1000 ** alpha], s=140, color=ACCENT, edgecolor="white", lw=2, zorder=5)
-    ax.scatter([-1000], [-lam * 1000 ** alpha], s=140, color=UP, edgecolor="white", lw=2, zorder=5)
+    # 关键点：+1000 vs -1000（按公式精确计算）
+    v_pos = 1000 ** alpha          # ≈ 436.5
+    v_neg = -lam * 1000 ** alpha   # ≈ -982.2
+    ax.scatter([1000], [v_pos], s=140, color=ACCENT, edgecolor="white", lw=2, zorder=5)
+    ax.scatter([-1000], [v_neg], s=140, color=UP, edgecolor="white", lw=2, zorder=5)
 
     # 标注 +1000
-    ax.annotate("收益 +1000\n价值 ≈ +1000",
-                xy=(1000, 1000 ** alpha), xytext=(1100, 2000),
+    ax.annotate(f"收益 +1000\n心理价值 ≈ +{v_pos:.0f}\n（敏感度递减）",
+                xy=(1000, v_pos), xytext=(1100, 2000),
                 fontsize=12, color=ACCENT, ha="left", fontweight="bold",
                 bbox=dict(boxstyle="round,pad=0.3", fc=BG_SURFACE, ec=ACCENT, lw=1.0),
                 arrowprops=dict(arrowstyle="->", color=ACCENT, lw=1.5))
 
-    # 标注 -1000
-    ax.annotate("损失 −1000\n价值 ≈ −2250\n（绝对值更大）",
-                xy=(-1000, -lam * 1000 ** alpha), xytext=(-2700, -2300),
+    # 标注 -1000（绝对值显著大于 v_pos，这就是损失厌恶的物理意义）
+    ax.annotate(f"损失 −1000\n心理价值 ≈ {v_neg:.0f}\n（绝对值 {abs(v_neg):.0f} > {v_pos:.0f}，\n损失端更陡）",
+                xy=(-1000, v_neg), xytext=(-2700, -2300),
                 fontsize=12, color=UP, ha="center", fontweight="bold",
                 bbox=dict(boxstyle="round,pad=0.3", fc=BG_SURFACE, ec=UP, lw=1.0),
                 arrowprops=dict(arrowstyle="->", color=UP, lw=1.5))
@@ -203,7 +205,7 @@ def fig3_prospect_theory():
             fontsize=12, color=ACCENT, ha="left", va="center", fontweight="bold",
             bbox=dict(boxstyle="round,pad=0.4", fc=BG_SURFACE, ec=ACCENT, lw=1.0))
 
-    ax.text(-2000, -1900,
+    ax.text(-2800, -1300,
             "λ ≈ 2.25\n（损失厌恶系数）",
             fontsize=12, color=UP, ha="left", va="center", fontweight="bold",
             bbox=dict(boxstyle="round,pad=0.4", fc=BG_SURFACE, ec=UP, lw=1.0))
@@ -223,9 +225,9 @@ def fig3_prospect_theory():
             transform=ax.transAxes,
             fontsize=12, color=ACCENT, ha="left", va="top", fontweight="bold",
             bbox=dict(boxstyle="round,pad=0.3", fc=BG_SURFACE, ec=ACCENT, lw=1.0))
-    ax.text(0.55, 0.12, "亏损区（凸函数、更陡）",
+    ax.text(0.05, 0.92, "亏损区（凸函数、更陡）",
             transform=ax.transAxes,
-            fontsize=12, color=UP, ha="left", va="bottom", fontweight="bold",
+            fontsize=12, color=UP, ha="left", va="top", fontweight="bold",
             bbox=dict(boxstyle="round,pad=0.3", fc=BG_SURFACE, ec=UP, lw=1.0))
 
     # 底部说明（放在 axes 内，避开 footer）

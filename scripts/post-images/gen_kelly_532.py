@@ -97,57 +97,71 @@ def fig2_kelly_curve():
 def fig3_shannon_rebalance():
     fig, axes = new_fig(aspect=(W, H))
     add_title(fig, "香农恶魔：波动本身就能印钱，再平衡就是那根吸管")
-    add_subtitle(fig, "两份等额资产，波动越大 + 再平衡频率越高，长期收益越显著超过 buy-and-hold")
+    add_subtitle(fig, "稳赚资产（国债）+ 零期望波动资产（股票）：再平衡从波动中榨出额外收益")
 
     np.random.seed(7)
     days = np.arange(252)  # 一年交易日
-    # 两只股票，价格随机游走但均值回归（用正负波动）
-    s1 = 10 * np.cumprod(1 + np.random.randn(252) * 0.02)
-    s2 = 10 * np.cumprod(1 + np.random.randn(252) * 0.02)
+    # 资产 A：稳赚 6%/年，相当于国债，每日收益 6%/252
+    bond_daily_ret = 0.06 / 252
+    bond = np.cumprod(np.full(252, 1 + bond_daily_ret))
 
-    # 组合 A：buy-and-hold（50/50 不再平衡）
-    bh_value = (s1 + s2) / 2 * np.ones_like(s1)
+    # 资产 B：零期望波动（每日 0 均值收益 + 2% 波动率），类似股票指数
+    np.random.seed(42)
+    stock = np.cumprod(1 + np.random.randn(252) * 0.02)
+
+    # 组合 A：buy-and-hold 50/50（不再平衡）
+    # 初始 share_bond = 0.5 / bond[0], share_stock = 0.5 / stock[0]
+    bh_value = (0.5 / bond[0] * bond + 0.5 / stock[0] * stock)
 
     # 组合 B：每月再平衡到 50/50
-    rb_value = np.zeros_like(s1)
-    shares1, shares2 = 0.5 / s1[0], 0.5 / s2[0]
+    rb_value = np.zeros_like(days, dtype=float)
+    share_bond = 0.5 / bond[0]
+    share_stock = 0.5 / stock[0]
     rb_value[0] = 1.0
     last_rebalance = 0
-    for i in range(1, len(s1)):
-        port_value = shares1 * s1[i] + shares2 * s2[i]
-        rb_value[i] = port_value
-        # 每月（21 天）再平衡
+    for i in range(1, len(days)):
+        port = share_bond * bond[i] + share_stock * stock[i]
+        rb_value[i] = port
         if (i - last_rebalance) >= 21:
-            target1 = port_value * 0.5 / s1[i]
-            target2 = port_value * 0.5 / s2[i]
-            shares1 = target1
-            shares2 = target2
+            share_bond = port * 0.5 / bond[i]
+            share_stock = port * 0.5 / stock[i]
             last_rebalance = i
+    # 归一化
+    rb_value = rb_value / rb_value[0]
+    bh_value = bh_value / bh_value[0]
 
     plt.close(fig)
     fig, ax = plt.subplots(figsize=(W / DPI, H / DPI), dpi=DPI)
     fig.patch.set_facecolor(BG_PAGE)
     ax.set_facecolor(BG_PAGE)
 
-    ax.plot(days, bh_value, color=TEXT_MUTED, lw=2.0, label="Buy & Hold（不再平衡）")
-    ax.plot(days, rb_value, color=ACCENT, lw=2.5, label="每月再平衡 → 50/50")
+    ax.plot(days, bh_value, color=TEXT_MUTED, lw=2.0, ls="--", label="Buy & Hold（50/50 不再平衡）")
+    ax.plot(days, rb_value, color=ACCENT, lw=2.5, label="每月再平衡到 50/50")
 
-    # 差异填充
+    # 再平衡多赚的填充
     ax.fill_between(days, bh_value, rb_value,
-                     where=(rb_value > bh_value), color=ACCENT_SUBTLE, alpha=0.5,
-                     label="再平衡多赚的")
+                     where=(rb_value > bh_value), color=ACCENT_SUBTLE, alpha=0.6,
+                     label="再平衡多赚的（来自波动）")
+
+    # 标注
+    end_diff = (rb_value[-1] - bh_value[-1]) / bh_value[-1] * 100
+    ax.annotate(f"一年下来再平衡多赚约 +{end_diff:.1f}%\n关键机制：股票涨时卖股买债、\n股票跌时卖债买股 = 高抛低吸",
+                xy=(252, rb_value[-1]), xytext=(140, rb_value[-1] + 0.02),
+                fontsize=11, color=ACCENT, ha="center", fontweight="bold",
+                arrowprops=dict(arrowstyle="->", color=ACCENT, lw=1.2),
+                bbox=dict(boxstyle="round,pad=0.4", fc=BG_SURFACE, ec=ACCENT, lw=1.0))
 
     ax.set_xlabel("交易日（一年）", fontsize=11, color=TEXT_SECONDARY)
     ax.set_ylabel("组合价值（起点 1.0）", fontsize=11, color=TEXT_SECONDARY)
-    ax.legend(loc="upper left", fontsize=10, frameon=False)
     style_axes(ax)
 
     fig.suptitle("香农恶魔：波动本身就能印钱，再平衡就是那根吸管",
                  fontsize=20, fontweight="bold", color=TEXT_PRIMARY, y=0.97)
     fig.text(0.5, 0.93,
-             "两份等额资产，波动越大 + 再平衡频率越高，长期收益越显著超过 buy-and-hold",
+             "稳赚资产（国债）+ 零期望波动资产（股票）：再平衡从波动中榨出额外收益",
              ha="center", fontsize=12, color=TEXT_SECONDARY, style="italic")
-    fig.subplots_adjust(left=0.07, right=0.97, top=0.88, bottom=0.08)
+    ax.legend(loc="lower left", fontsize=10, frameon=False)
+    fig.subplots_adjust(left=0.07, right=0.97, top=0.86, bottom=0.10)
 
     add_footer(fig, SLUG, 3, TOTAL)
     return save(fig, SLUG, 3, tight=False)
