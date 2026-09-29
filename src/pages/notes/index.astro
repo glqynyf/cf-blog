@@ -65,7 +65,7 @@ const totalStages = stages.length;
           <ol class="note-list">
             {stage.notes.map((note) => (
               <li>
-                <a class="note-list__link" href={`/notes/${note.slug}`}>
+                <a class="note-list__link" href={`/notes/${encodeURIComponent(note.slug)}`}>
                   <span class="note-list__num">{note.num}</span>
                   <span class="note-list__title">{note.title}</span>
                   <span class="note-list__arrow" aria-hidden="true">→</span>
