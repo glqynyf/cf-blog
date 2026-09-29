@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>量价关系一期讲透：量在价先、九种组合、背离与误区｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b;
+    --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    line-height: 1.8; -webkit-font-smoothing: antialiased;
+  }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14.5px; }
+  th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { background: var(--surface); color: var(--accent); font-weight: 700; }
+  td { color: var(--text-dim); }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 3</span>
+  <span class="stage-name">量价关系</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 16 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 3 · 第 1 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">量价关系一期讲透：量在价先、九种组合、背离与误区</h1>
+  <p class="note-subtitle">K线可以修饰、指标容易失真——但成交量是真金白银留下的痕迹。读懂它，你就拥有看穿主力底牌的"雷达"。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>在技术分析的百年历史中，<span class="hl">价格是表象</span>，<span class="hl">成交量才是推动价格运转的真实能量</span>。<span class="hl">量在价先</span>的本质是：<span class="hl-red">主动买盘</span>会用市价横扫盘口挂单，每一次扫货都在下方留下成交量痕迹。<strong>没有成交量支撑的上涨是空中楼阁</strong>，而成交量的萎缩往往先于价格见顶。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-why">量在价先：为什么成交量走在价格前面</a></li>
+    <li><a href="#sec-nine">九种量价组合 + 位置判断</a></li>
+    <li><a href="#sec-divergence">量价背离：价格与成交量分道扬镳</a></li>
+    <li><a href="#sec-myth">常见误区与假象</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-why">
+  <h2 class="section-title">量在价先：为什么成交量走在价格前面</h2>
+
+  <h3 class="sub-title">新手看价，老手看量，高手看筹码</h3>
+  <p>为什么无数长期专注于技术分析的交易者最终都高度重视"价格+成交量"这两个最普速的指标？想象一下，你开着一辆越野车爬坡：</p>
+  <ul>
+    <li><span class="hl">价格</span> = 车子的<span class="hl-blue">高度和速度</span></li>
+    <li><span class="hl">成交量</span> = 发动机的<span class="hl-red">转速和油箱里的油</span></li>
+  </ul>
+  <p>如果高度表显示正在向上，但发动机转速已经归零、油箱也干了——你觉得这辆车还能在陡坡上坚持多久？<span class="hl-red">没有成交量支撑的上涨，就是一场失去燃料的空中楼阁</span>。</p>
+
+  <h3 class="sub-title">底层逻辑：订单撮合机制</h3>
+  <p>很多人误以为"价格上涨是因为买的人比卖的人多"。但其实<span class="hl">在任何一笔成功的交易中，买入股数永远等于卖出股数</span>——没人卖你就买不到，没人买你也卖不出去。价格之所以会波动，关键在于<span class="hl">主动性买盘和主动性卖盘</span>之间的博弈：</p>
+
+  <div class="compare-grid">
+    <div class="col win">
+      <h4>主动性买单（市价扫货）</h4>
+      <ul>
+        <li>不挂单排队，<span class="hl">直接吃掉卖一/卖二/卖三</span></li>
+        <li>"<span class="hl">我现在立刻马上就要买入</span>"</li>
+        <li>每一次撮合都在下方留下<span class="hl">成交量痕迹</span></li>
+        <li>当买方扫货意愿强烈时，成交量<span class="hl-blue">爆发式增长</span></li>
+      </ul>
+    </div>
+    <div class="col trap">
+      <h4>被动性挂单（限价等待）</h4>
+      <ul>
+        <li>静静躺在<span class="hl-blue">买一买二或卖一卖二</span></li>
+        <li>"<span class="hl-blue">我想在这个价格交易，但可以等待</span>"</li>
+        <li>虽然参与撮合，但<span class="hl-red">成交量贡献微弱</span></li>
+        <li>零星撮合产生的价格波动是<span class="hl-red">无源之水</span></li>
+      </ul>
+    </div>
+  </div>
+  <style>
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 24px 0; }
+  .compare-grid .col { padding: 18px 20px; border-radius: 8px; }
+  .compare-grid .col h4 { font-size: 15px; margin-bottom: 10px; }
+  .compare-grid .col ul { margin: 0; padding-left: 18px; }
+  .compare-grid .col ul li { font-size: 14px; color: var(--text-dim); }
+  .compare-grid .win { background: rgba(86, 211, 100, 0.08); border: 1px solid rgba(86, 211, 100, 0.3); }
+  .compare-grid .win h4 { color: var(--green); }
+  .compare-grid .trap { background: rgba(255, 107, 107, 0.08); border: 1px solid rgba(255, 107, 107, 0.3); }
+  .compare-grid .trap h4 { color: var(--red); }
+  </style>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 主力的"对倒"局限</div>
+    <p>主力虽然可以用<span class="hl">左手倒右手的对倒单</span>制造单日成交量，但必须承担实实在在的<span class="hl-red">佣金和印花税成本</span>。他们很难在长时间里不计代价堆出几亿甚至几十亿的持续成交量。所以<span class="hl">成交量承载着主力资金最真实的意图</span>——它是真金白银在市场上进行筹码交换的体现。</p>
+  </div>
+
+
+<section class="section" id="sec-nine">
+  <h2 class="section-title">九种量价组合 + 位置判断</h2>
+  <p>任何教科书对量价组合的解读，都必须建立在<span class="hl">"它出现在什么位置"</span>这个大前提下。位置不同，含义天差地别。</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>组合形态</th>
+        <th>位置</th>
+        <th>真实含义</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="hl-green">价涨量增</span></td>
+        <td>底部/突破位</td>
+        <td><span class="hl-green">健康上涨</span>，主力开始扫货，新行情可能启动</td>
+      </tr>
+      <tr>
+        <td><span class="hl-red">价涨量增</span></td>
+        <td>历史高位</td>
+        <td><span class="hl-red">主力对倒出货</span>，用巨量吸引跟风，悄悄派发</td>
+      </tr>
+      <tr>
+        <td><span class="hl">价涨量缩</span></td>
+        <td>低位</td>
+        <td><span class="hl">抛压衰竭</span>，主力锁仓控盘，新一波拉升在即</td>
+      </tr>
+      <tr>
+        <td><span class="hl-red">价涨量缩</span></td>
+        <td>高位</td>
+        <td><span class="hl-red">买盘枯竭</span>，拉高出货即将结束，即将崩盘</td>
+      </tr>
+      <tr>
+        <td><span class="hl-red">价跌量增</span></td>
+        <td>高位初期</td>
+        <td><span class="hl-red">主力出货砸盘</span>，恐慌盘涌出</td>
+      </tr>
+      <tr>
+        <td><span class="hl-green">价跌量增</span></td>
+        <td>底部末期</td>
+        <td><span class="hl-green">最后恐慌</span>，主力低位吸筹，"天量见天价"反过来</td>
+      </tr>
+      <tr>
+        <td><span class="hl">价跌量缩</span></td>
+        <td>下跌中继</td>
+        <td><span class="hl">缩量阴跌</span>，没人接盘，继续下行概率大</td>
+      </tr>
+      <tr>
+        <td><span class="hl-green">价跌量缩</span></td>
+        <td>底部横盘</td>
+        <td><span class="hl-green">惜售心理</span>，主力已经吸筹完毕，抛压枯竭</td>
+      </tr>
+      <tr>
+        <td><span class="hl">成交量突然放大 + 价格不动</span></td>
+        <td>任何位置</td>
+        <td><span class="hl">主力对倒</span>或换筹，方向未定需要后续 K 线确认</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="quote-banner">
+    同样一个"<span class="hl">价涨量增</span>"，<br>
+    在<span class="hl-green">底部</span>是<span class="hl-green">黄金</span>，<br>
+    在<span class="hl-red">顶部</span>是<span class="hl-red">致命的匕首</span>。<br>
+    一切量价分析，<span class="hl">离开位置就是耍流氓</span>。
+  </div>
+</section>
+
+<section class="section" id="sec-divergence">
+  <h2 class="section-title">量价背离：价格与成交量分道扬镳</h2>
+
+  <h3 class="sub-title">什么是量价背离？</h3>
+  <p>当<span class="hl">价格创新高但成交量没跟上</span>（顶背离），或<span class="hl">价格创新低但成交量萎缩</span>（底背离）时，就出现了量价背离。这种现象本质是<span class="hl-red">趋势动能的衰减信号</span>——好比车子还在向上爬，但发动机已经熄火。</p>
+
+  <div class="compare-grid">
+    <div class="col trap">
+      <h4>顶背离（最危险的信号）</h4>
+      <ul>
+        <li>股价<span class="hl-red">创出新高</span></li>
+        <li>成交量<span class="hl-red">明显萎缩</span></li>
+        <li>说明创新高的动力已经<span class="hl-red">接不上来了</span></li>
+        <li>常见于拉升末段，主力<span class="hl-red">控盘锁仓</span></li>
+        <li>但也可能是<span class="hl">缩量过顶的强势信号</span>，需要后续 K 线确认</li>
+      </ul>
+    </div>
+    <div class="col win">
+      <h4>底背离（值得关注的信号）</h4>
+      <ul>
+        <li>股价<span class="hl-green">创出新低</span></li>
+        <li>成交量<span class="hl-green">反而萎缩</span></li>
+        <li>说明<span class="hl-green">砸盘的卖压已经枯竭</span></li>
+        <li>底部筹码<span class="hl-green">惜售心理</span>显现</li>
+        <li>但<span class="hl">下降趋势中</span>可能继续缩量阴跌，不可孤立使用</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="sub-title">底背离为何有 4 次失败就 1 次成功的情况？</h3>
+  <p>在 A 股市场，<span class="hl">底背离往往多次出现才真正见底</span>——这就是经典的"多重底背离"。原因是：</p>
+  <ul>
+    <li><span class="hl">A 股散户情绪极强</span>，底部需要反复绝望才能真正确认</li>
+    <li><span class="hl">主力的吸筹需要时间</span>，通常横盘数月才完成</li>
+    <li><span class="hl">政策底→市场底</span>的传导往往滞后 3-6 个月</li>
+  </ul>
+  <p>所以底背离<span class="hl">不是"看到就买"的信号</span>，而是<span class="hl">"列入观察池，等反转结构出现"</span>的提示。</p>
+</section>
+
+<section class="section" id="sec-myth">
+  <h2 class="section-title">常见误区与假象</h2>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 误区一：成交量越大越好？</div>
+    <p><span class="hl-red">错</span>。高位成交量暴增往往是<span class="hl-red">主力派发出货</span>；底部成交量暴增却可能是<span class="hl-green">天量见底</span>。关键不是大小，而是<span class="hl">位置 + 后续价格走势</span>。</p>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 误区二：缩量一定见底？</div>
+    <p><span class="hl-red">错</span>。缩量阴跌是<span class="hl-red">最可怕的下跌形态</span>——没人接盘，机构也只能慢慢阴跌出货。只有缩量 + 价格止跌横盘 + 筹码密集，才是真的见底信号。</p>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 误区三：天量天价一定错？</div>
+    <p><span class="hl">不一定</span>。<span class="hl">"天量见天价"</span>是常见规律，但<span class="hl-blue">"地量见地价"</span>同样成立——底部出现成交量骤降到极致（近半年最低），往往是<span class="hl-blue">底部反转前夜</span>。</p>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 误区四：把成交量当买卖信号</div>
+    <p><span class="hl-red">错</span>。成交量<span class="hl">只是确认工具</span>，不是<span class="hl-red">买卖触发器</span>。永远要等成交量结构、位置、K线形态三者形成共振，再做决策。</p>
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li><span class="hl">量在价先</span>的本质：<span class="hl">主动买盘</span>用市价扫货，每一次扫货都在下方留下成交量痕迹</li>
+      <li>任何成交量分析都必须结合<span class="hl">位置</span>——底部 vs 顶部含义天差地别</li>
+      <li>最健康的形态：<span class="hl-green">底部价涨量增</span>；最危险的形态：<span class="hl-red">顶部价涨量增</span>（主力出货）</li>
+      <li><span class="hl">量价背离</span> = 趋势动能衰减信号，<span class="hl">顶背离最危险</span>，但也要后续 K 线确认</li>
+      <li>A股底背离往往需要<span class="hl">多次</span>才见底，必须等结构反转才动手</li>
+      <li><span class="hl">成交量是确认工具，不是买卖触发器</span>——必须与位置、K线形态共振</li>
+      <li>主力对倒可以制造单日成交量，但<span class="hl-red">很难长期持续堆出巨量</span>，这是成交量无法骗人的底层逻辑</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 3 · 量价关系</p>
+</footer>
+
+
+
