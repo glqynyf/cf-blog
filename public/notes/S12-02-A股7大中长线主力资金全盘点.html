@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A 股 7 路中长线主力资金全盘点：别只盯着社保 / 公募 / 国家队｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b;
+    --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14.5px; }
+  th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { background: var(--surface); color: var(--accent); font-weight: 700; }
+  td { color: var(--text-dim); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 12</span>
+  <span class="stage-name">市场生态与主力资金</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 18 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 12 · 第 2 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">A 股 7 路中长线主力资金全盘点：别只盯着社保 / 公募 / 国家队</h1>
+  <p class="note-subtitle">你以为的主力就这三家？实际上你已经漏掉了市场上一半以上的"千亿级长线大钱"。这一篇带你逐家拆解 7 路资金的属性、规模、运作逻辑与最新动向。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>A 股真正的<span class="hl">长期玩家</span>远不止"<span class="hl">社保、公募、国家队</span>"这三家，<span class="hl">保险资金、QFII、银行理财、信托资金、产业资本（地方国资 / 央企）</span>加在一起构成了市场一半以上的长线资金。<span class="hl">看懂了他们的属性</span>，<span class="hl">就看懂了为什么指数涨你的股票不涨</span>、<span class="hl-red">看懂了下一波行情谁来点火</span>。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-7forces">7 路主力资金全景对比表</a></li>
+    <li><a href="#sec-social">第 1 路：社保基金 + 基本养老金</a></li>
+    <li><a href="#sec-insurance">第 2 路：保险资金（定盘星）</a></li>
+    <li><a href="#sec-nation">第 3 路：国家队（防风险）</a></li>
+    <li><a href="#sec-mutual">第 4 路：公募基金</a></li>
+    <li><a href="#sec-qfii">第 5 路：QFII（合格境外机构投资者）</a></li>
+    <li><a href="#sec-private">第 6 路：私募基金</a></li>
+    <li><a href="#sec-bank">第 7 路：银行理财 + 信托</a></li>
+    <li><a href="#sec-strategy">实战策略：跟对资金找对方向</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-7forces">
+  <h2 class="section-title">7 路主力资金全景对比表</h2>
+  <p>很多人对 A 股的认知还停留在"<span class="hl">主力就是北向 + 公募 + 游资</span>"的旧框架。实际上真正影响指数中长期走势、决定 A 股生态结构的是以下<span class="hl"> 7 路中长线资金</span>。它们的<span class="hl">体量、负债属性、投资风格、对市场的影响维度</span>都不一样。</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>主力类型</th>
+        <th>资金体量</th>
+        <th>入市的核心约束</th>
+        <th>对 A 股的主要影响</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>全国社保基金</strong></td>
+        <td>资产总额<span class="hl">3.3 万亿+</span></td>
+        <td>战略储备 + 长期考核</td>
+        <td><span class="hl-green">逆向投资大师</span>，估值锚 + 周期平滑器</td>
+      </tr>
+      <tr>
+        <td><strong>保险资金</strong></td>
+        <td>运用余额<span class="hl">40 万亿+</span>（权益 6.3 万亿）</td>
+        <td>负债久期 20-50 年</td>
+        <td><span class="hl-green">定盘星</span>，哑铃型配置，最耐心的钱</td>
+      </tr>
+      <tr>
+        <td><strong>国家队</strong></td>
+        <td>数以<span class="hl-blue">万亿</span>计</td>
+        <td>防系统性金融风险</td>
+        <td>危机时托底，工具化（<span class="hl">ETF 大额申购</span>）</td>
+      </tr>
+      <tr>
+        <td><strong>公募基金</strong></td>
+        <td>A 股权益约<span class="hl-blue">4.5 万亿</span></td>
+        <td>相对排名 + 申赎压力</td>
+        <td>抱团白马 / 行业主题，决定<span class="hl">风格切换</span></td>
+      </tr>
+      <tr>
+        <td><strong>QFII</strong></td>
+        <td>累计<span class="hl">约 1.8 万亿</span>持股</td>
+        <td>合规 + 跨境结算</td>
+        <td>核心资产定价权，<span class="hl">估值体系参照</span></td>
+      </tr>
+      <tr>
+        <td><strong>私募基金</strong></td>
+        <td>证券类约<span class="hl-blue">5 万亿</span></td>
+        <td>绝对收益 + 预警线</td>
+        <td>灵活仓位，<span class="hl-red">极端行情的加速器</span></td>
+      </tr>
+      <tr>
+        <td><strong>银行理财 + 信托</strong></td>
+        <td>理财约<span class="hl-blue">28 万亿+</span></td>
+        <td>净值化、权益占比上限</td>
+        <td><span class="hl-blue">增量活水</span>，震荡市的边际定价者</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="quote-banner">
+    你以为的主力只有 1 万亿，<br>
+    真正能影响 A 股的玩家合计<span class="hl">超过 80 万亿</span>。<br>
+    <span class="hl">看懂他们的入场逻辑</span>，你才能看懂市场。
+  </div>
+</section>
+
+<section class="section" id="sec-social">
+  <h2 class="section-title">第 1 路：社保基金 + 基本养老金</h2>
+
+  <h3 class="sub-title">两者的区别</h3>
+  <p>很多朋友分不清社保基金和养老金。这里要拆清楚：</p>
+  <ul>
+    <li><strong>全国社保基金</strong>：<span class="hl">国家战略储备基金</span>，用来应对未来人口老龄化高峰的养老金支付缺口</li>
+    <li><strong>基本养老保险基金</strong>：各省份结余的养老保险金的<span class="hl">委托运营盘子</span>，由全国社保基金理事会统筹管理或委托专业机构运作</li>
+  </ul>
+  <p>两者性质虽有不同，但操盘逻辑一致——都是<span class="hl">穿越多轮牛熊的长期资金</span>。</p>
+
+  <h3 class="sub-title">实战战绩</h3>
+  <blockquote>
+    <strong>截至最新数据</strong>：全国社保基金资产总额稳定在 <span class="hl">3.3 万亿元以上</span>，自成立以来的<span class="hl">年均投资收益率保持在 7.3% 左右</span>，累计创造投资收益突破 <span class="hl">1.9 万亿元</span>。在牛熊波动剧烈的 A 股市场跑出这个复利成绩，含金量极高。
+  </blockquote>
+
+  <h3 class="sub-title">逆向投资大师</h3>
+  <p>社保基金对 A 股的影响主要体现在<span class="hl">估值锚定</span>与<span class="hl">周期平滑</span>两个维度：</p>
+  <ul>
+    <li><strong>市场狂热、估值泡沫高企</strong> → 提前分批减仓，锁定利润</li>
+    <li><strong>市场恐慌、泥沙俱下、优质资产跌出流动性折价</strong> → 坚决进场"捡带血的筹码"</li>
+  </ul>
+  <p>2026 年上半年，社保的调仓动向呈现"<span class="hl">稳健压舱 + 科技突围</span>"的格局：</p>
+  <ul>
+    <li><strong>压舱石</strong>：以国有大行、大型水电、公用事业、资源龙头为代表的高股息资产</li>
+    <li><strong>成长端</strong>：加大对新质生产力、算力基础设施、先进半导体封装、创新药细分龙头的配置</li>
+  </ul>
+</section>
+
+<section class="section" id="sec-insurance">
+  <h2 class="section-title">第 2 路：保险资金（定盘星）</h2>
+
+  <h3 class="sub-title">整个中国最大的买方巨无霸</h3>
+  <p>金融监管总局数据显示，我国保险资金运用余额已突破 <span class="hl">40 万亿元</span>，其中投向股票和证券投资基金的规模超过 <span class="hl">6.3 万亿元</span>，股票直接持仓占比稳定在 <span class="hl">10% 以上</span>。</p>
+  <p>险资对 A 股的影响可以用"<span class="hl">定盘星</span>"来形容——它是指数真正的<span class="hl">压舱石</span>。</p>
+
+  <h3 class="sub-title">负债驱动 = 极致耐心</h3>
+  <p>险资最大的特点是<span class="hl">负债久期长</span>，很多寿险保单对付期长达 <span class="hl">20 年甚至 50 年</span>。这种负债特性决定了险资<span class="hl">天然具备极强的耐力</span>——它不需要抢短期题材炒作。</p>
+
+  <h3 class="sub-title">哑铃型配置策略</h3>
+  <p>这几年险资面临着一个行业痛点：国内低利率环境持续、长端国债收益率和银行存款利率不断下行，存量保单却有刚性的负债成本。这倒逼险资必须<span class="hl">加大权益类资产配置</span>以弥补固收端的收益缺口。</p>
+  <p>于是险资形成了成熟的<span class="hl">哑铃型配置</span>：</p>
+  <ul>
+    <li><strong>哑铃一端</strong>：死死锚定<span class="hl">高股息、高现金流的红利类资产</span>。新会计准则实施后，险资将大量高股息个股划入"特定账户"，只要不卖出，股价日常波动不会影响当期利润，每年 4%-6% 的股息分红可直接确认为投资收益</li>
+    <li><strong>哑铃另一端</strong>：通过<span class="hl">长期股权投资、战略定增、认购硬科技主题 ETF</span>等方式积极拥抱高端装备制造、人工智能算力网络与绿色能源转型产业</li>
+  </ul>
+
+  <div class="quote-banner">
+    未来 3-5 年，<span class="hl">险资</span>将是<br>
+    <span class="hl">推动中国核心资产估值体系重塑</span>的<br>
+    <span class="hl">关键推手</span>。
+  </div>
+</section>
+
+<section class="section" id="sec-nation">
+  <h2 class="section-title">第 3 路：国家队（防风险）</h2>
+
+  <h3 class="sub-title">国家队不是"赚最多"的钱</h3>
+  <p>广义上的国家队主要包括<span class="hl">中央汇金公司、中国证券金融股份有限公司（证金）、梧桐树投资平台、中国国新控股、中国诚通</span>等国有资本运营公司。资金体量数以万亿计，但它的<span class="hl">底层逻辑</span>和其他所有机构完全不同——</p>
+  <blockquote class="purple">
+    商业机构的目标是追求<span class="hl">商业回报</span>，<br>
+    而<span class="hl">国家队的首要目标是防范系统性金融风险，维护资本市场平稳健康运行</span>。
+  </blockquote>
+
+  <h3 class="sub-title">操盘战术的质变</h3>
+  <p>回顾过去几年的走势，国家队在 A 股经历<span class="hl">流动性冲击和非理性下跌</span>的关键时刻，发挥了<span class="hl">不可替代</span>的作用。更重要的是，国家队的<span class="hl">操盘战术发生了质的飞跃</span>：</p>
+  <ul>
+    <li><strong>过去</strong>：习惯直接拉抬工商银行、中国石油等超大市值权重股</li>
+    <li><strong>现在</strong>：转向<span class="hl">通过大规模申购宽基 ETF</span>（从沪深 300、中证 500 到中证 1000、科创 50，再到央企科技类指数），把流动性<span class="hl">精准输送到底层数百家实体</span>，相当于给整个指数体系注入流动性</li>
+  </ul>
+  <div class="warning-card">
+    <div class="label">⚠️ 散户误区</div>
+    <p>国家队的动作你<span class="hl">不一定看得到实时数据</span>，但你<span class="hl">一定看得到结果</span>——只要指数在急跌中不再"瀑布式"崩塌，背后大概率有国家队的身影。<span class="hl-red">别误以为那是市场自发的"见底信号"</span>，可能是国家队在托。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-mutual">
+  <h2 class="section-title">第 4 路：公募基金</h2>
+  <p>公募基金是 A 股最大的<span class="hl">"机构散户化"</span>力量。A 股权益公募总规模约 <span class="hl">4.5 万亿</span>，看似庞大，但其实<span class="hl">持仓高度集中</span>——核心白马 + 行业 ETF 占据了大半仓位。</p>
+
+  <h3 class="sub-title">双重性格：抱团 + 踩踏</h3>
+  <ul>
+    <li><strong>抱团</strong>：由于相对排名考核 + 申赎压力，公募<span class="hl">容易形成强烈的抱团倾向</span>——2020 年的"茅台 + 酱油 + 酱油瓶盖"抱团就是典型</li>
+    <li><strong>踩踏</strong>：一旦业绩跑输 + 赎回潮来袭，公募<span class="hl-red">被迫砍仓</span>，反过来又强化下跌</li>
+  </ul>
+
+  <h3 class="sub-title">公募的真正影响：风格切换</h3>
+  <p>公募对 A 股的核心影响不是绝对收益，而是<span class="hl">风格切换</span>：</p>
+  <ul>
+    <li>大举申购<span class="hl">宽基 ETF + 行业主题 ETF</span> → 推动指数级行情</li>
+    <li>集中加仓<span class="hl">高股息红利</span> → 红年市风格</li>
+    <li>集体调仓至<span class="hl">科创 / 半导体 / AI</span> → 科技成长行情</li>
+  </ul>
+  <p>所以你要做的不是去追公募重仓股（已经贵了），而是<span class="hl">观察公募调仓的方向，去找下一站热点</span>。</p>
+</section>
+
+<section class="section" id="sec-qfii">
+  <h2 class="section-title">第 5 路：QFII（合格境外机构投资者）</h2>
+  <p>QFII 和北向资金（陆股通）在功能上高度重叠，主要参与者是<span class="hl">全球养老金、主权财富基金、知名公募</span>。截至 2024 年 4 月，<span class="hl">北向 + QFII 合计持仓约 1.8 万亿元</span>，占 A 股总市值约 <span class="hl">2.5%</span>。</p>
+
+  <h3 class="sub-title">QFII 的核心价值：估值锚</h3>
+  <p>QFII 的真正价值不在于"成交占比"，而在于<span class="hl">"估值锚"</span>。他们习惯用<span class="hl">全球可比公司的估值</span>来给 A 股定价，是优质资产长期定价权的提供者。详见<a href="#" style="color: var(--accent);"> S12-07 北向资金</a>。</p>
+</section>
+
+<section class="section" id="sec-private">
+  <h2 class="section-title">第 6 路：私募基金</h2>
+
+  <h3 class="sub-title">绝对收益的"双刃剑"</h3>
+  <p>中国证券类私募基金管理规模约 <span class="hl">5 万亿元</span>，整体规模仅次于公募，但<span class="hl">策略灵活度</span>远超公募：</p>
+  <ul>
+    <li>主观多头、量化对冲、CTA、宏观对冲、套利……几乎覆盖所有主流策略</li>
+    <li>但<span class="hl">预警线 + 止损线</span>是悬在头顶的利剑</li>
+  </ul>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 私募 ≠ 长期资金</div>
+    <p>很多私募的<span class="hl-red">考核周期只有 1 年</span>，净值跌至预警线就<span class="hl-red">必须被动减仓</span>。这就是私募在<span class="hl-red">极端下跌中往往比公募还要踩踏</span>的原因。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-bank">
+  <h2 class="section-title">第 7 路：银行理财 + 信托资金</h2>
+
+  <h3 class="sub-title">曾经的"沉默巨兽"</h3>
+  <p>银行理财总规模约 <span class="hl">28 万亿+</span>（含固收、混合、权益类）。在资管新规前，理财通过<span class="hl">"嵌套 + 优先级"</span>的方式间接参与股市。资管新规后，<span class="hl">净值化转型</span>使得权益占比被压缩。</p>
+
+  <h3 class="sub-title">未来的"边际活水"</h3>
+  <p>但近几年监管反复强调<span class="hl">"打通中长期资金入市的堵点"</span>，理财 + 信托的权益占比上限正在逐步打开。一旦利率长期下行，<span class="hl">理财资金对权益类资产的配置需求会显著上升</span>，这部分"<span class="hl-blue">增量活水</span>"很可能成为下一轮震荡市的<span class="hl">边际定价者</span>。</p>
+</section>
+
+<section class="section" id="sec-strategy">
+  <h2 class="section-title">实战策略：跟对资金找对方向</h2>
+
+  <h3 class="sub-title">三种用法</h3>
+  <ul>
+    <li><strong>看社保 / 险资</strong>：持仓公布在年报 + 季报。他们的重仓股是<span class="hl">"底仓配置"</span>的参考，长期跟踪能形成稳健的行业 beta</li>
+    <li><strong>看公募</strong>：规模变化、申购赎回数据能<span class="hl">提前判断风格切换</span></li>
+    <li><strong>看国家队</strong>：ETF 申购数据、汇金 / 证金的持仓变动是<span class="hl">底部的"风向标"</span></li>
+  </ul>
+
+  <div class="quote-banner">
+    散户最该做的：<span class="hl">不是猜主力在干嘛，<br>
+    而是从主力持仓里读出"他们在押什么未来"</span>。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>A 股真正的<span class="hl">中长线主力</span>有 <span class="hl">7 路</span>，合计资金<span class="hl">超过 80 万亿</span></li>
+      <li><span class="hl-blue">社保</span>：逆向投资大师，<span class="hl">估值锚 + 周期平滑器</span>，年均 7.3% 收益</li>
+      <li><span class="hl-blue">险资</span>：40 万亿运用余额，定盘星，哑铃型配置 + 长期耐心钱</li>
+      <li><span class="hl-blue">国家队</span>：以<span class="hl">防范系统性风险</span>为目标，工具已从拉权重股 → <span class="hl">申购宽基 ETF</span></li>
+      <li><span class="hl-blue">公募</span>：抱团 + 踩踏双重性格，影响<span class="hl">风格切换</span>不直接影响收益</li>
+      <li><span class="hl-blue">QFII / 北向</span>：绝对体量仅占 <span class="hl">2.5%</span>，但提供<span class="hl">估值锚</span></li>
+      <li><span class="hl-red">私募</span>：预警线 / 止损线是利剑，<span class="hl-red">极端行情可能比公募更踩踏</span></li>
+      <li><span class="hl-blue">银行理财 / 信托</span>：净值化转型后仍是<span class="hl">潜在边际活水</span></li>
+      <li><strong>散户策略</strong>：<span class="hl">从主力持仓读出"他们在押什么未来"</span>，比追涨杀跌更靠谱</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 12 · 市场生态与主力资金</p>
+</footer>
+
+</body>
+
