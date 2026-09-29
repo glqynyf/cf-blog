@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>为什么浮盈 10% 让你想卖，浮亏 30% 却能让你心安理得死扛？｜行为金融学笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4;
+    --text-mute: #6b7785; --accent: #f0883e;
+    --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff;
+    --yellow: #e3b341; --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 32px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  .hl-purple { color: var(--purple); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.red { border-left-color: var(--red); }
+  blockquote.red strong { color: var(--red); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .number-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 20px 0; }
+  .number-cell { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 18px 22px; text-align: center; }
+  .number-cell .num { font-size: 30px; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 8px; }
+  .number-cell .label { font-size: 12.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  table th, table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14.5px; color: var(--text); }
+  table th { background: var(--surface-2); color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 12.5px; }
+  table tr:last-child td { border-bottom: none; }
+  table td:first-child { font-weight: 600; color: var(--accent); }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  .compare-cell { padding: 20px 24px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); }
+  .compare-cell.bad { border-left: 4px solid var(--red); }
+  .compare-cell.good { border-left: 4px solid var(--green); }
+  .compare-cell h5 { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+  .compare-cell.bad h5 { color: var(--red); }
+  .compare-cell.good h5 { color: var(--green); }
+  .compare-cell p { font-size: 14.5px; color: var(--text-dim); margin-bottom: 0; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 24px; } h2.section-title { font-size: 22px; } .number-grid, .compare-grid { grid-template-columns: 1fr; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 1</span>
+  <span class="stage-name">行为金融学：解码人性弱点</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 14 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 1 · 第 1 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">为什么浮盈 10% 让你想卖，浮亏 30% 却能让你心安理得死扛？</h1>
+  <p class="note-subtitle">不是心态差，是<span class="hl">基因自带的处置效应+损失厌恶</span>。人类 20 万年的丛林进化给你写入了一套<span class="hl-red">致命的神经缺陷</span>——让你在利润面前变懦夫，在亏损面前变赌徒。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>多数散户的悲剧模式是<span class="hl-red">"小赚大亏"</span>——浮盈 10% 坐立难安急着卖，浮亏 30% 谈笑风生死扛到底。诺贝尔奖得主<strong>卡尼曼</strong>与<strong>特沃斯基</strong>的前景理论已经把它钉死在数学上：<span class="hl">亏损的痛感 ≈ 收益快乐的 2-2.5 倍</span>。本文用一道真实的算术演示：<span class="hl">70% 胜率的散户模式最终净亏 <strong>20,000</strong>；30% 胜率的专业模式最终净赚 <strong>40,000</strong></span>。胜率从来不是关键，<span class="hl-red">让利润奔跑+截断亏损才是</span>。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-gene">真相：人类被写死的一套"神经缺陷"</a></li>
+    <li><a href="#sec-3laws">三大定律：损失厌恶 / 确定效应 / 反射效应</a></li>
+    <li><a href="#sec-math">残酷的数学演示：70% 胜率为什么还会亏钱</a></li>
+    <li><a href="#sec-pro">专业交易员如何彻底反转 S 型价值曲线</a></li>
+    <li><a href="#sec-pitfall">三个致命的执行陷阱</a></li>
+    <li><a href="#sec-system">三步实战清单：可立即用的系统化框架</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-gene">
+  <h2 class="section-title">真相：人类被写死的一套"神经缺陷"</h2>
+  <p>浮盈 10% 让你一分钟看八次盘、稍有风吹草动就想落袋为安；浮亏 30% 甚至被腰斩，反而<span class="hl">心如止水、安然卸载软件死扛到底</span>——这不是你心态差，也不是缺乏毅力，而是<span class="hl-red">20 万年进化被写进你基因里的一套致命神经缺陷</span>。</p>
+
+  <blockquote class="red">
+    <strong>行为金融学把它叫做"处置效应"+"损失厌恶"</strong>。这道刻在基因里的程序，让大多数人<strong>在利润面前变成极度的懦夫，在亏损面前却变成疯狂的赌徒</strong>。<br><br>
+    金融学教授<strong>奥登（Odean）1998</strong> 的经典研究分析了上万个真实散户账户，得出冰冷的结论：<strong>投资者卖出盈利股票的意愿，显著高于卖出亏损股票</strong>——两者比例差距非常悬殊。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-3laws">
+  <h2 class="section-title">三大定律：损失厌恶 / 确定效应 / 反射效应</h2>
+  <p>卡尼曼和特沃斯基的前景理论给出三条核心定律，解释了这种矛盾的本能分裂。</p>
+
+  <h3 class="sub-title">定律一 · 损失厌恶（约 2-2.5 倍）</h3>
+  <p>人类对损失的敏感程度远大于同等收益。<span class="hl">损失 100 元带来的痛苦，需要赚取约 200-250 元的快乐才能弥补——痛感被放大了 2-2.5 倍</span>。</p>
+  <blockquote>
+    <strong>进化论的解释</strong>：几十万年前的原始丛林里，<span class="hl">多吃一块野果带来的只是额外能量（锦上天花），但少了一天的口粮就面临生命终结</span>。在自然选择中，<strong>对危险和亏损极度敏感的基因被完整保留下来，刻进了每一个现代人的潜意识</strong>。
+  </blockquote>
+
+  <h3 class="sub-title">定律二 · 盈利时的确定性效应</h3>
+  <p>当人类处于盈利状态时，大脑表现出强烈的<span class="hl">风险厌恶</span>。通俗说——<span class="hl">"两鸟在林不如一鸟在手"</span>。</p>
+  <p>当账户浮盈 10%，大脑里负责奖赏与安全感的机制会极度渴望把这个抽象数字转化为确定事实。你不再去思考这支股票未来还能不能涨 30%，<strong>全部注意力都被"万一这 10% 缩水了怎么办"</strong>所占据。为了消除这种不确定性带来的心理折磨，你的大脑会强烈驱使你<span class="hl-red">立刻落袋为安</span>。</p>
+
+  <h3 class="sub-title">定律三 · 亏损时的反射效应</h3>
+  <p>当你陷入亏损状态时，大脑机制会发生诡异的反转——<span class="hl-red">由风险厌恶者瞬间变为极度的风险偏好者</span>。</p>
+  <p>按理性逻辑账户浮亏 10% 应该斩断，可因为损失厌恶的存在，卖出割肉意味着你必须在现实中正式承认这笔亏损——大脑必须真实承受那两倍多的剧烈痛苦。<span class="hl">为了逃避这种切肤之痛，大脑本能启动心理防御："只要我不卖，账面上就不是真正的亏损"</span>。为了赌那极其渺茫的保本反弹概率，你宁愿承担股价继续暴跌 30%-50% 的巨大风险。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 两个补充概念</div>
+    <p><strong>心理账户</strong>：你的大脑会不自觉把浮盈和浮亏放进两个完全不同的账户里，用两套完全不同的规则对待——所以你才会在交易时精神分裂式地既贪婪又恐惧。<br><br>
+    <strong>沉没成本谬误</strong>：死扛那笔亏损，本质上是因为你已经投入的本金、时间、情绪让你无法接受它归零，于是不停追加投入试图挽回那些其实早已无法挽回的东西。<span class="hl-red">你以为你在坚守，其实你只是被沉没成本绑架了。</span></p>
+  </div>
+</section>
+
+<section class="section" id="sec-math">
+  <h2 class="section-title">残酷的数学演示：70% 胜率为什么还会亏钱</h2>
+  <p>让我们用 10 万本金、10 笔独立交易，把这种"赚一点就跑、亏了死扛"的散户模式算到底。</p>
+
+  <h3 class="sub-title">散户版本 · 70% 胜率</h3>
+  <table>
+    <thead><tr><th>变量</th><th>数值</th></tr></thead>
+    <tbody>
+      <tr><td>本金</td><td>100,000 元</td></tr>
+      <tr><td>交易次数</td><td>10 次</td></tr>
+      <tr><td>胜率</td><td>70%（7 次对，3 次错）</td></tr>
+      <tr><td>盈利每笔</td><td>+10%（浮盈 10% 就跑）→ <span class="hl-green">+10,000 元</span></td></tr>
+      <tr><td>亏损每笔</td><td>-30%（死扛到 -30% 才割）→ <span class="hl-red">-30,000 元</span></td></tr>
+    </tbody>
+  </table>
+
+  <p>算账：</p>
+  <ul>
+    <li>7 次盈利 = 7 × 10,000 = <span class="hl-green">+70,000 元</span></li>
+    <li>3 次亏损 = 3 × 30,000 = <span class="hl-red">-90,000 元</span></li>
+    <li><strong>账户净结果 = -20,000 元</strong></li>
+  </ul>
+
+  <div class="quote-banner">
+    <span class="hl">70% 的高胜率，</span><br>
+    最终账户净亏 20,000 元（占本金 <strong>20%</strong>）。<br>
+    <span class="hl-red">这就是"小赚大亏"的终局。</span>
+  </div>
+</section>
+
+<section class="section" id="sec-pro">
+  <h2 class="section-title">专业交易员如何彻底反转 S 型价值曲线</h2>
+  <p>先看两条被反复引用的话——</p>
+  <blockquote>
+    <strong>保罗·都铎·琼斯（Paul Tudor Jones II）：</strong>"我每天都在假设我手里的每一个头寸都是错的。我把保住本金放在第一位，只有当市场证明我正确时，我才会让利润去奔跑。"<br><br>
+    <strong>杰西·利弗莫尔：</strong>"利润总是能够自己照顾自己，而亏损却永远不会自动停止。"
+  </blockquote>
+
+  <p>专业交易员与普通散户的本质区别，在于他们通过严密的纪律与系统，<span class="hl">彻底反转了人类大脑的 S 型价值曲线</span>：</p>
+
+  <div class="compare-grid">
+    <div class="compare-cell bad">
+      <h5>面对亏损时</h5>
+      <p><strong>极度的冷酷与风险厌恶</strong>。一旦市场跌破防线，像外科医生切除肿瘤一样在亏损 3%-5% 时毫不犹豫地手起刀落，绝不在亏损的泥潭里停留一秒。</p>
+    </div>
+    <div class="compare-cell good">
+      <h5>面对盈利时</h5>
+      <p><strong>极度的耐心与风险偏好</strong>。不仅不会在浮盈 10% 时急着离场，反而会利用这笔已经产生的浮盈作为"防弹衣"，通过动态抬高止损线，让利润在主升浪里尽情奔跑。</p>
+    </div>
+  </div>
+
+  <h3 class="sub-title">专业版本的数学推演</h3>
+  <p>同样 10 笔交易、10 万本金，但采用专业交易员的<strong>非对称盈亏比系统</strong>：</p>
+  <ul>
+    <li><span class="hl-blue">单笔最大亏损死死限制在 5%</span>，即 5,000 元（实际管理的是<strong>仓位风险</strong>，先定总资金 2% 风险，再倒推仓位与止损宽度）</li>
+    <li><span class="hl-green">盈亏比至少 3:1</span>，平均每笔盈利 25%，即 25,000 元</li>
+  </ul>
+
+  <p>假设选股能力平庸，<span class="hl">10 次里做错 7 次，胜率只有 30%</span>：</p>
+  <ul>
+    <li>7 次错：7 × (-5,000) = <span class="hl-red">-35,000 元</span></li>
+    <li>3 次对：3 × 25,000 = <span class="hl-green">+75,000 元</span></li>
+    <li><strong>账户净结果 = +40,000 元</strong></li>
+  </ul>
+
+  <div class="quote-banner">
+    <span class="hl">散户 70% 胜率 → 净亏 20,000 元</span><br>
+    <span class="hl">专业 30% 胜率 → 净赚 40,000 元</span><br><br>
+    <span class="hl-red">决定你最终能不能跨越阶层的，<br>从来不是你看对行情的次数有多频繁，<br>而是做错时付出了多么微不足道的代价，<br>看对时你敢不敢让利润飞得足够远。</span>
+  </div>
+</section>
+
+<section class="section" id="sec-pitfall">
+  <h2 class="section-title">三个致命的执行陷阱</h2>
+  <p>很多投资者听懂了前景理论、看懂了盈亏比公式，以为自己明天就能大杀四方——但一到实战就频繁亏损、心态崩溃。问题在于三大执行陷阱：</p>
+
+  <h3 class="sub-title">禁忌一 · 心理止损 + 移动止损下移</h3>
+  <p>心理止损只是事前的美好承诺。一旦股价真跌破 5%，大脑损失厌恶机制被瞬间激活，看着账户里真实的亏损开始剧烈抗争——</p>
+  <blockquote class="red">
+    "现在技术指标已经超卖了，主力肯定在洗盘，我如果现在卖正好卖在最底部。不妨把止损线从 5% 往下拉到 10% 再看看。"<br><br>
+    <span class="hl">当你把止损线往下挪动第一毫米的时候，你就已经亲手解开了自己的安全带</span>。股价继续下挫到 10%，你又把它下拉到 15%——<span class="hl-red">每下移一次都是你向软弱的人性做出的妥协</span>。
+  </blockquote>
+  <div class="warning-card">
+    <div class="label">⚠️ 铁律</div>
+    <p>止损线永远只能向上抬高以保护利润，<strong>绝对不能向下移动去包容亏损</strong>。只要你的止损指令不是挂在系统里的条件单，所有的心理止损在极度恐慌面前都只是一句废话。</p>
+  </div>
+
+  <h3 class="sub-title">禁忌二 · 无趋势震荡行情里死板止损</h3>
+  <p>有些投资者学会截断亏损后走向另一个极端——不管市场具体波动特征，只要亏损达 3%-5% 就立刻割肉。结果在忽上忽下的无序震荡里，今天买被洗出来、明天追高又被震出来，连止 10 次损。</p>
+  <blockquote>
+    看似单笔损失很小，<span class="hl">但 10 次累加下来，本金在反复磨损中被活活割掉 30%</span>。交易圈里把这种<span class="hl-red">慢性失血</span>的现象形象地称作"被频繁打脸"。<br><br>
+    成熟的止损绝不会用死板的固定百分比，他们会引入<strong>ATR（平均真实波幅）</strong>——通过测量过去 14 天的日常波动范围，把止损放在噪音波动之外，既有充足的防守纵深能扛住日内的正常洗盘，又能在真正的趋势破位时精准切断风险。
+  </blockquote>
+
+  <h3 class="sub-title">禁忌三 · 成本锚定 + 自我中心的傲慢</h3>
+  <p>绝大多数散户交易时眼睛永远盯着一个数字：<span class="hl-red">自己的买入成本价</span>。</p>
+  <ul>
+    <li>股价在成本上方——觉得自己是赢家、极度自豪</li>
+    <li>股价跌破成本线——觉得被市场羞辱，非要等涨回成本价才肯罢休</li>
+  </ul>
+  <p>但市场由千万个买家卖家组成，每天产生数百亿、千亿的资金博弈——<span class="hl-red">市场根本不知道你是谁，市场更不在乎你的买入成本是多少</span>。对市场而言，当前最新成交价就是对所有已知信息的唯一合理定价。</p>
+  <blockquote>
+    你最初的买入价，在成交完成那一秒钟起就彻底沦为了毫无意义的<strong>历史沉没成本</strong>。<br><br>
+    专业的交易者每天开盘时都强迫自己<span class="hl">忘记初始买入价</span>。他们只问自己一个问题：<span class="hl">"如果我现在是一个空仓者，以当前的价格和趋势形态，我愿不愿意在这个位置重新买入？"</span><br><br>
+    如果不愿意，那么无论现在是浮盈还是浮亏，都应按照客观信号离场。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-system">
+  <h2 class="section-title">三步实战清单：可立即用的系统化框架</h2>
+
+  <h3 class="sub-title">第一步 · 入场前预设备损单</h3>
+  <p>买入指令成交<span class="hl">之前</span>，必须先在交易软件中设定好严格的硬止损条件单，把这笔交易的最大风险牢牢锁死在<span class="hl">总资金的 2% 以内</span>。再用这个额度倒推你的仓位和止损宽度。</p>
+  <blockquote>
+    <strong>让冰冷的机器代码代替你脆弱的人性去执行离场</strong>。绝不在盘中做任何临时的主观决定——这是从散户迈向专业的第一个分水岭。
+  </blockquote>
+
+  <h3 class="sub-title">第二步 · 建立利润保护的移动防线</h3>
+  <p>当头寸顺应趋势产生超过 <span class="hl">8%-10% 的浮盈</span>时，立刻将止损线上移到你的<span class="hl">入场价</span>。</p>
+  <blockquote>
+    注意，这里用入场价不是让你重新去锚定成本、执念于回本，而是把它当作<span class="hl">一条保护本金的基准线</span>。从这一刻开始，<strong>你仓位的本金风险已经彻底归零</strong>——<span class="hl">你是在用市场给你的利润作为抵押，去博取后方可能出现的翻倍主升浪</span>，从容不迫地让利润在趋势中飞翔。
+  </blockquote>
+
+  <h3 class="sub-title">第三步 · 遮蔽账户盈亏金额</h3>
+  <p>日常盯盘过程中，<span class="hl">尽量关闭显示实际盈亏金额的界面</span>。把你的注意力从具体的几千、几万元盈亏，转移到 K 线形态、成交量变化、均线系统的客观信号上。</p>
+  <blockquote>
+    <strong>只要出场信号没有触发，就坚决不去看账户资产的变化</strong>——切断奖赏与恐惧情绪的神经传导。
+  </blockquote>
+
+  <div class="quote-banner">
+    把这三步执行清单打印出来贴在电脑屏幕前，<br>
+    每一次下单之前严格对照检查，<br>
+    你就能逐步建立起一套<span class="hl">违背人类本能但完全符合财富增长规律</span><br>
+    的专业交易体系。<br><br>
+    在人类 20 万年的进化史中，<span class="hl">顺应本能让我们活了下来</span>，<br>
+    但在现代金融博弈中，<span class="hl-red">只有反抗本能才能让你走上顶峰</span>。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>浮盈 10% 想跑、浮亏 30% 死扛，根源是<span class="hl">处置效应+损失厌恶</span>——20 万年基因的神经缺陷</li>
+      <li><span class="hl">损失痛感 ≈ 收益快乐的 2-2.5 倍</span>；盈利时风险厌恶、亏损时风险偏好，方向完全相反</li>
+      <li>数学铁证：散户 <strong>70% 胜率净亏 20,000</strong>（占本金 <strong>20%</strong>）；专业 <strong>30% 胜率净赚 40,000</strong></li>
+      <li>专业关键：<strong>非对称盈亏比</strong>（盈亏比 ≥ 3:1）+ <strong>仓位风险管理</strong>（每笔 ≤ 总资金 2%）</li>
+      <li>三大执行禁忌：<strong>止损下移 / 震荡市频繁止损 / 成本锚定</strong></li>
+      <li>三步实战清单：<strong>入场前预设备损单 + 浮盈 8-10% 上移止损到入场价 + 遮蔽盈亏金额</strong></li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 1 · 行为金融学</p>
+</footer>
+
+</body>
+
