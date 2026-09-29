@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>双重顶（M头）与双重底（W底）：颈线回踩确认与真假突破鉴别｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --surface: #1a2332;
+    --surface-2: #232f3f;
+    --border: #2a3744;
+    --text: #e6edf3;
+    --text-dim: #9aa7b4;
+    --text-mute: #6b7785;
+    --accent: #f0883e;
+    --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff;
+    --green: #56d364;
+    --red: #ff6b6b;
+    --purple: #bc8cff;
+    --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    line-height: 1.8; -webkit-font-smoothing: antialiased;
+  }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border); border-left: 4px solid var(--accent);
+    border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow);
+  }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14.5px; }
+  th { background: var(--surface); color: var(--accent); text-align: left; padding: 12px 14px; border-bottom: 2px solid var(--accent); font-weight: 700; }
+  td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+  tr:hover td { background: var(--surface); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .misuse-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin: 24px 0; display: grid; grid-template-columns: 1fr auto 1fr; gap: 18px; align-items: stretch; }
+  .misuse-card .col { padding: 18px 20px; border-radius: 8px; }
+  .misuse-card .wrong { background: rgba(255, 107, 107, 0.08); border: 1px solid rgba(255, 107, 107, 0.3); }
+  .misuse-card .wrong h4 { color: var(--red); }
+  .misuse-card .right { background: rgba(86, 211, 100, 0.08); border: 1px solid rgba(86, 211, 100, 0.3); }
+  .misuse-card .right h4 { color: var(--green); }
+  .misuse-card .vs { align-self: center; font-size: 24px; font-weight: 800; color: var(--text-mute); }
+  .misuse-card h4 { font-size: 15px; margin-bottom: 10px; }
+  .misuse-card ul { margin: 0; padding-left: 18px; }
+  .misuse-card ul li { font-size: 14px; color: var(--text-dim); }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+    .misuse-card { grid-template-columns: 1fr; }
+    .misuse-card .vs { text-align: center; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 6</span>
+  <span class="stage-name">形态学与缺口理论</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 12 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 6 · 第 1 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">双重顶（M头）与双重底（W底）：颈线回踩确认与真假突破鉴别</h1>
+  <p class="note-subtitle">为什么你看到的"教科书 M 头"一跌破就去追空，下一秒却被一根大阳线拉爆？为什么一追完美的 W 底突破，结果却买在庄家出货的最高点？本期把双重顶与双重底放在订单流与统计学的显微镜下拆给你看。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>M 头与 W 底<span class="hl">不是孤立的两段波浪</span>，而是多空双方在特定价格区间内历经数周甚至数月资金肉搏后留下的<span class="hl">"资金账本"</span>。<strong>Bulkowski 在《图表形态百科全书》（Encyclopedia of Chart Patterns）中量化回测显示</strong>：双重顶突破后回撤（pullback）、双重底向上突破后回踩（throwback）的概率均在 <strong>60%–70%</strong> 的量级；形态未被颈线收盘价确认前存在较高失败风险，需耐心等待收盘确认。<span class="hl-red">注</span>：上述具体百分比数值<span class="hl-red">精确到可疑程度，未能通过 Bulkowski 原书核验（部分站点跳转停放页，无法精确核对原书版次）</span>，建议读者视为大致范围（<strong>60-70%</strong>）而非精确数值。所以<span class="hl">"穿透即追单"等于六成概率硬扛逆向波动</span>。真正的交易，必须等收盘确认 + 颈线回踩。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-stat">波尔斯科夫斯基的统计真相</a></li>
+    <li><a href="#sec-mhead">M 头是如何"造"出来的</a></li>
+    <li><a href="#sec-wbot">W 底的两种实战结构</a></li>
+    <li><a href="#sec-types">亚亚当 vs 夏娃：四种形态学组合</a></li>
+    <li><a href="#sec-pullback">颈线回踩：真假突破的过滤网</a></li>
+    <li><a href="#sec-fight">真假突破的实战鉴别</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-stat">
+  <h2 class="section-title">波尔斯科夫斯基的统计真相</h2>
+  <p>华尔街著名技术分析大师 <strong>托马斯·波尔斯科夫斯基（Thomas Bulkowski）</strong> 在他的《图表形态百科全书》中，用几十年的时间对成千上万个真实的股票与大宗商品形态样本做了严谨的量化回测。他得出的结论直接颠覆了多数散户对形态的美好想象。</p>
+
+  <h3 class="sub-title">两个关键概率</h3>
+  <ul>
+    <li><strong>形态确认前的失败风险</strong>：在形态未被颈线收盘价最终确认前（即潜在的 M 头 / W 底还没跌破或突破颈线时），存在较高的假突破风险。Bulkowski 量化回测显示，双重顶突破后回撤、双重底向上突破后回踩的概率均在 <span class="hl">60%–70%</span> 的量级（不同版次与样本的具体百分比需查原书）。意味着你若仅凭主观一厢情愿去重仓压注，输钱概率接近 <span class="hl">2/3</span>。</li>
+    <li><strong>确认突破后的回踩概率</strong>：即便形态已经有效收在颈线之外：
+      <ul>
+        <li>双重底向上突破后向颈线回踩（throwback）的概率约 <span class="hl">60%–70%</span></li>
+        <li>双重顶向下跌破颈线后向颈线反抽（Pullback）的概率约 <span class="hl">60%–70%</span></li>
+      </ul>
+    </li>
+  </ul>
+
+  <blockquote class="purple">
+    <strong>翻译成大白话</strong>：如果你像绝大多数三流教材教的那样，在 K 线刚刚穿透颈线的瞬间就盲目追单，你将<strong>有超过六成的概率</strong>硬扛随后而来的逆向剧烈波动，而那个回踩过程会反复击穿散户的心理防线，最终在主升浪或主跌浪启动前的最后 1 秒被主力精准扫损出局。
+  </blockquote>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 这不是玄学，是统计学</div>
+    <p>形态的"成功率"和"失败率"是公开的统计事实。任何一本严肃的形态学教材都会告诉你同一件事：<span class="hl-red">没有任何形态能给你 100% 的胜率</span>，你要做的是用"识别概率"和"等待回踩"来提高自己的胜率，而不是追求确定性。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-mhead">
+  <h2 class="section-title">M 头是如何"造"出来的</h2>
+  <p>要拆解 M 头，必须回到形态孕育的最早期，看主力资金在每一个高点都埋下了怎样的意图。</p>
+
+  <h3 class="sub-title">左顶：散户的非理性狂热期</h3>
+  <p>在一段健康的上升趋势中，多头每一次推高价格，市场上都会伴随散户的追涨情绪与空头的止损盘。在<span class="hl">第一个顶峰（左侧顶）</span>形成的时刻，往往是整段行情的<span class="hl">非理性狂热期</span>：</p>
+  <ul>
+    <li>财经媒体充斥着极度乐观的利好消息</li>
+    <li>市场情绪亢奋，换手率极具飙升</li>
+    <li>成交量通常呈现<span class="hl">脉冲式的巨量释放</span></li>
+  </ul>
+  <p>但这根巨量往往<strong>不是多头乘胜追击的信号</strong>，而是极度聪明的长期资本、产业资本或顶级对冲基金趁着散户的狂热买单提供的充沛流动性，悄悄完成<span class="hl">第一批大规模筹码派发</span>。</p>
+
+  <h3 class="sub-title">颈线位置：多头的最后防线</h3>
+  <p>当主力的抛售压过散户的跟风买盘，价格自然出现第一波回调。这个回踩的局部低点，在未来几天或几周里，就会演变成<span class="hl">颈线</span>——整个 M 头里最关键的水平分界线。</p>
+
+  <h3 class="sub-title">右顶：虚张声势的多头陷阱</h3>
+  <p>在颈线位置，依然沉浸在多头信仰中的场外散户和短线客会再次进场抄底，把价格推向第二个高峰，即<span class="hl">右侧顶</span>。但你必须死死盯住右顶的形成细节：</p>
+  <blockquote>
+    <strong>如果左顶是十打十的真金白银在激烈碰撞，那么右顶在绝大多数情况下纯粹是一场多头虚张声势。</strong>在绝大多数由机构主导的真性 M 头中，<span class="hl-red">右顶成交量相比左顶会出现极其明显的萎缩</span>，这在量价关系理论中被称为<strong>量价顶背离</strong>。
+  </blockquote>
+  <p>背后的微观真相是：</p>
+  <ul>
+    <li>主力资金<span class="hl">已不再愿意在高位消耗真金白银</span>去吃掉上方的套牢盘</li>
+    <li>它们只是利用极其微弱的资金挂单虚假撑住盘面，诱导最后一批抱有侥幸心理的技术派追高买入</li>
+    <li>一旦价格连前高都无法有效越过，或只是用一根带长上影线的 K 线假装刺破前高再被砸盘，整个市场多头心理防线就会瞬间瓦解</li>
+  </ul>
+</section>
+
+<section class="section" id="sec-wbot">
+  <h2 class="section-title">W 底的两种实战结构</h2>
+  <p>教科书里那种左右对称、整整齐齐的 W 底，在实战博弈中很多时候都是<span class="hl">诱多陷阱</span>。真正相对更可靠、更能确认底部反转的 W 底，从博弈角度看只有<span class="hl">两种结构</span>值得研究。</p>
+
+  <h3 class="sub-title">结构一：右底抬高型 W 底</h3>
+  <p>当股价第一次跌到一个低点出现一波反弹（超跌反抽），反弹之后遇到上方套牢盘抛压，必然要二次回落。关键细节来了：</p>
+  <ul>
+    <li>第二次回落时，<span class="hl">股价根本没有跌破前一个低点</span></li>
+    <li>在半空中就被一股强大的力量拖住，随后放量拉起</li>
+    <li>为什么右底的低点会比左底高？因为主力资金建仓意愿迫切，<span class="hl">甚至不愿意让股价跌得更便宜</span>，生怕别人抢走了廉价筹码</li>
+  </ul>
+
+  <h3 class="sub-title">结构二：弹簧效应（假跌破 + 真拉起）</h3>
+  <p>这种走势往往更加凶狠，在威科夫理论里被称为<span class="hl">"弹簧效应"</span>：</p>
+  <ul>
+    <li>当股价二次探底时，主力故意用一两根<span class="hl">带量的大阴线</span>瞬间击穿左边的最低点</li>
+    <li>制造出一种彻底破位下行、深不见底的恐怖气氛</li>
+    <li>所有按传统技术把止损设在左底下方的散户都会恐慌割肉</li>
+    <li>但击穿前低后次日或两三天内，<span class="hl">一根坚决的大阳线以迅雷不及掩耳之势把失地全部收复</span>，重新站上支撑线</li>
+  </ul>
+  <p>这个"击穿再拉回"的动作就是主力在底部进行的<span class="hl-red">终极震仓</span>——它利用散户的技术性恐慌一口气吞掉了市场上最后的浮动筹码。</p>
+
+  <div class="quote-banner">
+    真正的双底不是"两个一样高的低"，<br>
+    而是<span class="hl">右底抬高</span>或<span class="hl">假跌破真拉起</span>的博弈结果。<br>
+    对称图形，反而常常是诱多陷阱。
+  </div>
+</section>
+
+<section class="section" id="sec-types">
+  <h2 class="section-title">亚亚当 vs 夏娃：四种形态学组合</h2>
+  <p>波尔斯科夫斯基在实证研究中，把双重顶和双重底严格细分为四种组合：<span class="hl">亚当与亚当、夏娃与夏娃、亚当与夏娃、夏娃与亚当</span>。这种区分绝不是学院派无聊的文字游戏，它<span class="hl">直接关乎形态成立后的爆发力与失效概率</span>。</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>类型</th>
+        <th>K 线特征</th>
+        <th>代表含义</th>
+        <th>实战意义</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>亚当型 Adam</strong></td>
+        <td>尖锐、狭窄、一两根急爆发力 K 线瞬间冲顶或探底后迅速反转</td>
+        <td>极度非理性情绪，常伴单日天量</td>
+        <td>突破 / 跌破爆发力强，但失败率也最高</td>
+      </tr>
+      <tr>
+        <td><strong>夏娃型 Eve</strong></td>
+        <td>圆润、宽阔、顶部或底部反复震荡拉锯</td>
+        <td>多空力量在区间内充分博弈</td>
+        <td>突破后趋势更稳，但所需时间更长</td>
+      </tr>
+      <tr>
+        <td><strong>亚当 + 亚当</strong></td>
+        <td>左右两顶/底都是尖锐型</td>
+        <td>情绪化、非理性博弈</td>
+        <td>突破后波动剧烈，回踩概率高</td>
+      </tr>
+      <tr>
+        <td><strong>夏娃 + 夏娃</strong></td>
+        <td>左右两顶/底都是圆润型</td>
+        <td>主力充分吸筹 / 派发</td>
+        <td>突破后趋势延续性最强，<span class="hl-green">是最值得跟进的形态</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <strong>实战启示</strong>：如果你看到的是两根长上影、振幅剧烈、天量换手的"亚当双顶"，那大概率是情绪化顶；如果你看到的是两只圆滑的"夏娃双顶"，主力资金已经把筹码派发完毕，<span class="hl">趋势反转的可信度更高</span>。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-pullback">
+  <h2 class="section-title">颈线回踩：真假突破的过滤网</h2>
+  <p>正是因为有 <strong>60%–70%</strong> 的概率（Bulkowski <span class="hl-red">大致范围，原书具体百分比需查证</span>）会出现颈线回踩，所以<strong>等待回踩确认</strong>才是 M 头 / W 底最核心的实战价值。</p>
+
+  <h3 class="sub-title">M 头跌破后的反抽</h3>
+  <ul>
+    <li>价格跌破颈线后，多头会出现"死猫跳"式的反抽</li>
+    <li>反抽的高点通常<span class="hl">精确落在颈线位置</span>附近</li>
+    <li>反抽时成交量<span class="hl">必须明显萎缩</span>，且 K 线留下长上影线或吞没形态</li>
+    <li>这一刻，才是<span class="hl">顶部反转向下最安全的追击点</span></li>
+  </ul>
+
+  <h3 class="sub-title">W 底突破后的回踩</h3>
+  <ul>
+    <li>价格突破颈线后，主力常常"压回测试"原颈线是否已经转化为支撑</li>
+    <li>回踩时<span class="hl">成交量同样需要明显萎缩</span></li>
+    <li>不能跌破颈线，最好收出带下影线的小阳线或十字星</li>
+    <li>这一刻，是<span class="hl">底部反转向上最稳健的加仓点</span></li>
+  </ul>
+
+  <div class="quote-banner">
+    突破只是故事的序章，<span class="hl">回踩才是故事的高潮</span>。<br>
+    没经过回踩确认的突破，六成概率是陷阱。<br>
+    真正的交易员永远等"第二根 K 线"——那是市场给你的最终答案。
+  </div>
+</section>
+
+<section class="section" id="sec-fight">
+  <h2 class="section-title">真假突破的实战鉴别</h2>
+
+  <div class="misuse-card">
+    <div class="col wrong">
+      <h4>❌ 散户的典型死法</h4>
+      <ul>
+        <li>右顶/右底刚出现就凭"长得像"主观进场</li>
+        <li>颈线一被穿透立即追单，不等收盘确认</li>
+        <li>看到突破就满仓梭哈，期待主升浪一蹴而就</li>
+        <li>跌破后死扛不止损，坚信"形态一定会走完"</li>
+      </ul>
+    </div>
+    <div class="vs">VS</div>
+    <div class="col right">
+      <h4>✓ 职业选手的鉴别步骤</h4>
+      <ul>
+        <li>先看趋势方向：顺势形态胜率 > 逆势形态</li>
+        <li>等收盘确认：颈线之<strong>外</strong>的 K 线收盘价才算数</li>
+        <li>等回踩测试：缩量 + 不破颈线 = 真突破概率上升</li>
+        <li>止损设在颈线另一侧 1%–3% 处，跌破即认错</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="sub-title">4 个真假突破过滤维度</h3>
+  <ol>
+    <li><strong>收盘价确认</strong>：盘中刺破不算，必须等日 K 收完且收盘价明确在颈线之外</li>
+    <li><strong>时间确认（双日法则）</strong>：跌破后两个交易日都不能收复才算有效突破</li>
+    <li><strong>成交量确认</strong>：真突破伴巨量；无量突破多为诱多</li>
+    <li><strong>MACD / 均线配合</strong>：MACD 在零轴上方金叉 + 5/10 日均线多头排列，胜率显著提高</li>
+  </ol>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 牢记这一句话</div>
+    <p>形态不是算命的工具，而是<span class="hl">概率的语言 + 风控的坐标</span>。高手与散户最大的区别，不在于谁猜对了每一次顶底，而在于高手有严格的仓位管理与止损纪律，散户只有情绪和侥幸。</p>
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>形态在未被颈线收盘价确认前存在<span class="hl-red">较高失败风险</span>（Bulkowski 大致范围 60%–70%，原书具体百分比需查证）</li>
+      <li>即便形态已确认，向颈线回踩的概率仍达 <span class="hl-red">60%–70%</span>（Bulkowski 大致范围）</li>
+      <li>真性 M 头的<span class="hl">右顶成交量必须明显萎缩</span>（量价顶背离）</li>
+      <li>W 底真正可信的结构是<span class="hl">右底抬高型</span>或<span class="hl">弹簧效应假跌破</span></li>
+      <li>夏娃型（圆润）双底比亚当型（尖锐）双底趋势延续性更强</li>
+      <li>突破后必须等缩量回踩 + 不破颈线，才是真正安全的入场点</li>
+      <li>任何形态都要配合<strong>收盘价 + 时间 + 成交量</strong>三重过滤</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 6 · 形态学与缺口理论</p>
+</footer>
+
+</body>
