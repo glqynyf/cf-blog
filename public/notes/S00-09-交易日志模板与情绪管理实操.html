@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>交易日志：散户最该写却最不想写的"病历本"｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4;
+    --text-mute: #6b7785; --accent: #f0883e;
+    --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff;
+    --yellow: #e3b341; --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    line-height: 1.8; -webkit-font-smoothing: antialiased;
+  }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+    font-size: 13px; color: var(--text-dim); flex-wrap: wrap;
+  }
+  .stage-bar .stage-pill {
+    display: inline-block; padding: 4px 12px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 700; letter-spacing: 1px; font-size: 12px;
+  }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+    font-size: 13px; color: var(--text-mute); flex-wrap: wrap;
+  }
+  .meta-bar .tag {
+    padding: 4px 10px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 600; letter-spacing: 0.5px;
+  }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border); border-left: 4px solid var(--accent);
+    border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow);
+  }
+  .summary-card h3 {
+    font-size: 14px; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px;
+  }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px 24px; margin-bottom: 48px;
+  }
+  .toc h4 {
+    font-size: 13px; color: var(--text-mute); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a {
+    color: var(--text-dim); text-decoration: none; font-size: 14.5px;
+    display: flex; align-items: baseline; transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before {
+    content: counter(toc-counter, decimal-leading-zero);
+    color: var(--accent); font-weight: 700; margin-right: 12px;
+    font-variant-numeric: tabular-nums; min-width: 28px;
+  }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title {
+    font-size: 26px; font-weight: 700; margin-bottom: 24px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--accent);
+    display: inline-block; letter-spacing: -0.3px;
+  }
+  h3.sub-title {
+    font-size: 19px; font-weight: 600; margin: 28px 0 14px;
+    color: var(--text); display: flex; align-items: center;
+  }
+  h3.sub-title::before {
+    content: ""; width: 4px; height: 18px;
+    background: var(--accent); border-radius: 2px; margin-right: 12px;
+  }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  .hl-purple { color: var(--purple); font-weight: 600; }
+  .hl-yellow { color: var(--yellow); font-weight: 600; }
+  blockquote {
+    margin: 20px 0; padding: 16px 22px;
+    background: var(--surface); border-left: 4px solid var(--blue);
+    border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px;
+  }
+  blockquote strong { color: var(--blue); }
+  blockquote.red { border-left-color: var(--red); }
+  blockquote.red strong { color: var(--red); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .key-points {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+  }
+  .key-points h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li {
+    padding: 8px 0 8px 30px; position: relative;
+    color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border);
+  }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before {
+    content: "✓"; position: absolute; left: 0; top: 8px;
+    color: var(--green); font-weight: 800; font-size: 18px;
+  }
+  .warning-card {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08));
+    border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red);
+    border-radius: 8px; padding: 18px 22px; margin: 20px 0;
+  }
+  .warning-card .label {
+    color: var(--red); font-weight: 700; font-size: 13px;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--accent); border-radius: 10px;
+    padding: 28px 32px; margin: 32px 0;
+    text-align: center; font-size: 19px;
+    font-weight: 600; color: var(--accent);
+    line-height: 1.6; box-shadow: var(--shadow);
+  }
+  .quote-banner::before {
+    content: """; display: block; font-size: 48px;
+    line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5;
+  }
+  /* 数字表格 */
+  .number-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;
+    margin: 20px 0;
+  }
+  .number-cell {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 18px 22px;
+    text-align: center;
+  }
+  .number-cell .num {
+    font-size: 32px; font-weight: 800; color: var(--accent);
+    line-height: 1; margin-bottom: 8px;
+  }
+  .number-cell .label {
+    font-size: 13px; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  /* 字段表 */
+  table.field-table {
+    width: 100%; border-collapse: collapse;
+    margin: 20px 0; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  }
+  table.field-table th, table.field-table td {
+    padding: 12px 16px; text-align: left; font-size: 14.5px;
+    border-bottom: 1px solid var(--border); vertical-align: top;
+  }
+  table.field-table th {
+    background: var(--surface-2); color: var(--accent);
+    font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; font-size: 12px;
+  }
+  table.field-table td { color: var(--text); }
+  table.field-table td:first-child {
+    color: var(--blue); font-weight: 600; width: 30%;
+    white-space: nowrap;
+  }
+  table.field-table tr:last-child td { border-bottom: none; }
+  /* 公式盒 */
+  .formula-box {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border); border-left: 4px solid var(--purple);
+    border-radius: 8px; padding: 20px 24px; margin: 24px 0;
+  }
+  .formula-box h4 {
+    color: var(--purple); font-size: 13px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .formula-box .formula {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 16px; color: var(--text);
+    background: var(--bg); padding: 12px 16px; border-radius: 6px;
+    margin: 8px 0; border: 1px solid var(--border);
+  }
+  .formula-box p { font-size: 14.5px; color: var(--text-dim); margin-bottom: 8px; }
+  /* 复盘时间表 */
+  .review-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+    margin: 20px 0;
+  }
+  .review-cell {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 18px 20px;
+  }
+  .review-cell .head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .review-cell .head .name {
+    font-size: 16px; font-weight: 700; color: var(--accent);
+  }
+  .review-cell .head .time {
+    font-size: 12px; color: var(--text-mute);
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+  .review-cell ul {
+    list-style: none; margin: 8px 0 0 0; padding: 0;
+  }
+  .review-cell ul li {
+    padding: 4px 0 4px 16px; position: relative;
+    font-size: 14px; color: var(--text-dim); border-bottom: none;
+  }
+  .review-cell ul li::before {
+    content: "·"; position: absolute; left: 4px;
+    color: var(--accent); font-weight: 700;
+  }
+  /* 情绪打分 */
+  .emotion-scale {
+    display: grid; grid-template-columns: repeat(11, 1fr); gap: 4px;
+    margin: 16px 0 8px;
+  }
+  .emotion-scale .step {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 4px; padding: 10px 0; text-align: center;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-weight: 700; font-size: 14px; color: var(--text-dim);
+  }
+  .emotion-scale .step.low { color: var(--green); border-color: rgba(86, 211, 100, 0.3); }
+  .emotion-scale .step.mid { color: var(--yellow); border-color: rgba(227, 179, 65, 0.3); }
+  .emotion-scale .step.high { color: var(--red); border-color: rgba(255, 107, 107, 0.4); }
+  .emotion-scale-labels {
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: var(--text-mute); margin-bottom: 16px;
+  }
+  /* 相关笔记导航 */
+  .related-notes {
+    margin-top: 64px; padding: 22px 26px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .related-notes h4 {
+    font-size: 13px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .related-notes ul { list-style: none; margin: 0; padding: 0; }
+  .related-notes ul li {
+    padding: 10px 0; border-bottom: 1px dashed var(--border);
+  }
+  .related-notes ul li:last-child { border-bottom: none; }
+  .related-notes a {
+    color: var(--text); text-decoration: none; font-size: 15px;
+    display: flex; align-items: center; transition: color 0.2s;
+  }
+  .related-notes a:hover { color: var(--accent); }
+  .related-notes .stage-tag {
+    display: inline-block; padding: 2px 8px; border-radius: 3px;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 11px; font-weight: 700; margin-right: 12px;
+    letter-spacing: 0.5px; min-width: 56px; text-align: center;
+  }
+  footer.note-footer {
+    margin-top: 32px; padding-top: 28px;
+    border-top: 1px solid var(--border);
+    color: var(--text-mute); font-size: 13.5px; text-align: center;
+  }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+    .number-grid { grid-template-columns: 1fr; }
+    .review-grid { grid-template-columns: 1fr; }
+    .emotion-scale { grid-template-columns: repeat(6, 1fr); }
+    table.field-table { font-size: 13px; }
+    table.field-table th, table.field-table td { padding: 10px 12px; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 0</span>
+  <span class="stage-name">认知重塑（破除散户思维，先破后立）</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 12 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 0 · 第 9 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">交易日志：散户最该写却最不想写的"病历本"</h1>
+  <p class="note-subtitle">你不是没有策略，而是<strong>没有反馈循环</strong>；你不是管不住手，而是<strong>没有情绪记录</strong>。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>散户最常见的"我学了很多但还是亏"，根因不是技术不够，而是<span class="hl">没有可量化的反馈循环</span>。知识是输入，但<span class="hl-red">没有记录就没有数据</span>，没有数据就没有复盘，没有复盘就没有迭代，没有迭代就永远在同一个错误里打转。交易日志不是给自己看的"成绩单"，而是给未来的自己看的<span class="hl">"病历本"</span>。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-why">为什么需要交易日志——没有反馈循环的努力都是假努力</a></li>
+    <li><a href="#sec-fields">交易日志的三大必填字段：决策 / 情绪 / 复盘</a></li>
+    <li><a href="#sec-schedule">复盘的三种时间表：日 / 周 / 月</a></li>
+    <li><a href="#sec-emotion">情绪管理实操工具：交易前的四道闸门</a></li>
+    <li><a href="#sec-warning">关键警示：日志是"病历本"不是"成绩单"</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-why">
+  <h2 class="section-title">为什么需要交易日志——没有反馈循环的努力都是假努力</h2>
+  <p>散户在市场里最常说的一句话是：<span class="hl">"我学了很多，但还是亏。"</span></p>
+  <p>这句话听起来很冤，但当你问他：你最近 10 笔交易分别为什么买、为什么卖、错在哪？多数人答不上来。</p>
+
+  <h3 class="sub-title">一个让 99% 散户亏损的因果链</h3>
+  <blockquote class="red">
+    <strong>没有记录 → 没有数据 → 没有复盘 → 没有迭代 → 永远在同一个错误里打转</strong>
+  </blockquote>
+
+  <p>这条链条里，<span class="hl-red">最关键的卡点是"没有记录"</span>。技术指标、K 线形态、资金管理，你学得再多，那都是<span class="hl">输入</span>。没有<strong>输出</strong>，大脑无法评估这些输入有没有效。</p>
+
+  <div class="number-grid">
+    <div class="number-cell">
+      <div class="num">0 篇</div>
+      <div class="label">散户平均交易日志数</div>
+    </div>
+    <div class="number-cell">
+      <div class="num">200+ 篇</div>
+      <div class="label">职业交易员每年日志数</div>
+    </div>
+  </div>
+
+  <p>职业交易员和散户最大的区别，不是天赋、不是技术、不是消息，而是<span class="hl">"是否记录自己的每一次决策"</span>。一个交易员写满 3 年的日志，他对自己的偏好、弱点、最容易冲动的时刻、胜率最高的时段，<strong>会有近乎本能的认知</strong>；而一个不写日志的散户，即使炒了 10 年，依然是 10 年前的自己。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 你不是在学交易，你是在重复犯错</div>
+    <p>没有日志的"努力"，本质上是一种<span class="hl-red">安慰剂式勤奋</span>——你看 K 线、看研报、看财经直播，但其实是在<strong>用战术上的勤奋掩盖战略上的懒惰</strong>。3 年后回看账户，你会发现亏钱的方式和去年、前年一模一样。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-fields">
+  <h2 class="section-title">交易日志的三大必填字段：决策 / 情绪 / 复盘</h2>
+  <p>一份合格的交易日志，必须能回答三个问题：</p>
+  <ol>
+    <li><span class="hl-blue">我为什么买/卖？</span>（决策字段）</li>
+    <li><span class="hl">我当时是什么状态？</span>（情绪字段）</li>
+    <li><span class="hl-green">结果如何、我学到了什么？</span>（复盘字段）</li>
+  </ol>
+  <p>缺任何一项，日志都会从"病历本"退化成"流水账"。</p>
+
+  <h3 class="sub-title">一、决策字段（每次买入/卖出前必填）</h3>
+  <p>这是<strong>决定这笔交易是否值得发生</strong>的依据。字段不全，等于在"凭感觉交易"。</p>
+
+  <table class="field-table">
+    <thead>
+      <tr><th>字段</th><th>填写要求</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>日期 / 时间</td><td>精确到分钟，用于回看当时大盘环境</td></tr>
+      <tr><td>标的代码 + 名称</td><td>完整记录，避免事后记错</td></tr>
+      <tr><td>买入 / 卖出理由</td><td><span class="hl">不超过 50 字</span>——写得越长越说明你自己都不信</td></tr>
+      <tr><td>触发信号</td><td>基于哪个指标 / 形态 / 消息？写具体，例如"MACD 金叉 + 突破 20 日均线"</td></tr>
+      <tr><td>目标价 / 止损价</td><td><span class="hl-red">没写止损价 = 冲动交易</span></td></tr>
+      <tr><td>预期持有周期</td><td>短线 1-3 天 / 中线 1-4 周 / 长线 1 月+，写清楚</td></tr>
+      <tr><td>计划仓位比例</td><td>占总资金的百分比，超过 30% 单一标的就要重新审视</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote class="red">
+    <strong>决策字段的第一原则：写不出来，就别下单。</strong>
+    任何一项写不出来，说明你自己还没想清楚，没想清楚就下单等于赌大小。
+  </blockquote>
+
+  <h3 class="sub-title">二、情绪打分（强制字段，0-10 分）</h3>
+  <p>很多人忽略这一项，但它<strong>比决策字段更能预测亏损</strong>。研究发现：情绪打分超过 7 分的交易，亏损概率显著上升。</p>
+
+  <div class="emotion-scale">
+    <div class="step low">0</div>
+    <div class="step low">1</div>
+    <div class="step low">2</div>
+    <div class="step mid">3</div>
+    <div class="step mid">4</div>
+    <div class="step mid">5</div>
+    <div class="step mid">6</div>
+    <div class="step high">7</div>
+    <div class="step high">8</div>
+    <div class="step high">9</div>
+    <div class="step high">10</div>
+  </div>
+  <div class="emotion-scale-labels">
+    <span>平静（推荐）</span>
+    <span>轻微紧张</span>
+    <span>失控区（建议不下单）</span>
+  </div>
+
+  <p>每次决策前，必须记录两项：</p>
+  <ul>
+    <li><span class="hl">情绪状态</span>：兴奋 / 焦虑 / 恐惧 / 贪婪 / 平静（多选）</li>
+    <li><span class="hl">这笔交易是"计划内"还是"冲动型"？</span>（必答）</li>
+  </ul>
+
+  <div class="quote-banner">
+    情绪打分 ≥ 7 的交易，<br>
+    <span class="hl">亏损概率翻倍</span>——<br>
+    不是市场在惩罚你，是<span class="hl">情绪在惩罚你</span>。
+  </div>
+
+  <h3 class="sub-title">三、复盘字段（交易结束后 24 小时内必填）</h3>
+  <p>拖过 24 小时，复盘就失效——人会自动<strong>美化自己的决策</strong>。所以必须当天写、当天记。</p>
+
+  <table class="field-table">
+    <thead>
+      <tr><th>字段</th><th>填写要求</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>实际买入 / 卖出价</td><td>和计划价的偏离度，差多少、为什么差</td></tr>
+      <tr><td>是否遵守原计划</td><td><span class="hl-red">"是/否"必须明确回答</span>，不允许写"差不多"</td></tr>
+      <tr><td>假设最坏情况下还能涨多少？</td><td>倒推止损线，看是否真的合理</td></tr>
+      <tr><td>我从这笔交易学到了什么？</td><td>一句话总结，不超过 30 字</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="section" id="sec-schedule">
+  <h2 class="section-title">复盘的三种时间表：日 / 周 / 月</h2>
+  <p>光写单笔日志不够，还需要<strong>定期聚合复盘</strong>，才能从单点数据里挖出规律。</p>
+
+  <div class="review-grid">
+    <div class="review-cell">
+      <div class="head">
+        <span class="name">日复盘</span>
+        <span class="time">15 min</span>
+      </div>
+      <p style="font-size:13.5px; color:var(--text-mute); margin-bottom:6px;">每天收盘后 30 分钟内</p>
+      <ul>
+        <li>回顾当天的所有决策</li>
+        <li>检查情绪打分是否正常</li>
+        <li>标出"冲动型"交易</li>
+        <li>写下明天的进场条件</li>
+      </ul>
+    </div>
+
+    <div class="review-cell">
+      <div class="head">
+        <span class="name">周复盘</span>
+        <span class="time">60 min</span>
+      </div>
+      <p style="font-size:13.5px; color:var(--text-mute); margin-bottom:6px;">每个周末固定时间</p>
+      <ul>
+        <li>统计周胜率与平均盈亏比</li>
+        <li>分类：计划内 vs 冲动型</li>
+        <li>对比"按计划"和"没按计划"两组的真实盈亏</li>
+        <li>调整下周仓位上限</li>
+      </ul>
+    </div>
+
+    <div class="review-cell">
+      <div class="head">
+        <span class="name">月复盘</span>
+        <span class="time">半天</span>
+      </div>
+      <p style="font-size:13.5px; color:var(--text-mute); margin-bottom:6px;">每月最后一个交易日</p>
+      <ul>
+        <li>挖系统性错误：是否总在某个时段亏钱</li>
+        <li>是否总在某种情绪下冲动交易</li>
+        <li>是否总在某个标的类型上判断失误</li>
+        <li>形成下月的"禁区清单"</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <h4>核心公式 · 决定你盈亏的不是胜率，是这两个比</h4>
+    <div class="formula">
+      月度净利润 ＝  胜率 × 平均盈利  −  (1 − 胜率) × 平均亏损
+    </div>
+    <p>胜率 40%、盈亏比 3:1 的人，<strong>长期是稳定盈利的</strong>（<code>0.4×3 − 0.6×1 = +0.6</code>）。<span class="hl-red">注</span>：原文"胜率 80%、盈亏比 1:3 长期是稳定亏损"是<span class="hl-red">反例错误</span>——代入 <code>0.8×1 − 0.2×3 = +0.2</code>，期望仍为正。要构成亏损反例需更恶化的赔率，如"胜率 80%、盈亏比 1:5 → 0.8 − 1.0 = −0.2"。<span class="hl">这里要传达的核心思想是：胜率只是变量之一，盈亏比才是决定长期结果的杠杆</span>。周复盘和月复盘，本质上都是在跟踪这两个数字的动态变化。</p>
+  </div>
+
+  <blockquote>
+    <strong>复盘的真正作用不是"找自己的错"，而是"找到可重复的模式"。</strong>
+    当你连续记录 50 笔以上交易，你会发现一些规律：例如"我总在周四下午亏损最大"、"我总在 MACD 金叉次日买入就跌"、"我的冲动型交易平均亏损 -5.2%"——这些<span class="hl">就是你的"系统"</span>。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-emotion">
+  <h2 class="section-title">情绪管理实操工具：交易前的四道闸门</h2>
+  <p>情绪管理不是"鸡汤"，而是<span class="hl">一套在情绪失控前就拦截自己的硬流程</span>。以下四个工具，建议打印出来贴在电脑前。</p>
+
+  <h3 class="sub-title">闸门一 · 冥想 5 分钟</h3>
+  <p>下单前，强制自己闭眼 5 分钟。不刷手机、不看盘、不说话。</p>
+  <ul>
+    <li>如果 5 分钟结束后还想买，<span class="hl-green">这笔交易大概率是理性的</span></li>
+    <li>如果 5 分钟内烦躁到坐不住，<span class="hl-red">你已经处于多巴胺成瘾状态</span>，建议离场</li>
+  </ul>
+
+  <h3 class="sub-title">闸门二 · "亏光测试"问题</h3>
+  <blockquote class="red">
+    <strong>写下这句话并认真回答：</strong>「如果这笔交易亏光了，我能承受吗？<strong>会不会影响我的生活、我的睡眠、我的家人？</strong>」
+  </blockquote>
+  <p>如果答案是"会"，<span class="hl-red">立刻放弃这笔交易</span>。市场里永远有机会，但<span class="hl">只有活着的人才有资格等到下一笔</span>。</p>
+
+  <h3 class="sub-title">闸门三 · 最坏情况 ×5 放大</h3>
+  <p>很多人能接受"亏 2%"，但实际上：</p>
+  <ul>
+    <li>黑天鹅发生时，<strong>真实亏损往往是预估的 3-5 倍</strong></li>
+    <li>止损位可能被击穿后继续下跌</li>
+    <li>流动性缺失时可能根本卖不出去</li>
+  </ul>
+  <p>所以下单前，<span class="hl">把你以为的"最坏情况"再乘以 5</span>，问自己还做不做。</p>
+  <blockquote>
+    如果 ×5 后还能接受，说明仓位是合理的；如果 ×5 后睡不着，<strong>立刻减仓到 ×1 能睡着的水平</strong>。
+  </blockquote>
+
+  <h3 class="sub-title">闸门四 · 单日/单周最大亏损上限</h3>
+  <p>这是最简单也最反人性的规则：</p>
+
+  <table class="field-table">
+    <thead>
+      <tr><th>上限类型</th><th>建议比例</th><th>触发后的动作</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>单日最大亏损</td><td>总资金的 <span class="hl-red">2%</span></td><td>当日<strong>立刻关软件</strong>，次日不再交易</td></tr>
+      <tr><td>单周最大亏损</td><td>总资金的 <span class="hl-red">5%</span></td><td>本周<strong>停止所有主动交易</strong>，只允许被动平仓</td></tr>
+      <tr><td>单月最大亏损</td><td>总资金的 <span class="hl-red">10%</span></td><td>暂停交易一个月，<strong>只做复盘</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="quote-banner">
+    <span class="hl">情绪管理的本质</span>，<br>
+    不是让自己"没有情绪"，而是<span class="hl">让情绪无法触发错误交易</span>——<br>
+    靠的是<span class="hl">流程，不是意志力</span>。
+  </div>
+</section>
+
+<section class="section" id="sec-warning">
+  <h2 class="section-title">关键警示：日志是"病历本"不是"成绩单"</h2>
+  <p>写交易日志最常见的两个错误：</p>
+
+  <ul>
+    <li><span class="hl-red">错误一：只记录盈利的交易</span>，把亏损交易"选择性遗忘"</li>
+    <li><span class="hl-red">错误二：把日志写成自我安慰的工具</span>，例如"虽然亏了，但我学到了"</li>
+  </ul>
+
+  <h3 class="sub-title">病历本 vs 成绩单的本质区别</h3>
+  <blockquote>
+    <strong>成绩单的目的</strong>是让自己感觉良好，<br>
+    <strong>病历本的目的</strong>是让自己看清哪里在发炎。
+  </blockquote>
+
+  <p>病历本有几个不能漏的字段：</p>
+  <ol>
+    <li><span class="hl">亏损交易必须单独列出</span>，不允许合并到"杂项"</li>
+    <li><span class="hl">冲动型交易必须有独立标签</span>，例如 tag: 冲动</li>
+    <li><span class="hl">情绪打分 ≥ 7 的交易必须标注</span>，哪怕赚到了钱</li>
+    <li><span class="hl">"学到什么"必须包含具体动作</span>，不能是"以后要更谨慎"这种空话</li>
+  </ol>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 最后一条警告</div>
+    <p>日志不是写给别人看的，<span class="hl">也不是写给"现在的自己"看的</span>，而是写给<strong>"三个月后情绪又上来的那个自己"</strong>看的。当你下次手痒想下单、想抄底、想割肉时，翻开日志，<span class="hl">你会看到过去的自己因为同样的冲动血亏了一次</span>——这就是日志最大的复利。</p>
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li><strong>没有记录就没有数据</strong>，没有数据就没有复盘，没有复盘就没有成长——这是散户亏损的因果链</li>
+      <li>交易日志三大必填字段：<strong>决策字段</strong>（理由/触发信号/止损价/仓位）、<strong>情绪打分</strong>（0-10 分 + 计划内/冲动型）、<strong>复盘字段</strong>（24 小时内必填）</li>
+      <li>三种复盘时间表：<strong>日复盘 15 分钟 / 周复盘 60 分钟 / 月复盘半天</strong></li>
+      <li>月度净利润 ＝ 胜率 × 平均盈利 − (1 − 胜率) × 平均亏损，<strong>盈亏比比胜率更重要</strong></li>
+      <li>情绪管理四道闸门：<strong>冥想 5 分钟 / 亏光测试 / 最坏情况 ×5 放大 / 单日 2% 单周 5% 上限</strong></li>
+      <li>情绪打分 ≥ 7 的交易，<strong>亏损概率翻倍</strong></li>
+      <li>日志是<strong>"病历本"</strong>不是"成绩单"——亏损交易必须诚实记录，包括所有冲动型交易</li>
+    </ul>
+  </div>
+</section>
+
+<div class="related-notes">
+  <h4>相关笔记</h4>
+  <ul>
+    <li><a href="S00-08-交易成长的4个阶段：对照一下，你现在卡在哪一步？.html"><span class="stage-tag">S00-08</span>交易成长的 4 个阶段：对照一下，你现在卡在哪一步？</a></li>
+    <li><a href="S01-04-止损护身符.html"><span class="stage-tag">S01-04</span>止损护身符：让亏损有底线，让利润奔跑有上限</a></li>
+    <li><a href="S08-05-深套30%解套策略.html"><span class="stage-tag">S08-05</span>深套 30% 解套策略：不割肉的代价是下一次机会</a></li>
+  </ul>
+</div>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 0 · 认知重塑</p>
+</footer>
+
+</body>
