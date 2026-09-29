@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>为什么有人能把持仓成本做成负数：5 种可参考的降本实操思路｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4;
+    --text-mute: #6b7785; --accent: #f0883e;
+    --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff;
+    --yellow: #e3b341; --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    line-height: 1.8; -webkit-font-smoothing: antialiased;
+  }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+    font-size: 13px; color: var(--text-dim); flex-wrap: wrap;
+  }
+  .stage-bar .stage-pill {
+    display: inline-block; padding: 4px 12px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 700; letter-spacing: 1px; font-size: 12px;
+  }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+    font-size: 13px; color: var(--text-mute); flex-wrap: wrap;
+  }
+  .meta-bar .tag {
+    padding: 4px 10px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 600; letter-spacing: 0.5px;
+  }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border); border-left: 4px solid var(--accent);
+    border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow);
+  }
+  .summary-card h3 {
+    font-size: 14px; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px;
+  }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px 24px; margin-bottom: 48px;
+  }
+  .toc h4 {
+    font-size: 13px; color: var(--text-mute); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a {
+    color: var(--text-dim); text-decoration: none; font-size: 14.5px;
+    display: flex; align-items: baseline; transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before {
+    content: counter(toc-counter, decimal-leading-zero);
+    color: var(--accent); font-weight: 700; margin-right: 12px;
+    font-variant-numeric: tabular-nums; min-width: 28px;
+  }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title {
+    font-size: 26px; font-weight: 700; margin-bottom: 24px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--accent);
+    display: inline-block; letter-spacing: -0.3px;
+  }
+  h3.sub-title {
+    font-size: 19px; font-weight: 600; margin: 28px 0 14px;
+    color: var(--text); display: flex; align-items: center;
+  }
+  h3.sub-title::before {
+    content: ""; width: 4px; height: 18px;
+    background: var(--accent); border-radius: 2px; margin-right: 12px;
+  }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote {
+    margin: 20px 0; padding: 16px 22px;
+    background: var(--surface); border-left: 4px solid var(--blue);
+    border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px;
+  }
+  blockquote strong { color: var(--blue); }
+  blockquote.red { border-left-color: var(--red); }
+  blockquote.red strong { color: var(--red); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .formula-box {
+    background: var(--surface); border: 1px solid var(--accent);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+    text-align: center;
+  }
+  .formula-box .formula {
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: var(--accent); font-size: 19px; font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; }
+  .key-points {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+  }
+  .key-points h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li {
+    padding: 8px 0 8px 30px; position: relative;
+    color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border);
+  }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before {
+    content: "✓"; position: absolute; left: 0; top: 8px;
+    color: var(--green); font-weight: 800; font-size: 18px;
+  }
+  .warning-card {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08));
+    border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red);
+    border-radius: 8px; padding: 18px 22px; margin: 20px 0;
+  }
+  .warning-card .label {
+    color: var(--red); font-weight: 700; font-size: 13px;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--accent); border-radius: 10px;
+    padding: 28px 32px; margin: 32px 0;
+    text-align: center; font-size: 19px;
+    font-weight: 600; color: var(--accent);
+    line-height: 1.6; box-shadow: var(--shadow);
+  }
+  .quote-banner::before {
+    content: """; display: block; font-size: 48px;
+    line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5;
+  }
+  .recover-table {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+  }
+  .recover-table h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .recover-table table { width: 100%; border-collapse: collapse; }
+  .recover-table th, .recover-table td {
+    padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);
+    color: var(--text); font-size: 14.5px;
+  }
+  .recover-table th { color: var(--text-dim); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .recover-table .lose { color: var(--red); font-weight: 700; }
+  .recover-table .gain { color: var(--green); font-weight: 700; }
+  footer.note-footer {
+    margin-top: 72px; padding-top: 28px;
+    border-top: 1px solid var(--border);
+    color: var(--text-mute); font-size: 13.5px; text-align: center;
+  }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 9</span>
+  <span class="stage-name">仓位管理与资金管理</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 14 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 9 · 第 8 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">为什么有人能把持仓成本做成负数：5 种可参考的降本实操思路</h1>
+  <p class="note-subtitle">股票持仓成本显示成负数——这不是<span class="hl">软件 Bug</span>，而是<span class="hl">成熟交易者的资金管理逻辑</span>。一旦你把一只股票的成本降到负数，持仓心态就会发生质的变化。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>负成本既不是系统错误也不是什么黑科技，本质是一套<span class="hl">严密、客观的资金管理与数学计算逻辑</span>。一旦把股票成本降到负数，主力怎么震荡、大盘怎么波动对你来说都只是<span class="hl">账面数字的跳动</span>——因为本金早就收回来了，剩下的每一分市值都是<span class="hl">继续参与市场的浮动收益</span>。本文拆解 5 种可参考的降本路径。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-formula">负成本的计算公式：分子分母一目了然</a></li>
+    <li><a href="#sec-method1">方法一 · 抽本流利法（成长股必杀技）</a></li>
+    <li><a href="#sec-method2">方法二 · 底仓不动 + 网格动态作踢</a></li>
+    <li><a href="#sec-method3">方法三 · 高股息收租法（大资金偏爱）</a></li>
+    <li><a href="#sec-method4">方法四 · 期权备兑 + 可转债事件套利</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-formula">
+  <h2 class="section-title">负成本的计算公式：分子分母一目了然</h2>
+  <p>在大部分券商软件默认的摊薄成本法下，持仓成本公式其实非常简单：</p>
+
+  <div class="formula-box">
+    <div class="formula">持仓成本 = (买入总本金 − 累计卖出落袋现金 − 累计现金分红) ÷ 剩余股票数量</div>
+    <div class="desc">分子为负 → 持仓成本显示为负数</div>
+  </div>
+
+  <p>当股票经过多次操作或大幅上涨后，<span class="hl">累计卖出的现金 + 累计现金分红 &gt; 最初投入的总本金</span>，分子就变成了负数。负数除以剩余股票数量，软件自然显示为负成本。</p>
+
+  <blockquote>
+    <strong>举个最通俗的例子</strong>：你花 10 块钱买了一个西瓜，切成 10 块。把其中 5 块以每块 3 块钱的价格卖给邻居，收回 15 块。这时你已经把买西瓜的 10 块本金全收回来了，兜里还净赚 5 块。手里剩下 5 块西瓜，每一块的成本是多少？答案是 <span class="hl">负的 1 块钱</span>。哪怕你把剩下的西瓜免费送人或者放坏了扔掉，你也已经实现了 5 块钱的净收益。
+  </blockquote>
+
+  <p>理解了这一点，<span class="hl">把持仓做到负数并不是去修改市场成交价格</span>，而是通过一系列交易策略把风险资产变成已收回本金的资产。</p>
+</section>
+
+<section class="section" id="sec-method1">
+  <h2 class="section-title">方法一 · 抽本流利法（成长股必杀技）</h2>
+  <p>这是整个股票交易史上最经典、心态最稳健的方法，也叫<span class="hl">零成本持股</span>。它最适合用在那些处于明显上升趋势或基本面发生重大向好反转的<span class="hl">成长股</span>上。</p>
+
+  <h3 class="sub-title">散户的痛苦：拿不住 vs 死拿</h3>
+  <ul>
+    <li>买到牛股，涨 20% 就想跑，生怕利润回吐——结果刚卖就翻三五倍</li>
+    <li>死拿不放，结果坐了一趟过山车，从赚 100% 又跌回了原地</li>
+  </ul>
+
+  <h3 class="sub-title">高手的做法：完全逆人性</h3>
+  <p>假设你在 <strong>10 块钱</strong>买入某公司股票 1 万股，总投资 <strong>10 万元</strong>。股价一路上涨到 <strong>20 元</strong>，总市值变成 20 万元，账面浮盈 10 万元（收益率 100%）。</p>
+
+  <p>高手在这里会执行极其机械的<span class="hl">抽本操作</span>：直接在 20 块卖掉 5000 股，收回 10 万元现金。10 万元回到银行卡，当初投进股市的本金已经一分不少地落袋为安。此时账户里还剩 5000 股，对应的原始成本是 <span class="hl">0 元</span>。</p>
+
+  <p>但游戏还没结束。如果公司基本面依然强劲，股价继续涨到 25 元，再卖出 1000 股，落袋 2.5 万元：</p>
+
+  <div class="recover-table">
+    <h4>抽本流利法的负成本演化</h4>
+    <table>
+      <thead>
+        <tr><th>操作</th><th>投入</th><th>累计回收</th><th>剩余股数</th><th>持仓成本</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>10 元买入 1 万股</td><td>10 万</td><td>0</td><td>10000</td><td>10 元</td></tr>
+        <tr><td>20 元卖出 5000 股</td><td>10 万</td><td>10 万</td><td>5000</td><td class="gain">0 元</td></tr>
+        <tr><td>25 元卖出 1000 股</td><td>10 万</td><td>12.5 万</td><td>4000</td><td class="lose">−6.25 元</td></tr>
+        <tr><td>30 元继续卖 1000 股</td><td>10 万</td><td>15.5 万</td><td>3000</td><td class="lose">−18.3 元</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote class="red">
+    <strong>这时你的交易心态会发生脱胎换骨的质变</strong>：股价哪怕明天直接来两个跌停板跌到 15 块，你也不会有丝毫恐慌。因为你已经把 5.5 万元的利润落袋为安，手里还拿着 3000 股<span class="hl">负成本</span>的股权——可以从容陪着这家企业成长。
+  </blockquote>
+
+  <p>这种方法的核心秘诀就八个字：<span class="hl">分批锁定，利润奔跑</span>。它用最符合数学期望的方式，把人性的贪婪和恐惧彻底隔离开。</p>
+</section>
+
+<section class="section" id="sec-method2">
+  <h2 class="section-title">方法二 · 底仓不动 + 网格动态作踢</h2>
+  <p>在<span class="hl">震荡市</span>里，技术派老手最喜欢用的方法是：把底仓长期持有，再用一部分仓位做网格动态作踢。</p>
+
+  <p>很多散户尝试过做 T 降成本，结果一顿操作猛如虎，涨了不敢卖、跌了舍不得割，最后高买低卖、坐电梯。其实做 T 的核心不是技术，是<span class="hl">纪律</span>：</p>
+
+  <ul>
+    <li>选定一个长期向上的标的（如宽基 ETF）</li>
+    <li>把 <span class="hl">50%</span> 作为底仓永远不动</li>
+    <li>另外 <span class="hl">30%</span> 在设定的网格区间里高抛低吸</li>
+    <li>剩下的 <span class="hl">20%</span> 留作现金，应对单边行情</li>
+  </ul>
+
+  <p>这种做法本质上是<span class="hl">把网格利润累加到底仓成本上</span>：每一次成功的高抛低吸，回收的现金都在降低底仓的净投入。当网格利润累计超过底仓原始投入时，<span class="hl">整个底仓的成本就变成负数</span>。</p>
+
+  <div class="formula-box">
+    <div class="formula">底仓成本 = 原始投入 − 网格累计回收利润</div>
+    <div class="desc">网格利润 > 原始投入 → 底仓成本变负数</div>
+  </div>
+
+  <blockquote>
+    <strong>但前提是你必须处理好单边行情</strong>。一旦进入单边下跌，必须有<span class="hl">硬性止损位</span>保护网格不被绞杀（详见 <a href="#sec-grid">网格交易专题</a>）。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-method3">
+  <h2 class="section-title">方法三 · 高股息收租法（大资金偏爱）</h2>
+  <p>这是<span class="hl">大资金偏爱</span>的稳健降本路径。核心逻辑：买入稳定高分红的蓝筹股，长期持有，靠<span class="hl">每年现金分红</span>把持仓成本慢慢吃成负数。</p>
+
+  <h3 class="sub-title">案例演算</h3>
+  <p>假设你在 <strong>10 元</strong>买入某高股息股票 1 万股，投入 10 万元。该股票每年现金分红 5%，每年分红 <strong>5000 元</strong>。</p>
+
+  <div class="recover-table">
+    <h4>高股息收租的负成本演化</h4>
+    <table>
+      <thead>
+        <tr><th>年份</th><th>累计分红</th><th>剩余投入</th><th>持仓成本</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>第 0 年</td><td>0</td><td>10 万</td><td>10 元</td></tr>
+        <tr><td>第 5 年</td><td>2.5 万</td><td>7.5 万</td><td>7.5 元</td></tr>
+        <tr><td>第 10 年</td><td>5 万</td><td>5 万</td><td>5 元</td></tr>
+        <tr><td>第 20 年</td><td>10 万</td><td class="lose">−0 元</td><td class="lose">0 元</td></tr>
+        <tr><td>第 30 年</td><td>15 万</td><td class="lose">−5 万</td><td class="lose">−5 元</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote>
+    <strong>只要公司不倒闭、分红不中断</strong>，20 年后你的 10 万本金已经被分红全额收回。之后每一年的分红都是<span class="hl">净收益</span>，持仓成本正式变成负数。巴菲特长期持有的可口可乐、富国银行等蓝筹股，本质上用的就是这个逻辑。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-method4">
+  <h2 class="section-title">方法四 · 期权备兑 + 可转债事件套利</h2>
+  <h3 class="sub-title">方法四 · 期权备兑（Covered Call）</h3>
+  <p>如果你已经有了<span class="hl">长期持有的底仓</span>（如 1 万股），可以在期权市场每月卖出对应数量的<span class="hl">认购期权（Call）</span>，收取权利金：</p>
+
+  <ul>
+    <li>卖出 1 张认购期权收 200 元</li>
+    <li>每月卖出一次，一年收 2400 元</li>
+    <li>期权到期被行权，你按约定价格卖出股票；同时权利金已经落袋</li>
+  </ul>
+
+  <p>长期下来，权利金累计超过股票原始成本，<span class="hl">持仓成本变负数</span>。</p>
+
+  <h3 class="sub-title">方法五 · 可转债事件套利</h3>
+  <p>这条路径专业性更强：在可转债进入<span class="hl">强赎期</span>或<span class="hl">回售期</span>的事件窗口里，捕捉转股折价、套利空间；或在折价时申购配售对应正股，待正股上涨或转债强赎时套利离场。</p>
+
+  <p>反复做几次事件套利后，累计的套利利润会慢慢把对应正股的持仓成本吃成负数。<span class="hl">可转债是 A 股最适合做"零成本持股"的工具之一</span>。</p>
+
+  <div class="quote-banner">
+    <span class="hl">把持仓成本做到负数</span><br>
+    不是修改市场成交价格<br>
+    而是通过一套<span class="hl">严密的资金管理逻辑</span><br>
+    把<span class="hl">风险资产变成已收回本金的资产</span>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 负成本不等于无风险</div>
+    <p>负成本意味着你的<span class="hl">原始本金已经收回</span>，但这不代表"零风险"。股票依然可能下跌，归零股、退市股的风险依然存在。负成本只解决了<span class="hl">心态问题</span>，不解决<span class="hl">选股问题</span>。在照搬任何降本方法之前，先确认你买的是一只值得长期持有的好公司。</p>
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>负成本公式：<strong>(总投入 − 累计回收 − 累计分红) ÷ 剩余股数</strong></li>
+      <li>方法一·<span class="hl">抽本流利法</span>：分批锁定利润、剩余零成本奔跑（成长股）</li>
+      <li>方法二·<span class="hl">底仓 + 网格作踢</span>：网格利润累加到负成本（震荡市）</li>
+      <li>方法三·<span class="hl">高股息收租</span>：每年分红吃成本（蓝筹股）</li>
+      <li>方法四·<span class="hl">期权备兑</span>：每月卖出 Call 收权利金</li>
+      <li>方法五·<span class="hl">可转债事件套利</span>：A 股最适合作"零成本持股"的工具</li>
+      <li>负成本 ≠ <span class="hl-red">零风险</span>：只解决心态，不解决选股</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 9 · 仓位管理</p>
+</footer>
+
+</body>
