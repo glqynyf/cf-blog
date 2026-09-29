@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>投资组合构建：相关性矩阵与再平衡｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4;
+    --text-mute: #6b7785; --accent: #f0883e;
+    --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff;
+    --yellow: #e3b341; --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    line-height: 1.8; -webkit-font-smoothing: antialiased;
+  }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+    font-size: 13px; color: var(--text-dim); flex-wrap: wrap;
+  }
+  .stage-bar .stage-pill {
+    display: inline-block; padding: 4px 12px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 700; letter-spacing: 1px; font-size: 12px;
+  }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+    font-size: 13px; color: var(--text-mute); flex-wrap: wrap;
+  }
+  .meta-bar .tag {
+    padding: 4px 10px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 600; letter-spacing: 0.5px;
+  }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border); border-left: 4px solid var(--accent);
+    border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow);
+  }
+  .summary-card h3 {
+    font-size: 14px; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px;
+  }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px 24px; margin-bottom: 48px;
+  }
+  .toc h4 {
+    font-size: 13px; color: var(--text-mute); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a {
+    color: var(--text-dim); text-decoration: none; font-size: 14.5px;
+    display: flex; align-items: baseline; transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before {
+    content: counter(toc-counter, decimal-leading-zero);
+    color: var(--accent); font-weight: 700; margin-right: 12px;
+    font-variant-numeric: tabular-nums; min-width: 28px;
+  }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title {
+    font-size: 26px; font-weight: 700; margin-bottom: 24px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--accent);
+    display: inline-block; letter-spacing: -0.3px;
+  }
+  h3.sub-title {
+    font-size: 19px; font-weight: 600; margin: 28px 0 14px;
+    color: var(--text); display: flex; align-items: center;
+  }
+  h3.sub-title::before {
+    content: ""; width: 4px; height: 18px;
+    background: var(--accent); border-radius: 2px; margin-right: 12px;
+  }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote {
+    margin: 20px 0; padding: 16px 22px;
+    background: var(--surface); border-left: 4px solid var(--blue);
+    border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px;
+  }
+  blockquote strong { color: var(--blue); }
+  blockquote.red { border-left-color: var(--red); }
+  blockquote.red strong { color: var(--red); }
+  blockquote.green { border-left-color: var(--green); }
+  blockquote.green strong { color: var(--green); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .formula-box {
+    background: var(--surface); border: 1px solid var(--accent);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+    text-align: center;
+  }
+  .formula-box .formula {
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: var(--accent); font-size: 19px; font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; }
+  .key-points {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+  }
+  .key-points h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li {
+    padding: 8px 0 8px 30px; position: relative;
+    color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border);
+  }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before {
+    content: "✓"; position: absolute; left: 0; top: 8px;
+    color: var(--green); font-weight: 800; font-size: 18px;
+  }
+  .warning-card {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08));
+    border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red);
+    border-radius: 8px; padding: 18px 22px; margin: 20px 0;
+  }
+  .warning-card .label {
+    color: var(--red); font-weight: 700; font-size: 13px;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--accent); border-radius: 10px;
+    padding: 28px 32px; margin: 32px 0;
+    text-align: center; font-size: 19px;
+    font-weight: 600; color: var(--accent);
+    line-height: 1.6; box-shadow: var(--shadow);
+  }
+  .quote-banner::before {
+    content: """; display: block; font-size: 48px;
+    line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5;
+  }
+  .recover-table {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+  }
+  .recover-table h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .recover-table table { width: 100%; border-collapse: collapse; }
+  .recover-table th, .recover-table td {
+    padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);
+    color: var(--text); font-size: 14.5px;
+  }
+  .recover-table th { color: var(--text-dim); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .recover-table .lose { color: var(--red); font-weight: 700; }
+  .recover-table .gain { color: var(--green); font-weight: 700; }
+  .recover-table .mid { color: var(--yellow); font-weight: 700; }
+  .recover-table .low { color: var(--green); font-weight: 700; }
+  .portfolio-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 4px solid var(--blue);
+    border-radius: 8px; padding: 20px 24px; margin: 18px 0;
+  }
+  .portfolio-card .label {
+    color: var(--blue); font-weight: 700; font-size: 13px;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .portfolio-card .desc { color: var(--text-dim); font-size: 14px; margin-bottom: 10px; }
+  .portfolio-card .bar {
+    display: flex; height: 28px; border-radius: 6px; overflow: hidden;
+    margin: 12px 0; border: 1px solid var(--border);
+  }
+  .portfolio-card .bar > div {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: var(--bg);
+    transition: flex 0.3s;
+  }
+  .portfolio-card ul { list-style: none; margin: 12px 0 0; padding: 0; }
+  .portfolio-card ul li {
+    padding: 6px 0; font-size: 14px; color: var(--text);
+    border-bottom: 1px dashed var(--border);
+    display: flex; justify-content: space-between;
+  }
+  .portfolio-card ul li:last-child { border-bottom: none; }
+  .portfolio-card ul li span:last-child { color: var(--accent); font-weight: 700; }
+  .nav-related {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px 24px; margin: 32px 0;
+  }
+  .nav-related h4 {
+    font-size: 13px; color: var(--text-mute);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .nav-related ul { list-style: none; margin: 0; padding: 0; }
+  .nav-related ul li {
+    padding: 8px 0; border-bottom: 1px dashed var(--border);
+    color: var(--text-dim); font-size: 14.5px;
+  }
+  .nav-related ul li:last-child { border-bottom: none; }
+  .nav-related ul li::before {
+    content: "→ "; color: var(--accent); font-weight: 700;
+  }
+  footer.note-footer {
+    margin-top: 72px; padding-top: 28px;
+    border-top: 1px solid var(--border);
+    color: var(--text-mute); font-size: 13.5px; text-align: center;
+  }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 9</span>
+  <span class="stage-name">仓位管理与资金管理</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 18 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 9 · 第 12 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">投资组合构建：相关性矩阵与再平衡</h1>
+  <p class="note-subtitle">选标的远不如"如何配置"重要。一份真正能抗住牛熊的组合，靠的不是<span class="hl">多买几只股票</span>，而是<span class="hl">低相关资产</span> + <span class="hl">纪律化再平衡</span>。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>Brinson 等人 (1986) 的经典研究证明：<span class="hl">91 家美国大型养老基金 10 年数据中，93.6% 的收益波动由资产配置决定</span>，选股只贡献 4.6%，择时 1.8%。这意味着真正的风险不来自"我选了什么股票"，而来自"我把鸡蛋放在哪几个篮子里"——而判断篮子之间是否分散的核心指标，是<span class="hl">相关性</span>，不是数量。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-one">为什么单一持仓不够：93.6% 的真相</a></li>
+    <li><a href="#sec-corr">相关性矩阵：分散的真正核心</a></li>
+    <li><a href="#sec-a-share">A 股常见资产相关性参考表</a></li>
+    <li><a href="#sec-rebal">再平衡：被低估的纪律化收益</a></li>
+    <li><a href="#sec-template">散户可落地的 3 套组合模板</a></li>
+    <li><a href="#sec-mistake">最常见的 3 个误区</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-one">
+  <h2 class="section-title">为什么单一持仓不够：93.6% 的真相</h2>
+  <p>大部分散户以为投资的核心是"选出下一个茅台"。但 1986 年 <span class="hl">Brinson、Hood、Beebower</span> 在 Financial Analysts Journal 上发表的那篇被引用了上万次的经典研究，把这个幻觉打碎了。</p>
+
+  <p>他们跟踪了 <span class="hl">91 家美国大型养老基金</span> 长达 <span class="hl">10 年</span> 的实际表现，把基金的收益分解成三个来源：</p>
+
+  <div class="recover-table">
+    <h4>基金收益波动的三大来源</h4>
+    <table>
+      <thead>
+        <tr><th>收益来源</th><th>对波动的解释力</th><th>通俗解释</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>资产配置（仓位）</td><td class="hl"><strong>93.6%</strong></td><td>股票/债券/海外各放多少</td></tr>
+        <tr><td>个股选择（选股）</td><td class="mid">4.6%</td><td>买了茅台还是五粮液</td></tr>
+        <tr><td>择时（什么时候进出）</td><td class="low">1.8%</td><td>是涨了追还是跌了买</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>换句话说：<strong>你买什么股票不重要，你怎么把股票和其他资产搭配在一起，几乎决定了一切</strong>。选股和择时那 6.4% 的事，99% 的人花 99% 的时间在做；真正重要的 93.6%，几乎没人系统性地思考。</p>
+
+  <blockquote class="red">
+    <strong>A 股散户的悲剧</strong>：90% 的资金压在 <span class="hl">1—3 只股票</span>上，等于把所有风险放在一个篮子里。一旦遭遇黑天鹅（财务造假、行业政策、董事长丑闻），账户一夜回到解放前不是段子，是<span class="hl">结构性的必然结果</span>。
+  </blockquote>
+
+  <p>很多人会说"我分散了，我买了 5 只股票呢"。但如果你买的是茅台、五粮液、洋河、汾酒、古井贡酒——这五只酒同涨同跌，本质上等于只买了"白酒"这一个品种。<span class="hl">真正的分散不是买得多，而是买得"不同"</span>。</p>
+</section>
+
+<section class="section" id="sec-corr">
+  <h2 class="section-title">相关性矩阵：分散的真正核心</h2>
+  <p>判断"不同"的客观指标，叫<span class="hl">相关性系数 ρ（rho）</span>。它的取值范围是 <strong>−1 到 +1</strong>，用来衡量两个资产同涨同跌的程度。</p>
+
+  <div class="formula-box">
+    <div class="formula">ρ ∈ [−1, +1]</div>
+    <div class="desc">ρ = +1 完全正相关 · ρ = 0 不相关 · ρ = −1 完全负相关</div>
+  </div>
+
+  <h3 class="sub-title">三种极端状态的现实含义</h3>
+  <ul>
+    <li><span class="hl">ρ = +1</span>：完全正相关。茅台和五粮液同涨同跌，买两只和买一只的风险几乎一样。</li>
+    <li><span class="hl">ρ = 0</span>：完全不相关。一种资产涨或跌和另一种没有任何关系，组合效果最优。</li>
+    <li><span class="hl">ρ = −1</span>：完全负相关。金价上涨时美元指数往往下跌，二者构成天然对冲。</li>
+  </ul>
+
+  <blockquote>
+    <strong>关键认知</strong>：投资组合的整体风险 = <span class="hl">个股风险的加权平均</span>，但这个加权平均的"折扣"由<span class="hl">相关性</span>决定。哪怕你每只股票风险都是 30%，只要它们彼此相关性接近 0，整个组合的风险可能只有 15%—18%。<strong>分散的魔法不来自数量，来自低相关性</strong>。
+  </blockquote>
+
+  <h3 class="sub-title">A 股的现实约束</h3>
+  <p>A 股资产之间的相关性比想象中更高：</p>
+  <ul>
+    <li>沪深 300、消费、医药、金融、科技——这些主流宽基和行业 ETF 之间的相关性普遍在 <span class="hl">0.7—0.9</span></li>
+    <li>只有跨大类（股、债、黄金、海外、美元）才能拿到 <span class="hl">0.5 以下</span> 的相关性</li>
+    <li>真正的"分散资产"在 A 股只有 4—5 类：<span class="hl">A 股大盘、行业、债券、黄金、港股/海外</span></li>
+  </ul>
+</section>
+
+<section class="section" id="sec-a-share">
+  <h2 class="section-title">A 股常见资产相关性参考表</h2>
+  <p>下表是过去 5 年（2019—2024）A 股市场各类常见 ETF 与大盘指数的<span class="hl">日收益率相关系数</span>参考。数字越大，越倾向于同涨同跌。</p>
+
+  <div class="recover-table">
+    <h4>A 股常见资产相关性矩阵（参考）</h4>
+    <table>
+      <thead>
+        <tr><th>资产</th><th>与上证指数相关性</th><th>与沪深 300 相关性</th><th>分散效果</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>沪深 300 ETF</td><td>1.00</td><td>1.00</td><td class="lose">完全同步</td></tr>
+        <tr><td>创业板 ETF</td><td>0.85</td><td>0.85</td><td class="lose">高度同步</td></tr>
+        <tr><td>消费 ETF</td><td>0.75</td><td>0.80</td><td class="mid">中等同步</td></tr>
+        <tr><td>医药 ETF</td><td>0.70</td><td>0.75</td><td class="mid">中等同步</td></tr>
+        <tr><td>金融 ETF</td><td>0.85</td><td>0.90</td><td class="lose">高度同步</td></tr>
+        <tr><td>黄金 ETF</td><td>−0.10</td><td>−0.10</td><td class="low">几乎无关 ✓</td></tr>
+        <tr><td>国债 ETF</td><td>−0.20</td><td>−0.20</td><td class="low">弱负相关 ✓</td></tr>
+        <tr><td>港股 ETF</td><td>0.65</td><td>0.70</td><td class="mid">中等同步</td></tr>
+        <tr><td>美元指数</td><td>−0.30</td><td>−0.30</td><td class="low">弱负相关 ✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote class="green">
+    <strong>实操启示</strong>：<span class="hl">跨资产相关性低于 0.5 才能真正分散风险</span>。观察这张表你会发现：A 股内部相关性都很高（0.65—1.0），只有<span class="hl">黄金、国债、美元</span>这些跨大类资产才进入"真分散"区间。<strong>这就是为什么组合里必须配债、必须配黄金——不是为了收益，是为了救命</strong>。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-rebal">
+  <h2 class="section-title">再平衡：被低估的纪律化收益</h2>
+  <p><span class="hl">再平衡（Rebalancing）</span>就是定期把组合里各资产的比例"调回"最初设定的目标。比如你原计划股 6 债 4，一年后股票涨得快变成股 7 债 3，再平衡就是<span class="hl">卖出股票买入债券</span>，恢复到 6:4。</p>
+
+  <p>听起来像"高抛低吸"？对，本质上就是<span class="hl">纪律化的反向操作</span>。</p>
+
+  <h3 class="sub-title">三种主流再平衡方法</h3>
+  <div class="recover-table">
+    <h4>三种再平衡方法对比</h4>
+    <table>
+      <thead>
+        <tr><th>方法</th><th>触发条件</th><th>优点</th><th>缺点</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="hl">阈值法</span></td><td>任一资产偏离目标 5—10%</td><td>只在必要时交易，省手续费</td><td>需要持续监控</td></tr>
+        <tr><td><span class="hl">时间法</span></td><td>每季度/半年强制再平衡</td><td>执行简单、机械</td><td>可能做无用功</td></tr>
+        <tr><td><span class="hl">混合法</span></td><td>季度检查 + 偏离 5% 触发</td><td>兼顾效率与纪律</td><td>需要简单记录</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote>
+    <strong>学术研究的结论</strong>：多份实证研究显示，再平衡本身能贡献约 <span class="hl">0.3—0.5%</span> 的年化超额收益。<span class="hl">看似不多，但这是"免费午餐"</span>——你的工作只是每月看一眼账户，做一次机械调仓。
+  </blockquote>
+
+  <h3 class="sub-title">再平衡的心理学价值</h3>
+  <p>再平衡最大的价值不在收益数字，而在<span class="hl">对抗人性</span>：</p>
+  <ul>
+    <li>股票涨多了，你本能想"再加一点"——再平衡告诉你<span class="hl">应该卖</span></li>
+    <li>股票跌多了，你本能想"止损跑路"——再平衡告诉你<span class="hl">应该买</span></li>
+    <li>它把"高抛低吸"这件最难的事，变成了一条<span class="hl">不需要判断的规则</span></li>
+  </ul>
+
+  <div class="quote-banner">
+    再平衡不是择时<br>
+    而是<span class="hl">用规则替代情绪</span><br>
+    把"高抛低吸"从一种天赋<br>
+    变成<span class="hl">任何人都能执行的纪律</span>
+  </div>
+</section>
+
+<section class="section" id="sec-template">
+  <h2 class="section-title">散户可落地的 3 套组合模板</h2>
+  <p>理论说完了，落地才是关键。下面是<span class="hl">三个风险梯度</span>的组合模板，全部用 ETF 实现（场内 ETF 费率低、透明度高、随时可交易）。</p>
+
+  <div class="portfolio-card">
+    <div class="label">模板 A · 稳健型（适合：保守/养老/不能接受大波动）</div>
+    <div class="desc">股 6.5 + 债 2 + 黄金 1.5，跨大类分散，预期年化波动 8—10%</div>
+    <div class="bar">
+      <div style="flex: 50; background: #58a6ff;">沪深 300<br>50%</div>
+      <div style="flex: 20; background: #56d364;">债券<br>20%</div>
+      <div style="flex: 15; background: #e3b341;">黄金<br>15%</div>
+      <div style="flex: 15; background: #bc8cff;">港股<br>15%</div>
+    </div>
+    <ul>
+      <li><span>沪深 300 ETF（510300）</span><span>50%</span></li>
+      <li><span>债券 ETF（511010 或 511260）</span><span>20%</span></li>
+      <li><span>黄金 ETF（518880）</span><span>15%</span></li>
+      <li><span>港股 ETF（513050 或 510900）</span><span>15%</span></li>
+    </ul>
+  </div>
+
+  <div class="portfolio-card">
+    <div class="label">模板 B · 平衡型（适合：长期投资 / 30 岁左右 / 中等风险偏好）</div>
+    <div class="desc">股 8 + 黄金 1 + 港股 1，进攻为主防御为辅，预期年化波动 12—15%</div>
+    <div class="bar">
+      <div style="flex: 40; background: #58a6ff;">沪深 300<br>40%</div>
+      <div style="flex: 20; background: #f0883e;">创业板<br>20%</div>
+      <div style="flex: 20; background: #bc8cff;">行业 ETF<br>20%</div>
+      <div style="flex: 10; background: #56d364;">港股<br>10%</div>
+      <div style="flex: 10; background: #e3b341;">黄金<br>10%</div>
+    </div>
+    <ul>
+      <li><span>沪深 300 ETF（510300）</span><span>40%</span></li>
+      <li><span>创业板 ETF（159915）</span><span>20%</span></li>
+      <li><span>行业 ETF（消费/医药/科技三选一，分批配置）</span><span>20%</span></li>
+      <li><span>港股 ETF（513050）</span><span>10%</span></li>
+      <li><span>黄金 ETF（518880）</span><span>10%</span></li>
+    </ul>
+  </div>
+
+  <div class="portfolio-card">
+    <div class="label">模板 C · 进取型（适合：年轻 / 高风险偏好 / 10 年以上不动的钱）</div>
+    <div class="desc">几乎全股票仓位，行业暴露更高，预期年化波动 18—25%</div>
+    <div class="bar">
+      <div style="flex: 30; background: #58a6ff;">沪深 300<br>30%</div>
+      <div style="flex: 25; background: #f0883e;">创业板<br>25%</div>
+      <div style="flex: 25; background: #bc8cff;">行业主题<br>25%</div>
+      <div style="flex: 15; background: #56d364;">港股<br>15%</div>
+      <div style="flex: 5; background: #e3b341;">黄金/债券<br>5%</div>
+    </div>
+    <ul>
+      <li><span>沪深 300 ETF（510300）</span><span>30%</span></li>
+      <li><span>创业板 ETF（159915）</span><span>25%</span></li>
+      <li><span>行业主题 ETF（科技/新能源/医药 等）</span><span>25%</span></li>
+      <li><span>港股 ETF（513050）</span><span>15%</span></li>
+      <li><span>黄金/债券 ETF（微量对冲）</span><span>5%</span></li>
+    </ul>
+  </div>
+
+  <blockquote>
+    <strong>使用建议</strong>：<span class="hl">先用 12 个月工资、1 年内不需要动用的钱</span>试水。组合一旦确定，<span class="hl">至少运行 3 年再评判</span>。中间最多做季度再平衡，<span class="hl">不要因为短期波动就调结构</span>。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-mistake">
+  <h2 class="section-title">最常见的 3 个误区</h2>
+  <p>即使知道了相关性矩阵和再平衡，散户依然会犯三个致命错误。</p>
+
+  <div class="recover-table">
+    <h4>三个最常见的组合构建误区</h4>
+    <table>
+      <thead>
+        <tr><th>误区</th><th>散户认知</th><th>真相</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>分散 = 买很多只股票</td><td>持仓 10 只以上就分散了</td><td class="lose">买 10 只白酒和买 1 只没区别</td></tr>
+        <tr><td>低相关 = 低风险</td><td>相关性低就够了</td><td class="lose">还要看波动率和最大回撤</td></tr>
+        <tr><td>再平衡 = 高抛低吸</td><td>再平衡就是择时</td><td class="gain">再平衡是机械执行，不是判断</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub-title">误区 1 · 分散 = 买很多只股票</h3>
+  <p>最经典的错误。<span class="hl">数量从来不是分散的标准，相关性才是</span>。买 10 只白酒的组合实际只有 1 个风险因子（白酒行业景气度），一旦行业遭遇塑化剂、禁酒令、消费降级，整组一起崩。</p>
+
+  <blockquote>
+    <strong>检验方法</strong>：问自己——"如果某只股票黑天鹅跌停 50%，其他持仓会不会受影响？"<span class="hl">如果答案是"会"，它们本质上是同一只股票</span>。
+  </blockquote>
+
+  <h3 class="sub-title">误区 2 · 低相关 = 低风险</h3>
+  <p>相关性只是<span class="hl">组合风险的一个维度</span>。你还需要看每只资产自身的<span class="hl">波动率</span>和<span class="hl">最大回撤</span>。比如某种加密货币和股票相关性为 0，但自身波动率 80%，年化最大回撤 90%——把它放进组合，可能比不放更危险。</p>
+
+  <h3 class="sub-title">误区 3 · 再平衡 = 高抛低吸</h3>
+  <p>再平衡不是"我觉得高了就卖、低了就买"的择时。<span class="hl">再平衡是事先定好规则，事到临头时机械执行</span>。它的前提是<span class="hl">没有判断</span>——只要某个资产偏离目标超过 5%，就调，不问为什么。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 一个必须警惕的陷阱</div>
+    <p>很多散户学了再平衡后，开始<span class="hl">频繁操作</span>，把好好的季度再平衡做成"每周调一次"。结果就是<span class="hl">手续费吃掉所有再平衡收益</span>，甚至倒亏。再平衡的真谛是"<span class="hl">少动</span>"——大部分时间什么都不做，到了规则触发的那一刻才动一下。</p>
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>Brinson (1986)：<span class="hl">93.6% 的收益波动</span>由资产配置决定，选股 4.6%，择时 1.8%</li>
+      <li>分散的核心不是数量，是<span class="hl">相关性</span>——跨大类资产相关性低于 0.5 才算真分散</li>
+      <li>A 股内部资产相关性普遍在 0.65—1.0，<span class="hl">只有股/债/金/海外四类</span>是真分散资产</li>
+      <li>再平衡 = <span class="hl">纪律化的反向操作</span>，阈值法、时间法、混合法三种</li>
+      <li>再平衡贡献 <span class="hl">0.3—0.5% 年化超额收益</span>，且最大价值是<span class="hl">对抗人性</span></li>
+      <li>三个模板：稳健型（债 20% + 金 15%）、平衡型（跨股 + 金）、进取型（几乎全股）</li>
+      <li>三个误区：<span class="hl">数量 ≠ 分散、低相关 ≠ 低风险、再平衡 ≠ 择时</span></li>
+    </ul>
+  </div>
+</section>
+
+<div class="nav-related">
+  <h4>相关笔记</h4>
+  <ul>
+    <li>S09-01 · 仓位管理为什么比选股更重要</li>
+    <li>S09-08 · 持仓成本做成负数</li>
+    <li>S10-02 · 真正看懂一家公司</li>
+  </ul>
+</div>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 9 · 仓位管理</p>
+</footer>
+
+</body>
