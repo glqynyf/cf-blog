@@ -150,6 +150,7 @@ npm run preview    # 本地预览构建产物
 | `add-note-canonical.py` | 注入 `<link rel="canonical">` |
 | `generate-og-images.py` | 批量生成 OG 分享图 |
 | `post-images/` | 单篇文章配图生成 |
+| `push-via-api.py` | **`github.com` 主站不可达时的应急推送**，改走 `api.github.com` |
 
 > ⚠️ `generate-og-images.py` 与 `post-images/` 读取的是**已不存在的** `src/content/posts/`，属于旧内容结构的遗留，当前跑不通。
 >
@@ -182,6 +183,21 @@ Cloudflare Pages 已通过 Git 集成配置好，**推送到 `main` 即自动部
 | Node version | `20`（Environment variable `NODE_VERSION=20`） |
 
 部署耗时约 100 秒。**验证线上更新时务必给 URL 加 cache-buster**（如 `?cb=1234`）—— Cloudflare 边缘对静态 HTML 有长达 7 天的 `s-maxage` 缓存，不加会读到旧内容，误判成「新构建没生效」。
+
+### 推送失败：`Error in the HTTP2 framing layer`
+
+某些网络下 `github.com` 主站不可达（DNS 解析到的 IP 连不上，备用 anycast 入口也分钟级波动），表现为 `git push` 报 `Error in the HTTP2 framing layer`。此时 **`api.github.com` 通常仍然可用**，且用的是同一份账号凭据：
+
+```bash
+python3 scripts/push-via-api.py --dry-run   # 先比对，确认要推什么
+python3 scripts/push-via-api.py             # 走 Git Data API 推送
+```
+
+⚠️ 这会留下**本地与远端 SHA 不一致**（内容完全一致，只是 commit 元数据不同）。网络恢复后收敛一次即可，不会丢内容：
+
+```bash
+git fetch origin && git reset --hard origin/main
+```
 
 ## ⚠️ 已知约束
 
