@@ -7,7 +7,7 @@
  *    章节   序号                标题
  *
  * 笔记不经过 Astro 处理（不读 frontmatter、不做 Markdown 转换），
- * Astro 只负责：扫描文件名生成目录（/notes/）与章节页（/notes/S00/）。
+ * Astro 只负责：扫描文件名生成目录页（/notes/），并支持 ?stage=S00 单章筛选。
  */
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -95,23 +95,4 @@ export function getAllNotes(): { stages: Stage[]; all: Note[] } {
 
   cached = { stages, all };
   return cached;
-}
-
-/** 按章节 ID 取单个章节；不存在返回 undefined。 */
-export function getStage(stageId: string): Stage | undefined {
-  return getAllNotes().stages.find((s) => s.id === stageId);
-}
-
-/** 取某章节的上一个 / 下一个章节，用于章节页的翻页导航。 */
-export function getStageNeighbours(stageId: string): {
-  prev?: Stage;
-  next?: Stage;
-} {
-  const { stages } = getAllNotes();
-  const i = stages.findIndex((s) => s.id === stageId);
-  if (i === -1) return {};
-  return {
-    prev: i > 0 ? stages[i - 1] : undefined,
-    next: i < stages.length - 1 ? stages[i + 1] : undefined,
-  };
 }

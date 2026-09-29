@@ -65,7 +65,7 @@ const stagePreview = stages.map((s) => ({
       </p>
       <div class="note-stage-grid">
         {stagePreview.map((stage) => (
-          <a class="note-stage-card" href={`/notes/${stage.id}/`}>
+          <a class="note-stage-card" href={`/notes/?stage=${stage.id}`}>
             <div class="note-stage-card__head">
               <span class="note-stage-card__id">{stage.id}</span>
               <span class="note-stage-card__count">{stage.count} 篇</span>

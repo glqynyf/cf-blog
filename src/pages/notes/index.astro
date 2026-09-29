@@ -3,11 +3,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getAllNotes } from '../../utils/notes';
 
 /**
- * 笔记总索引：在 Astro build 时扫描 public/notes/ 下的所有 HTML 文件，
+ * 笔记索引页：Astro build 时扫描 public/notes/ 下的所有 HTML 文件，
  * 按章节前缀（S00-S13）分组列出。笔记正文是独立 HTML（深色主题），
  * 不经过 Astro 处理；这里只负责目录和导航。
  *
- * 每章另有独立页面 /notes/{stage}/，只列该章笔记。
+ * 单章视图用 URL query 参数实现，避免动态路由：
+ *   /notes/            → 全部 115 篇
+ *   /notes/?stage=S00  → 只显示 S00 章的 9 篇
+ * 脚本（is:inline）在客户端读取 ?stage= 后隐藏其他章节，
+ * 因此静态构建即可工作，不需要为每章生成单独页面。
  */
 const { stages, all: notes } = getAllNotes();
 ---
@@ -26,35 +30,106 @@ const { stages, all: notes } = getAllNotes();
       </p>
     </header>
 
-    {stages.map((stage) => (
-      <section class="stage-group" id={stage.id}>
-        <h2 class="stage-group__title">
-          <span class="stage-group__id">{stage.id}</span>
-          <a class="stage-group__name" href={`/notes/${stage.id}/`}>{stage.title}</a>
-          <span class="stage-group__count">{stage.notes.length} 篇</span>
-        </h2>
-        <ol class="note-list">
-          {stage.notes.map((note) => (
-            <li>
-              <a class="note-list__link" href={`/notes/${note.slug}`}>
-                <span class="note-list__num">{note.num}</span>
-                <span class="note-list__title">{note.title}</span>
-                <span class="note-list__arrow" aria-hidden="true">→</span>
-              </a>
-            </li>
-          ))}
-        </ol>
-        <a class="stage-group__more" href={`/notes/${stage.id}/`}>
-          只看本章 {stage.notes.length} 篇 →
+    <nav class="stage-filter" aria-label="按章节筛选">
+      <a class="stage-filter__chip" href="/notes/" data-stage-chip data-stage-title="全部笔记">全部</a>
+      {stages.map((stage) => (
+        <a
+          class="stage-filter__chip"
+          href={`/notes/?stage=${stage.id}`}
+          data-stage-chip={stage.id}
+          data-stage-title={stage.title}
+        >
+          <span class="stage-filter__id">{stage.id}</span>
+          {stage.title.split(' · ')[0]}
         </a>
-      </section>
-    ))}
+      ))}
+    </nav>
+
+    <div id="stage-view" data-all-count={notes.length}>
+      {stages.map((stage) => (
+        <section class="stage-group" id={stage.id} data-stage={stage.id}>
+          <h2 class="stage-group__title">
+            <span class="stage-group__id">{stage.id}</span>
+            <span class="stage-group__name">{stage.title}</span>
+            <span class="stage-group__count">{stage.notes.length} 篇</span>
+          </h2>
+          <ol class="note-list">
+            {stage.notes.map((note) => (
+              <li>
+                <a class="note-list__link" href={`/notes/${note.slug}`}>
+                  <span class="note-list__num">{note.num}</span>
+                  <span class="note-list__title">{note.title}</span>
+                  <span class="note-list__arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ))}
+    </div>
+
+    <p class="stage-empty" data-stage-empty hidden>该章节没有笔记。</p>
   </section>
+
+  <script is:inline>
+    // 单章视图：/notes/?stage=S00 只显示 S00 章，其余章节隐藏。
+    // 静态构建产物里所有章节都在 HTML 中，由这里按参数过滤。
+    (function () {
+      var view = document.getElementById('stage-view');
+      if (!view) return;
+
+      var stage = new URLSearchParams(location.search).get('stage');
+      var groups = Array.prototype.slice.call(
+        view.querySelectorAll('[data-stage]')
+      );
+      var chips = Array.prototype.slice.call(
+        document.querySelectorAll('[data-stage-chip]')
+      );
+      var lead = document.querySelector('.page-header__lead');
+      var h1 = document.querySelector('.page-header h1');
+
+      if (!stage) {
+        // 全部视图：给「全部」chip 加高亮
+        chips.forEach(function (c) {
+          if (!c.getAttribute('data-stage-chip')) c.classList.add('is-active');
+        });
+        return;
+      }
+
+      var matched = 0;
+      groups.forEach(function (g) {
+        var on = g.getAttribute('data-stage') === stage;
+        g.hidden = !on;
+        if (on) matched += 1;
+      });
+
+      chips.forEach(function (c) {
+        if (c.getAttribute('data-stage-chip') === stage) c.classList.add('is-active');
+      });
+
+      if (matched === 0) {
+        var empty = document.querySelector('[data-stage-empty]');
+        if (empty) empty.hidden = false;
+      }
+
+      if (h1) {
+        var active = document.querySelector('[data-stage-chip="' + stage + '"]');
+        var name = active ? active.getAttribute('data-stage-title') : stage;
+        h1.textContent = stage + ' · ' + (name || stage);
+      }
+
+      if (lead) {
+        var visible = view.querySelector('[data-stage="' + stage + '"]');
+        var n = visible ? visible.querySelectorAll('.note-list__link').length : 0;
+        lead.textContent = '本章共 ' + n + ' 篇笔记。';
+      }
+    })();
+  </script>
 </BaseLayout>
 
 <style>
   .page-header {
-    margin-bottom: var(--space-12);
+    margin-bottom: var(--space-8);
     padding-bottom: var(--space-6);
     border-bottom: 1px solid var(--border-default);
   }
@@ -81,8 +156,58 @@ const { stages, all: notes } = getAllNotes();
     line-height: 1.7;
   }
 
+  /* 章节筛选 chips */
+  .stage-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-8);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px dashed var(--border-default);
+  }
+
+  .stage-filter__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: 999px;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+
+  .stage-filter__chip:hover {
+    color: var(--accent-hover);
+    border-color: var(--accent);
+    background: var(--accent-subtle);
+    text-decoration: none;
+  }
+
+  .stage-filter__chip.is-active {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--accent-subtle);
+    font-weight: 600;
+  }
+
+  .stage-filter__id {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
   .stage-group {
     margin-bottom: var(--space-10);
+  }
+
+  .stage-group[hidden] {
+    display: none;
   }
 
   .stage-group__title {
@@ -110,13 +235,6 @@ const { stages, all: notes } = getAllNotes();
     flex: 1;
     color: var(--text-primary);
     font-weight: 600;
-    text-decoration: none;
-    transition: color var(--transition-fast);
-  }
-
-  .stage-group__name:hover {
-    color: var(--accent);
-    text-decoration: none;
   }
 
   .stage-group__count {
@@ -124,18 +242,6 @@ const { stages, all: notes } = getAllNotes();
     font-size: 0.8125rem;
     color: var(--text-muted);
     font-weight: 400;
-  }
-
-  .stage-group__more {
-    display: inline-block;
-    margin-top: var(--space-3);
-    font-size: 0.8125rem;
-    color: var(--accent);
-    text-decoration: none;
-  }
-
-  .stage-group__more:hover {
-    text-decoration: underline;
   }
 
   .note-list {
@@ -194,6 +300,15 @@ const { stages, all: notes } = getAllNotes();
     opacity: 1;
     transform: translateX(4px);
     color: var(--accent);
+  }
+
+  .stage-empty {
+    padding: var(--space-8);
+    text-align: center;
+    color: var(--text-muted);
+    background: var(--bg-subtle);
+    border-radius: var(--radius-lg);
+    border: 1px dashed var(--border-default);
   }
 
   @media (max-width: 640px) {
