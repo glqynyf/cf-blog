@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>均线系统 5 大法则 + 葛南维八大买卖点：5/10/20/60 日线经典搭配｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px;
+    padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px;
+    display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero);
+    color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--accent);
+    display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px;
+    color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue);
+    border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .formula-box { background: var(--surface); border: 1px solid var(--accent);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0; text-align: center; }
+  .formula-box .formula { font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: var(--accent); font-size: 19px; font-weight: 700; margin-bottom: 12px; }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; }
+  .key-points { background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative;
+    color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px;
+    color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08));
+    border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red);
+    border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0;
+    text-align: center; font-size: 19px; font-weight: 600; color: var(--accent);
+    line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px;
+    line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  .compare-grid .col { padding: 18px 20px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); }
+  .compare-grid .col h4 { font-size: 15px; margin-bottom: 10px; color: var(--accent); }
+  .compare-grid .col ul { margin: 0; padding-left: 18px; }
+  .compare-grid .col ul li { font-size: 14px; color: var(--text-dim); }
+  table.signal-table { width: 100%; border-collapse: collapse; margin: 20px 0;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  table.signal-table th { background: var(--surface-2); color: var(--accent);
+    padding: 12px 14px; text-align: left; font-size: 13px; letter-spacing: 1px;
+    text-transform: uppercase; border-bottom: 1px solid var(--border); }
+  table.signal-table td { padding: 12px 14px; color: var(--text); font-size: 14.5px;
+    border-bottom: 1px solid var(--border); }
+  table.signal-table tr:last-child td { border-bottom: none; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border);
+    color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; }
+    .compare-grid { grid-template-columns: 1fr; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 4</span>
+  <span class="stage-name">均线系统与趋势</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 12 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 4 · 第 1 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">均线系统 5 大法则 + 葛南维八大买卖点：5/10/20/60 日线经典搭配</h1>
+  <p class="note-subtitle">为什么一买金叉就被套？不是均线本身有问题，是没看懂背后"资金成本"的语言。5 日是情绪、10 日是心跳、20 日是生命线、60 日是牛熊分界线——这一篇把这套语言翻译给你听。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>均线不是数学公式，是<span class="hl">几十亿真金白银堆出来的"市场平均成本"</span>。它同时是<span class="hl">引力、陷阱、心理安全区</span>。读懂 5/10/20/60 日四根线的角色分工，再叠加"空间引力、多头排列、均线黏合、量价配合、葛南维八大买卖点"<span class="hl-red">六大法则</span>，就能识别主力故意做出来的"均线绞杀"。<span class="src">注：原文标题"5 大法则"与内部"葛南维八大买卖点"自相矛盾——5+8 应为 13，但通常将葛南维八大买卖点视为均线的子模块，故统称"均线系统六大法则"。</span></p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-role">5/10/20/60 四根线的角色分工</a></li>
+    <li><a href="#sec-law1">法则一 · 空间引力：远离均线不追高，靠近均线找机会</a></li>
+    <li><a href="#sec-law2">法则二 · 多头排列的共振效应</a></li>
+    <li><a href="#sec-law3">法则三 · 均线黏合：火山喷发前的寂静</a></li>
+    <li><a href="#sec-law4">法则四 · 葛南维八大买卖点</a></li>
+    <li><a href="#sec-law5">法则五 · 量价配合：均线的"油箱"</a></li>
+    <li><a href="#sec-trap">主力"均线绞杀"三大陷阱</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-role">
+  <h2 class="section-title">5/10/20/60 四根线的角色分工</h2>
+  <p>很多人把均线当成几条会拐弯的曲线，其实它是一支<span class="hl">军队的指挥系统</span>。每一根线代表不同周期资金的"持仓成本"，不同资金各有各的性格：</p>
+
+  <table class="signal-table">
+    <thead>
+      <tr><th>均线</th><th>角色</th><th>反映的资金</th><th>含义</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="hl">5 日线</span></td><td>呼吸线</td><td>短线客情绪</td>
+        <td>5 天平均成本，最敏感。股价跌破 = 短线资金在撤退</td>
+      </tr>
+      <tr>
+        <td><span class="hl-blue">10 日线</span></td><td>心跳线</td><td>活跃资金动向</td>
+        <td>回踩 5 日没稳，但只要 10 日能勾回来，这口气就没断</td>
+      </tr>
+      <tr>
+        <td><span class="hl-green">20 日线</span></td><td>生命线</td><td>中线资金成本</td>
+        <td>一个月平均成本。站稳 = 中长线资金开始进场</td>
+      </tr>
+      <tr>
+        <td><span class="hl-red">60 日线</span></td><td>牛熊分界线</td><td>季线 / 战略资金</td>
+        <td>下方是反弹，上方才是反转；最高指挥部级别的战略意志</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <strong>一个生活化的比喻：</strong>把均线想成菜市场的鸡蛋价格。过去 5 天鸡蛋均价 5 元，今天突然涨到 7 元——5 元就是你的"心理防线"，对应 5 日线。<strong>均线之所以有用，是因为它对应着真金白银的持仓成本</strong>，跌破这里就意味着那批最敏感的资金开始认赔或止盈。
+  </blockquote>
+
+  <p>把这四根线合在一起看，就像一支军队的指挥系统：</p>
+  <ul>
+    <li><strong>5 日线</strong>是前线侦察兵，跑得最快、最容易牺牲</li>
+    <li><strong>10 日线</strong>是冲锋队，节奏稳健一些</li>
+    <li><strong>20 日线</strong>是大后方支援，决定能不能持久</li>
+    <li><strong>60 日线</strong>是最高指挥部，是"打还是撤"的战略意志</li>
+  </ul>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 散户最常犯的错</div>
+    <p>把每一根线单独看——见到 5 日金叉 10 日就冲进去，结果冲到顶回落。<strong>任何单根线都不算数，必须看四根线的协同关系</strong>，否则你就被主力用"均线绞杀"收割。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-law1">
+  <h2 class="section-title">法则一 · 空间引力：远离均线不追高，靠近均线找机会</h2>
+  <p>这一条的核心思想其实非常直觉：</p>
+
+  <blockquote class="purple">
+    <strong>股价像主人手里牵着的那条狗，均线就是主人。</strong>狗跑得太远了，绳子会把它勒回来；狗落得太多了，主人会停下来等它。<strong>这就是乖离率（BIAS）的物理本质。</strong>
+  </blockquote>
+
+  <p>从大量历史走势复盘看，绝大多数短线见顶都伴随着<span class="hl">5 日均线与 20 日均线正乖离率过大</span>。这不是玄学，而是获利盘集中兑现形成的"规律性现象"。</p>
+
+  <div class="formula-box">
+    <div class="formula">5 日乖离率 = (现价 − 5 日均线) / 5 日均线 × 100%</div>
+    <div class="desc">超过 5%–7% 属于过热区，警惕短线回调</div>
+  </div>
+
+  <p>所以法则一的关键是两个字：<strong>"等"</strong>。</p>
+  <ul>
+    <li>不要在 5 日线远离 20 日线时追高</li>
+    <li>不要在突破发生的那一刻就动手</li>
+    <li>相对稳妥的窗口是——<span class="hl">突破之后回踩均线确认支撑的那一刻</span></li>
+  </ul>
+</section>
+
+<section class="section" id="sec-law2">
+  <h2 class="section-title">法则二 · 多头排列的共振效应</h2>
+  <p><strong>多头排列</strong>是均线系统最直观的健康形态：</p>
+  <blockquote>
+    <strong>5 日 &gt; 10 日 &gt; 20 日 &gt; 60 日</strong>，四条线像楼梯一样依次向上排列，<span class="hl-blue">每一根短期均线都在长期均线之上</span>，就像四位数的台阶一级比一级高。
+  </blockquote>
+
+  <p>这种形态意味着——不管短线客、中线机构还是长线资金，所有人<strong>都处在盈利状态</strong>。一个人赚钱会想显摆，所有人都赚钱就形成了强大的持仓信心。所以：</p>
+  <ul>
+    <li>回调到 10 日线 / 20 日线附近，往往是值得重点观察的位置</li>
+    <li>每一次缩量回踩生命线，都可能是新一轮上车的机会</li>
+  </ul>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 看多头发排列只看线不看"脚"</div>
+    <p>很多新手只看均线排列，不看<strong>斜率</strong>。如果 5 日线斜率超过 45 度且持续时间过长，叫<span class="hl-red">"加速赶顶"</span>——<strong>能量在衰竭</strong>。真正走得远的强势股，均线往往是<span class="hl-green">温和、有节奏地向上倾斜</span>。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-law3">
+  <h2 class="section-title">法则三 · 均线黏合：火山喷发前的寂静</h2>
+  <p>均线黏合是整个均线系统里<span class="hl">最具前瞻性</span>的信号：</p>
+
+  <blockquote class="purple">
+    <strong>当 5 日、10 日、20 日线几乎重合在一起形成一条直线时</strong>，意味着市场上几乎所有参与者的持仓成本都出奇一致。<strong>这就是火山喷发前的寂静</strong>。
+  </blockquote>
+
+  <p>在那些波澜壮阔的翻倍行情里，许多强势股在起爆前是不是都经历了一段<strong>漫长的均线黏合期</strong>？这时候你不需要预测，只需要<span class="hl">耐心观察那根"变盘信号"</span>：</p>
+  <ul>
+    <li>放量 + 大阳线 + 突破黏合区 = 发令枪响</li>
+    <li>均线开始向上发散（多头排列）= 行情正式启动</li>
+  </ul>
+
+  <p>反过来，<span class="hl-red">均线黏合后向下突破</span>，同样要警惕——意味着所有人的持仓成本都被跌破，集中止损会引发雪崩。</p>
+</section>
+
+<section class="section" id="sec-law4">
+  <h2 class="section-title">法则四 · 葛南维八大买卖点</h2>
+  <p>葛南维（Granville）八大法则是均线系统的"经典圣经"。它的核心是：<strong>均线与股价的位置关系 + 乖离率</strong>，而不是单纯的金叉死叉。</p>
+
+  <table class="signal-table">
+    <thead>
+      <tr><th>买点信号</th><th>卖出信号</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>股价从下上穿均线 + 均线开始走平或上行</td><td>股价从上下穿均线 + 均线开始走平或下行</td></tr>
+      <tr><td>股价回踩均线不破 + 缩量</td><td>股价反弹受阻于均线 + 缩量</td></tr>
+      <tr><td>乖离率过大后回归均线</td><td>乖离率过小后远离均线</td></tr>
+      <tr><td>均线金叉 + 多头排列 + 成交量放大</td><td>均线死叉 + 空头排列 + 成交量放大</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 葛南维法则的局限</div>
+    <p>这套法则是 1960 年代提出的，基于美国市场的统计特征。在 A 股的<strong>震荡市和单边趋势</strong>中胜率会显著下降。<strong>它适合"框架理解"，不适合机械执行</strong>——具体买点还要叠加趋势、量能、位置三个过滤条件。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-law5">
+  <h2 class="section-title">法则五 · 量价配合：均线的"油箱"</h2>
+  <p>均线告诉你<span class="hl">方向</span>，成交量告诉你<span class="hl">动力</span>。<strong>没有成交量的均线信号都是"没油的发动机"</strong>。</p>
+
+  <div class="compare-grid">
+    <div class="col">
+      <h4>✓ 健康的多头形态</h4>
+      <ul>
+        <li>5 日上穿 10 日，<strong>放量</strong></li>
+        <li>回踩 20 日，<strong>缩量</strong></li>
+        <li>突破黏合区，<strong>放量</strong></li>
+        <li>回调重要均线后反弹，<strong>再次放量</strong></li>
+      </ul>
+    </div>
+    <div class="col" style="border-left: 4px solid var(--red);">
+      <h4>❌ 危险的"假金叉"</h4>
+      <ul>
+        <li>5 日上穿 10 日，<strong>缩量</strong></li>
+        <li>回踩 20 日，<strong>放量跌破</strong></li>
+        <li>看似突破，<strong>无量跟随</strong></li>
+        <li>均线交叉但<strong>斜率向下</strong></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="sec-trap">
+  <h2 class="section-title">主力"均线绞杀"三大陷阱</h2>
+  <p>看懂均线还不够，<strong>主力会故意用均线做陷阱</strong>：</p>
+
+  <h3 class="sub-title">陷阱一 · 假金叉诱多</h3>
+  <p>主力先打压股价让 5 日线、10 日线形成死叉，散户割肉。然后突然拉升，让 5 日线快速上穿 10 日线——"教科书金叉"出现，散户追进，主力在高位派发。</p>
+
+  <h3 class="sub-title">陷阱二 · 均线黏合后假突破</h3>
+  <p>长期均线黏合后，主力用少量资金快速拉出一根放量阳线突破，散户蜂拥而入，结果主力反向砸盘，股价跌破黏合区下沿，<span class="hl-red">所有"突破追进去"的人都被埋</span>。</p>
+
+  <h3 class="sub-title">陷阱三 · 60 日线假支撑</h3>
+  <p>股价在 60 日线附近反复"假支撑"——主力故意让股价跌穿 60 日线一点点，逼出止损盘，然后迅速收回。<span class="hl">跌破后 1-2 天内必须收回才算有效</span>，否则是真破位。</p>
+
+  <div class="quote-banner">
+    均线是市场平均成本的语言。<br>
+    <span class="hl">5 日是情绪、10 日是节奏、20 日是生命、60 日是战略。</span><br>
+    单看任何一根线都是盲人摸象，看懂四线协同 + 五大法则 + 量价配合，才是均线系统的完整闭环。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>5 日 = 短线情绪；10 日 = 活跃资金；20 日 = 生命线；60 日 = 牛熊分界</li>
+      <li>空间引力法则：<strong>远离均线不追高，靠近均线找机会</strong></li>
+      <li>多头排列代表全市场盈利共振；<strong>斜率超过 45 度且持续过久 = 警惕加速赶顶</strong></li>
+      <li>均线黏合 + 放量突破 = 强启动信号；均线黏合 + 跌破 = 集中止损雪崩</li>
+      <li>金叉死叉必须配合<strong>位置 + 成交量 + 趋势</strong>三个过滤条件</li>
+      <li>主力用均线陷阱收割散户：假金叉、假突破、假支撑——必须等"二次确认"</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 4 · 均线系统与趋势</p>
+</footer>
+
+</body>
