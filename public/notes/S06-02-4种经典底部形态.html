@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>分不清真假底部？4 种经典底部形态复盘：左侧与右侧建仓逻辑｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14.5px; }
+  th { background: var(--surface); color: var(--accent); text-align: left; padding: 12px 14px; border-bottom: 2px solid var(--accent); font-weight: 700; }
+  td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+  tr:hover td { background: var(--surface); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .misuse-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin: 24px 0; display: grid; grid-template-columns: 1fr auto 1fr; gap: 18px; align-items: stretch; }
+  .misuse-card .col { padding: 18px 20px; border-radius: 8px; }
+  .misuse-card .wrong { background: rgba(255, 107, 107, 0.08); border: 1px solid rgba(255, 107, 107, 0.3); }
+  .misuse-card .wrong h4 { color: var(--red); }
+  .misuse-card .right { background: rgba(86, 211, 100, 0.08); border: 1px solid rgba(86, 211, 100, 0.3); }
+  .misuse-card .right h4 { color: var(--green); }
+  .misuse-card .vs { align-self: center; font-size: 24px; font-weight: 800; color: var(--text-mute); }
+  .misuse-card h4 { font-size: 15px; margin-bottom: 10px; }
+  .misuse-card ul { margin: 0; padding-left: 18px; }
+  .misuse-card ul li { font-size: 14px; color: var(--text-dim); }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+    .misuse-card { grid-template-columns: 1fr; }
+    .misuse-card .vs { text-align: center; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 6</span>
+  <span class="stage-name">形态学与缺口理论</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 14 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 6 · 第 2 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">分不清真假底部？4 种经典底部形态复盘：左侧与右侧建仓逻辑</h1>
+  <p class="note-subtitle">为什么你一反弹就冲、却总买在半山腰？本期把"双重底、头肩底、圆弧底、箱体震荡筑底"四种形态的每一根关键 K 线、量价虚实讲清楚，更重要的是厘清绝大多数散户一辈子都没搞懂的左侧与右侧建仓逻辑。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>真正的底部<span class="hl">不是某个点</span>，而是<span class="hl">一个区间</span>，是一场时间与筹码的消耗战。<strong>真正成熟的建仓体系 = 左侧轻奇兵试探 + 右侧重仓跟随</strong>。没被颈线/箱体上轨放量突破确认的形态，统统只能当作"下跌中继"对待——这是无数人用真金白银换来的血泪教训。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-foundation">底部的本质：时间与筹码的消耗战</a></li>
+    <li><a href="#sec-wdouble">双重底（W 底）：三步确认真底</a></li>
+    <li><a href="#sec-hs">头肩底：最考验心理的深度洗盘</a></li>
+    <li><a href="#sec-round">圆弧底：极跌出反弹，慢跌磨成底</a></li>
+    <li><a href="#sec-box">箱体震荡筑底：识别洗盘还是出货</a></li>
+    <li><a href="#sec-principles">底部建仓的三条铁律</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-foundation">
+  <h2 class="section-title">底部的本质：时间与筹码的消耗战</h2>
+  <p>很多散户朋友总爱问一个问题："这只股票跌了 50% 了，市盈率只有十几倍，它到底见底了没有？"请大家记住一个最底层也最颠覆常识的认知：</p>
+  <blockquote class="purple">
+    <strong>真正的底部从来不是某一个具体的点位，更不是谁能提前精准算出来的静态价格。</strong>真正的底部是一个区间，是一场时间与筹码的消耗战，是多空双方用真金白银厮杀出来的一种平衡状态。盲目去猜最低点，是很多人长期亏损的重要根源。
+  </blockquote>
+
+  <h3 class="sub-title">左侧建仓 vs 右侧建仓</h3>
+  <ul>
+    <li><span class="hl">左侧交易</span>：在拐点尚未明确出现时，根据跌幅、估值分位数或长期筹码支撑位<span class="hl">提前逢低买入</span>。核心逻辑是"便宜"，但风险是<span class="hl-red">你永远不知道下跌通道什么时候结束</span>，资金时间成本极高。</li>
+    <li><span class="hl">右侧交易</span>：放弃买在最低点的执念，宁可多花 5%–10% 溢价，<span class="hl">等市场走出明确止跌结构</span>、成交量温和放大、均线扭转走平、关键颈线位被放量突破后才顺势进场。核心逻辑不是便宜，而是<span class="hl-green">确定性更高的启动临界点</span>。</li>
+  </ul>
+
+  <div class="quote-banner">
+    对资金量有限、心理承受能力弱的普通个人投资者来说，<br>
+    <span class="hl">重仓去赌左侧，本质上跟赌运气没有太大区别。</span><br>
+    真正成熟的体系，是"左侧倾仓试探 + 右侧重仓跟随"的有机结合。
+  </div>
+</section>
+
+<section class="section" id="sec-wdouble">
+  <h2 class="section-title">双重底（W 底）：三步确认真底</h2>
+  <p>双重底是全市场普及率最高，但散户踩坑率也最频繁的形态。一个真正具有反转意义的双重底，演变逻辑极其严密。</p>
+
+  <h3 class="sub-title">左脚：恐慌性割肉</h3>
+  <p>股价经历长时间大幅下跌后，市场弥漫悲观情绪，空头砸出第一个低点（<span class="hl">左脚</span>）。这一过程往往伴随恐慌性割肉，成交量可能脉冲式局部放量，代表一部分绝望的散户不计成本离场。随后超跌反弹资金进场，形成中间高点，确立<span class="hl">颈线</span>。</p>
+
+  <h3 class="sub-title">右脚：判断真底的三个核心标准</h3>
+  <ol>
+    <li><strong>看量能</strong>：右脚回落过程中成交量必须呈现<span class="hl">极其明显的阶梯式萎缩</span>。缩量意味着上方愿意继续抛售的筹码已极其稀少，<span class="hl-red">空头抛压到了强弩之末</span>。</li>
+    <li><strong>看右脚位置</strong>：最健康的双底结构中，右脚低点通常<span class="hl">略高于左脚</span>（次低点抬高）。但实战中有一种极具欺骗性的走势：右脚<span class="hl-red">故意砸穿左脚</span>制造恐慌假象，随后一两日内大阳线收复失地——这就是<span class="hl">弹簧效应（假跌破真拉起）</span>。</li>
+    <li><strong>看突破信号</strong>：稳健买点永远在两个位置——
+      <ul>
+        <li>一根实体饱满的中阳 / 大阳线伴明显放量<span class="hl">坚决突破颈线</span>的瞬间</li>
+        <li>突破后缩量回踩颈线，颈线由阻力变支撑，再次止跌回升的 K 线组合</li>
+      </ul>
+    </li>
+  </ol>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 散户最常犯的错</div>
+    <p>把买点选在右脚还没走出来的时候，这就是典型的盲目左侧交易。<span class="hl-red">没被颈线放量突破确认的"双重底"，随时可能演变成下跌途中的"双重顶"</span>。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-hs">
+  <h2 class="section-title">头肩底：最考验心理的深度洗盘</h2>
+  <p>如果说双底是多空双方的两次试探，那么头肩底就是资金对市场浮躁筹码展开的<span class="hl">一场深度心理战</span>。很多股民抱怨自己手里的股票拿了半年没动静，一割肉三天就翻倍——你割肉割掉的那个位置大概率就是头肩底的<span class="hl">头部</span>。</p>
+
+  <h3 class="sub-title">三部曲拆解</h3>
+  <ol>
+    <li><strong>左肩</strong>：下跌末端空方惯性下砸创波段新低，超跌反弹确立左肩高度，成交量正常水平</li>
+    <li><strong>头部</strong>：空头卷土重来，<span class="hl">不仅跌破左肩低点，甚至砸出更低的历史新低</span>。此时利空消息铺天盖地，讨论区一片绝望，踏空者不计成本抛售，而部分资金正在最低位<span class="hl">悄无声息地承接廉价筹码</span></li>
+    <li><strong>右肩</strong>：股价从最低点反弹到左肩高度附近遇阻，再次回落，<span class="hl">成交量急剧萎缩至地量水平</span>。当右肩起稳再次拐头向上、成交量温和放大、股价带量穿透颈线时，<span class="hl-green">头肩底形态正式成立</span></li>
+  </ol>
+
+  <h3 class="sub-title">两个生死攸关的信号</h3>
+  <ul>
+    <li>右肩回落<span class="hl-red">绝对不能跌破头部最低点</span>，且右肩低点通常与左肩基本持平甚至更高</li>
+    <li>右肩起稳放量突破颈线时，<span class="hl">成交量必须达到左肩反弹时的 1.5 倍以上</span></li>
+  </ul>
+
+  <blockquote>
+    <strong>左侧建仓逻辑</strong>：风险偏好高、资金管理严的交易者，可在右肩缩量回踩到与左肩相近位置、出现早晨之星或垂头线时，用<span class="hl">总仓位 10% 的极轻底仓</span>做左侧潜伏，止损必须极果断地挂在头部最低点下方。<br>
+    <strong>右侧建仓逻辑</strong>：普通投资者应等股价带大成交量坚决突破颈线的那一刻，以及突破后缩量回踩颈线确认支撑有效的那一刻再顺势跟进，吃到主升浪中最流畅的一段。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-round">
+  <h2 class="section-title">圆弧底：极跌出反弹，慢跌磨成底</h2>
+  <p>金融圈有句老话："<span class="hl">急跌出反弹，慢跌磨成底</span>"。散户不怕暴跌，因为暴跌总有"马上要反弹"的幻想；散户最怕的是钝刀子割肉——每天跌几分、几个月毫无波澜的阴跌与横盘。而圆弧底就是把这种磨人战术发挥到极致的一种形态。</p>
+
+  <h3 class="sub-title">结构特征</h3>
+  <ul>
+    <li>外观像平底锅的锅底，两边高中间低且极为平缓</li>
+    <li>通常出现在经历长达一年甚至数年深度熊市之后</li>
+    <li>圆弧左侧：下跌斜率由陡峭逐渐变平缓，由每天大跌变成微跌、长一天跌一天</li>
+    <li>锅底中心：日 K 线往往是毫无生气的十字星或极小阴小阳，<span class="hl">换手率可能只有 0.5%</span>，成交量甚至能缩到行情高点的 1/10 以下——这就是<span class="hl">地量见地价</span></li>
+  </ul>
+
+  <h3 class="sub-title">右侧启动：温和的慢牛起步</h3>
+  <p>圆弧底右侧的启动往往不是突然的涨停板，而是呈现一种<span class="hl">极其温和的慢爬态势</span>：</p>
+  <ul>
+    <li>股价重心每天以极小幅度向上攀升，<span class="hl">阳线明显多于阴线</span></li>
+    <li>成交量像小草破土一样呈现温和的 T 级放大</li>
+    <li>均线系统由缠绕黏合转为<span class="hl">标准的多头排列</span></li>
+    <li>最终以一根放量的大阳线<span class="hl">彻底打穿左侧边缘的颈线阻力位</span>，正式宣告主升浪开始</li>
+  </ul>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 圆弧底最大的杀手</div>
+    <p>绝大多数普通散户<span class="hl">并不适合过早进场</span>，因为你无法预测这个地量磨底过程会持续三个月、半年还是整整一年。普通人的资金有时间成本和心理耐受极限，过早压在锅底里，最终会在右侧启动前一天被洗出局。<strong>合理的入场点</strong>是均线系统彻底完成多头排列 + 股价带量越过震荡中轴线之时。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-box">
+  <h2 class="section-title">箱体震荡筑底：识别洗盘还是出货</h2>
+  <p>有些朋友常困惑：为什么这只股票既不像双底也不像头肩底，它就是在某个特定价格区间里，上去被打下来、下来又被拉上去，几个月反复震荡？这就是<span class="hl">箱体整理筑底</span>。</p>
+
+  <h3 class="sub-title">箱体的资金意图</h3>
+  <ul>
+    <li>每一次反弹到箱体上轨附近，<span class="hl">会出现大抛单把股价压下去</span>，目的是不让场外跟风盘过早察觉启动信号，同时测试上方套牢盘压力</li>
+    <li>每一次回落到箱体下轨附近，<span class="hl">资金会坚决守住阵线</span>，防止筹码流失到更低价格</li>
+  </ul>
+
+  <h3 class="sub-title">识别洗盘箱 vs 出货箱的两个核心维度</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>维度</th>
+        <th>洗盘吸筹箱体（真底部）</th>
+        <th>下跌中继箱体（假底部）</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>量价特征</td>
+        <td>阳线放量、阴线缩量</td>
+        <td>下跌放巨量，上涨反而缩量</td>
+      </tr>
+      <tr>
+        <td>资金行为</td>
+        <td>从下轨往上推升时积极拿货</td>
+        <td>借震荡掩护出货</td>
+      </tr>
+      <tr>
+        <td>突破特征</td>
+        <td>实体大阳线 + 量能 2 倍以上放大</td>
+        <td>盘中高点上轨又回落，<span class="hl-red">冲高回落型假突破</span></td>
+      </tr>
+      <tr>
+        <td>后续走势</td>
+        <td>突破后缩量回踩上轨确认支撑</td>
+        <td>突破后很快跌回箱体甚至破位下行</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <strong>左侧 vs 右侧逻辑一目了然</strong>：在箱体未被实质性突破之前，所有操作本质上都属于左侧震荡交易。左侧只能在触及下轨且出现缩量止跌信号时<span class="hl">轻仓做高抛低吸</span>，绝不能盲目重仓加码。全场最核心的战役级机会，通常出现在<span class="hl">右侧放量突破上轨 + 回踩确认</span>的那一刻。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-principles">
+  <h2 class="section-title">底部建仓的三条铁律</h2>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 铁律一：未经突破确认的形态 = 下跌中继</div>
+    <p>在双底没有突破颈线之前，它完全有可能演变成下跌途中的双头；在头肩底的右肩没有放量突破之前，它完全有可能被空头一脚踹穿变成顺势下挫；在箱体没有突破上轨之前，它随时可能向下破位。<span class="hl-red">千万不要在形态还没完全走出来之前主观幻想它一定会反转</span>。</p>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 铁律二：仓位管理永远排在形态判断前面</div>
+    <p>没有任何成熟的职业交易员会在左侧试探点上<span class="hl">一把梭哈</span>。科学的建仓节奏是<span class="hl">分批布局的漏斗法则</span>：</p>
+    <ul style="margin-top:10px;">
+      <li>左侧发现估值极度便宜时，<span class="hl">1–2 成小仓位</span>建立观察仓（轻奇兵试探）</li>
+      <li>形态出现右侧特征时，<span class="hl">追加 2–3 成仓位</span></li>
+      <li>关键颈线被放量突破、右侧大势彻底确立时，<span class="hl">主力仓位顺势压上</span></li>
+    </ul>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 铁律三：入场之前先定止损，绝不与亏损死扛</div>
+    <p>所有右侧确认都可能遇到假突破，这是交易中不可避免的试错成本。但假突破并不可怕，可怕的是你在突破进场后面对股价重新跌回颈线下方时，因为舍不得割肉而把一笔短线顺势的右侧交易<span class="hl">硬生生拖成深套一两年的长线投资</span>。<strong>如果一根大阳线突破了颈线，那么这根大阳线实体下沿或颈线下方一点的位置就是你不可动摇的生命止损线</strong>，跌破即无条件执行纪律立场。</p>
+  </div>
+
+  <div class="quote-banner">
+    形态不是预测未来的水晶球，<br>
+    形态是<span class="hl">多空博弈留下的足迹</span>，是<span class="hl">概率的语言</span>，<br>
+    也是我们制定<span class="hl">风险控制方案</span>的坐标池。<br>
+    留得青山在，不怕没柴烧。<br>
+    <span class="hl-green">保住本金，永远是通往富裕的第一张门票。</span>
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>真正的底部<span class="hl">是一个区间</span>，是时间与筹码的消耗战</li>
+      <li>左侧轻仓试探 + 右侧重仓跟随 = 成熟的建仓体系</li>
+      <li>W 底真底的三个标准：右底缩量、抬高或假跌破、颈线放量突破</li>
+      <li>头肩底右肩<span class="hl">绝对不能跌破头部最低点</span>，突破颈线量能需放大</li>
+      <li>圆弧底最怕的不是暴跌，而是钝刀割肉式阴跌，最适合右侧温和启动后跟进</li>
+      <li>箱体洗盘与箱体出货的差异：阳线放量 vs 阴线放量</li>
+      <li>未经颈线突破确认的形态，统统只能当作<span class="hl-red">下跌中继</span>对待</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 6 · 形态学与缺口理论</p>
+</footer>
+
+</body>
