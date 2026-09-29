@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>量化回测框架与 Python 工具入门：避开 6 大致命陷阱，让策略在数据中现原形｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4;
+    --text-mute: #6b7785; --accent: #f0883e;
+    --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff;
+    --yellow: #e3b341; --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    line-height: 1.8; -webkit-font-smoothing: antialiased;
+  }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+    font-size: 13px; color: var(--text-dim); flex-wrap: wrap;
+  }
+  .stage-bar .stage-pill {
+    display: inline-block; padding: 4px 12px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 700; letter-spacing: 1px; font-size: 12px;
+  }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+    font-size: 13px; color: var(--text-mute); flex-wrap: wrap;
+  }
+  .meta-bar .tag {
+    padding: 4px 10px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 600; letter-spacing: 0.5px;
+  }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border); border-left: 4px solid var(--accent);
+    border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow);
+  }
+  .summary-card h3 {
+    font-size: 14px; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px;
+  }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px 24px; margin-bottom: 48px;
+  }
+  .toc h4 {
+    font-size: 13px; color: var(--text-mute); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a {
+    color: var(--text-dim); text-decoration: none; font-size: 14.5px;
+    display: flex; align-items: baseline; transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before {
+    content: counter(toc-counter, decimal-leading-zero);
+    color: var(--accent); font-weight: 700; margin-right: 12px;
+    font-variant-numeric: tabular-nums; min-width: 28px;
+  }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title {
+    font-size: 26px; font-weight: 700; margin-bottom: 24px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--accent);
+    display: inline-block; letter-spacing: -0.3px;
+  }
+  h3.sub-title {
+    font-size: 19px; font-weight: 600; margin: 28px 0 14px;
+    color: var(--text); display: flex; align-items: center;
+  }
+  h3.sub-title::before {
+    content: ""; width: 4px; height: 18px;
+    background: var(--accent); border-radius: 2px; margin-right: 12px;
+  }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote {
+    margin: 20px 0; padding: 16px 22px;
+    background: var(--surface); border-left: 4px solid var(--blue);
+    border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px;
+  }
+  blockquote strong { color: var(--blue); }
+  blockquote.red { border-left-color: var(--red); }
+  blockquote.red strong { color: var(--red); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .formula-box {
+    background: var(--surface); border: 1px solid var(--accent);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+    text-align: center;
+  }
+  .formula-box .formula {
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: var(--accent); font-size: 19px; font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; }
+  .key-points {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+  }
+  .key-points h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li {
+    padding: 8px 0 8px 30px; position: relative;
+    color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border);
+  }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before {
+    content: "✓"; position: absolute; left: 0; top: 8px;
+    color: var(--green); font-weight: 800; font-size: 18px;
+  }
+  .warning-card {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08));
+    border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red);
+    border-radius: 8px; padding: 18px 22px; margin: 20px 0;
+  }
+  .warning-card .label {
+    color: var(--red); font-weight: 700; font-size: 13px;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--accent); border-radius: 10px;
+    padding: 28px 32px; margin: 32px 0;
+    text-align: center; font-size: 19px;
+    font-weight: 600; color: var(--accent);
+    line-height: 1.6; box-shadow: var(--shadow);
+  }
+  .quote-banner::before {
+    content: """; display: block; font-size: 48px;
+    line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5;
+  }
+  .recover-table {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+  }
+  .recover-table h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .recover-table table { width: 100%; border-collapse: collapse; }
+  .recover-table th, .recover-table td {
+    padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border);
+    color: var(--text); font-size: 14.5px;
+  }
+  .recover-table th { color: var(--text-dim); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; text-align: center; }
+  .recover-table .lose { color: var(--red); font-weight: 700; }
+  .recover-table .gain { color: var(--green); font-weight: 700; }
+  .code-box {
+    background: #0a0f15; border: 1px solid var(--border); border-left: 4px solid var(--blue);
+    border-radius: 8px; padding: 20px 22px; margin: 24px 0;
+    overflow-x: auto;
+  }
+  .code-box .code-label {
+    font-size: 12px; color: var(--blue); font-weight: 700;
+    letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .code-box pre {
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: var(--text); font-size: 13.5px; line-height: 1.7;
+    margin: 0; white-space: pre;
+  }
+  .code-box .kw { color: var(--purple); }
+  .code-box .str { color: var(--green); }
+  .code-box .num { color: var(--yellow); }
+  .code-box .cmt { color: var(--text-mute); font-style: italic; }
+  .code-box .fn { color: var(--blue); }
+  .related-nav {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 32px 0;
+  }
+  .related-nav h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .related-nav ul { list-style: none; margin: 0; }
+  .related-nav ul li {
+    padding: 8px 0; border-bottom: 1px dashed var(--border);
+    color: var(--text); font-size: 15px;
+  }
+  .related-nav ul li:last-child { border-bottom: none; }
+  .related-nav ul li a {
+    color: var(--blue); text-decoration: none;
+  }
+  .related-nav ul li a:hover { color: var(--accent); text-decoration: underline; }
+  .related-nav .stage-tag {
+    color: var(--text-mute); font-size: 12.5px; margin-left: 8px;
+    font-family: 'SF Mono', monospace;
+  }
+  footer.note-footer {
+    margin-top: 72px; padding-top: 28px;
+    border-top: 1px solid var(--border);
+    color: var(--text-mute); font-size: 13.5px; text-align: center;
+  }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 9</span>
+  <span class="stage-name">仓位管理与资金管理</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 18 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 9 · 第 13 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">量化回测框架与 Python 工具入门：避开 6 大致命陷阱，让策略在数据中现原形</h1>
+  <p class="note-subtitle">主观判断最大的问题，是<span class="hl">选择性记忆</span>——亏了觉得无关紧要，赚了牢牢记住。回测的价值不是"证明你很牛"，而是<span class="hl">在数据面前撕掉你的过度自信</span>。但 90% 的散户量化尝试都死在了同样的六个坑里：未来函数、幸存者偏差、过度拟合、忽略交易成本、数据窥探、复权方式错误。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>回测不是<span class="hl">"策略赚钱能力的证明"</span>，而是<span class="hl">"策略是否经得起数据拷问的压力测试"</span>。一条健康的回测曲线要同时满足：<strong>参数 ≤ 5 个、跨周期验证、扣除全部交易成本、最大回撤 &lt; 20%、夏普比率 &gt; 1.5</strong>。做不到这五条的策略，无论看着多么漂亮，都只是<span class="hl-red">未来函数 + 幸存者偏差 + 过度拟合</span>合谋制造的虚假幻觉。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-why">为什么需要量化回测：撕掉主观记忆的滤镜</a></li>
+    <li><a href="#sec-traps">回测的 6 大致命陷阱</a></li>
+    <li><a href="#sec-framework">回测框架的核心组件：数据 / 信号 / 持仓 / 评估</a></li>
+    <li><a href="#sec-python">Python 工具推荐与双均线示例代码</a></li>
+    <li><a href="#sec-report">回测报告的 5 大禁忌与 3 个常见误区</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-why">
+  <h2 class="section-title">为什么需要量化回测：撕掉主观记忆的滤镜</h2>
+  <p>你有没有这样的体验：账户上个月明明赚了 8000 块，你却觉得"好像没赚多少"；可上上个月亏了 2000 块，你却记得清清楚楚，连哪只票、哪一天买的都能复述。这不是记忆力问题，是<span class="hl">人类大脑天然的选择性记忆偏差</span>。</p>
+
+  <p>这种偏差在投资里的表现非常一致：</p>
+  <ul>
+    <li><span class="hl">小亏 → 自动忽略</span>（"这是正常波动，不算"）</li>
+    <li><span class="hl">大赚 → 深度强化</span>（"我当时眼光真准！"）</li>
+    <li><span class="hl">决策错误的次数被压缩</span>，决策正确的次数被放大</li>
+    <li>结论就是：<span class="hl-red">你比自己以为的差得多</span></li>
+  </ul>
+
+  <p><span class="hl">量化回测的价值，就是让冷冰冰的数据替代你的记忆</span>。它能在几秒钟之内回答三个核心问题：</p>
+  <ul>
+    <li>这套策略在过去 N 年的真实胜率是多少？</li>
+    <li>最大回撤发生在哪一年？当时你能不能扛住？</li>
+    <li>扣除所有交易成本后，真实年化收益还剩多少？</li>
+  </ul>
+
+  <blockquote>
+    <strong>回测解决的不是"选哪个策略"的问题</strong>，而是<span class="hl">"在你以为有效的策略里，先把不靠谱的快速剔除掉"</span>的问题。一个无法在历史数据里站住脚的策略，到了实盘一定死得更难看——因为实盘还有滑点、情绪、黑天鹅三个回测里都没出现的额外打击。
+  </blockquote>
+
+  <p>但要小心：回测同时也是一个<span class="hl-red">最容易自欺欺人的工具</span>。用得不对，它会让你比主观判断更危险——因为你会在<span class="hl">虚假的安全感</span>里加大注码。我们接着看那 6 大致命陷阱。</p>
+</section>
+
+<section class="section" id="sec-traps">
+  <h2 class="section-title">回测的 6 大致命陷阱</h2>
+  <p>这 6 个坑，90% 的初学者都会全部踩一遍。它们不是技术 bug，而是<span class="hl">认知陷阱</span>——你越聪明，越容易踩得深。下面一个一个拆。</p>
+
+  <h3 class="sub-title">陷阱 1：未来函数（Look-ahead Bias）</h3>
+  <p>这是回测里最常见、也最隐蔽的错误：<span class="hl">在决策时偷看了还没发生的数据</span>。</p>
+  <div class="recover-table">
+    <h4>未来函数的典型场景</h4>
+    <table>
+      <thead><tr><th>错误做法</th><th>为什么错</th><th>正确做法</th></tr></thead>
+      <tbody>
+        <tr><td>用当日收盘价算信号</td><td>收盘价 15:00 才确定，你不可能在当天买入</td><td>次日开盘买入</td></tr>
+        <tr><td>用当日最高/最低价决定买卖</td><td>日内的高低点是事后才知道的</td><td>次日开盘价成交</td></tr>
+        <tr><td>回看 20 天后才公告的财报</td><td>公告日之后你才能看到</td><td>按公告日 T+1 决策</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>未来函数会让你的回测曲线看起来无比漂亮——<span class="hl-red">但每漂亮一分，实盘就会难看十分</span>。原因很简单：实盘里你永远拿不到还没发生的数据，而回测里你偷看了，结果差距就是几十个百分点。</p>
+
+  <h3 class="sub-title">陷阱 2：幸存者偏差（Survivorship Bias）</h3>
+  <p>用今天还活着的成分股，去回测过去 10 年——<span class="hl">这等于自动忽略了所有已经退市的股票</span>。而退市的票里恰恰藏着最多的暴跌、停牌、归零。</p>
+  <ul>
+    <li><span class="hl">错误</span>：用今天沪深 300 成分股，回测 2014—2024</li>
+    <li><span class="hl-green">正确</span>：使用"全历史成分股"数据，记录每一次进出</li>
+  </ul>
+
+  <h3 class="sub-title">陷阱 3：过度拟合（Overfitting）</h3>
+  <p>当你用 <span class="hl">50 个参数 + 1000 只股票 + 10 年日线</span> 去"找规律"，你几乎一定能在历史数据里"挖"出一个年化 80% 的"圣杯"。但这个圣杯<span class="hl-red">只对过去有效，对未来完全无效</span>。</p>
+
+  <div class="formula-box">
+    <div class="formula">参数自由度过高 → 在噪声中拟合出"规律"</div>
+    <div class="desc">机器学习里叫"奥卡姆剃刀"：解释力相同的模型，越简单越好。参数越多，过拟合概率指数级上升。</div>
+  </div>
+
+  <p>正确做法只有两条：<span class="hl">参数尽量少（&lt; 5 个）</span>，<span class="hl">样本外验证（Out-of-Sample Testing）</span>。比如用 2010—2018 训练，用 2019—2024 验证，这是最朴素但最有效的方法。</p>
+
+  <h3 class="sub-title">陷阱 4：交易成本忽略</h3>
+  <p>这是新手回测里<span class="hl">最普遍、最容易让人自我感觉良好</span>的陷阱。一组直观数字：</p>
+
+  <div class="formula-box">
+    <div class="formula">双向交易成本 ≈ 0.05% + 0.025% + 0.1% = 0.175%</div>
+    <div class="desc">印花税（卖出）0.05% + 佣金 0.025%（双边） + 滑点 0.1% → 全周期双边成本约 0.175%</div>
+  </div>
+
+  <p>听起来不多？<span class="hl">算给你看</span>：</p>
+  <ul>
+    <li>理论年化收益：50%</li>
+    <li>每天换手一次：250 天 × 0.175% = <span class="hl-red">43.75% 成本</span>（不要重复 ×2——上方"双向 0.175%"已经包含买入+卖出）</li>
+    <li><span class="hl-red">实盘净收益：50% − 43.75% = +6.25%</span>（<span class="hl">仍是正期望，但远低于理论值</span>）</li>
+  </ul>
+
+  <p>高频策略忽略交易成本 = <span class="hl-red">稳亏不赚的死亡螺旋</span>。任何回测都必须扣除：印花税 0.05%（卖出单边）+ 佣金万 2.5（双边）+ 滑点至少 0.1%。</p>
+
+  <h3 class="sub-title">陷阱 5：数据质量 / 数据窥探（Data Snooping）</h3>
+  <p>在同一份历史数据上反复测试、反复调参、反复"找规律"——<span class="hl">哪怕一开始没有规律，你测试 1000 次也能凑巧出 50 个"看似有效"的策略</span>。这就是数据窥探。</p>
+  <ul>
+    <li><span class="hl">错误</span>：A 股 2010—2024 跑出 30% 年化 → 立刻上实盘</li>
+    <li><span class="hl-green">正确</span>：A 股 2010—2024 训练 → 港股 / 美股跨市场验证 → 样本外测试</li>
+  </ul>
+
+  <h3 class="sub-title">陷阱 6：复权方式选择错误</h3>
+  <p>A 股有除权除息，需要对历史价格做调整。但复权方式选错，会直接污染你的回测：</p>
+  <div class="recover-table">
+    <h4>三种复权方式的对比</h4>
+    <table>
+      <thead><tr><th>复权方式</th><th>特点</th><th>使用场景</th></tr></thead>
+      <tbody>
+        <tr><td>不复权</td><td>原始价格，含跳空缺口</td><td>仅用于查看真实历史成交</td></tr>
+        <tr><td>前复权</td><td>以最新价为基准回溯调整</td><td class="hl-green">实盘看盘（推荐）</td></tr>
+        <tr><td>后复权</td><td>保持早期数据连续性</td><td class="hl-green">回测专用（推荐）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>如果用前复权做回测，<span class="hl">早期数据会随着每次分红送股被重新调整</span>，长期看价格曲线会出现不真实的"塌陷"。<strong>回测用后复权，实盘用前复权</strong>，这是不可违反的铁律。</p>
+</section>
+
+<section class="section" id="sec-framework">
+  <h2 class="section-title">回测框架的核心组件：数据 / 信号 / 持仓 / 评估</h2>
+  <p>一个完整的回测框架，本质上由四层组成：<span class="hl">数据层 → 信号层 → 持仓层 → 业绩评估</span>。下面分别拆解每一层的关键设计要点。</p>
+
+  <h3 class="sub-title">1. 数据层：决定回测真实性的根基</h3>
+  <p>回测结果的可信度，80% 取决于数据质量。数据层要解决三件事：</p>
+  <ul>
+    <li><span class="hl">数据源选型</span>：tushare pro、akshare、baostock、wind（付费）</li>
+    <li><span class="hl">必备字段</span>：日期、开高低收、成交量、<span class="hl">复权因子</span></li>
+    <li><span class="hl">数据清洗</span>：停牌日处理、复牌跳空、除权除息对齐、异常值剔除</li>
+  </ul>
+
+  <blockquote class="red">
+    <strong>缺失复权因子的回测都是耍流氓</strong>。<span class="hl-red">不复权 ≠ 真实价格，会导致分红送股后的跳空被误判为"暴跌信号"</span>。这一点几乎是 90% 散户回测犯的第一个错。
+  </blockquote>
+
+  <h3 class="sub-title">2. 信号层：策略灵魂的数字化表达</h3>
+  <p>信号层负责把"我觉得要涨"翻译成机器能执行的规则。常见三类信号：</p>
+  <div class="recover-table">
+    <h4>信号类型分类</h4>
+    <table>
+      <thead><tr><th>类型</th><th>典型例子</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>阈值型</td><td>MA5 &gt; MA20 买入</td><td>规则最简单、最容易验证</td></tr>
+        <tr><td>形态型</td><td>早晨之星、MACD 金叉</td><td>多条件组合，过拟合高发区</td></tr>
+        <tr><td>组合型</td><td>量价共振 + 趋势 + 估值</td><td>多因子打分，参数容易失控</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>无论哪种信号，<span class="hl">生成时机必须是"当日收盘 + 第二日开盘"或者更晚</span>。这条规则再强调一次，因为它直接对应"未来函数"陷阱 1。</p>
+
+  <h3 class="sub-title">3. 持仓层：资金分配与再平衡</h3>
+  <p>信号告诉你买什么，持仓层决定买多少。健康的资金分配规则：</p>
+  <ul>
+    <li><span class="hl">单标的仓位</span>：5%—20%（超过 20% 等于押宝）</li>
+    <li><span class="hl">同时持仓数</span>：5—20 只（少于 5 只分散不够，多于 20 只管不过来）</li>
+    <li><span class="hl">再平衡频率</span>：每周 / 每月（频率太高侵蚀收益，太低响应迟钝）</li>
+  </ul>
+
+  <h3 class="sub-title">4. 业绩评估：7 个健康指标</h3>
+  <p>回测结束不代表结束——<span class="hl">评估才是策略能否上实盘的最后一关</span>。下面是 7 个核心指标的"健康值"参考：</p>
+
+  <div class="recover-table">
+    <h4>回测业绩健康指标</h4>
+    <table>
+      <thead><tr><th>指标</th><th>含义</th><th>健康值</th></tr></thead>
+      <tbody>
+        <tr><td>年化收益</td><td>复合年化收益率</td><td class="hl-green">&gt; 15%</td></tr>
+        <tr><td>最大回撤</td><td>从峰值到谷底的最大跌幅</td><td class="hl-green">&lt; 20%</td></tr>
+        <tr><td>夏普比率</td><td>（收益 − 无风险）/ 波动率</td><td class="hl-green">&gt; 1.5</td></tr>
+        <tr><td>卡玛比率</td><td>年化收益 / 最大回撤</td><td class="hl-green">&gt; 1.0</td></tr>
+        <tr><td>胜率</td><td>盈利交易占比</td><td class="hl-green">&gt; 50%</td></tr>
+        <tr><td>盈亏比</td><td>平均盈利 / 平均亏损</td><td class="hl-green">&gt; 1.5</td></tr>
+        <tr><td>换手率</td><td>资金周转速度</td><td>越低越好</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote>
+    <strong>注意：年化 15% 听起来不高</strong>，但<span class="hl">叠加最大回撤 &lt; 20%、夏普 &gt; 1.5</span>这两个约束条件，能同时满足的策略在 A 股长期看<span class="hl">已经是 TOP 5%</span> 的水平。任何看着年化 50%+ 的策略，几乎都可以判定为存在陷阱 1—3 中的某一个。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-python">
+  <h2 class="section-title">Python 工具推荐与双均线示例代码</h2>
+  <p>Python 是量化回测的事实标准。下面按"数据获取 → 回测框架"两个维度推荐工具，并给出一段可直接运行的<span class="hl">双均线示例</span>。</p>
+
+  <h3 class="sub-title">1. 数据获取工具</h3>
+  <div class="recover-table">
+    <h4>A 股常用数据源对比</h4>
+    <table>
+      <thead><tr><th>工具</th><th>费用</th><th>数据范围</th><th>适合人群</th></tr></thead>
+      <tbody>
+        <tr><td><span class="hl">akshare</span></td><td>完全免费</td><td>A 股 / 港股 / 美股 / 基金 / 期货</td><td>新手首选，无注册门槛</td></tr>
+        <tr><td><span class="hl">baostock</span></td><td>完全免费</td><td>A 股证券数据齐全</td><td>需要完整复权因子的用户</td></tr>
+        <tr><td><span class="hl">tushare pro</span></td><td>积分制（基础免费）</td><td>A 股全量数据</td><td>需要稳定高频数据的进阶用户</td></tr>
+        <tr><td><span class="hl">wind / iFinD</span></td><td>机构付费</td><td>全市场 + 宏观 + 衍生数据</td><td>专业机构 / 量化团队</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub-title">2. 回测框架</h3>
+  <div class="recover-table">
+    <h4>主流 Python 回测框架对比</h4>
+    <table>
+      <thead><tr><th>框架</th><th>特点</th><th>适合场景</th></tr></thead>
+      <tbody>
+        <tr><td><span class="hl">backtrader</span></td><td>经典回测框架，社区庞大</td><td>事件驱动策略、多标的组合</td></tr>
+        <tr><td><span class="hl">vectorbt</span></td><td>向量化回测，性能极强</td><td>参数扫描 / 大规模回测</td></tr>
+        <tr><td><span class="hl">qstock</span></td><td>小而美，开箱即用</td><td>轻量级个人策略验证</td></tr>
+        <tr><td><span class="hl">zipline / quantstats</span></td><td>专业量化平台级</td><td>研究型 / 机构级回测</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub-title">3. 双均线策略示例代码</h3>
+  <p>下面是一段<span class="hl">可直接复制运行的最小回测示例</span>，用 akshare 拉数据、用 pandas 做双均线策略、用 shift(1) 避免未来函数：</p>
+
+  <div class="code-box">
+    <div class="code-label">Python · 双均线策略最小回测</div>
+<pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> akshare <span class="kw">as</span> ak
+
+<span class="cmt"># 1. 获取数据（后复权，避免陷阱 6）</span>
+df = ak.<span class="fn">stock_zh_a_hist</span>(symbol=<span class="str">"000001"</span>, period=<span class="str">"daily"</span>, adjust=<span class="str">"hfq"</span>)
+
+<span class="cmt"># 2. 计算均线</span>
+df[<span class="str">'MA5'</span>]  = df[<span class="str">'收盘'</span>].<span class="fn">rolling</span>(<span class="num">5</span>).<span class="fn">mean</span>()
+df[<span class="str">'MA20'</span>] = df[<span class="str">'收盘'</span>].<span class="fn">rolling</span>(<span class="num">20</span>).<span class="fn">mean</span>()
+
+<span class="cmt"># 3. 生成信号（金叉买入 / 死叉卖出）</span>
+df[<span class="str">'signal'</span>] = <span class="num">0</span>
+df.<span class="fn">loc</span>[df[<span class="str">'MA5'</span>] &gt; df[<span class="str">'MA20'</span>], <span class="str">'signal'</span>] = <span class="num">1</span>
+df.<span class="fn">loc</span>[df[<span class="str">'MA5'</span>] &lt; df[<span class="str">'MA20'</span>], <span class="str">'signal'</span>] = <span class="num">-1</span>
+
+<span class="cmt"># 4. 计算收益（shift(1) 避免未来函数，对应陷阱 1）</span>
+df[<span class="str">'ret'</span>]          = df[<span class="str">'收盘'</span>].<span class="fn">pct_change</span>()
+df[<span class="str">'strategy_ret'</span>] = df[<span class="str">'signal'</span>].<span class="fn">shift</span>(<span class="num">1</span>) * df[<span class="str">'ret'</span>]
+
+<span class="cmt"># 5. 评估业绩（参考 7 个健康指标）</span>
+annual_ret = df[<span class="str">'strategy_ret'</span>].<span class="fn">mean</span>() * <span class="num">252</span>
+<span class="cmt"># 注：上面算的是简单平均年化（单利近似），复合年化要用 (1+ret).prod()**(252/n) - 1</span>
+nav         = (<span class="num">1</span> + df[<span class="str">'strategy_ret'</span>]).<span class="fn">cumprod</span>()
+peak        = nav.<span class="fn">cummax</span>()
+max_dd      = ((nav - peak) / peak).<span class="fn">min</span>()
+<span class="cmt"># 注：原代码用 cumsum() 的减法算的是"日收益累加曲线"与峰值之差，量纲错误</span>
+<span class="fn">print</span>(<span class="str">f"年化收益: {annual_ret:.2%}, 最大回撤: {max_dd:.2%}"</span>)</pre>
+  </div>
+
+  <blockquote>
+    <strong>这段代码 30 行不到，但已经内置了所有"防陷阱机制"</strong>：后复权数据、<code>shift(1)</code> 防止未来函数、滚动计算、收益序列、最大回撤。<span class="hl">这是你能写出的最干净的最小回测原型</span>。先在这个基础上跑通，再去套 backtrader 或 vectorbt 才有意义。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-report">
+  <h2 class="section-title">回测报告的 5 大禁忌与 3 个常见误区</h2>
+  <p>一份诚实的回测报告，比一份漂亮的回测报告有价值 100 倍。下面先看<span class="hl">回测报告的 5 大禁忌</span>——任何一份报告犯了其中之一，请直接判定为<span class="hl-red">不可信</span>。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 回测报告的 5 大禁忌</div>
+    <p>① <span class="hl">只展示胜率</span>（隐藏回撤） · ② <span class="hl">只展示最好年份</span>（隐藏最差年份） · ③ <span class="hl">只展示最优参数</span>（隐藏参数敏感性） · ④ <span class="hl">没有交易次数</span>（10 次和 1000 次完全是两回事） · ⑤ <span class="hl">没有跨周期验证</span>（只在牛市中跑过不算数）。</p>
+  </div>
+
+  <h3 class="sub-title">3 个最常见的认知误区</h3>
+
+  <div class="recover-table">
+    <h4>回测的 3 个致命误区</h4>
+    <table>
+      <thead><tr><th>误区</th><th>真相</th></tr></thead>
+      <tbody>
+        <tr><td>回测赚钱 = 实盘赚钱</td><td class="hl-red">滑点 + 心理因素 + 流动性，通常会让收益缩水 30%—60%</td></tr>
+        <tr><td>策略越复杂越好</td><td class="hl-green">5 个参数 &gt; 50 个参数，简单即正义</td></tr>
+        <tr><td>胜率高 = 策略好</td><td class="hl-red">盈亏比同样关键，胜率 40% + 盈亏比 3 的策略远胜胜率 80% + 盈亏比 0.5</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="quote-banner">
+    <span class="hl">回测不是终点</span><br>
+    而是<span class="hl">策略进入实盘前的最后一次拷问</span><br>
+    <strong>连回测都站不住的策略</strong><br>
+    在实盘里<span class="hl-red">一定站不住</span>
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>回测的核心价值：<span class="hl">撕掉主观记忆滤镜，让数据替你判断</span></li>
+      <li>未来函数：信号必须在<span class="hl">当日收盘后、次日开盘前</span>生成</li>
+      <li>幸存者偏差：用<span class="hl">全历史成分股</span>数据，不要用今天的成分股回测过去</li>
+      <li>过度拟合：参数 ≤ 5 个，必须做<span class="hl">样本外验证</span></li>
+      <li>交易成本：<span class="hl">印花税 0.05% + 佣金万 2.5 + 滑点 0.1%</span>，缺一不可</li>
+      <li>复权方式：<span class="hl">回测用后复权，实盘用前复权</span></li>
+      <li>健康指标：<span class="hl">年化 &gt; 15%、回撤 &lt; 20%、夏普 &gt; 1.5、卡玛 &gt; 1.0</span></li>
+      <li>回测报告要诚实：必须含<span class="hl">交易次数、跨周期验证、参数敏感性</span></li>
+    </ul>
+  </div>
+</section>
+
+<div class="related-nav">
+  <h4>相关笔记导航</h4>
+  <ul>
+    <li><a href="./S09-02-532法则与凯利公式.html">S09-02 · 532 法则与凯利公式：仓位分配的金科玉律</a><span class="stage-tag">S09-02</span></li>
+    <li><a href="./S12-10-量化交易机器人是怎么收割散户的.html">S12-10 · 量化交易机器人如何收割散户</a><span class="stage-tag">S12-10</span></li>
+    <li><a href="./S12-16-量化因子库六大主流因子.html">S12-16 · 量化因子库：从 Alpha 到 Smart Beta</a><span class="stage-tag">S12-16</span></li>
+  </ul>
+</div>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 9 · 仓位管理</p>
+</footer>
+
+</body>
+
