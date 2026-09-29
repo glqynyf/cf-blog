@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A 股 4 种缺口形态别看错！尤其是第 3 种，往往是趋势加速的信号｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14.5px; }
+  th { background: var(--surface); color: var(--accent); text-align: left; padding: 12px 14px; border-bottom: 2px solid var(--accent); font-weight: 700; }
+  td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+  tr:hover td { background: var(--surface); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .misuse-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin: 24px 0; display: grid; grid-template-columns: 1fr auto 1fr; gap: 18px; align-items: stretch; }
+  .misuse-card .col { padding: 18px 20px; border-radius: 8px; }
+  .misuse-card .wrong { background: rgba(255, 107, 107, 0.08); border: 1px solid rgba(255, 107, 107, 0.3); }
+  .misuse-card .wrong h4 { color: var(--red); }
+  .misuse-card .right { background: rgba(86, 211, 100, 0.08); border: 1px solid rgba(86, 211, 100, 0.3); }
+  .misuse-card .right h4 { color: var(--green); }
+  .misuse-card .vs { align-self: center; font-size: 24px; font-weight: 800; color: var(--text-mute); }
+  .misuse-card h4 { font-size: 15px; margin-bottom: 10px; }
+  .misuse-card ul { margin: 0; padding-left: 18px; }
+  .misuse-card ul li { font-size: 14px; color: var(--text-dim); }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+    .misuse-card { grid-template-columns: 1fr; }
+    .misuse-card .vs { text-align: center; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 6</span>
+  <span class="stage-name">形态学与缺口理论</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 12 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 6 · 第 7 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">A 股 4 种缺口形态别看错！尤其是第 3 种，往往是趋势加速的信号</h1>
+  <p class="note-subtitle">"逢缺必补"这句话坑了无数散户。同样是缺口，有的一定要回补，有的坚决不回补。本期把四种真正影响你判断的缺口形态一次性点透，重点复盘第三种——持续性缺口。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>缺口本质上是<span class="hl">情绪的断层</span>——价格不是走楼梯而是一步跨过去好几阶。在专业选手眼里缺口的逻辑只有两种：<span class="hl">诱导</span>（故意做动作让你判断错误）和<span class="hl">跨越</span>（快速脱离成本不给对手盘喘息）。<strong>普通投资者最容易犯的错，是把诱导当成了真趋势，把跨越误会成了普通的跳空</strong>。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-physics">跳空的本质：情绪的断层</a></li>
+    <li><a href="#sec-common">普通缺口：盘面常见的烟雾弹</a></li>
+    <li><a href="#sec-breakout">突破缺口：趋势的诞生</a></li>
+    <li><a href="#sec-continuation">持续缺口：理解主力节奏的关键窗口</a></li>
+    <li><a href="#sec-exhaustion">衰竭缺口：趋势的终结信号</a></li>
+    <li><a href="#sec-summary">四种缺口的实战应对清单</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-physics">
+  <h2 class="section-title">跳空的本质：情绪的断层</h2>
+  <p>在专业的金融教材里，缺口有一个更正式的名字叫做跳空——相邻的两根 K 线在价格上出现了不连续的情况，中间空出来了一块没有任何成交。<strong>但这么讲太干了</strong>，咱们换一个更好理解的视角：</p>
+  <blockquote class="purple">
+    <strong>缺口本质上是一种情绪的断层。</strong>正常的股价走势就像一个人在爬楼梯，一阶一阶往上走，脚下每一步都是连续的。可一旦出现缺口，就说明这个人不是在走楼梯了，他是<span class="hl">直接一步跨过去了好几阶，甚至是坐上了电梯</span>。这背后代表的是市场上买卖双方原本的平衡在某一个瞬间被彻底打破了。
+  </blockquote>
+
+  <h3 class="sub-title">为什么 A 股容易出现跳空？</h3>
+  <p>A 股是一个有<span class="hl">涨跌幅限制</span>、<span class="hl">T+1 交易制度</span>的市场，在这样一个相对受约束的环境里，价格还愿意直接跳空，那说明背后的力量一定不小：</p>
+  <ul>
+    <li>要么是利好或利空的消息足够强烈，强烈到大家都不愿意在原来的价格上成交</li>
+    <li>要么就是资金的意图足够坚决，坚决到宁可高开或低开也要在第一时间完成买入或卖出</li>
+  </ul>
+
+  <p>还有一个很有意思的细节：A 股每天下午三点收盘，到第二天早上九点半开盘，<span class="hl">中间隔了整整 18 个半小时</span>。这 18 个半小时里事件没有停下来，政策在发布，消息在传播，各种利好和利空都在悄悄地发酵。等到第二天开盘的一瞬间，如果买卖双方的预期差距已经大到没办法通过正常的连续价位来撮合成交，跳空就自然而然地出现了。</p>
+
+  <div class="quote-banner">
+    缺口不是一根虚无缥缈的线，<br>
+    它是<span class="hl">真金白银砸出来的意图</span>。<br>
+    真正的专业选手眼里的缺口逻辑只有两种：<br>
+    <span class="hl">诱导</span>（故意做动作让你判断错误）<br>
+    <span class="hl-green">跨越</span>（快速脱离成本不给对手盘任何喘息）。
+  </div>
+</section>
+
+<section class="section" id="sec-common">
+  <h2 class="section-title">普通缺口：盘面常见的烟雾弹</h2>
+  <p>咱们先来拆第一种，也是盘面上最常见、但对咱们判断价值最低的一种——<span class="hl">普通缺口</span>。光听名字你就能感觉到它很普通，没什么大不了的。</p>
+
+  <h3 class="sub-title">普通缺口通常出现在哪？</h3>
+  <p>通常出现在那种<span class="hl">窄幅震荡、不上不下的行情当中</span>。你去看那种股价，它上也上不去，下也下不来，每天就在一个很小的区间里来回摸。摸到你自己都快把它给忘了。然后某一天可能是受到一点点小消息的影响，也可能是早上集合竞价的时候有那么几笔不太理性的挂单，价格就往上跳了那么一小格或者往下跳了那么一小格。</p>
+
+  <h3 class="sub-title">为什么说它无效？</h3>
+  <p>从过往的市场经验来看，这一类普通缺口大多数情况下都会在比较短的时间内被重新填掉。你别去纠结那个具体的天数，你就记住一个画面就行——<strong>它就像一个人在走路不小心趔趄了一下，但很快他就能站稳，然后继续按照原来的方向往前走</strong>。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 普通缺口的操作思路</div>
+    <p>对于普通缺口，咱们的操作思路其实就四个字：<span class="hl-red">不予理会</span>。如果你仅仅因为一个普通缺口就急急忙忙地冲进去，那你大概率会被后面反反复复的震荡给磨掉耐心，最后割在地板上。<span class="hl">普通缺口就是一颗烟雾弹，它唯一的价值就是在提醒你现在这个市场还是个震荡市，别想太多别自己给自己加戏</span>。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-breakout">
+  <h2 class="section-title">突破缺口：趋势的诞生</h2>
+  <p>聊完了最没价值的，你肯定想问了，那到底什么样的缺口才值得咱们打起十二分精神来关注？答案就是<span class="hl">突破缺口</span>。</p>
+
+  <h3 class="sub-title">突破缺口的诞生场景</h3>
+  <p>一支股票或大宗商品品种在底部箱体内已经横盘震荡了整整几个月甚至更久。散户的耐心被漫长的窄幅波动彻底磨灭，主力资金在暗中完成了筹码的收集与沉淀。此时上方存在一个被全市场技术派共同关注的重要阻力位。</p>
+
+  <p>在传统的走势中，价格如果慢悠悠地爬升到这个阻力位，往往会遭遇大量的解套盘和获利盘抛压。但是真正的超级主力，<span class="hl">绝不会给场外资金从容上车的机会</span>。当突破的实际成熟，主力资金会选择在开盘瞬间发动突然袭击：</p>
+  <ul>
+    <li>价格直接越过阻力位，<span class="hl">向上跳空开盘</span></li>
+    <li>在阻力位之上留下一个清晰的空白区域</li>
+    <li>那些原本打算在阻力位解套卖出的人发现价格直接跳过了他们的心理防线</li>
+    <li>那些等待回踩买入的人发现挂在下方的限价单根本无法成交</li>
+    <li>而那些在阻力位建立空头仓位的人<span class="hl-red">在开盘的第一秒就直接面临暴仓或者巨额亏损的边缘</span></li>
+  </ul>
+
+  <h3 class="sub-title">突破缺口的确认标准</h3>
+  <ul>
+    <li>跳空当天的<span class="hl">成交量必须显著放大</span>，通常需要达到过去 20 日平均成交量的 2 倍以上</li>
+    <li>跳空之后价格在接下来几个交易日<span class="hl-red">绝不能再度回落到缺口区间内</span></li>
+    <li>MACD、均线系统<span class="hl">同步发出多头信号</span>，可信度更高</li>
+  </ul>
+</section>
+
+<section class="section" id="sec-continuation">
+  <h2 class="section-title">持续缺口：理解主力节奏的关键窗口</h2>
+  <p>这一种是咱们今天要重点复盘的——<span class="hl">持续性缺口</span>。在很多人眼里它是一段趋势里最值得研究的技术形态之一，也是<span class="hl">理解主力节奏的一个关键窗口</span>。</p>
+
+  <h3 class="sub-title">持续缺口的核心特征</h3>
+  <p>持续缺口出现在行情的中段。当突破缺口确立了新趋势的方向后，价格在持续推进的过程中，由于惯性、情绪与基本面的多重共振，会在中途再次出现跳空。</p>
+  <ul>
+    <li>它意味着<span class="hl">趋势正在加速</span>，多方或空方的力量远比市场预期更充沛</li>
+    <li>成交量<span class="hl">温和放大</span>，但不必像突破缺口那样剧烈</li>
+    <li>缺口出现后，<span class="hl-green">趋势延续的概率极高</span></li>
+    <li>持续缺口最大的实战价值：<span class="hl">它告诉你趋势依然健康，主力志在高远</span></li>
+  </ul>
+
+  <h3 class="sub-title">如何用持续缺口把握主力节奏？</h3>
+  <p>持续缺口是主力给市场节奏最清晰的信号：</p>
+  <ul>
+    <li>持续缺口 + 缩量回踩 + 不破缺口 = <span class="hl">绝佳加仓点</span></li>
+    <li>持续缺口 + 立刻继续放量上攻 = <span class="hl">趋势非常强，主升浪在即</span></li>
+    <li>持续缺口 + 出现上影线 / 滞涨形态 = <span class="hl-red">警惕趋势末期</span></li>
+  </ul>
+
+  <blockquote>
+    <strong>为什么持续缺口特别重要？</strong>因为它通常出现在主升浪的中段，主力志在高远、远未到出货阶段。<span class="hl-green">在持续缺口出现后的缩量回踩中买入，往往是吃大波段最舒服的位置</span>。但前提是<span class="hl">你必须严格区分它是持续缺口而非衰竭缺口</span>。
+  </blockquote>
+
+  <div class="quote-banner">
+    持续缺口是趋势的<span class="hl">中段体检报告</span>。<br>
+    它意味着：<span class="hl-green">行情正在加速，远未结束</span>。<br>
+    在缩量回踩到缺口附近时买入，<br>
+    往往是<span class="hl-green">吃大波段最舒服的位置</span>。
+  </div>
+</section>
+
+<section class="section" id="sec-exhaustion">
+  <h2 class="section-title">衰竭缺口：趋势的终结信号</h2>
+  <p>最后一种，也是最危险的一种——<span class="hl-red">衰竭缺口</span>。它的出现往往意味着原本强劲的趋势已经到了强弩之末。</p>
+
+  <h3 class="sub-title">衰竭缺口的典型特征</h3>
+  <ul>
+    <li>出现在趋势的<span class="hl-red">末端</span>，而非中段</li>
+    <li>当日<span class="hl-red">放出巨量</span>，创出整个趋势运行以来的最大量</li>
+    <li>但价格却在缺口之后<span class="hl-red">迅速停滞</span>，无法再创新高或新低</li>
+    <li>随后几个交易日内<span class="hl-red">很快回补了缺口</span></li>
+    <li>回补缺口后，趋势随即发生反转</li>
+  </ul>
+
+  <h3 class="sub-title">衰竭缺口为什么危险？</h3>
+  <p>衰竭缺口的本质是<span class="hl-red">"最后的疯狂"</span>。在趋势的末端，原本保持理性观望的资金开始按捺不住 FOMO 情绪冲进市场，他们的追高买入反而<span class="hl">成了主力出货的最后接盘侠</span>。当所有能买的资金都买完后，市场上再也没有新的买盘能够推动价格继续上行，于是趋势戛然而止，缺口被快速回补。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 区分持续缺口 vs 衰竭缺口</div>
+    <p>这是实战中最容易判断错误的地方。两者都是趋势中段或末端的跳空，形态相似，但<span class="hl-red">持续缺口后续创新高，而衰竭缺口后续创新低</span>。区分的关键是观察缺口出现后的成交量、后续走势和回补速度。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-summary">
+  <h2 class="section-title">四种缺口的实战应对清单</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>类型</th>
+        <th>典型位置</th>
+        <th>成交量</th>
+        <th>趋势含义</th>
+        <th>应对策略</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>普通缺口</strong></td>
+        <td>横盘震荡区间内</td>
+        <td>无显著放大</td>
+        <td>无方向意义</td>
+        <td><span class="hl">不予理会</span></td>
+      </tr>
+      <tr>
+        <td><strong>突破缺口</strong></td>
+        <td>关键阻力 / 支撑位</td>
+        <td>2 倍以上放大</td>
+        <td>趋势诞生</td>
+        <td><span class="hl-green">果断跟进</span>，止损缺口下沿</td>
+      </tr>
+      <tr>
+        <td><strong>持续缺口</strong></td>
+        <td>趋势中段</td>
+        <td>温和放大</td>
+        <td><span class="hl-green">趋势加速</span></td>
+        <td><span class="hl-green">缩量回踩时跟进</span></td>
+      </tr>
+      <tr>
+        <td><strong>衰竭缺口</strong></td>
+        <td>趋势末端</td>
+        <td>巨量放出</td>
+        <td><span class="hl-red">趋势死亡</span></td>
+        <td><span class="hl-red">立即减仓兑现</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 普通投资者最容易犯的两个错</div>
+    <p><strong>错一</strong>：把诱导（主力故意制造的假缺口）当成了真趋势去追。<br>
+    <strong>错二</strong>：把跨越（主力真实的拉升或出货）误会成了普通的跳空，<span class="hl">白白错过真正的大行情</span>。<br>
+    <span class="hl">一念之差，方向完全相反</span>。</p>
+  </div>
+
+  <div class="quote-banner">
+    主力资金最不希望你看懂的不是缺口这条线本身，<br>
+    而是<span class="hl">缺口背后那一手看不见的资金底牌</span>。<br>
+    <span class="hl-green">学会判断"哪一种缺口大概率会补，哪一种缺口坚决不补"</span>，<br>
+    你就拥有了主力送给你的一份确定性礼物。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>缺口是<span class="hl">情绪的断层</span>，是<span class="hl">真金白银砸出来的意图</span></li>
+      <li>缺口逻辑只有两种：<span class="hl">诱导</span>（骗你判断错误）vs <span class="hl">跨越</span>（脱离成本区）</li>
+      <li><strong>普通缺口</strong>：震荡市的烟雾弹，操作思路四字——<span class="hl-red">不予理会</span></li>
+      <li><strong>突破缺口</strong>：出现在关键阻力位 + 放量 2 倍以上 = 顺势跟进</li>
+      <li><strong>持续缺口</strong>：趋势中段 + 温和放量 + 后续创新高 = 绝佳加仓点</li>
+      <li><strong>衰竭缺口</strong>：趋势末端 + 巨量放出 + 快速回补 = 立即减仓</li>
+      <li>普通投资者最容易犯的错：把<span class="hl-red">诱导</span>当真趋势，把<span class="hl-red">跨越</span>当普通跳空</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 6 · 形态学与缺口理论</p>
+</footer>
+
+</body>
