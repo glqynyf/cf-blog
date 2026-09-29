@@ -1,0 +1,238 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getAllNotes } from '../utils/notes';
+
+const { stages, all: notes } = getAllNotes();
+const total = notes.length;
+const totalStages = stages.length;
+
+/** 五个板块：章节区间 + 说明。篇数从实际数据算出，不手写。 */
+const BOARDS = [
+  {
+    name: '认知与心态',
+    range: 'S00–S01',
+    ids: ['S00', 'S01'],
+    topics: '亏损的根因、处置效应、决策疲劳、止损纪律、交易日志',
+  },
+  {
+    name: '技术分析',
+    range: 'S02–S07',
+    ids: ['S02', 'S03', 'S04', 'S05', 'S06', 'S07'],
+    topics: 'K 线与形态、量价关系、均线趋势、MACD / KDJ / RSI / BOLL、进出场时机',
+  },
+  {
+    name: '风控与仓位',
+    range: 'S08–S09',
+    ids: ['S08', 'S09'],
+    topics: '止盈止损标准、532 法则与凯利公式、网格交易、正金字塔建仓、相关性矩阵再平衡',
+  },
+  {
+    name: '基本面与选股',
+    range: 'S10–S11',
+    ids: ['S10', 'S11'],
+    topics: '选股框架、护城河、财报识别、五套估值公式、分红回购与税务',
+  },
+  {
+    name: '资金面与市场周期',
+    range: 'S12–S13',
+    ids: ['S12', 'S13'],
+    topics: '筹码分布、北向资金、融资融券、大宗交易、板块轮动、熔断与情绪周期',
+  },
+];
+
+/** 各章主题说明：取自该章笔记标题，避免与实际内容脱节。 */
+const CHAPTER_TOPICS: Record<string, string> = {
+  S00: '亏损根因、认知陷阱、复利的谎言、交易成长四阶段',
+  S01: '处置效应、一买就跌、反向指标、止损护身符',
+  S02: '单根含义、早晨之星与黄昏之星、金针探底',
+  S03: '量价讲透、12 种量价形态、「量是因价是果」',
+  S04: '均线 5 大法则、趋势线、K 线周期选择',
+  S05: 'BOLL、KDJ、MACD、RSI、背离、指标组合回测',
+  S06: '双重顶底、缺口理论、真假突破、诱多诱空',
+  S07: '进出场时机、分时均线、游资追高、交易 checklist',
+  S08: '卖出的判断标准、分批止盈、流动性止损、深套解套',
+  S09: '532 法则与凯利公式、网格、正金字塔、组合再平衡',
+  S10: '选股框架、护城河、财报识别、估值公式',
+  S11: '除权除息、回购、定增配债、A股税务',
+  S12: '筹码分布、主力资金、北向、融资融券、量化因子',
+  S13: '政策底、熔断、天地板、跨市场配置',
+};
+
+const countOf = (ids: string[]) =>
+  stages.filter((s) => ids.includes(s.id)).reduce((n, s) => n + s.notes.length, 0);
+---
+
+<BaseLayout
+  title="关于"
+  description={`盘面札记是一个散户写给自己的投资笔记站：${total} 篇笔记、${totalStages} 个章节，覆盖认知重塑、技术分析、仓位管理、基本面选股、资金面与市场周期五大板块。全部为个人复盘与学习笔记，不构成任何投资建议。`}
+>
+  <article class="container about">
+    <h1>关于</h1>
+
+    <p class="about__lead">
+      <strong>盘面札记</strong>是我写给自己的投资笔记站——<strong>{total} 篇笔记、{totalStages} 个章节</strong>，从「为什么会亏钱」一路排到「市场周期与情绪」。
+    </p>
+    <p>
+      所有内容都是<strong>个人复盘与学习笔记</strong>，不构成任何投资建议。市场的不可知性远比任何指标都大。
+    </p>
+
+    <h2>写什么</h2>
+    <p>内容按五个板块组织，合计 {total} 篇：</p>
+
+    <div class="about__table-wrap">
+      <table class="about__table">
+        <thead>
+          <tr><th>板块</th><th>章节</th><th class="num">篇数</th><th>主要内容</th></tr>
+        </thead>
+        <tbody>
+          {BOARDS.map((b) => (
+            <tr>
+              <td class="strong">{b.name}</td>
+              <td class="mono">{b.range}</td>
+              <td class="num">{countOf(b.ids)}</td>
+              <td class="muted">{b.topics}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <h2>章节一览</h2>
+
+    <div class="about__table-wrap">
+      <table class="about__table">
+        <thead>
+          <tr><th>章节</th><th>主题</th><th class="num">篇数</th></tr>
+        </thead>
+        <tbody>
+          {stages.map((s) => (
+            <tr>
+              <td class="mono strong">{s.id}</td>
+              <td>{CHAPTER_TOPICS[s.id] ?? s.title}</td>
+              <td class="num">{s.notes.length}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <p class="about__more">
+      完整目录见 <a href="/notes/">全部笔记</a>，也可以按章节筛选。
+    </p>
+
+    <h2>适合谁看</h2>
+    <ul>
+      <li>刚开始接触 A 股、想把常见技术指标和交易规则一次性理清的散户。</li>
+      <li>已经入市几年、想梳理自己交易体系（选股 → 仓位 → 止损）而不是零散记笔记的人。</li>
+      <li>对财报识别、估值方法、资金面与市场周期感兴趣的同好。</li>
+      <li>想找<strong>可证伪</strong>结论的人——这里给结论一定同时给条件。</li>
+    </ul>
+
+    <h2>不适合谁看</h2>
+    <ul>
+      <li>寻找"必胜指标"或"一夜翻倍秘籍"的人——这里没有这种东西。</li>
+      <li>想把别人策略直接照搬的人——任何策略都需要适配自己的风险偏好与资金量级。</li>
+      <li>期待荐股的人——这里只讲方法与推理过程，不给标的。</li>
+    </ul>
+
+    <h2>写作原则</h2>
+    <ol>
+      <li><strong>诚实</strong>——亏损的票、犯过的错也会写出来，不刻意制造"股神"人设。</li>
+      <li><strong>可证伪</strong>——给结论必给条件，条件不成立时主动修订，而不是换个说法圆回来。</li>
+      <li><strong>节制</strong>——宁可少写也不灌水，每一篇尽量给出一个能立刻用上的认知。</li>
+      <li><strong>区分事实与观点</strong>——引用数据给出来源，讲判断时明说那是判断。</li>
+    </ol>
+
+    <h2>如何联系</h2>
+    <ul>
+      <li>邮箱：<a href="mailto:service@duckuno.com">service@duckuno.com</a></li>
+      <li>GitHub：<a href="https://github.com/glqynyf/cf-blog" target="_blank" rel="noopener noreferrer">github.com/glqynyf/cf-blog</a></li>
+    </ul>
+    <p>发现内容有错或有更合适的写法，欢迎直接写信，我会修订。</p>
+
+    <hr />
+    <p class="about__foot">*入市有风险，决策需谨慎。*</p>
+  </article>
+</BaseLayout>
+
+<style>
+  .about {
+    padding-bottom: var(--space-8);
+  }
+
+  .about__lead {
+    font-size: 1.0625rem;
+    line-height: 1.8;
+  }
+
+  .about h2 {
+    margin-top: var(--space-12);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--border-default);
+    font-size: 1.25rem;
+  }
+
+  .about ul,
+  .about ol {
+    padding-left: 1.35rem;
+  }
+
+  .about li {
+    margin-bottom: var(--space-2);
+    line-height: 1.75;
+  }
+
+  .about__table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+  }
+
+  .about__table {
+    margin: 0;
+    font-size: 0.875rem;
+  }
+
+  .about__table th {
+    white-space: nowrap;
+  }
+
+  .about__table td {
+    vertical-align: top;
+  }
+
+  .about__table .num {
+    width: 1%;
+    white-space: nowrap;
+    text-align: right;
+    font-family: var(--font-mono);
+  }
+
+  .about__table .strong {
+    white-space: nowrap;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .about__table .mono {
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--accent);
+  }
+
+  .about__table .muted {
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  .about__more {
+    margin-top: var(--space-4);
+    color: var(--text-secondary);
+  }
+
+  .about__foot {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+</style>
