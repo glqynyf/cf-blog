@@ -69,22 +69,15 @@
   .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
   footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
   @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } }
-  /* 返回入口（由 add-note-nav.py 注入） */
-  .note-nav__back {
-    display: inline-flex; align-items: center; gap: 6px;
-    margin-left: auto; padding: 5px 12px; border-radius: 6px;
-    background: var(--surface-2); border: 1px solid var(--border);
-    color: var(--text-dim); text-decoration: none;
-    font-size: 13px; font-weight: 600; line-height: 1.4;
-    transition: all 0.2s;
-  }
+  /* 返回入口（由 add-note-nav.py 注入）：仅补充 hover / 窄屏行为 */
   .note-nav__back:hover {
-    background: var(--accent-soft); border-color: var(--accent);
-    color: var(--accent); text-decoration: none;
+    background: var(--accent-soft) !important;
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+    text-decoration: none !important;
   }
-  /* 窄屏：按钮不再右推，改为独占一行左侧 */
   @media (max-width: 640px) {
-    .note-nav__back { margin-left: 0; }
+    .note-nav__back { margin-left: 0 !important; }
   }
 </style>
 </head>
@@ -94,7 +87,7 @@
   <span class="stage-pill">STAGE 12</span>
   <span class="stage-name">市场生态与主力资金</span>
 
-  <a class="note-nav__back" href="/notes/?stage=S12">← 返回笔记</a>
+  <a class="note-nav__back" href="/notes/?stage=S12" style="display:inline-flex;align-items:center;gap:6px;margin-left:auto;padding:5px 12px;border-radius:6px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-dim);text-decoration:none;font-size:13px;font-weight:600;line-height:1.4;transition:all .2s;">← 返回笔记</a>
 </div>
 
 <div class="meta-bar">
