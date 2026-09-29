@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>把交易拆成流程：交易前/中/后完整 checklist｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .formula-box { background: var(--surface); border: 1px solid var(--accent); border-radius: 8px; padding: 22px 26px; margin: 24px 0; text-align: center; }
+  .formula-box .formula { font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; color: var(--accent); font-size: 19px; font-weight: 700; margin-bottom: 12px; }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  table th { background: var(--surface-2); color: var(--accent); padding: 12px 16px; text-align: left; font-weight: 700; font-size: 14px; border-bottom: 1px solid var(--border); }
+  table td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text); font-size: 14.5px; }
+  table tr:last-child td { border-bottom: none; }
+  table tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+  .check-list { list-style: none; margin: 18px 0 22px; padding: 0; }
+  .check-list li { padding: 12px 16px 12px 44px; position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  .check-list li::before { content: ""; position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; border: 2px solid var(--accent); border-radius: 4px; }
+  .check-list li strong { color: var(--accent); }
+  .related-notes { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin-top: 32px; }
+  .related-notes h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .related-notes ul { list-style: none; margin: 0; padding: 0; }
+  .related-notes ul li { padding: 8px 0; border-bottom: 1px dashed var(--border); font-size: 15px; }
+  .related-notes ul li:last-child { border-bottom: none; }
+  .related-notes a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; display: flex; align-items: center; gap: 10px; }
+  .related-notes a:hover { color: var(--accent); }
+  .related-notes .arrow { color: var(--accent); font-weight: 700; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } }
+</style>
+</head>
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 7</span>
+  <span class="stage-name">买入策略：左侧交易 vs 右侧交易</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">交易纪律</span>
+  <span class="dot"></span>
+  <span>约 13 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 7 · 第 6 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">把交易拆成流程：交易前 / 中 / 后完整 checklist</h1>
+  <p class="note-subtitle">顶级交易员从来不在盘中做决定——他们把所有判断提前固化成清单，让规则代替直觉。这是一篇从买入前、交易中、卖出到复盘的全流程清单设计指南，帮你把"我感觉不错"型冲动交易，逐条挡在账户之外。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>交易亏损的根源，<span class="hl-red">80% 来自临场决策的随机性，而非技术分析的失误</span>。<span class="hl">Checklist 的真正价值不是"提醒你做什么"，而是"在你不想做的时候拦下你"</span>——它把判断从实时脑补转化为流程化验证，把情绪从决策链中剔除出去。任何一项"勉强通过"，都应该放弃本次交易。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-why">为什么需要 checklist：决策疲劳与"我感觉不错"陷阱</a></li>
+    <li><a href="#sec-before">买入前 checklist：5 项必查的入场验证</a></li>
+    <li><a href="#sec-during">交易中 checklist：盘中的 4 条铁律</a></li>
+    <li><a href="#sec-exit">卖出 checklist：5 项必查的离场验证</a></li>
+    <li><a href="#sec-review">复盘 checklist：交易后 24 小时内的功课</a></li>
+    <li><a href="#sec-meta">避免 checklist 失效：清单的"反脆弱"机制</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-why">
+  <h2 class="section-title">为什么需要 checklist：决策疲劳与"我感觉不错"陷阱</h2>
+  <p>你有没有过这样的经历：盘后复盘时逻辑清晰无比，<strong>一开盘就被分时图带跑</strong>，一笔交易做完单子走得稀里糊涂，晚上复盘才意识到自己干了什么？</p>
+  <p>这不是你的判断力有问题，而是<span class="hl">人类的决策系统天生不适合高频金融决策</span>。神经科学研究显示，一个人在连续做出决策后，决策质量会呈指数级下滑——这就是<span class="hl">决策疲劳</span>。</p>
+
+  <blockquote class="purple">
+    <strong>真相：</strong>每一次"我感觉这次会涨"，都是大脑在偷懒。情绪化决策的失败率，<span class="hl-red">永远高于流程化决策的失败率</span>——不是因为情绪化更聪明，而是因为它跳过了验证。
+  </blockquote>
+
+  <h3 class="sub-title">决策疲劳：大脑的带宽是有限的</h3>
+  <p>每一次判断都在消耗前额叶皮层的能量。开盘 4 小时做几十个决定后，<strong>你的判断力会比开盘前下降 40% 以上</strong>。这就是为什么很多人在尾盘容易冲动——不是判断力变强了，是判断力终于跑不动了。</p>
+  <p>而<span class="hl">顶级交易员的解决方案是"决策外包"</span>——把所有可能的判断提前做成清单，开盘时只执行、不决策。他们用<strong>规则代替直觉</strong>，用<strong>流程代替灵感</strong>。</p>
+
+  <h3 class="sub-title">"我感觉不错"陷阱</h3>
+  <p>散户最危险的三个字，不是"涨"或"跌"，而是<span class="hl-red">"我感觉不错"</span>。这句话背后是三层认知扭曲：</p>
+  <ul>
+    <li><span class="hl">确认偏误</span>：只看到支持买入的证据，自动过滤反对证据</li>
+    <li><span class="hl">近期偏好</span>：被最近 3 笔盈利蒙蔽，把运气当能力</li>
+    <li><span class="hl">FOMO 心理</span>：怕错过行情，把"必须进场"当成买入理由</li>
+  </ul>
+
+  <p>Checklist 的核心功能就是<span class="hl">把"我感觉"这种主观输入，转化为可验证的客观问题</span>。当你能用"是 / 否"回答时，<strong>情绪就已经被排除在决策链之外</strong>。</p>
+
+  <div class="quote-banner">
+    Checklist 不是帮你赚钱的工具，<br>
+    <span class="hl">是帮你不亏钱的工具。</span>
+  </div>
+</section>
+
+<section class="section" id="sec-before">
+  <h2 class="section-title">买入前 checklist：5 项必查的入场验证</h2>
+  <p>买入前 checklist 是整个交易系统里<span class="hl">最重要的一道闸门</span>。这 5 个问题不是建议，是<strong>入场必须全部通过的硬条件</strong>。任何一项不通过，本次交易就应该被取消。</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 22%;">检查项</th>
+        <th style="width: 53%;">判断标准</th>
+        <th style="width: 25%;">必须确认</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1. 触发信号</strong></td>
+        <td>是否<strong>明确</strong>符合预定的入场条件？（如放量突破、回踩均线、底部形态完成）</td>
+        <td>✓ / ✗</td>
+      </tr>
+      <tr>
+        <td><strong>2. 风险预算</strong></td>
+        <td>这笔交易<strong>最大亏损</strong>是否 ≤ 总资金 1-2%？是否已计算仓位？</td>
+        <td>✓ / ✗</td>
+      </tr>
+      <tr>
+        <td><strong>3. 持有计划</strong></td>
+        <td>预期持有周期是多久？止盈点 / 止损点在哪？是否已书面写下？</td>
+        <td>✓ / ✗</td>
+      </tr>
+      <tr>
+        <td><strong>4. 情绪状态</strong></td>
+        <td>当前是平静还是激动？是否被"必须进场"驱动？是否有报复性交易倾向？</td>
+        <td>✓ / ✗</td>
+      </tr>
+      <tr>
+        <td><strong>5. 信息核实</strong></td>
+        <td>是否已交叉检查至少 <strong>2 个独立数据源</strong>？消息是否已验证非谣言？</td>
+        <td>✓ / ✗</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-title">逐项拆解：每个问题都在过滤什么</h3>
+
+  <p><strong>① 触发信号：</strong>这一项是整个 checklist 的<strong>地基</strong>。如果入场理由是"看着好像要涨"、"感觉今天能起"、"已经跌这么多了应该反弹"——任何不来自预设计划的入场，都应该取消。<span class="hl-red">没有触发信号，就没有这次交易</span>。</p>
+
+  <p><strong>② 风险预算：</strong>1-2% 不是随便说的数字，它对应的是<span class="hl">连续亏损 50 次后仍能保留 36-61% 本金</span>的生存底线（<code>0.98<sup>50</sup>≈36.4%</code>、<code>0.99<sup>50</sup>≈60.5%</code>，上界取 61% 而非 64%）。计算公式是：</p>
+
+  <div class="formula-box">
+    <div class="formula">仓位 = (总资金 × 1-2%) ÷ (入场价 − 止损价)</div>
+    <div class="desc">先确定能亏多少，再倒推应该买多少——而不是反过来</div>
+  </div>
+
+  <p><strong>③ 持有计划：</strong>如果你没法说出"这笔交易我打算持有多久、止盈在哪、止损在哪"，<span class="hl-red">你就根本没准备好交易</span>。没有计划的交易，本质上是在赌——而赌场的胜率是负的。</p>
+
+  <p><strong>④ 情绪状态：</strong>这是 5 项中<span class="hl">最容易被忽视</span>的一项，也是<span class="hl">最容易出大事</span>的一项。<span class="hl-red">人在激动时做的决定，80% 会在冷静后后悔</span>。</p>
+
+  <blockquote class="purple">
+    <strong>情绪红灯：</strong>心跳加快、手心出汗、想立刻下单、感到"必须抓住这个机会"——只要出现一个，<span class="hl">请站起来离开屏幕 10 分钟</span>。
+  </blockquote>
+
+  <p><strong>⑤ 信息核实：</strong>谣言、内幕、小道消息是散户亏钱最快的捷径。<span class="hl">一个消息必须经过至少 2 个独立信源验证</span>——如果只有 1 个来源，请默认它是假的。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ "勉强通过"等于不通过</div>
+    <p>任何一项让你犹豫超过 10 秒、不敢写下来、或者需要找理由说服自己的，<span class="hl-red">都应该视为不通过</span>。Checklist 不是辩论赛，不需要举证，<strong>它只接受明确的是</strong>。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-during">
+  <h2 class="section-title">交易中 checklist：盘中的 4 条铁律</h2>
+  <p>盘中是最容易冲动的时刻。<span class="hl">买入前 checklist 是为了防止错误入场，盘中 checklist 则是为了防止正确入场后被自己破坏</span>。这 4 条铁律不需要思考，只需要遵守。</p>
+
+  <ul class="check-list">
+    <li><strong>不追涨封板</strong>——这是流动性陷阱，涨停板上的最后一档买入往往是无量拉升后的接盘侠</li>
+    <li><strong>不在跌停板割肉</strong>——这是流动性枯竭，挂单根本出不去，只会在最低点被迫平仓</li>
+    <li><strong>大额交易分批执行</strong>——单笔大单会立刻暴露自己，分批可以拿到均价、降低冲击成本</li>
+    <li><strong>严格执行止损，不临时改动</strong>——盘中临时改止损是 80% 爆仓案例的导火索</li>
+  </ul>
+
+  <h3 class="sub-title">铁律 ①：不追涨封板</h3>
+  <p>封板意味着所有想买的都已经买了，<span class="hl-red">剩下的都是想卖的</span>。你在涨停板上扫货，等于在最高点接盘。机构在封板前的最后 5 分钟扫货，是因为他们有<span class="hl">通道优势</span>——你没有。</p>
+
+  <h3 class="sub-title">铁律 ②：不在跌停板割肉</h3>
+  <p>跌停板挂单根本卖不出去——这是流动性陷阱的最深形态。<span class="hl">真正的割肉机会在反弹后的反抽阶段</span>，而不是最绝望的跌停板上。跌停板上割肉的，往往在第二天发现自己割在了最低点。</p>
+
+  <h3 class="sub-title">铁律 ③：大额交易分批执行</h3>
+  <p>如果你要建仓 100 万的标的，<span class="hl">应该分 5-10 笔在 2-3 天内完成</span>。原因有三：</p>
+  <ul>
+    <li>避免<strong>冲击成本</strong>——单笔大单会瞬间抬高买入价</li>
+    <li>避免<strong>暴露意图</strong>——大单会被程序化交易识别并反向操作</li>
+    <li>获得<strong>价格平均化</strong>——分批可以拿到比一次性建仓更优的均价</li>
+  </ul>
+
+  <h3 class="sub-title">铁律 ④：严格执行止损，不临时改动</h3>
+  <p>这是<span class="hl">4 条铁律里最重要的一条</span>。买入前你冷静地计算了止损点，盘中浮亏放大后却想着"再等等会反弹"——这就是<span class="hl-red">沉没成本谬误</span>在发挥作用。</p>
+
+  <blockquote>
+    <strong>盘中止损的本质：</strong>不是你认输了，是<span class="hl">你在执行一个你冷静时制定的规则</span>。盘中临时改止损，等于把决策权交回情绪——而情绪已经被浮亏绑架了。
+  </blockquote>
+
+  <div class="quote-banner">
+    盘中的你，<br>
+    不是最好的你。<br>
+    <span class="hl">盘前制定规则，盘后检验规则，盘中只执行。</span>
+  </div>
+</section>
+
+<section class="section" id="sec-exit">
+  <h2 class="section-title">卖出 checklist：5 项必查的离场验证</h2>
+  <p>买入决策决定了入场位置，<span class="hl">卖出决策才决定这笔交易是赚是亏</span>。但 90% 的散户买入时小心翼翼，卖出时却全凭感觉——这是典型的"重仓买入、轻率卖出"。</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 30%;">检查项</th>
+        <th style="width: 70%;">判断标准</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1. 止盈 / 止损点</strong></td>
+        <td>是否触及预设的止盈或止损点？是否已无理由偏离原计划？</td>
+      </tr>
+      <tr>
+        <td><strong>2. 买入逻辑</strong></td>
+        <td>买入时的核心逻辑是否仍然成立？基本面 / 技术面 / 资金面是否被破坏？</td>
+      </tr>
+      <tr>
+        <td><strong>3. 市场环境</strong></td>
+        <td>大盘是否出现系统性风险？行业是否被政策 / 黑天鹅重演？</td>
+      </tr>
+      <tr>
+        <td><strong>4. 替代机会</strong></td>
+        <td>是否有<strong>胜率更高</strong>或<strong>赔率更优</strong>的替代标的？</td>
+      </tr>
+      <tr>
+        <td><strong>5. 情绪信号</strong></td>
+        <td>是否出现"舍不得卖"、"再看看"、"已经跌这么多了不甘心"？</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-title">离场的两大类触发：止盈 vs 止损</h3>
+
+  <p><strong>止盈触发：</strong>这是"好"的离场。<span class="hl">浮盈变成实际盈利的那一刻，是最容易过度乐观的时刻</span>。要警惕"赚 30% 后期待赚 50%，结果坐电梯回原点"的剧本。</p>
+
+  <p><strong>止损触发：</strong>这是"坏"的离场，但<strong>是必要的离场</strong>。止损的本质不是认输，是<span class="hl">承认自己的判断有限、为错误定价</span>。止损后能活下来，就有重新开仓的本钱；不止损爆仓，就没有机会了。</p>
+
+  <h3 class="sub-title">"舍不得卖"是最大的卖出信号</h3>
+  <p>当你开始出现"舍不得卖"、"卖了就涨怎么办"、"再等等吧"这些念头时，<span class="hl-red">往往意味着你应该坚决卖出</span>。这是<span class="hl">处置效应</span>的典型表现——人类天生对亏损的痛苦是对等盈利的 2-2.5 倍（损失厌恶）。</p>
+
+  <blockquote class="purple">
+    <strong>关键警示：</strong>如果你的持仓已经让你<span class="hl-red">睡不好觉、影响心情、需要反复去看</span>——不管盈亏，<strong>都应该减仓或清仓</strong>。一个让你焦虑的仓位，永远不是好仓位。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-review">
+  <h2 class="section-title">复盘 checklist：交易后 24 小时内的功课</h2>
+  <p>复盘是交易系统中<span class="hl">最被低估</span>的一环。90% 的散户不亏在选股，不亏在买入，<span class="hl-red">亏在"从不复盘，所以从不进步"</span>。一次完整的复盘，能顶你做 10 笔新交易。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 复盘的黄金时间窗口：交易结束后 24 小时内</div>
+    <p>超过 24 小时，<span class="hl-red">你对自己的"叙事"会开始美化</span>，你会本能地把错误决策重新解释为"当时看来是合理的"。24 小时内的复盘，是记忆最真实、批判最客观的时刻。
+  </div>
+
+  <h3 class="sub-title">复盘必填的 4 项内容</h3>
+
+  <p><strong>① 实际盈亏 vs 计划盈亏：</strong>不仅看金额，更要看<span class="hl">这笔交易在你整体策略中的位置</span>。是预期内的盈利、预期内的止损，还是偏离计划的意外？</p>
+
+  <p><strong>② 决策过程 vs 执行过程的偏差：</strong>这是复盘最有价值的一环——<span class="hl">你的计划是 A，实际做的是 B，差距在哪？</span></p>
+  <ul>
+    <li>原计划买入 30%，实际买入了 80%？→ 仓位管理失控</li>
+    <li>原计划止损 -5%，实际 -12% 才止损？→ 止损纪律失效</li>
+    <li>原计划持有 1 周，实际持有 3 个月？→ 持有期被套牢绑架</li>
+  </ul>
+
+  <p><strong>③ 情绪记录：</strong>这是<span class="hl">最诚实的一项</span>。你需要诚实地回答：买入时我是什么情绪？持有时我经历了什么？卖出时我是释然还是遗憾？</p>
+  <blockquote>
+    <strong>建议：</strong>用 1-10 分给自己的情绪打分（1 = 极平静，10 = 极激动）。连续 5 笔情绪分超过 7 的交易，应该暂停交易一周。
+  </blockquote>
+
+  <p><strong>④ 关键教训（不超过 3 条）：</strong>复盘的最终产出是<span class="hl">可执行的改进</span>。每次复盘只写 3 条以内，<strong>多了记不住，也执行不了</strong>。</p>
+
+  <h3 class="sub-title">盈利交易的复盘更重要</h3>
+  <p>很多人只复盘亏损交易，这是错的。<span class="hl-red">盈利交易里藏着你以为的"能力"，但很多其实是趋势红利</span>。不分析盈利来源，你会高估自己，最终在一次失败中亏掉所有靠运气赚的钱。</p>
+
+  <div class="formula-box">
+    <div class="formula">盈利 = 能力 × 运气  |  复盘 = 把运气从盈利中剥离</div>
+    <div class="desc">不剥离运气，下一次凭运气赚的钱会被凭实力亏光</div>
+  </div>
+</section>
+
+<section class="section" id="sec-meta">
+  <h2 class="section-title">避免 checklist 失效：清单的"反脆弱"机制</h2>
+  <p>Checklist 本身不是万能药。<span class="hl-red">它最大的敌人不是市场，而是你自己</span>。当你已经想好要交易时，checklist 会变成你最想打发的障碍。下面是 3 个 checklist 最常见的失效方式：</p>
+
+  <ul class="check-list">
+    <li><strong>不要在情绪激动时强行打勾</strong>——激动状态下的勾，本质上是<span class="hl">给你已经决定好的行为盖章</span>，而不是过滤</li>
+    <li><strong>不要"为了交易而强行通过 checklist"</strong>——找理由解释为什么不通过，比强行通过更值钱</li>
+    <li><strong>任何一项"勉强通过"，都应该放弃本次交易</strong>——<span class="hl-red">犹豫本身就是信号</span></li>
+  </ul>
+
+  <h3 class="sub-title">失效模式 ①：在激动时打勾</h3>
+  <p>激动状态下打勾，是 checklist 最常见的失效方式。<span class="hl">你的身体已经在尖叫"买入"，然后你翻开 checklist 给这种冲动找证据</span>——这种勾的本质不是验证，是<span class="hl-red">给冲动穿上了理性的外衣</span>。</p>
+  <blockquote class="purple">
+    <strong>反脆弱机制：</strong>激动状态下的 checklist 必须<span class="hl">强制延迟 30 分钟</span>再填。如果 30 分钟后还想打勾，才算通过。
+  </blockquote>
+
+  <h3 class="sub-title">失效模式 ②：为了交易强行通过</h3>
+  <p>"这只票是龙头"、"题材很纯"、"今天必须进场"——这些都是<span class="hl">为了交易而找的理由</span>。Checklist 不是辩论赛，你不需要为不通过辩护——<span class="hl-red">不通过就是结论</span>。</p>
+
+  <h3 class="sub-title">失效模式 ③：勉强通过</h3>
+  <p>每一项都应该清晰明确。</p>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 40%;">回答</th>
+        <th style="width: 60%;">含义</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong style="color: var(--green);">✓ 干脆通过</strong></td>
+        <td>立即、明确、不需要思考 —— 真信号</td>
+      </tr>
+      <tr>
+        <td><strong style="color: var(--yellow);">△ 勉强通过</strong></td>
+        <td>需要思考、需要找理由 —— <span class="hl-red">假信号</span></td>
+      </tr>
+      <tr>
+        <td><strong style="color: var(--red);">✗ 不通过</strong></td>
+        <td>放弃本次交易 —— 这是正确结果</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><span class="hl">"勉强通过"是 checklist 失效的最大漏洞</span>。你能勉强通过，就意味着下次你能更勉强地通过——<strong>直到完全失去判断力</strong>。</p>
+
+  <div class="quote-banner">
+    一个不能让你放弃交易的 checklist，<br>
+    <span class="hl">不是 checklist，是免责声明。</span>
+  </div>
+
+  <h3 class="sub-title">Checklist 的"反脆弱"：让规则保护你不被自己打败</h3>
+  <p>Checklist 的真正价值，是<span class="hl">在你不想做的时候拦下你</span>。当你兴奋想进场时，它提醒你冷静；当你恐慌想割肉时，它提醒你别在最差的位置离场；当你贪心不止盈时，它提醒你已经赚够了。</p>
+
+  <blockquote>
+    <strong>顶级交易员的"决策外包"思维：</strong>他们承认自己在激动 / 恐慌 / 贪婪时会犯错，所以他们<span class="hl">提前把所有决策外包给一份冷静时制定的清单</span>。Checklist 不是一个工具，是<span class="hl">你冷静时的自己</span>，替你管住情绪化的自己。
+  </blockquote>
+
+  <div class="warning-card">
+    <div class="label">⚠️ checklist 的最后一条铁律</div>
+    <p>如果你连续 3 次都对 checklist 的结果不满意（觉得它"太严"、"挡了我赚钱"），<span class="hl-red">请检查你的交易系统，而不是抱怨 checklist</span>。Checklist 不赚钱，它只是阻止你亏钱。<strong>赚钱靠逻辑，逻辑靠纪律，纪律靠清单。</strong></p>
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>80% 的交易亏损来自<span class="hl">临场决策的随机性</span>，而非技术分析失误</li>
+      <li>买入前 <strong>5 项必查</strong>：触发信号、风险预算（≤ 1-2%）、持有计划、情绪状态、信息核实</li>
+      <li>盘中 <strong>4 条铁律</strong>：不追涨封板、不在跌停板割肉、大额分批、不临时改止损</li>
+      <li>卖出 <strong>5 项必查</strong>：止盈止损点、买入逻辑、市场环境、替代机会、情绪信号</li>
+      <li>复盘 <strong>4 项功课</strong>：盈亏对比、决策 vs 执行偏差、情绪打分、3 条以内教训</li>
+      <li>Checklist <strong>失效的 3 种方式</strong>：激动时打勾、强行通过、勉强通过</li>
+      <li>任何一项"勉强通过"，<span class="hl-red">都应该放弃本次交易</span></li>
+      <li>顶级交易员的<span class="hl">决策外包</span>思维：用冷静时制定的清单，约束激动时的自己</li>
+    </ul>
+  </div>
+</section>
+
+<div class="related-notes">
+  <h4>相关笔记</h4>
+  <ul>
+    <li><a href="S07-01-左侧交易与右侧交易基础版.html"><span class="arrow">→</span> S07-01 左侧交易与右侧交易基础版：建立入场框架的起点</a></li>
+    <li><a href="S07-05-为什么每次抄底都站在山顶.html"><span class="arrow">→</span> S07-05 为什么每次抄底都站在山顶：理解入场逻辑的失效场景</a></li>
+    <li><a href="#"><span class="arrow">→</span> S08-06 止损系统设计（即将发布）：Checklist 中第 3 项的深度展开</a></li>
+  </ul>
+</div>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 7 · 买入策略</p>
+</footer>
+
+</body>
+</html>
