@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>支撑位变压力位：一旦跌破，原来的地板就是现在的天花板｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14.5px; }
+  th { background: var(--surface); color: var(--accent); text-align: left; padding: 12px 14px; border-bottom: 2px solid var(--accent); font-weight: 700; }
+  td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+  tr:hover td { background: var(--surface); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .misuse-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin: 24px 0; display: grid; grid-template-columns: 1fr auto 1fr; gap: 18px; align-items: stretch; }
+  .misuse-card .col { padding: 18px 20px; border-radius: 8px; }
+  .misuse-card .wrong { background: rgba(255, 107, 107, 0.08); border: 1px solid rgba(255, 107, 107, 0.3); }
+  .misuse-card .wrong h4 { color: var(--red); }
+  .misuse-card .right { background: rgba(86, 211, 100, 0.08); border: 1px solid rgba(86, 211, 100, 0.3); }
+  .misuse-card .right h4 { color: var(--green); }
+  .misuse-card .vs { align-self: center; font-size: 24px; font-weight: 800; color: var(--text-mute); }
+  .misuse-card h4 { font-size: 15px; margin-bottom: 10px; }
+  .misuse-card ul { margin: 0; padding-left: 18px; }
+  .misuse-card ul li { font-size: 14px; color: var(--text-dim); }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+    .misuse-card { grid-template-columns: 1fr; }
+    .misuse-card .vs { text-align: center; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 6</span>
+  <span class="stage-name">形态学与缺口理论</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 14 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 6 · 第 5 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">支撑位变压力位：一旦跌破，原来的地板就是现在的天花板</h1>
+  <p class="note-subtitle">为什么你坚守的钻石底，在被跌破的瞬间会变成你这辈子都无法解套的钢铁天花板？这个角色逆转不是什么玄学，而是无数被套牢的资金在自私与恐惧的本能驱动下集体合谋的必然结果。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>支撑位和阻力位<span class="hl">不是冷冰冰的几何徒刑</span>，而是<span class="hl">多空双方用真金白银铸起的心理战壕</span>。一旦关键支撑被砸穿，<span class="hl-red">多头的盟友会瞬间叛变</span>变成最坚定的卖家——因为<span class="hl">"解套保本"的心理会让他们在反弹到原支撑位时疯狂挂单卖出</span>。这正是极性原理的核心：地板在被砸穿的那一秒，被恐惧与贪婪铁铸成了天花板。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-foundation">支撑位与阻力位的本质：心理战壕</a></li>
+    <li><a href="#sec-betrayal">跌破瞬间的三类人群叛变</a></li>
+    <li><a href="#sec-history">三段历史实证：地板如何变天花板</a></li>
+    <li><a href="#sec-hunt">大空头的精准猎杀剧本</a></li>
+    <li><a href="#sec-filter">过滤假突破的 3 个黄金确认维度</a></li>
+    <li><a href="#sec-strategy">破位回抽策略：极性原理的反向运用</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-foundation">
+  <h2 class="section-title">支撑位与阻力位的本质：心理战壕</h2>
+  <p>在很多人眼里，K 线图上的支撑位和阻力位只是几条用软件自动画出来的横线，或者是某个重要的均线位置。但如果你的认知只停留在这一步，你在这场金钱游戏中就<span class="hl-red">注定只能扮演猎物的角色</span>。</p>
+
+  <h3 class="sub-title">支撑位是什么？</h3>
+  <p>支撑位不是冷冰冰的几何徒刑，它在本质上是<span class="hl">多头在某个特定的价格区间用成百上千亿的真金白银铸起的一道防线</span>。想象一下当一个资产的价格一路下滑跌到了某个大家都公认便宜的区间：</p>
+  <ul>
+    <li>有人觉得估值到了历史低点可以抄底</li>
+    <li>有人是之前错过了上涨现在等到了回调</li>
+    <li>有机构必须在这个位置护盘以保证质押资产安全</li>
+  </ul>
+  <p>在这个特定的价位节点上，<span class="hl">买单的涌入速度远远超过抛单</span>，供求平衡被瞬间打破，买盘像一堵厚实的墙一样硬生生挡住了价格下跌的势头。这就是支撑位——<strong>多头用真金白银在战场上挖出的心理战壕</strong>。</p>
+
+  <h3 class="sub-title">阻力位是什么？</h3>
+  <p>阻力位（压力位）是这套逻辑在反方向的完美对称。当价格上涨到某个高点，原本获利的买方开始集体套现，而那些认为估值过高的做空力量也开始在这个位置大量挂单。在这个价格区间，<span class="hl">卖方的抛压铺天盖地</span>，多头再也无力向上推进，上涨趋势在这里戛然而止。这就是天花板——<strong>空方筑起的钢铁长城</strong>。</p>
+
+  <blockquote class="purple">
+    <strong>只要市场处于相对平衡的状态，价格就会在这两个无形的界线之间像皮球一样反复弹跳。</strong>看着价格在触及地板时弹起，在触及天花板时落下，周而复始。这种规律让无数人产生了一种虚幻的安全感——他们开始相信地板永远会是地板，开始在这些位置放松警惕，甚至把杠杆拉满。
+  </blockquote>
+
+  <div class="quote-banner">
+    然而金融市场最残忍的地方就在于，<br>
+    <span class="hl">平衡永远是用来被打破的</span>。<br>
+    当那个曾经无数次拯救市场的钻石底，<br>
+    被一根冷酷的阴线彻底击穿时，<span class="hl-red">真正的噩梦才刚刚拉开序幕</span>。
+  </div>
+</section>
+
+<section class="section" id="sec-betrayal">
+  <h2 class="section-title">跌破瞬间的三类人群叛变</h2>
+  <p>为什么一旦跌破支撑位，原来的地板会立刻变成压力位？这是因为市场中所有参与者的<span class="hl">心理和立场，在破位的那一瞬间发生了天翻地覆的彻底判变</span>。我们从行为金融学的显微镜下去解剖三种最典型的人群。</p>
+
+  <h3 class="sub-title">第一类：多头套牢者</h3>
+  <p>这群人是极性原理形成的最关键推手。当价格处于支撑位时，他们满怀信心地买入，坚信这里就是最安全的地板。然而价格并没有像往常一样弹起，而是无情地跌破了这条防线。</p>
+  <p>那一刻这群投资者在心理上瞬间陷入了极度恐慌。但<span class="hl">行为金融学中的损失厌恶和锚定效应</span>开始在他们的大脑里作祟——人不肯轻易承认自己的失败，更不愿意割肉离场。他们会死死盯着自己买入的成本价，在心中反复默念一个卑微的期盼：</p>
+  <blockquote>
+    <strong>"只要价格能够反弹回我的成本价，哪怕一分钱不赚，只要能让我平仓出局，我以后再也不碰这个资产了。"</strong>
+  </blockquote>
+  <p>这种<span class="hl">"只要保本就走"</span>的执念在成千上万个散户心中形成了强大的共振。当价格真的在下跌之后出现反弹，重新逼近那个曾经的支撑位时，他们不会继续看好，而是会像逃难一样把手里的所有筹码铺天盖地地挂单卖出。<span class="hl-red">曾经在支撑位买入的多头，在价格反弹回原支撑位时，全部叛变，变成了最坚定的卖家</span>。</p>
+
+  <h3 class="sub-title">第二类：踏空观望者</h3>
+  <p>在价格还在震荡时他们一直在犹豫，生怕自己买在高位。可一旦他们看到价格跌破了那个长期持稳的超级支撑位，市场的趋势被彻底确认为了下行，这群观望者的心理防线也会随之崩溃。他们不再幻想着去抄底，而是会改变策略，甚至<span class="hl">加入做空的队伍</span>。即使他们想买，他们也会把预期的心理价位大幅度往下调整。这时候市场上原本潜在的买方力量瞬间消失。</p>
+
+  <h3 class="sub-title">第三类：专业做空机构与量化对冲基金</h3>
+  <p>对于他们来说，支撑位不是用来尊重的，而是用来<span class="hl-red">测试和猎杀</span>的。他们非常清楚，在这些关键的支撑位下方，密密麻麻地排满了无数散户的止损单和质押盘的强平线。</p>
+  <p>只要他们用足够强大的资金头寸在极短的时间内将价格强行砸穿这个支撑位，就会瞬间触发<span class="hl">多米诺骨牌效应</span>：</p>
+  <ul>
+    <li>无数的止损单会被系统自动激活变成市价卖单</li>
+    <li>杠杆资金会被强制平仓变成抛售潮</li>
+    <li>做空机构只需要在破位的那一瞬间顺水推舟，就能<span class="hl">借用散户自己设定的止损单把价格推向更深的深渊</span></li>
+  </ul>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 极性原理的核心心理机制</div>
+    <p>跌破支撑位的那一瞬间，<span class="hl">信仰破碎，盟友变成敌人</span>。地板在人们内心的恐惧与贪婪的交织中被铁铸成了天花板。曾经的多头为了保本在卖，踏空者在观望，空头在疯狂打压——多方曾经看似坚不可摧的联盟在一夜之间全员叛变，多空力量的对比发生了根本性的逆转。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-history">
+  <h2 class="section-title">三段历史实证：地板如何变天花板</h2>
+
+  <h3 class="sub-title">案例一：2008 年标普 500 的 1200 点</h3>
+  <p>标普 500 在 2007 年 10 月达到 1565 点的历史高点，次贷危机阴霾笼罩华尔街。但 2008 年前 8 个月，指数在 <strong>1200–1300 点</strong>之间展现出极强韧性——这不仅是整数关口，更是当时无数共同基金、养老金和华尔街多头分析师一致认为的神明线。每当价格跌到 1200 点附近，就会有天量买盘涌入将价格托起。</p>
+  <p>然而 2008 年 9 月雷曼兄弟破产，1200 点的黄金地板在十天之内被一根根无情的阴线瞬间砸穿。标普 500 像断了线的风筝，在几个月内一路腰斩，<span class="hl">最低跌到了 666 点</span>。当指数反弹到 1200–1300 点区间时，<span class="hl-red">可怕的事情发生了</span>：从 2010 年到 2011 年初的近一年时间里，每当局势试图冲破 1200 点，就会遭遇像狂风暴雨一样的疯狂抛压。<span class="hl">曾经在 1200 点买入的套牢盘，在绝望等待了三年后终于看到了解套保本的曙光，毫不犹豫地选择疯狂挂单离场</span>。</p>
+
+  <h3 class="sub-title">案例二：思科（Cisco）在 2000 年互联网泡沫</h3>
+  <p>作为全球网络硬件绝对霸主的思科，市值一度突破 5000 亿美元，股价创历史高点约 <strong>80 美元</strong>（2000 年 3 月拆股调整后峰值 $80.06，未拆股前为 $146.75）。泡沫破裂初期，股价开始滑落，但在 <span class="hl">50–60 美元</span>区间曾展现教科书般的顽强抵抗。当时几乎所有散户都认为：一家统治全球互联网底层基础设施的巨头怎么可能继续暴跌？</p>
+  <p>残酷的现实是当估值逻辑崩塌、大环境流动性彻底枯竭后，50 美元的地板被毫无悬念地砸碎了。思科股价一路狂泻，最低甚至跌破了 <strong>10 美元</strong>，盘中一度只剩 8 美元出头。<span class="hl-red">从最高点算起跌幅高达近 90%</span>。这批在 50–60 美元进场抄底的人在接下来的漫长岁月里体会到了什么叫做天花板的折磨。基本面后来早已恢复、盈利能力也极强的思科，股价足足用了<span class="hl">将近 19 年</span>才重新爬回 50–60 美元（2019 年才回到约 58 美元），真正突破 2000 年高点 $80.06 已经是 2025 年 12 月（历时 25 年）。</p>
+
+  <h3 class="sub-title">案例三：2021–2022 年比特币的 3 万美元</h3>
+  <p>2021 年年中，比特币多次经历利空袭击，价格反复下探 <strong>3 万美元大关</strong>。但每一次跌到这里都伴随着大量的机构买盘和散户的抄底资金，三万美元是坚不可摧的共识底。然而 2022 年 5–6 月，随着 Luna 算法稳定币崩盘、三箭资本 3AC 爆雷以及Celsius Network（塞勒希厄斯）等借贷平台接连资不抵债，这层所谓的共识底在一夜之间被彻底洞穿。</p>
+  <p>跌破三万美元后，无数的止损单被集体引爆，价格被进一步砸到 <strong>1.6 万美元</strong>附近。2022 年下半年到 2023 年，比特币每次试图发起反弹，三万美元这个位置就像一堵无形的巨大电网。<span class="hl-red">价格只要一触碰就会伴随着天量的卖单被瞬间弹回</span>——那些在三万美元套牢的筹码在保本心理的支配下只要看到价格反弹回来就会绝望地抛售。</p>
+</section>
+
+<section class="section" id="sec-hunt">
+  <h2 class="section-title">大空头的精准猎杀剧本</h2>
+
+  <h3 class="sub-title">剧本第一步：假突破前的诱敌</h3>
+  <p>假设一个资产的价格在经历一段下跌后来到一个非常关键的超级支撑位。此时市场多头情绪开始回暖，散户们看到价格似乎跌不动了便开始在支撑线附近大量挂单买入，<span class="hl">同时在支撑线下方仅仅 2%–3% 的位置设定了止损单</span>。</p>
+  <p>做空机构此时<span class="hl">不会立刻发动总攻</span>，相反他们会先在支撑位上方假装退让，让价格出现一波微弱的反弹——这种反弹会被技术分析派散户解读为支撑有效、趋势反转的信号，于是更多的跟风盘和杠杆资金开始疯狂涌入。</p>
+
+  <h3 class="sub-title">剧本第二步：砸穿支撑位触发雪崩</h3>
+  <p>等到多头买盘的筹码在支撑位附近积累到足够庞大的规模时，陷阱的盖子就会被瞬间合上：</p>
+  <ul>
+    <li>空头机构突然调集海量的借来筹码或者股指期货空单</li>
+    <li>在极短的时间内以摧枯拉朽之势将价格强行击穿这个支撑位</li>
+    <li>散户在支撑位下方设立的密密麻麻的<span class="hl">止损单本质就是市价卖单</span>，当这些止损单被大批量触发时，系统会不计成本地以任何价格在市场上进行抛售</li>
+    <li>加了杠杆的融资盘在跌破支撑位后由于保证金不足也会被券商或交易所自动执行强平</li>
+    <li><span class="hl-red">散户自己设置的止损单和强平单就像雪崩中的雪球一样自动开始疯狂砸盘</span></li>
+  </ul>
+
+  <h3 class="sub-title">剧本第三步：反弹原支撑位形成新天花板</h3>
+  <p>更讽刺的是当这波暴跌告一段落，市场因为超跌而出现死猫跳式的反弹时，<span class="hl">那些在暴跌中由于反应慢而没有来得及止损的被套散户，又会产生我们前面提到的解套保本心理</span>。只要价格反弹回原来的支撑位，他们就会把手里的筹码当做垃圾一样倾倒出来。空头机构此时会顺水推舟在这个原支撑位上重新部署大量的空头头寸。<span class="hl-red">散户的解套抛盘加上空头的压制，两股力量合二为一，使得反弹在触及曾经的地板后瞬间夭折</span>，从而开启了下一轮更加漫长和绝望的阴跌。</p>
+
+  <blockquote class="purple">
+    <strong>在这场高阶的游戏里，支撑位从来都不是散户避难的温床——它是空头捕杀场上最显眼最诱人的诱饵。</strong>一旦你对支撑位产生了盲目的信仰，你就已经把自己的生死决定权毫无保留地交到了那些嗜血猎手的手中。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-filter">
+  <h2 class="section-title">过滤假突破的 3 个黄金确认维度</h2>
+  <p>作为普通投资者，我们难道只能被动地成为大空头的盘中餐吗？答案当然是否定的。<span class="hl">关键在于你必须学会区分真正的破位与诱敌深入的陷阱</span>，并拥有一套铁一般的实操法则。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 维度一：收盘价确认</div>
+    <p>无论盘中价格波动多么剧烈，你都不要急于做决定。<span class="hl">只有当日 K 线彻底收盘且收盘价明确位于支撑线下方时，破位才算初步成立</span>。收盘价是多空双方在一天激烈争夺后妥协的最终结果，它比盘中的任何瞬时价格都更具权威性。</p>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 维度二：时间确认（双日法则）</div>
+    <p>在跌破支撑位后，价格需要<span class="hl">连续两个交易日的收盘价都维持在支撑位下方</span>，而不是在第二天就迅速收复失地。如果价格能在跌破后持续停留，说明市场已经开始接受这个新的价格区间，原有的多头防线已经彻底放弃抵抗。</p>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 维度三：成交量确认</div>
+    <p>真正的破位往往伴随着<span class="hl">成交量的显著放大甚至跳空缺口</span>，代表着机构资金的离场和做空力量的合力，是真枪实弹的破位。<span class="hl-red">而无量阴跌跌破支撑位的走势往往很容易在随后被一股神秘力量拉回，形成诱空陷阱</span>。</p>
+  </div>
+
+  <div class="misuse-card">
+    <div class="col wrong">
+      <h4>❌ 散户的典型死法</h4>
+      <ul>
+        <li>盘中刺破 100 元支撑位就立即割肉，结果收盘被拉回 101 元</li>
+        <li>在支撑位下方 2%–3% 处设止损单，等于给空头交"流动性税"</li>
+        <li>看到"地板"二字就放松警惕，放弃风险管理</li>
+      </ul>
+    </div>
+    <div class="vs">VS</div>
+    <div class="col right">
+      <h4>✓ 过滤假破位的三道闸门</h4>
+      <ul>
+        <li>等收盘价明确在支撑位之外</li>
+        <li>连续两日无法收复</li>
+        <li>伴随显著放量或跳空缺口</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="sec-strategy">
+  <h2 class="section-title">破位回抽策略：极性原理的反向运用</h2>
+  <p>在确认了破位的真实性之后，接下来就是如何利用极性原理进行安全交易。这就是顶级华尔街操盘手最推崇的经典手法之一——<span class="hl">破位回抽策略</span>。</p>
+
+  <h3 class="sub-title">为什么不在破位瞬间追空？</h3>
+  <p>很多散户在看到价格暴跌破位时，会因为害怕错过行情而选择在半山腰疯狂追空，结果往往被随后"死猫跳"式的反弹直接暴仓。正确的做法是耐心等待。</p>
+
+  <h3 class="sub-title">等待回抽测试</h3>
+  <p>一旦关键的地板被跌破，价格通常会在惯性下跌后出现一波试探性的反弹。这个反弹的过程在技术上被称为<span class="hl">回抽测试</span>：</p>
+  <ul>
+    <li>你要做的就是冷眼旁观，等待价格重新回到那个曾经的地板位置</li>
+    <li>当价格触碰到原支撑位（原阻力位）时，<span class="hl">如果成交量极具萎缩且 K 线在这个位置留下了长长的上影线或出现了吞没形态</span>，这就代表反弹无力，原来的地板已经成功转化为铁一般的天花板</li>
+    <li>这一刻就是<span class="hl">最完美的入场点</span></li>
+  </ul>
+
+  <h3 class="sub-title">风险报酬比极高的入场</h3>
+  <p>在这个新天花板的压制下进行反向交易不仅适应了市场的大趋势，而且<span class="hl">你的风险报酬比极高</span>：</p>
+  <ul>
+    <li>止损位设定在天花板上方不远处</li>
+    <li>如果价格重新站上这个位置说明交易逻辑失效，可以以极小的代价止损离场</li>
+    <li>如果价格如期承压下行，你将获得一段极为丰厚的主跌浪利润</li>
+  </ul>
+
+  <div class="quote-banner">
+    金融市场的极性原理，本质上不过是<span class="hl">人类群体恐惧与贪婪在图表上的投影</span>。<br>
+    当你不再试图去挑战这个群体的引力法则，<br>
+    当你学会<span class="hl">顺从趋势的脉搏</span>，<br>
+    你就已经超越了市场上 <span class="hl-green">90% 的盲目跟风者</span>。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>支撑位不是冷冰冰的几何徒刑，而是<span class="hl">多空双方用真金白银铸起的心理战壕</span></li>
+      <li>跌破瞬间三类人群叛变：套牢者想保本、踏空者改做空、空头加码砸盘</li>
+      <li>标志性历史实证：<span class="hl">2008 标普 1200 点、思科 50–60 美元、比特币 3 万美元</span>均经历地板变天花板</li>
+      <li>大空头的猎杀剧本：诱敌 → 砸穿 → 反弹原位变成新天花板</li>
+      <li>过滤假突破的 3 个黄金确认维度：<span class="hl">收盘价、时间（双日法则）、成交量</span></li>
+      <li>破位回抽策略 = 等待反弹到原支撑位 + 缩量长上影 + 反向做空</li>
+      <li><span class="hl-red">不要把止损设在支撑位下方 2%–3% 处，那正是空头最喜欢的位置</span></li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 6 · 形态学与缺口理论</p>
+</footer>
+
+</body>
