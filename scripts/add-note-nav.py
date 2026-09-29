@@ -21,33 +21,39 @@ import sys
 NOTES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'public', 'notes')
 
 # 注入到最后一个 </style> 之前的 CSS。
-# 不以换行开头：调用方已把 </style> 所在行的原始缩进放在最前面，
-# 若这里再带一个前导 \n 就会多插一个空行。
-# margin-left:auto 把按钮推到 stage-bar 行末右侧；
-# stage-bar 本身已是 flex + flex-wrap，窄屏时按钮会自然换行到下一行。
-NAV_CSS = """  /* 返回入口（由 add-note-nav.py 注入） */
-  .note-nav__back {
-    display: inline-flex; align-items: center; gap: 6px;
-    margin-left: auto; padding: 5px 12px; border-radius: 6px;
-    background: var(--surface-2); border: 1px solid var(--border);
-    color: var(--text-dim); text-decoration: none;
-    font-size: 13px; font-weight: 600; line-height: 1.4;
-    transition: all 0.2s;
-  }
+# 只负责 hover 与窄屏回落等"锦上添花"的效果；
+# 按钮的静态外观全部写在 HTML 的内联 style 上，不依赖 <style> 解析，
+# 避免个别笔记的 CSS 解析异常导致按钮退化成浏览器默认蓝色链接。
+NAV_CSS = """  /* 返回入口（由 add-note-nav.py 注入）：仅补充 hover / 窄屏行为 */
   .note-nav__back:hover {
-    background: var(--accent-soft); border-color: var(--accent);
-    color: var(--accent); text-decoration: none;
+    background: var(--accent-soft) !important;
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+    text-decoration: none !important;
   }
-  /* 窄屏：按钮不再右推，改为独占一行左侧 */
   @media (max-width: 640px) {
-    .note-nav__back { margin-left: 0; }
+    .note-nav__back { margin-left: 0 !important; }
   }
 """
+
+# 按钮静态外观内联在标签上：颜色/边框/圆角/排版一次到位。
+# 仍使用笔记自身的 CSS 变量，因此深色主题保持一致。
+INLINE_STYLE = (
+    "display:inline-flex;align-items:center;gap:6px;"
+    "margin-left:auto;padding:5px 12px;border-radius:6px;"
+    "background:var(--surface-2);border:1px solid var(--border);"
+    "color:var(--text-dim);text-decoration:none;"
+    "font-size:13px;font-weight:600;line-height:1.4;"
+    "transition:all .2s;"
+)
 
 
 def build_back(stage: str) -> str:
     # 前置换行让缩进自然；闭合 </div> 由调用方在自己的行首补回
-    return f'\n  <a class="note-nav__back" href="/notes/?stage={stage}">← 返回笔记</a>\n'
+    return (
+        f'\n  <a class="note-nav__back" href="/notes/?stage={stage}" '
+        f'style="{INLINE_STYLE}">← 返回笔记</a>\n'
+    )
 
 
 def main() -> int:
