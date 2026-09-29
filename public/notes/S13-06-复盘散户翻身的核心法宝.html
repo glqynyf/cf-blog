@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>复盘：散户翻身的核心法宝，收盘后的必修课｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b;
+    --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 13</span>
+  <span class="stage-name">宏观、市场周期与极端行情</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 13 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 13 · 第 6 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">复盘：散户翻身的核心法宝，收盘后的必修课</h1>
+  <p class="note-subtitle">炒股输赢不靠盯盘，复盘才是散户翻身的必修课。一套专业资金通用的复盘体系，从大盘情绪到个股风控再到交易规划，告别盲目炒股。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>很多人以为炒股拼的是开盘那 4 个小时的反应速度，但真相是<span class="hl">真正拉开账户差距的从来不是盯盘的时间，而是收盘后的那 30 分钟</span>。复盘的核心不是预测明天涨跌，而是<span class="hl-red">建立一套属于自己的概率过滤器</span>。本文拆解一套专业资金每天都在用的盘后复盘框架，从大盘环境到个股结构，从基本面逻辑到技术面信号，再到最致命的人性弱点。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-mindset">复盘的核心不是预测，而是概率过滤</a></li>
+    <li><a href="#sec-market">大盘复盘：看市场呼吸的节奏</a></li>
+    <li><a href="#sec-stock">个股复盘：4 步结构体检</a></li>
+    <li><a href="#sec-mental">心理复盘：散户跨越亏损的唯一桥梁</a></li>
+    <li><a href="#sec-template">复盘模板与落地动作</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-mindset">
+  <h2 class="section-title">复盘的核心不是预测，而是概率过滤</h2>
+
+  <p>在正式拆解方法之前，你必须先接受一个反直觉的事实：</p>
+
+  <blockquote class="purple">
+    <strong>复盘的核心根本不是预测明天涨跌</strong>，而是<span class="hl">建立一套属于你自己的概率过滤器</span>。
+  </blockquote>
+
+  <p>每天盯盘告诉你的是"今天亏了钱"——但这是精力，不是经验。复盘是逼你拆开自己，看清当时为什么下单、为什么死扛、为什么卖飞。精力变成经验，<strong>才是复盘的真正价值</strong>。</p>
+
+  <p>如果你能坚持 30 天按这个体系复盘，你的交易视角会发生一次彻底的降维打击。</p>
+</section>
+
+<section class="section" id="sec-market">
+  <h2 class="section-title">大盘复盘：看市场呼吸的节奏</h2>
+
+  <p>很多散户看大盘只看指数是红是绿，这就好比出门只看天气预报说"晴"，却不管外面是不是挂着十几级台风。<span class="hl">真正的高手看的是市场呼吸的节奏</span>。</p>
+
+  <h3 class="sub-title">第一步 · 摸水温，看量能</h3>
+  <p>现在的 A 股早就不是以前那种缩量阴跌的玩法了，<span class="hl">连续破 2 万亿的成交额才是及格线</span>。在这种超级巨量时代你要记下：</p>
+
+  <ul>
+    <li><span class="hl">天亮之后有没有天价</span>：今天大盘冲高但成交量却从前几天的 2.5 万亿突然萎缩到了 2 万亿以下 → <span class="hl-red">高位没有资金接力的上涨全是在耍流氓</span>，说明场外资金恐高</li>
+    <li><span class="hl-red">警惕天量阴线</span>：某天爆出 3 万亿以上的历史天量，指数却收了长上影线 → <span class="hl">主力在借狂热情绪疯狂派发</span>，你应该立刻收缩防线</li>
+  </ul>
+
+  <h3 class="sub-title">第二步 · 看情绪周期</h3>
+  <p>市场永远在<span class="hl-blue">冰点 → 修复 → 高潮 → 退潮</span>里循环。怎么判断？</p>
+
+  <p>别看大盘，<span class="hl">去看涨跌停加速和连板高度</span>：</p>
+  <ul>
+    <li>连板股全部被按在跌停板上摩擦 → <span class="hl-red">恶劣的退潮期</span>，最忌讳去接高位股</li>
+    <li>冰点之后出现首板批量启动、核心板块有明确领涨龙头 → <span class="hl-green">修复期</span>，才适合试错</li>
+  </ul>
+
+  <h3 class="sub-title">第三步 · 找主线</h3>
+  <p>既然盘中看不到北向资金的实时流向了，看什么？</p>
+
+  <ul>
+    <li><span class="hl">国家队的动向</span>：神秘资金在买沪深 300 护盘？</li>
+    <li><span class="hl">主力 ETF 的异动</span>：宽基 ETF 放量往往预示大资金调仓</li>
+    <li><span class="hl">游资的进攻方向</span>：低空经济、AI 科技、还是高股息红利？</li>
+  </ul>
+
+  <p>把当天的主线板块和支线板块列出来，你会发现<span class="hl">资金永远在确定性和高弹性之间做选择</span>。大盘复盘的终极目的是告诉你<span class="hl-red">今天该不该出手，出手的仓位上限是多少</span>。</p>
+
+  <blockquote>
+    <strong>环境不好，再好的技术也是逆势而为。</strong>看懂环境，<span class="hl">猪都能在风口上飞两圈</span>；看懂了环境，你只是拿到了入场券。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-stock">
+  <h2 class="section-title">个股复盘：4 步结构体检</h2>
+
+  <p>看懂了大盘，你只是拿到了入场券。接下来这一步个股体检才是决定你能不能把钱带走的关键。个股复盘不是让你把自选股里的代码挨个看一遍，而是做<span class="hl">结构体检</span>。</p>
+
+  <h3 class="sub-title">第 1 步 · 看位置</h3>
+  <p>这支股票是在历史底部、上升中继、还是高位加速？</p>
+  <ul>
+    <li><span class="hl-green">底部放量突破</span>：胜率最高</li>
+    <li><span class="hl-red">高位缩量滞涨</span>：风险最大</li>
+  </ul>
+
+  <h3 class="sub-title">第 2 步 · 看量价关系</h3>
+  <p>量价是技术面的灵魂：</p>
+  <ul>
+    <li><span class="hl-green">上涨放量 + 回调整缩量</span>：健康的多头结构</li>
+    <li><span class="hl-red">上涨无量</span>：跟风盘不足，随时可能回落</li>
+    <li><span class="hl-red">下跌放量</span>：主力在坚决派发，别幻想抄底</li>
+  </ul>
+
+  <h3 class="sub-title">第 3 步 · 看关键均线与筹码分布</h3>
+  <ul>
+    <li><span class="hl">20 日线和 60 日线</span>是生命线，股价在生命线之上、趋势向上、回踩不破是买点</li>
+    <li>跌破且反抽无力 → 趋势转弱，必须防守</li>
+    <li>看<span class="hl">筹码分布</span>，重点盯死底部的筹码峰有没有突然变小消失？<span class="hl-red">如果股价在高位但底部筹码消失，说明主力已经脚底抹油溜了</span></li>
+  </ul>
+
+  <h3 class="sub-title">第 4 步 · 看基本面催化</h3>
+  <p>技术面告诉你能不能买，<strong>基本面告诉你能拿多久</strong>。</p>
+
+  <p>你要问自己：</p>
+  <ul>
+    <li>这支股票上涨的逻辑是什么？是<span class="hl-blue">业绩超预期</span>，是<span class="hl-blue">政策扶持</span>，还是<span class="hl-red">纯粹的概念炒作</span>？</li>
+    <li>核心基本面复盘不是看消息有多好，而是看<span class="hl">预期差</span>：为什么年爆利润大增股票却跌停？因为市场提前一个月就炒过了，<strong>利好落地就是主力派发筹码的发令枪</strong></li>
+  </ul>
+
+  <p>个股复盘的结论必须落到三个问题上：</p>
+  <ol>
+    <li>我的买入逻辑还在吗？</li>
+    <li>止损位和止盈位设在哪里？</li>
+    <li>如果明天开盘不符合预期我怎么办？</li>
+  </ol>
+
+  <p>把答案写下来，明天开盘你才不会慌。</p>
+</section>
+
+<section class="section" id="sec-mental">
+  <h2 class="section-title">心理复盘：散户跨越亏损的唯一桥梁</h2>
+
+  <p>但如果你只做以上两步依然会亏钱，因为交易里最不可控的从来不是市场，而是<span class="hl-red">你自己</span>。心理复盘是散户跨越亏损泥潭的唯一桥梁。</p>
+
+  <h3 class="sub-title">过度自信陷阱</h3>
+  <p>回想一下你最近一次大亏，是不是发生在连续盈利之后？人一旦顺了就会膨胀，觉得市场是自己的提款机，于是<span class="hl-red">重仓追高 + 放松止损</span>，结果一次回撤把前面的利润全吐回去甚至倒亏。</p>
+
+  <h3 class="sub-title">损失厌恶与报复性交易</h3>
+  <p>连续亏损后，你是不是不敢下单了？看到好机会也犹豫，等涨上去了又拍大腿追高。这就是<span class="hl">损失厌恶</span>和<span class="hl-red">报复性交易</span>的典型表现。</p>
+
+  <h3 class="sub-title">心理复盘的落地动作</h3>
+  <p>很简单，给每笔交易打分——<strong>不是打盈亏的分，而是打纪律的分</strong>：</p>
+
+  <ul>
+    <li>买入时是按计划执行，还是情绪上头？</li>
+    <li>持仓时是淡定观察，还是每分钟看盘焦虑？</li>
+    <li>卖出时是到了止损/止盈位，还是害怕利润回吐提前跑了？</li>
+  </ul>
+
+  <p>把当时的心理活动原封不动写下来。<span class="hl">你会震惊地发现 80% 的亏损在下单那一刻就已经注定了</span>，因为你是<span class="hl-red">在贪婪、恐惧、焦虑或无聊的状态下做的决定</span>。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 交易日记是最好的复盘</div>
+    <p>坚持每天写交易日记，<strong>记下当时的判断、情绪、决策和结果</strong>。30 天后回看，你会发现自己最常犯的错误模式。识别模式是改变模式的前提。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-template">
+  <h2 class="section-title">复盘模板与落地动作</h2>
+
+  <p>一套完整的盘后复盘，建议按以下模板执行：</p>
+
+  <h3 class="sub-title">第一部分 · 大盘环境（10 分钟）</h3>
+  <ol>
+    <li>今日成交额：天量/缩量/平稳？</li>
+    <li>涨跌停家数、连板高度、炸板率：情绪处于哪个阶段？</li>
+    <li>主线板块：国家队动向 + 主力 ETF + 游资方向</li>
+    <li>结论：今天能不能出手？仓位上限是多少？</li>
+  </ol>
+
+  <h3 class="sub-title">第二部分 · 个股体检（15 分钟）</h3>
+  <ol>
+    <li>持仓股：买入逻辑是否还在？止损/止盈位调整了吗？</li>
+    <li>关注股：位置 / 量价 / 均线 / 筹码 / 基本面催化</li>
+    <li>明日计划：买入条件、卖出条件、仓位安排</li>
+  </ol>
+
+  <h3 class="sub-title">第三部分 · 心理复盘（5 分钟）</h3>
+  <ol>
+    <li>今天最大的一笔交易，买入/卖出的心理动机</li>
+    <li>如果可以重来一次，你会怎么做？</li>
+    <li>本周犯了什么重复的错误？</li>
+  </ol>
+
+  <p>每天收盘后 30 分钟坚持做这一套，30 天后你的交易水平会发生质的飞跃。</p>
+
+  <div class="quote-banner">
+    真正的炒股高手从不靠盘中反应，<br>
+    <span class="hl">而是靠收盘后的复盘</span>。<br>
+    复盘不是预测明天涨跌，而是建立<span class="hl">自己的概率过滤器</span>。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>复盘核心不是<span class="hl-red">预测涨跌</span>，而是<span class="hl-green">建立概率过滤器</span></li>
+      <li>大盘复盘三步：<strong>摸水温（量能）→ 看情绪周期 → 找主线</strong></li>
+      <li>个股复盘四步：<strong>位置 → 量价 → 均线筹码 → 基本面催化</strong></li>
+      <li>心理复盘要<span class="hl">给每笔交易打纪律分</span>，而不是盈亏分</li>
+      <li>坚持每天 30 分钟，30 天后交易水平会发生质变</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 13 · 宏观、市场周期与极端行情</p>
+</footer>
+
+</body>
