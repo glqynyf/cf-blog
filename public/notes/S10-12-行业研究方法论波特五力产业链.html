@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行业研究方法论：波特五力 + 产业链分析｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  blockquote.green { border-left-color: var(--green); }
+  blockquote.green strong { color: var(--green); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14.5px; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { background: var(--surface-2); color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; }
+  td { color: var(--text); }
+  tr:last-child td { border-bottom: none; }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .formula-box { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--yellow); border-radius: 8px; padding: 20px 24px; margin: 24px 0; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .formula-box .label { color: var(--yellow); font-weight: 700; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; }
+  .formula-box .formula-line { color: var(--text); font-size: 15px; margin: 6px 0; }
+  .formula-box .formula-note { color: var(--text-dim); font-size: 13.5px; margin-top: 10px; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; }
+  .chain-flow { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 24px; margin: 24px 0; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 14px; line-height: 1.9; color: var(--text); white-space: pre; overflow-x: auto; }
+  .related-notes { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 32px 0; }
+  .related-notes h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .related-notes ul { list-style: none; margin: 0; padding: 0; }
+  .related-notes ul li { padding: 8px 0 8px 24px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .related-notes ul li:last-child { border-bottom: none; }
+  .related-notes ul li::before { content: "→"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  .related-notes a { color: var(--text); text-decoration: none; transition: color 0.2s; }
+  .related-notes a:hover { color: var(--accent); }
+  .related-notes .code-tag { color: var(--text-mute); font-size: 12.5px; margin-right: 8px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } table { font-size: 13px; } th, td { padding: 10px 12px; } .chain-flow { font-size: 12.5px; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 10</span>
+  <span class="stage-name">选股框架与基本面分析</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 16 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 10 · 第 12 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">行业研究方法论：波特五力 + 产业链分析</h1>
+  <p class="note-subtitle">选股的 80% 努力应该花在行业判断上，而不是死磕一家公司。本文用波特五力回答"这门生意好不好做"，用产业链分析回答"哪一段最赚钱、哪一段要避开"，把行业研究这件事一次性讲透。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>选股的核心不是<span class="hl">找到好公司</span>，而是<span class="hl">找到好行业里的好公司</span>。行业景气度决定行业 80% 的平均涨幅，估值波动常常是行业 β 而非个股 α。<span class="hl-blue">波特五力</span>告诉你行业竞争结构和平均利润率，<span class="hl-blue">产业链分析</span>告诉你利润在哪个环节集中、剪刀差策略该押哪一段。两者搭配，就是散户能用的最朴素也最实用的行业研究框架。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-1">为什么行业研究比个股研究更重要</a></li>
+    <li><a href="#sec-2">波特五力模型：五大力量决定行业利润</a></li>
+    <li><a href="#sec-3">产业链分析：从上到下三个层级</a></li>
+    <li><a href="#sec-4">产业链的 4 种跟踪方法</a></li>
+    <li><a href="#sec-5">行业生命周期判断：四阶段定位法</a></li>
+    <li><a href="#sec-6">4 个常见误区：行业研究的认知陷阱</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-1">
+  <h2 class="section-title">一、为什么行业研究比个股研究更重要</h2>
+
+  <p>很多散户把绝大多数时间花在研究单家公司上——翻财报、查公告、画 K 线。但真正决定一只股票长期涨跌的，不是财报里的某个季度数字，而是<span class="hl-red">它所处行业的景气度和竞争结构</span>。选股 80% 的努力应该花在行业判断上。</p>
+
+  <p>原因有三：</p>
+  <ul>
+    <li><strong>好行业里，烂公司也能活下来。</strong>猪周期景气向上时，几乎所有养猪企业都赚钱；行业下行时，再优秀的成本控制也难独善其身。</li>
+    <li><strong>行业景气度决定 80% 的行业平均涨幅。</strong>无论你买龙头还是买尾部门，在一个β为负的行业里，绝大部分票都是亏钱的。</li>
+    <li><strong>估值波动常常是行业 β 而非个股 α。</strong>一个公司 PE 从 30 倍降到 15 倍，可能不是公司变差，而是整个行业的估值中枢在下移。</li>
+  </ul>
+
+  <blockquote class="purple">
+    <strong>一句话记住：</strong>选股票的本质是选赛道。赛道错，公司再努力也是逆水行舟；赛道对，差一点的玩家也能分到一杯汤。
+  </blockquote>
+
+  <p>那么怎么判断一个赛道好不好？传统商学院用的是<span class="hl">波特五力模型</span>，而 A 股实战里更接地气的工具是<span class="hl">产业链分析</span>。下面分别讲。</p>
+</section>
+
+<section class="section" id="sec-2">
+  <h2 class="section-title">二、波特五力模型：五大力量决定行业利润</h2>
+
+  <p>1979 年，哈佛大学迈克尔·波特提出<span class="hl">波特五力模型</span>。它的核心观点是：一个行业的<strong>长期平均利润率</strong>，不取决于行业内公司有多努力，而取决于五种结构性力量的合力。</p>
+
+  <table>
+    <thead>
+      <tr><th>力量</th><th>关键问题</th><th>对行业的影响</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>供应商议价能力</strong></td>
+        <td>供应商集中度？转换成本？是否存在稀缺资源？</td>
+        <td>上游涨价时，能否顺利转嫁给下游？</td>
+      </tr>
+      <tr>
+        <td><strong>购买者议价能力</strong></td>
+        <td>客户集中度？价格敏感度？产品差异化程度？</td>
+        <td>行业公司能否顺利提价？</td>
+      </tr>
+      <tr>
+        <td><strong>新进入者威胁</strong></td>
+        <td>准入门槛？规模效应？牌照壁垒？</td>
+        <td>新公司能否容易进入并抢走份额？</td>
+      </tr>
+      <tr>
+        <td><strong>替代品威胁</strong></td>
+        <td>替代品的相对成本？性能差距？切换习惯？</td>
+        <td>是否会被跨行业的产品彻底颠覆？</td>
+      </tr>
+      <tr>
+        <td><strong>行业内竞争强度</strong></td>
+        <td>市场集中度？行业增长率？产品差异化？退出壁垒？</td>
+        <td>行业内部是否陷入惨烈的价格战？</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-title">实操评估法：1-5 分打分</h3>
+
+  <p>每个维度按强度打分（1 = 极弱/极有利，5 = 极强/极不利）：</p>
+
+  <div class="formula-box">
+    <div class="label">FORMULA · 五力评分</div>
+    <div class="formula-line">总分 = 供应商 + 购买者 + 新进入者 + 替代品 + 行业内竞争</div>
+    <div class="formula-line">最小值 = 5（五个维度都是 1）→ 行业极其有利可图</div>
+    <div class="formula-line">最大值 = 25（五个维度都是 5）→ 行业极度内卷</div>
+    <div class="formula-note">实战参考：总分 &lt; 10 算优秀赛道；10-15 中等；&gt; 15 通常意味着价格战、产能过剩或被上下游夹击。</div>
+  </div>
+
+  <blockquote class="green">
+    <strong>案例对比：</strong>高端白酒的波特五力总分大约在 6-8 分——上游高粱种植分散（弱）、下游消费者极度分散（弱）、品牌+窖池+时间构成强壁垒（新进入弱）、替代品威胁小、行业内竞争有序。这是过去二十年 A 股最赚钱的行业之一。<br><br>
+    反过来看普通钢铁：上游铁矿石被三大矿垄断（强）、下游是少数大钢厂（强）、技术成熟无壁垒（新进入弱但产能过剩）、替代品不多、行业内几十家大厂打价格战（极强）。总分 18+，所以整个行业长期 ROE 都在个位数挣扎。
+  </blockquote>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 波特五力不是万能的</div>
+    <p>它更适合分析<strong>成熟期和衰退期</strong>的稳定行业。对于技术快速变化、监管频繁调整的新兴行业（比如当下的 AI、固态电池），模型会显得僵硬。实战中要把它和<span class="hl">产业链分析</span>搭配使用。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-3">
+  <h2 class="section-title">三、产业链分析：从上到下三个层级</h2>
+
+  <p>如果说波特五力是从"行业整体"看竞争结构，那产业链分析就是从"<strong>上下游关系</strong>"看利润在哪里集中。<span class="hl">同一个产业链，不同环节的赚钱能力天差地别。</span></p>
+
+  <div class="chain-flow">上游（原材料）   →   中游（制造）   →   下游（应用）
+- 议价能力强          - 议价能力弱          - 议价能力强
+- 周期性高            - 周期性中            - 周期性低
+- 集中度高            - 集中度低            - 集中度低</div>
+
+  <h3 class="sub-title">三个层级的典型特征</h3>
+
+  <ul>
+    <li><strong>上游（资源型）：</strong>煤矿、油田、锂矿、铁矿、光伏硅料。典型特征是<span class="hl">周期性极强、集中度高、定价权强</span>。价格上行期暴利，价格下行期巨亏（所谓"周期之王"）。</li>
+    <li><strong>中游（加工制造）：</strong>钢铁、化工、电池组件、组件封装。中游最惨，<span class="hl-red">两头受气</span>——上游原料涨价你接不住，下游客户压价你扛不住，毛利率常年只有个位数。</li>
+    <li><strong>下游（品牌/应用）：</strong>消费品、新能源整车、品牌服装、软件应用。离终端消费者越近，<span class="hl">品牌溢价和定价权越强</span>，周期性也越弱。</li>
+  </ul>
+
+  <h3 class="sub-title">剪刀差策略：宏观择时的核心</h3>
+
+  <p>产业链分析最经典的应用，是<span class="hl">剪刀差策略</span>。看两个宏观指标：</p>
+
+  <ul>
+    <li><strong>PPI（生产者价格指数）：</strong>反映上游和中游出厂价格</li>
+    <li><strong>CPI（消费者价格指数）：</strong>反映下游消费品零售价格</li>
+  </ul>
+
+  <div class="formula-box">
+    <div class="label">FORMULA · 剪刀差择时</div>
+    <div class="formula-line">剪刀差 = PPI 同比 − CPI 同比</div>
+    <div class="formula-line">剪刀差为正且扩大 → 上游热、中下游冷 → 避开中游，看上游</div>
+    <div class="formula-line">剪刀差为负 → 下游消费牛 → 买品牌消费、必选食品</div>
+    <div class="formula-note">底层逻辑：PPI 涨说明上游在涨价，中游成本被挤压；CPI 涨说明终端能涨价，下游企业利润扩张。</div>
+  </div>
+
+  <blockquote class="purple">
+    <strong>实战启示：</strong>2021 年 <strong>10 月</strong> PPI 同比 13.5%、CPI 1.5%，剪刀差达 12 个百分点（创历史纪录）。那一年周期股（煤炭、有色、化工）大牛市，而消费股普遍惨淡。到了 2023-2024 年剪刀差收敛甚至倒挂，逻辑就开始反向——消费股反弹、周期股熄火。<span class="hl-red">注</span>：<span class="hl-red">原文"全年 PPI 同比 13%、CPI 0.5%"与官方公布数据不符</span>——2021 全年 PPI 同比 +8.1%、CPI +0.9%；13.5%/1.5% 才是 2021-10 的单月极值。<br><br>
+    同样一套逻辑，<span class="hl">产业链投资就要顺着利润传导的方向走</span>，避开被两端挤压的中游地狱。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-4">
+  <h2 class="section-title">四、产业链的 4 种跟踪方法</h2>
+
+  <p>知道了产业链结构还不够，散户真正难的是<span class="hl">怎么持续跟踪一个行业的真实景气度</span>。四种主流方法各有优劣：</p>
+
+  <table>
+    <thead>
+      <tr><th>方法</th><th>路径</th><th>适用场景</th><th>核心优缺点</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>自上而下</strong></td>
+        <td>宏观 → 行业 → 公司</td>
+        <td>大资金 / 资产配置</td>
+        <td>把握大方向，但容易错过个股 α</td>
+      </tr>
+      <tr>
+        <td><strong>自下而上</strong></td>
+        <td>公司 → 行业 → 宏观</td>
+        <td>深度研究 / 个股挖掘</td>
+        <td>挖掘牛股，但容易陷入只见树木不见森林</td>
+      </tr>
+      <tr>
+        <td><strong>专家网络</strong></td>
+        <td>访谈行业从业者</td>
+        <td>专业级研究</td>
+        <td>信息密度最高，但成本高且样本可能偏差</td>
+      </tr>
+      <tr>
+        <td><strong>公开数据交叉</strong></td>
+        <td>协会报告 + 上市公司年报 + 招标数据</td>
+        <td>散户最现实的方法</td>
+        <td>免费且客观，但有滞后性</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-title">散户最现实的路径：公开数据交叉验证</h3>
+
+  <p>对绝大多数散户来说，<span class="hl">自上而下 + 自下而上结合公开数据交叉</span>是最现实的方法。具体操作三步走：</p>
+
+  <ul>
+    <li><strong>第一步 · 看官方/协会数据：</strong>国家统计局、海关总署、中国汽车工业协会、中国半导体行业协会等。这些数据<span class="hl">权威且免费</span>，但通常有 1-2 个月滞后。</li>
+    <li><strong>第二步 · 看龙头公司财报：</strong>每个行业抓 2-3 家龙头公司的季报，它们的收入和毛利率变化，基本就是行业景气度的真实写照。</li>
+    <li><strong>第三步 · 看高频指标：</strong>大宗商品价格、海运指数、招标信息（PPP 平台）、招股说明书里的客户列表。这些数据当月甚至当周就能拿到，对趋势判断极有价值。</li>
+  </ul>
+
+  <blockquote>
+    <strong>一个反常识：</strong>很多专业卖方分析师的盈利预测模型非常复杂，但真正驱动股价的，常常是<span class="hl">几个简单的供需指标</span>——比如水泥要看发货率和库存、光伏要看硅料价格和组件排产、消费品要看社零和电商 GMV。掌握这些高频指标，比读 200 页报告更有效。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-5">
+  <h2 class="section-title">五、行业生命周期判断：四阶段定位法</h2>
+
+  <p>每个行业都会经历四个阶段，<span class="hl">不同阶段的赚钱逻辑完全不同</span>。判断错阶段，估值方法也会全错——比如把成熟期当作成长期去估值，就会被套在山顶上。</p>
+
+  <table>
+    <thead>
+      <tr><th>阶段</th><th>行业增速</th><th>典型特征</th><th>A 股典型行业</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>导入期</strong></td>
+        <td>增速 &gt; 100%</td>
+        <td>盈利不稳定，渗透率 &lt; 5%，大量公司烧钱</td>
+        <td>早期生物医药、商业航天、固态电池</td>
+      </tr>
+      <tr>
+        <td><strong>成长期</strong></td>
+        <td>增速 30%–100%</td>
+        <td>渗透率 5%–30%，龙头开始显现，估值最贵</td>
+        <td>2017-2020 新能源车、2023+ AI 算力</td>
+      </tr>
+      <tr>
+        <td><strong>成熟期</strong></td>
+        <td>增速 5%–30%</td>
+        <td>格局稳定，集中度提升，龙头吃肉</td>
+        <td>白酒、家电、调味品、保险</td>
+      </tr>
+      <tr>
+        <td><strong>衰退期</strong></td>
+        <td>增速 &lt; 5% 或负增长</td>
+        <td>产能过剩，价格战，尾部企业亏损出局</td>
+        <td>传统报刊、低端功能手机、某些子化工</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-title">生命周期对应的投资策略</h3>
+
+  <ul>
+    <li><strong>导入期：</strong>风险高、赔率高。押注赔率不押注胜率，分散下注。</li>
+    <li><strong>成长期：</strong>估值溢价最高，<span class="hl">PEG 是核心工具</span>。买龙头、买增速可持续的公司。</li>
+    <li><strong>成熟期：</strong>看 ROE 和分红。重点是<strong>格局稳定后的龙头集中度提升</strong>。</li>
+    <li><strong>衰退期：</strong>只做反弹，不做反转。等产能出清、剩者为王。</li>
+  </ul>
+
+  <blockquote class="green">
+    <strong>A 股最大的 β 来自成长期向成熟期过渡的行业。</strong><br><br>
+    比如 2020 年的新能源车（增速 100%+，但格局已经向龙头集中）、2023 年的存储芯片（从亏损周期切入涨价周期）。<br><br>
+    核心逻辑：行业还在增长，但竞争结构已经稳定——这种"既增又稳"的窗口期，是 A 股最容易出十倍股的阶段。
+  </blockquote>
+
+  <div class="quote-banner">
+    行业研究的本质，是判断<span class="hl">"这个生意现在处在哪个阶段"</span><br>
+    <span class="hl">阶段对了，估值方法、买入节奏、持有时间都自然知道怎么安排。</span>
+  </div>
+</section>
+
+<section class="section" id="sec-6">
+  <h2 class="section-title">六、4 个常见误区：行业研究的认知陷阱</h2>
+
+  <p>行业研究听起来高大上，但散户最容易踩 4 个坑——这些坑不避开，再多研究也是白做：</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 误区一 · 把"行业好"等同于"所有公司都好"</div>
+    <p>这是最经典的错误。<span class="hl">好行业里也有大量亏损公司。</span>比如 2020 年新能源车行业增速 50%+，但当年亏损的新能源车企超过 100 家。能享受到行业 β 的，往往只是少数龙头和细分龙头。</p>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 误区二 · 忽略行业内的二八分化</div>
+    <p>行业平均数据掩盖了巨大的结构差异。化工行业整体 ROE 10%，但龙头万华化学 ROE 能到 25%，尾部企业只有 3% 甚至亏损。<span class="hl">投资研究要穿透到行业内分层，而不是只看行业平均值。</span></p>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 误区三 · 用单一指标判断行业（PE 低 ≠ 便宜）</div>
+    <p>很多散户看到 PE 10 倍就兴奋，殊不知这是<span class="hl">周期股顶部信号</span>——煤炭股 PE 不到 5 倍时，往往是周期顶部（业绩不可持续）；PE 20 倍时，反而可能是底部（业绩即将反转）。单一指标永远会骗人，必须结合行业特性看。</p>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 误区四 · 把周期性行业当成长股估值</div>
+    <p>这是 PE 误用的另一面。猪周期、煤炭、化工、有色都是强周期行业，<span class="hl-red">用 PE 估值会犯致命错误</span>——景气高点 PE 看着便宜（其实是最贵），景气低点 PE 看着贵（其实是最便宜）。周期股要看 PB 和历史分位，不能只看 PE。</p>
+  </div>
+
+  <blockquote class="purple">
+    <strong>最后一个忠告：</strong>行业研究不是越复杂越好。<span class="hl">真正的高手，是用最简单的框架（波特五力 + 产业链 + 生命周期）反复迭代</span>，而不是堆砌几十个指标让自己陷入分析瘫痪。先有框架，再用数据填空。
+  </blockquote>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li><strong>行业研究 &gt; 个股研究：</strong>80% 的努力放在判断行业景气度和竞争结构</li>
+      <li><strong>波特五力：</strong>供应商、购买者、新进入者、替代品、行业内竞争，1-5 分打分，总分越低行业越赚钱</li>
+      <li><strong>产业链分析：</strong>上游（资源）赚钱但周期强，中游（制造）两头受气，下游（品牌）赚品牌溢价</li>
+      <li><strong>剪刀差策略：</strong>PPI 高 CPI 低看上游周期，PPI 低 CPI 高看下游消费</li>
+      <li><strong>生命周期：</strong>导入期分散押注、成长期买龙头、成熟期看 ROE 和格局、衰退期只做反弹</li>
+      <li><strong>常见陷阱：</strong>行业好 ≠ 所有公司都好、要看二八分化、单一指标会骗人、周期股不能用 PE 估值</li>
+    </ul>
+  </div>
+</section>
+
+<div class="related-notes">
+  <h4>相关笔记</h4>
+  <ul>
+    <li><span class="code-tag">S10-01</span><a href="S10-01-怎么开始选股_自上而下和自下而上.html">怎么开始选股——先定赛道，再挑公司，最后看价格</a></li>
+    <li><span class="code-tag">S10-02</span><a href="S10-02-真正看懂一家公司，就看这7个方面.html">真正看懂一家公司，就看这 7 个方面：散户的认知必修课</a></li>
+    <li><span class="code-tag">S10-09</span><a href="S10-09-如何识别真护城河和假护城河.html">如何识别真护城河和假护城河</a></li>
+  </ul>
+</div>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 10 · 选股框架与基本面分析</p>
+</footer>
+
+</body>
