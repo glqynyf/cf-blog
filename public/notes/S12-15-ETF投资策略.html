@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETF 投资策略：从入门到精通｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b;
+    --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14.5px; }
+  th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { background: var(--surface); color: var(--accent); font-weight: 700; }
+  td { color: var(--text-dim); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .nav-related { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-top: 48px; }
+  .nav-related h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .nav-related ul { list-style: none; margin: 0; padding: 0; }
+  .nav-related li { padding: 8px 0; border-bottom: 1px dashed var(--border); }
+  .nav-related li:last-child { border-bottom: none; }
+  .nav-related a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; transition: color 0.2s; }
+  .nav-related a:hover { color: var(--accent); }
+  .nav-related .label { color: var(--accent); font-weight: 700; margin-right: 8px; font-variant-numeric: tabular-nums; min-width: 80px; display: inline-block; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 12</span>
+  <span class="stage-name">市场生态与主力资金</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 16 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 12 · 第 15 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">ETF 投资策略：从入门到精通</h1>
+  <p class="note-subtitle">如果说个股是在 5000 多家上市公司里"百里挑一"，那 ETF 就是让你一次性把整条赛道、甚至整个市场打包带走。这一篇系统拆解 A 股 ETF 的六大类别、四大策略、五大误区，让你从"知道 ETF"到"用好 ETF"。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>截至 2025 年，A 股 ETF 总规模已突破 <span class="hl">4 万亿元</span>，过去 5 年增长 <span class="hl">5 倍</span>——它早已是<span class="hl">机构和大资金的主战场</span>。对散户而言，ETF = <span class="hl">低成本</span> + <span class="hl-blue">高透明</span> + <span class="hl-green">分散化</span> + <span class="hl">灵活交易</span>，是<span class="hl-red">绕开个股黑天鹅</span>的最优解。但 ETF 也有自己的坑：<span class="hl-red">高溢价、清盘、风格漂移</span>，每一个都可能让你的账户悄悄流血。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-why">为什么散户应该重点考虑 ETF</a></li>
+    <li><a href="#sec-types">A 股 ETF 的六大类别</a></li>
+    <li><a href="#sec-advantage">ETF 的四大核心优势</a></li>
+    <li><a href="#sec-strategy">ETF 四大实战投资策略</a></li>
+    <li><a href="#sec-misconceptions">ETF 的 5 个常见误区</a></li>
+    <li><a href="#sec-indicators">ETF 选择的 6 大核心指标</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-why">
+  <h2 class="section-title">为什么散户应该重点考虑 ETF</h2>
+
+  <p>A 股现在有 <span class="hl">5000 多家</span>上市公司，而截至 2025 年，A 股 ETF 总规模已经突破 <span class="hl">4 万亿元</span>——过去 5 年增长了 5 倍。机构、保险、外资、社保……几乎所有"大钱"都在用 ETF 做配置。</p>
+
+  <p>这背后说明一件事：<span class="hl">当资金量越大、研究能力越强，越倾向于放弃个股、转向 ETF</span>。巴菲特的遗嘱里留给妻子的不是一篮子股票，而是 <span class="hl">90% 标普 500 ETF</span>。</p>
+
+  <h3 class="sub-title">散户直接买股票 vs 买 ETF</h3>
+  <ul>
+    <li><strong>避免单一公司暴雷</strong>——个股黑天鹅（财务造假、行业颠覆、政策打击）可能让你一夜腰斩，ETF 持有几十到几百只成分股，<span class="hl-green">单只暴雷几乎伤不到整体</span></li>
+    <li><strong>行业暴露而非个股暴露</strong>——你看多 AI 行业但不确定哪家会赢？买 AI ETF 即可<span class="hl">分散掉选股风险</span></li>
+    <li><strong>流动性更好</strong>——很多 ETF 日成交 <span class="hl">&gt; 10 亿</span>，进出顺畅，避免"卖不出去"的尴尬</li>
+    <li><strong>费率更低</strong>——场内 ETF 管理费 <span class="hl-green">0.15-0.5%</span>，远低于主动基金的 <span class="hl-red">1.5%</span>。长期看，<span class="hl">每年省下的 1% 费率复利 20 年就是 20% 收益差距</span></li>
+  </ul>
+
+  <blockquote class="purple">
+    <strong>核心结论</strong>：当你不具备<span class="hl-red">行业级研究能力</span>时，与其去赌个股，不如<span class="hl">买行业 ETF</span>；当你不具备<span class="hl-red">择时能力</span>时，与其去赌大盘方向，不如<span class="hl">买宽基 ETF 长期持有</span>。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-types">
+  <h2 class="section-title">A 股 ETF 的六大类别</h2>
+
+  <p>A 股 ETF 看似很多，其实全部归入六大类别。理解这个分类，你就理解了整个 ETF 宇宙的地图。</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>类别</th>
+        <th>典型示例</th>
+        <th>跟踪标的</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>宽基 ETF</strong></td>
+        <td>沪深 300ETF、中证 500ETF、创业板 ETF</td>
+        <td>市场<span class="hl-blue">核心指数</span>，代表大盘整体走势</td>
+      </tr>
+      <tr>
+        <td><strong>行业 ETF</strong></td>
+        <td>半导体 ETF、医药 ETF、消费 ETF</td>
+        <td><span class="hl">单一行业</span>暴露，跟随行业景气度</td>
+      </tr>
+      <tr>
+        <td><strong>主题 ETF</strong></td>
+        <td>碳中和 ETF、AI ETF、新能源 ETF</td>
+        <td>跨行业的<span class="hl-red">概念主题</span>，爆发力强</td>
+      </tr>
+      <tr>
+        <td><strong>风格 ETF</strong></td>
+        <td>红利低波 ETF、价值 ETF、成长 ETF</td>
+        <td><span class="hl">市值 / 估值 / 风格</span>因子暴露</td>
+      </tr>
+      <tr>
+        <td><strong>商品 ETF</strong></td>
+        <td>黄金 ETF、有色 ETF、豆粕 ETF</td>
+        <td>大宗商品，<span class="hl-blue">抗通胀 + 避险</span>工具</td>
+      </tr>
+      <tr>
+        <td><strong>海外 ETF</strong></td>
+        <td>纳指 ETF、标普 500ETF、日经 225ETF</td>
+        <td>跨境配置，<span class="hl">一键买入美股 / 日股</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <strong>新手路线建议</strong>：从<span class="hl">宽基 ETF</span>起步（沪深 300 + 中证 500），等建立收益预期后再逐步加入<span class="hl">行业 / 主题 ETF</span>做卫星配置。海外和商品 ETF 建议放在组合的<span class="hl-blue">"保险 + 卫星"</span>位置。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-advantage">
+  <h2 class="section-title">ETF 的四大核心优势</h2>
+
+  <p>相比个股和场外基金，ETF 拥有四个独特的优势——这也是它能成为机构主力工具的根本原因。</p>
+
+  <h3 class="sub-title">① 透明度极高</h3>
+  <p>ETF 每天公布<span class="hl">完整持仓</span>，精确到每一只成分股和权重。买 ETF 之前，你可以提前看到它"装的是什么"。而主动基金通常只披露前十大重仓，<span class="hl-red">真实持仓要等季报</span>，中间存在巨大信息差。</p>
+
+  <h3 class="sub-title">② 成本极低</h3>
+  <p>管理费 <span class="hl-green">0.15-0.5%</span> vs 主动基金 <span class="hl-red">1.5%</span>——单看一年差距不大，但<span class="hl">复利 10 年累计差距超过 10%</span>。场内 ETF 还没有申购赎回费，只有券商佣金（万分之 1-2.5）。</p>
+
+  <h3 class="sub-title">③ 分散化天然</h3>
+  <p>单只宽基 ETF 持有<span class="hl">几百只成分股</span>，行业 ETF 也覆盖几十只个股。<span class="hl">单一个股暴雷对整体的影响通常不超过 1-2%</span>，几乎可以忽略。</p>
+
+  <h3 class="sub-title">④ 灵活交易</h3>
+  <p>场内 ETF 像股票一样在二级市场交易。<span class="hl-red">注意：境内股票型 ETF 二级市场实行 T+1</span>（当日买入次日才能卖），<span class="hl-green">只有债券、黄金、货币、跨境、商品期货类 ETF 才是 T+0</span>。做网格策略时，股票型 ETF 必须留底仓，否则日内会"卖不出去"。<span class="hl">申赎一般也是 T+1</span>确认份额，但申赎门槛高、且申赎不直接做日内交易。这意味着你可以用 ETF 做<span class="hl">网格、轮动、定投</span>等几乎所有策略——这是场外基金做不到的。</p>
+
+  <div class="quote-banner">
+    对散户而言，<span class="hl">ETF 不是"低收益"的代名词</span><br>
+    而是<span class="hl">低成本获得市场平均收益</span>的最佳工具。<br>
+    真正决定收益的，从来不是工具，<br>
+    而是<span class="hl">你的策略 + 你的纪律</span>。
+  </div>
+</section>
+
+<section class="section" id="sec-strategy">
+  <h2 class="section-title">ETF 四大实战投资策略</h2>
+
+  <h3 class="sub-title">策略一：核心 + 卫星策略</h3>
+  <p>这是最适合上班族和刚入门投资者的策略。<span class="hl">把资金分成两大部分</span>：</p>
+  <ul>
+    <li><strong>核心仓位（70%）</strong>：宽基 ETF，比如 <span class="hl">沪深 300ETF</span> + <span class="hl">中证 500ETF</span> 各一半，获取市场平均回报</li>
+    <li><strong>卫星仓位（30%）</strong>：行业主题 ETF，根据个人研究判断配置 2-3 个看好的方向</li>
+  </ul>
+  <p>这样既<span class="hl-green">享受市场的 Beta</span>，又有机会通过卫星仓位获取 <span class="hl">Alpha 超额收益</span>。大多数私募和 FOF（基金中的基金）用的都是这套逻辑。</p>
+
+  <h3 class="sub-title">策略二：网格策略（在 ETF 上特别有效）</h3>
+  <p>ETF 网格策略之所以比个股网格更优，是因为：</p>
+  <ul>
+    <li>ETF <span class="hl">不会暴雷退市</span>（顶多清盘，可以提前赎回）</li>
+    <li>ETF <span class="hl-blue">波动规律性强</span>，围绕价值中枢震荡</li>
+    <li>ETF <span class="hl-green">流动性好</span>，买卖价差小</li>
+  </ul>
+  <p>具体操作：</p>
+  <ol>
+    <li>选择<span class="hl">高波动 ETF</span>（如半导体 ETF、新能源 ETF、医药 ETF）</li>
+    <li>在 <span class="hl">±5-10%</span> 区间等距划分网格</li>
+    <li>每跌一格买入一份，每涨一格卖出一份</li>
+    <li><span class="hl-red">触发卖出后等下跌再买回，循环往复</span></li>
+  </ol>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 网格策略的前提</div>
+    <p>网格策略只适用于<span class="hl">长期震荡或震荡上行的标的</span>。如果遇到单边下跌行情（如 2022 年医药），网格会<span class="hl-red">很快打光子弹</span>，然后被深套。务必保留至少 30% 现金作为"破网保险"。</p>
+  </div>
+
+  <h3 class="sub-title">策略三：定投策略</h3>
+  <p>对上班族来说，<span class="hl">定投是门槛最低、长期最有效的策略之一</span>。原理很简单：</p>
+  <ul>
+    <li>每月固定日期投入固定金额（建议发工资次日）</li>
+    <li><span class="hl">下跌买入多份额，上涨买入少份额</span>，自动实现"低买高卖"</li>
+    <li>特别适合<span class="hl-blue">没有时间研究</span>的工薪族</li>
+  </ul>
+  <p>历史回测：<span class="hl">沪深 300ETF 月定投 10 年，年化约 6-8%</span>——看似不高，但<span class="hl">扣掉择时焦虑和精神内耗</span>，这个收益率已经是普通人能拿到的优秀成绩。</p>
+
+  <h3 class="sub-title">策略四：轮动策略</h3>
+  <p>如果你想做得更激进，可以参考行业轮动思路：</p>
+  <ol>
+    <li>每季度评估一遍<span class="hl">主要行业 ETF 的近 3 个月表现</span></li>
+    <li>保留表现<span class="hl-green">前 3 名</span>的行业 ETF</li>
+    <li>把表现<span class="hl-red">后 3 名</span>的行业 ETF 换到当前最强的行业</li>
+    <li>动态再平衡，保持组合始终站在风口上</li>
+  </ol>
+  <p>轮动策略的难点在于<span class="hl-red">交易摩擦和判断滞后</span>。建议只在 3-5 个行业 ETF 间做切换，而不是全市场横扫。</p>
+
+  <blockquote class="purple">
+    <strong>策略选择心法</strong>：没时间选 <span class="hl-blue">核心卫星</span>；会看估值选 <span class="hl">网格</span>；有稳定现金流选 <span class="hl-green">定投</span>；对周期有感觉选 <span class="hl-red">轮动</span>。<span class="hl">没有"最好"的策略，只有"最合适"的策略</span>。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-misconceptions">
+  <h2 class="section-title">ETF 的 5 个常见误区</h2>
+
+  <p>再好的工具，用错也会亏钱。下面这 5 个误区，散户每年都在反复踩坑。</p>
+
+  <h3 class="sub-title">误区一：ETF 一定比股票安全</h3>
+  <p>错！<span class="hl">行业 ETF 的波动可以很大</span>。比如 2022 年的医药 ETF、2023 年的新能源 ETF，跌幅都能到 <span class="hl-red">40-50%</span>。买 ETF 只能避免"个股暴雷"，不能避免"行业周期下行"。</p>
+
+  <h3 class="sub-title">误区二：ETF 不会暴雷</h3>
+  <p>错！ETF 有<span class="hl-red">清盘风险</span>。当一只 ETF 规模持续低于 <span class="hl-red">5000 万</span>，基金公司可能选择清盘。规模太小还会带来：</p>
+  <ul>
+    <li><span class="hl-red">流动性枯竭</span>，买卖价差巨大</li>
+    <li><span class="hl-red">大额申赎导致跟踪误差放大</span></li>
+    <li><span class="hl-red">面临清盘时被迫折价赎回</span></li>
+  </ul>
+
+  <h3 class="sub-title">误区三：买 ETF 等于"价值投资"</h3>
+  <p>错！买 ETF 只是换了工具，<span class="hl">如果你追涨杀跌、频繁交易，亏钱的概率和炒个股一样高</span>。价值投资的核心是<span class="hl">以合理价格买入优秀资产并长期持有</span>，买 ETF 只是降低了选股难度，并不会自动改变你的投资习惯。</p>
+
+  <h3 class="sub-title">误区四：折价溢价无所谓</h3>
+  <p><span class="hl-red">错！这是 ETF 投资最容易亏钱的暗坑</span>。</p>
+  <ul>
+    <li><strong>折价</strong>（价格 &lt; 净值）：意味着<span class="hl-green">你可以打折买到等值资产</span>，长期会修复</li>
+    <li><strong>溢价</strong>（价格 &gt; 净值）：意味着<span class="hl-red">你在高位接盘</span>，溢价终将回归，亏的就是这部分</li>
+  </ul>
+  <p>特别是在<span class="hl-red">海外 ETF、热门主题 ETF</span>上，溢价经常能冲到 5-10% 甚至更高。新手最容易在情绪高点买在溢价顶部。</p>
+
+  <h3 class="sub-title">误区五：场内场外随便选</h3>
+  <p><span class="hl">场内场外是两套完全不同的玩法</span>：</p>
+  <ul>
+    <li><strong>场内 ETF</strong>：股票账户买卖，<span class="hl">实时报价、T+1 到账、有折溢价</span>，适合短线和网格</li>
+    <li><strong>场外 ETF 联接基金</strong>：基金账户申购，<span class="hl">按净值成交、T+2 到账、无折溢价</span>，适合长期定投</li>
+  </ul>
+  <p><span class="hl-red">套利机制复杂</span>，新手建议只走场内——简单、直接、看得见价格。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 溢价交易的真实案例</div>
+    <p>2024 年某跨境 ETF 因外汇额度限制，连续涨停后<span class="hl-red">溢价一度超过 30%</span>。散户高位追入后，溢价修复叠加净值下跌，<span class="hl-red">一周内浮亏超过 40%</span>。这就是典型的"溢价陷阱"。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-indicators">
+  <h2 class="section-title">ETF 选择的 6 大核心指标</h2>
+
+  <p>面对一只 ETF，到底要不要买？下面 6 个指标按重要性排序，<span class="hl">前两个不达标就直接放弃</span>。</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>指标</th>
+        <th>重要性</th>
+        <th>阈值</th>
+        <th>为什么重要</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>规模</strong></td>
+        <td><span class="hl">★★★★★</span></td>
+        <td><span class="hl-green">&gt; 5 亿</span></td>
+        <td>避免清盘、保证流动性</td>
+      </tr>
+      <tr>
+        <td><strong>日均成交额</strong></td>
+        <td><span class="hl">★★★★★</span></td>
+        <td><span class="hl-green">&gt; 5000 万</span></td>
+        <td>买卖价差小，<span class="hl">进出顺畅</span></td>
+      </tr>
+      <tr>
+        <td><strong>跟踪误差</strong></td>
+        <td><span class="hl">★★★★</span></td>
+        <td><span class="hl-blue">&lt; 0.5%</span></td>
+        <td>误差越大，越<span class="hl-red">偏离指数真实表现</span></td>
+      </tr>
+      <tr>
+        <td><strong>管理费率</strong></td>
+        <td><span class="hl">★★★</span></td>
+        <td><span class="hl-green">越低越好</span></td>
+        <td>长期复利影响显著</td>
+      </tr>
+      <tr>
+        <td><strong>成立年限</strong></td>
+        <td><span class="hl">★★★</span></td>
+        <td><span class="hl-blue">&gt; 3 年</span></td>
+        <td>穿越牛熊的业绩更可信</td>
+      </tr>
+      <tr>
+        <td><strong>成分股流动性</strong></td>
+        <td><span class="hl">★★</span></td>
+        <td><span class="hl">避免僵尸股</span></td>
+        <td>影响 ETF 净值真实性</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <blockquote class="purple">
+    <strong>选 ETF 的一句话标准</strong>：<span class="hl-green">规模够大 + 成交活跃 + 跟踪准确 + 费率够低</span>。满足这四条，剩下两个指标是加分项；前两条不满足，再便宜也不要碰。
+  </blockquote>
+
+  <div class="quote-banner">
+    ETF 不会让你一夜暴富，<br>
+    但<span class="hl">它会让你的账户活得足够久</span>。<br>
+    活得久 + 复利 + 纪律<br>
+    才是<span class="hl">普通人最终胜出的唯一路径</span>。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>截至 2025 年 A 股 ETF 规模突破 <span class="hl">4 万亿</span>，是<span class="hl">机构和大资金的主战场</span></li>
+      <li>散户选 ETF 的四大动机：<span class="hl-green">避雷 + 行业暴露 + 流动性 + 低成本</span></li>
+      <li>A 股 ETF 六大类别：<span class="hl">宽基 / 行业 / 主题 / 风格 / 商品 / 海外</span></li>
+      <li>ETF 四大优势：<span class="hl-blue">高透明度</span> + <span class="hl-green">低成本</span> + <span class="hl">分散化</span> + <span class="hl-red">灵活交易</span></li>
+      <li>四大策略：<span class="hl">核心卫星</span> / <span class="hl-blue">网格</span> / <span class="hl-green">定投</span> / <span class="hl-red">轮动</span></li>
+      <li>五个常见误区：以为 ETF <span class="hl-red">一定安全 / 不会暴雷 / 等于价值投资 / 溢价无所谓 / 场内场外可随便选</span></li>
+      <li><span class="hl-red">溢价交易是 ETF 最大的暗坑</span>，高位接盘溢价会亏双份</li>
+      <li>选 ETF 的硬指标：<span class="hl">规模 &gt; 5 亿 + 日均成交 &gt; 5000 万 + 跟踪误差 &lt; 0.5%</span></li>
+      <li>策略选择：<span class="hl">没时间选核心卫星、有现金流选定投、能判断周期选轮动</span></li>
+      <li>核心心法：<span class="hl-green">活得久 + 复利 + 纪律</span>，才是普通人最终胜出的路径</li>
+    </ul>
+  </div>
+</section>
+
+<nav class="nav-related">
+  <h4>相关笔记导航</h4>
+  <ul>
+    <li><a href="S12-05-板块轮动全解.html"><span class="label">S12-05</span>板块轮动全解：板块是什么？板块轮动怎么观察？</a></li>
+    <li><a href="S09-12-投资组合构建相关性矩阵与再平衡.html"><span class="label">S09-12</span>投资组合构建：相关性矩阵与再平衡</a></li>
+    <li><a href="S12-14-为什么跟着主力流入买.html"><span class="label">S12-14</span>为什么跟着主力流入买？读懂资金流向的真相</a></li>
+    <li><a href="S09-04-网格交易法.html"><span class="label">S09-04</span>网格交易法：震荡市的高胜率策略</a></li>
+  </ul>
+</nav>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 12 · 市场生态与主力资金 · 第 15 篇</p>
+</footer>
+
+</body>
