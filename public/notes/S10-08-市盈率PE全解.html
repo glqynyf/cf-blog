@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>市盈率 PE 全解：动态、静态、TTM 到底有什么区别？｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14.5px; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { background: var(--surface-2); color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; }
+  td { color: var(--text); }
+  tr:last-child td { border-bottom: none; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 24px 0; }
+  .compare-grid .col { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 18px 18px; }
+  .compare-grid .col h4 { font-size: 15px; margin-bottom: 10px; }
+  .compare-grid .col.static h4 { color: var(--yellow); }
+  .compare-grid .col.dynamic h4 { color: var(--blue); }
+  .compare-grid .col.ttm h4 { color: var(--green); }
+  .compare-grid .col ul { margin: 0; padding-left: 16px; }
+  .compare-grid .col ul li { font-size: 13px; color: var(--text-dim); margin-bottom: 6px; }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } .compare-grid { grid-template-columns: 1fr; } table { font-size: 13px; } th, td { padding: 10px 12px; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 10</span>
+  <span class="stage-name">选股框架与基本面分析</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 12 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 10 · 第 8 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">市盈率 PE 全解：动态、静态、TTM 到底有什么区别？</h1>
+  <p class="note-subtitle">买入 PE=3 倍看似便宜到极致的公司，可能让你三个月内血本无归；买入 PE=80 倍看似贵到天际的公司，反而可能让你资产翻倍。PE 这个每天在软件最显眼位置的指标，其实每天都在编织最温柔的陷阱。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>PE 本质是<span class="hl">"假设盈利不变，多少年回本"</span>——这个看似简单的公式背后藏着两个致命预设：<span class="hl">（1）利润全部分红；（2）未来盈利永远不变</span>。这两个假设几乎都不成立，所以 PE 是一个<span class="hl">随时在变动、充满想象空间或欺骗性的动态数字</span>。读 PE 必须先看懂"动态 / 静态 / TTM"三种算法的本质差异。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-base">PE 的底层含义：你的回本年限</a></li>
+    <li><a href="#sec-flaw">PE 的两个致命预设</a></li>
+    <li><a href="#sec-three">三种 PE 的本质区别：静态 / 动态 / TTM</a></li>
+    <li><a href="#sec-cycle">周期股 PE 致命陷阱：低 PE 反而是顶部</a></li>
+    <li><a href="#sec-rule">正确使用 PE 的 5 条规则</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-base">
+  <h2 class="section-title">PE 的底层含义：你的回本年限</h2>
+
+  <p>市盈率的英文缩写是 PE，<span class="hl">计算公式简单到小学生都能听懂</span>：</p>
+
+  <div class="formula-box" style="background: var(--surface); border: 1px solid var(--accent); border-radius: 8px; padding: 22px 26px; margin: 24px 0; text-align: center;">
+    <div class="formula" style="font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; color: var(--accent); font-size: 19px; font-weight: 700; margin-bottom: 12px;">PE = 总市值 ÷ 一年净利润 = 股价 ÷ 每股收益</div>
+  </div>
+
+  <p>用一个最直观的做生意逻辑来解释。假设你手里有 100 万闲钱，准备在校门口买下一家生意非常红火的奶茶店。店老板给你出示了账本，说这家店过去一年抛出所有房租、水电和人工，净赚了 10 万元。现在老板要把这家店整体转让，开价 100 万。</p>
+
+  <blockquote>
+    <strong>你的回本年限：</strong>100 万 ÷ 10 万 = 10 年<br>
+    <strong>隔壁的咖啡店：</strong>一年同样赚 10 万，但开价 200 万 → 回本年限 20 年<br>
+    <strong>傻子都知道选 10 倍的奶茶店。</strong>
+  </blockquote>
+
+  <p>PE 本质上就是你的<strong>投资回本年限</strong>。</p>
+</section>
+
+<section class="section" id="sec-flaw">
+  <h2 class="section-title">PE 的两个致命预设</h2>
+
+  <p>在股票市场里如果事情真这么简单，那全天下的会计和数学老师不就都成了股神？现实中 PE 这个所谓的"回本年限"，隐藏着两个几乎从来没人主动告诉过你的<strong>致命预设</strong>。</p>
+
+  <h3 class="sub-title">预设一 · 利润必须全部分红</h3>
+  <p>PE 默认公司必须把每年赚到的所有利润一分不剩地<strong>全部以现金红利的形式分给股东</strong>。可是现实中有几家上市公司会这样做？绝大多数公司赚了钱要么留着继续投资建厂、买设备，要么躺在账上当储备基金。真正能拿到你手里的分红，可能只有利润的三分之一甚至更少。</p>
+
+  <blockquote class="purple">
+    <strong>所以：</strong>如果你以为 10 倍 PE 就是 10 年回本，那你大概率会被现实狠狠上一课。
+  </blockquote>
+
+  <h3 class="sub-title">预设二 · 未来盈利永远不变</h3>
+  <p>PE 还假设这家公司的未来盈利能力<strong>永远一成不变</strong>。可是商场如战场，今年的奶茶店能赚 10 万，明年学校要是风效了呢？要是对面开了一家更便宜的柠檬茶店呢？利润一旦腰斩，你的回本年限就会瞬间从 10 年变成 20 年。</p>
+
+  <blockquote>
+    <strong>反过来：</strong>如果这家店推出了爆款新品，第二年利润飙升到 50 万，那你 2 年就能回本。
+  </blockquote>
+
+  <p>你在炒股软件上看到的那个 PE 数值，<span class="hl">它绝对不是一个刻在石头上一尘不变的真理，而是一个随时在变动的、充满想象空间或欺骗性的动态数字</span>。</p>
+</section>
+
+<section class="section" id="sec-three">
+  <h2 class="section-title">三种 PE 的本质区别：静态 / 动态 / TTM</h2>
+
+  <p>更要命的是，当你打开任何一个主流的行情软件，在个股页面的右侧，你会发现市盈率后面往往跟着不同的后缀——有的写着"静"，有的写着"动"，有的写着"滚动"或"TTM"。</p>
+
+  <p>新手买股票时一看 PE 才 15 倍觉得好便宜，<span class="hl-red">结果买进去才发现原来自己看错了后缀</span>。这三个不同的 PE 算出来的结果经常天差地别。</p>
+
+  <div class="compare-grid">
+    <div class="col static">
+      <h4>📌 静态 PE</h4>
+      <ul>
+        <li>软件标注：PE 静 / PE(静)</li>
+        <li>分母：上一完整年度净利润</li>
+        <li>优点：数据权威、不会变</li>
+        <li>缺点：严重滞后，年中数据失真</li>
+      </ul>
+    </div>
+    <div class="col dynamic">
+      <h4>📊 动态 PE</h4>
+      <ul>
+        <li>软件标注：PE 动 / PE(动)</li>
+        <li>分母：今年全年预测净利润</li>
+        <li>优点：前瞻性强</li>
+        <li>缺点：依赖预测，可被粉饰</li>
+      </ul>
+    </div>
+    <div class="col ttm">
+      <h4>📈 滚动 PE (TTM)</h4>
+      <ul>
+        <li>软件标注：PE TTM</li>
+        <li>分母：最近 4 个季度净利润</li>
+        <li>优点：最实时、最反映当下</li>
+        <li>缺点：会随季节性波动</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="sub-title">静态 PE · 严重滞后的"旧照片"</h3>
+  <p>静态 PE 的分母用的是上一个完整会计年度的净利润。比如现在已经是年中，你正在看一家上市公司的股票，静态 PE 在计算时用的依然是上一年度年报里公布的净利润。</p>
+
+  <blockquote>
+    <strong>一个形象的比喻：</strong>这就像你在今年 6 月去相亲，对方给你出示了一份去年年初的体检报告。这份报告确实是权威的、真实的、没有半点水分——但这都过去一年半了，对方在这一年半里有没有暴饮暴食、身体有没有出突发状况，去年的报告根本给不了你任何答案。
+  </blockquote>
+
+  <p>在快速变化的商业世界里，<span class="hl-red">静态 PE 的滞后性经常会成为主力资金收割散户的完美工具</span>。比如有些行业去年因为特殊宏观环境利润出现爆发式增长，今年景气度已经彻底入冬了，订单只剩下一小半甚至公司已经亏损，但由于今年年报还没出来，软件上的静态 PE 依然用去年那个历史最好业绩算出来。这时你看静态 PE 只有 5 倍，心花怒放觉得自己捡到了大便宜——结果等买进去，最新财报一公布才发现买在了"由盛转衰的顶点"。</p>
+
+  <h3 class="sub-title">动态 PE · 看似完美但依赖预测</h3>
+  <p>为了解决静态 PE 这种刻舟求剑的尴尬，市场发明了动态 PE。它的分母用的是<strong>对今年全年净利润的预测值</strong>。听起来很完美——我们投资股票不就是为了未来的盈利吗？</p>
+
+  <p>但问题是：这个"预测值"是谁给的？通常是券商分析师的<strong>一致性预期</strong>，或者公司自己发布的<strong>业绩预告</strong>。这两者都可能严重失真：分析师的预测常常集体过度乐观（屁股决定脑袋），而公司的业绩预告则可以"管理"。</p>
+
+  <h3 class="sub-title">滚动 TTM · 最贴近当下的实时窗口</h3>
+  <p>为了避免静态和动态的缺陷，机构最常用的其实是<strong>滚动 TTM PE</strong>——分母用<strong>最近连续 4 个季度</strong>的净利润。这个公式把刚发布的最近一个季度财报和前 3 个季度拼起来，最贴近公司当下的真实经营状况。</p>
+
+  <blockquote class="purple">
+    <strong>实战建议：</strong>绝大多数情况下，<span class="hl">TTM PE 是最值得参考的 PE</span>。它既不会因为静态 PE 滞后而误导，也不会因为动态 PE 预测偏差而失真。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-cycle">
+  <h2 class="section-title">周期股 PE 致命陷阱：低 PE 反而是顶部</h2>
+
+  <p>最后必须重点讲一个能避开 90% 踩雷风险的工具——<strong>周期股 PE 陷阱</strong>。</p>
+
+  <p>周期股（航运、钢铁、化工、有色、煤炭等）的盈利有一个特点：<span class="hl">景气高点时利润暴增几倍甚至十几倍</span>。这时候分母被撑得极大，算出来的 PE 自然低得惊人。</p>
+
+  <blockquote class="purple">
+    <strong>但这恰恰意味着景气度已经见顶。</strong>接下来几年很可能是产品价格回落、利润缩减甚至转向亏损。当利润缩水九成的时候，你以为的 2 倍 PE 可能瞬间变成 200 倍甚至变成负数。
+  </blockquote>
+
+  <h3 class="sub-title">历史数据印证</h3>
+  <p>2021 年某航运龙头利润创历史最高时，PE 只有 2-3 倍，散户以为是大便宜冲进去。两年后周期反转，业绩大幅下滑，股价腰斩再腰斩。回头看，当初那个 2 倍 PE 不是便宜，而是<strong>周期顶点的警告信号</strong>。</p>
+
+  <h3 class="sub-title">周期股的正确估值方法</h3>
+  <ul>
+    <li><strong>用 PB（市净率）替代 PE：</strong>PB 更稳定，不受利润波动影响</li>
+    <li><strong>用 EV/EBITDA：</strong>剔除折旧和税费，跨周期可比</li>
+    <li><strong>用席勒 PE（CAPE）：</strong>用 10 年平均盈利平滑周期波动</li>
+    <li><strong>看 PB 历史分位：</strong>PB 接近历史底部 = 可能是周期低点；PB 历史顶部 = 可能是周期高点</li>
+  </ul>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 低 PE 陷阱的核心逻辑</div>
+    <p><strong>PE = 股价 ÷ 每股盈利。</strong>当盈利处于历史高位时，PE 自然很低。但这不意味着便宜——盈利未来会均值回归甚至暴跌，<span class="hl-red">低 PE 反而是周期顶部的危险信号</span>。这是普通投资者最容易犯的估值错误之一。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-rule">
+  <h2 class="section-title">正确使用 PE 的 5 条规则</h2>
+
+  <div class="quote-banner">
+    PE 不是"便宜还是贵"的答案<br>
+    <span class="hl">而是"当前价格 vs 未来盈利"的相对位置<br>
+    真正的高手用 PE 看的是"市场预期 vs 真实经营"的偏差</span>
+  </div>
+
+  <ol>
+    <li><strong>优先看 TTM PE：</strong>最贴近当下，避免静态滞后与动态预测的失真</li>
+    <li><strong>必须结合行业属性：</strong>稳定盈利用 PE；周期股用 PB；亏损公司用 PS；成长股用 PEG</li>
+    <li><strong>横比 + 纵比：</strong>同行业横比 + 自身 5-10 年历史分位纵比</li>
+    <li><strong>结合利率环境：</strong>利率越低，合理 PE 越高；利率越高，PE 天花板越低</li>
+    <li><strong>永远看未来盈利：</strong>PE 假设盈利不变——任何会显著改变盈利的事件（行业拐点、新产品爆发、政策变化）都会让 PE 失效</li>
+  </ol>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li><strong>PE 本质：</strong>假设盈利不变，多少年回本</li>
+      <li><strong>两个致命预设：</strong>（1）利润全部分红；（2）未来盈利永远不变——这两个都不成立</li>
+      <li><strong>三种 PE：</strong>静态滞后 / 动态依赖预测 / TTM 最贴近当下</li>
+      <li><strong>周期股 PE 陷阱：</strong>景气顶部 PE 最低、景气底部 PE 最高，与直觉相反</li>
+      <li><strong>优选 TTM：</strong>绝大多数情况下，TTM PE 是最值得参考的指标</li>
+      <li><strong>估值必结合：</strong>行业属性 + 利率环境 + 未来盈利变化，永远不要孤立看 PE</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 10 · 选股框架与基本面分析</p>
+</footer>
+
+</body>
