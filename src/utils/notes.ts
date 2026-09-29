@@ -49,7 +49,7 @@ const STAGE_TITLES: Record<string, string> = {
   S10: '选股方法 · 自上而下与自下而上',
   S11: '分红回购 · 除权除息与税务',
   S12: '筹码主力 · 资金面与涨跌停规则',
-  S13: '跨市场配置 · A 股 / 美股 / 黄金 / 债券',
+  S13: '市场周期 · 政策底到出货的情绪演绎',
 };
 
 function getNotesDir(): string {
