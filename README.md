@@ -109,7 +109,8 @@ npm run preview    # 本地预览构建产物
 
 1. 新建 `public/notes/S{章}-{序号}-{标题}.html`，沿用现有笔记的完整结构（可直接复制 `S12-07-北向资金是什么.html` 作为骨架，它包含 stage-bar、summary-card、toc、note-sidenav、canonical 等全部构件）
 2. 写完后确认**没有** Astro frontmatter——笔记不走内容集合
-3. `npm run build` 后检查 `/notes/` 与 `/sitemap.xml` 是否都出现新条目
+3. 跑一次 `python3 scripts/check-note-css.py`，确认内联 CSS 没有被静默吃掉（见下文「已知约束」）
+4. `npm run build` 后检查 `/notes/` 与 `/sitemap.xml` 是否都出现新条目
 
 新增**章节**时才需要改代码：在 `src/utils/notes.ts` 的 `STAGE_TITLES` 里补一条显示名。
 
@@ -139,7 +140,7 @@ npm run preview    # 本地预览构建产物
 
 ## 🔧 维护脚本
 
-115 篇笔记需要成批改动时，用 `scripts/` 下的 Python 脚本处理，**改完逐篇抽查**。这些脚本都是幂等的，可重复执行。
+115 篇笔记需要成批改动时，用 `scripts/` 下的 Python 脚本处理，**改完逐篇抽查**。除 `rewrite-note-commits.py` 外都是幂等的，可重复执行。
 
 | 脚本 | 作用 |
 |---|---|
@@ -148,9 +149,13 @@ npm run preview    # 本地预览构建产物
 | `add-note-toc.py` | 为笔记批量生成左侧悬浮目录（从 `<section id>` + `<h2>` 提取） |
 | `add-note-nav.py` | 注入「返回」入口（笔记脱离 Astro，没有站点 Header） |
 | `add-note-canonical.py` | 注入 `<link rel="canonical">` |
+| `fix-note-css-splice.py` | 修「注释插在选择器与 `{` 之间」导致的后代选择器失效 |
+| `fix-note-css-badstring.py` | 修 `content: """` 未闭合字符串吞掉 `}` 导致的整段 CSS 失效 |
+| `check-note-css.py` | **只读检查**：抓上面两类静默失效 + 关键规则缺失，改完 CSS 跑一次 |
 | `generate-og-images.py` | 批量生成 OG 分享图 |
 | `post-images/` | 单篇文章配图生成 |
 | `push-via-api.py` | **`github.com` 主站不可达时的应急推送**，改走 `api.github.com` |
+| `rewrite-note-commits.py` | 一次性工具：把批量 commit 拆成每篇笔记一个（**不幂等**，需完整 git 对象链，只能走 `git push`） |
 
 > ⚠️ `generate-og-images.py` 与 `post-images/` 读取的是**已不存在的** `src/content/posts/`，属于旧内容结构的遗留，当前跑不通。
 >
@@ -204,9 +209,17 @@ git fetch origin && git reset --hard origin/main
 维护这个项目时容易踩的坑：
 
 - **文件名含 `%` 必须编码**。有 4 篇笔记标题里带「10%」「30%」这类 ASCII 百分号。生成链接时一律走 `encodeURIComponent(slug)`，裸 `%` 会构成非法 URL，Cloudflare 直接返回 **400**。（中文和全角 `？` 没问题，只有 ASCII `%` 会炸）
+- **笔记 CSS 坏了，肉眼和 grep 都看不出来**。本项目已经被同一类问题咬过两次：注释插在选择器与 `{` 之间（变成永不匹配的后代选择器）、`content: """` 未闭合字符串吞掉行尾 `}`（让解析器卡在前一个 `{` 里，后续规则全部嵌套失效，78 篇的宽屏侧栏就是这样整体变回浏览器默认样式）。两种情况**源码都写得清清楚楚**，`count('{') == count('}')` 也全部「通过」——因为整体是配平的，只是深度错位。
+  改完笔记 CSS 务必跑一次检查，它能同时抓住这两类：
+  ```bash
+  python3 scripts/check-note-css.py            # 全部笔记
+  python3 scripts/check-note-css.py --verbose  # 列出每个问题
+  ```
+  退出码 0 = 通过。词法校验按 CSS Syntax L3 规范处理注释、字符串、以及「字符串内遇换行 → bad-string 在换行处恢复」——**换行位置决定了整条规则压在一行时会不会连带吞掉闭合括号**，所以 `grep` 计数完全判断不出影响面（115 篇都含 `content: """`，但只有 78 篇真的坏）。
 - **站点没有 404 页**。任何未知路径都会被 SPA fallback 返回**首页 HTML + HTTP 200**。诊断时不能靠状态码判断文件是否存在，要看内容特征；删除文件后边缘缓存还可能继续返回旧页面最长 7 天。
 - **内容层与外壳页样式互不影响**。改 `global.css` 不会改变任何一篇笔记的外观，反之亦然。
 - **`build` 会跑类型检查**。`astro.config.mjs` 与端点里若用了 TypeScript 类型注解，无 node 环境下无法静态校验语法；`sitemap.xml.ts` 因此刻意采用纯 JS + JSDoc 写法。
+- **`scripts/` 里的 Python 脚本在本机 Python 3.9 上跑**。别用 `str | None` 这类 3.10+ 的注解语法，会在导入时直接 `TypeError`。
 
 ## 🔧 常用配置位置
 
