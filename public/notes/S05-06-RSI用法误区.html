@@ -104,27 +104,23 @@
   @media (max-width: 640px) { body { padding: 28px 18px 64px; }
     h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; }
     .compare-grid { grid-template-columns: 1fr; } }
-
-  /* 返回导航条（由 add-note-nav.py 注入） */
-  .note-nav {
-    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-    margin-bottom: 20px; padding: 10px 14px;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 8px; font-size: 13px;
-  }
-  .note-nav a {
+  /* 返回入口（由 add-note-nav.py 注入） */
+  .note-nav__back {
     display: inline-flex; align-items: center; gap: 6px;
-    padding: 5px 12px; border-radius: 6px;
+    margin-left: auto; padding: 5px 12px; border-radius: 6px;
     background: var(--surface-2); border: 1px solid var(--border);
     color: var(--text-dim); text-decoration: none;
-    font-weight: 600; transition: all 0.2s;
+    font-size: 13px; font-weight: 600; line-height: 1.4;
+    transition: all 0.2s;
   }
-  .note-nav a:hover {
+  .note-nav__back:hover {
     background: var(--accent-soft); border-color: var(--accent);
     color: var(--accent); text-decoration: none;
   }
-  .note-nav__sep { color: var(--text-mute); }
-  .note-nav__cur { color: var(--text-mute); font-size: 12px; }
+  /* 窄屏：按钮不再右推，改为独占一行左侧 */
+  @media (max-width: 640px) {
+    .note-nav__back { margin-left: 0; }
+  }
 </style>
 
 <body>
@@ -132,15 +128,9 @@
 <div class="stage-bar">
   <span class="stage-pill">STAGE 5</span>
   <span class="stage-name">常用技术指标精讲</span>
-</div>
-<nav class="note-nav" aria-label="返回导航">
-  <a href="/notes/?stage=S05">← 返回本章目录</a>
-  <a href="/notes/">全部笔记</a>
-  <span class="note-nav__sep">·</span>
-  <a href="/">首页</a>
-  <span class="note-nav__cur">S05</span>
-</nav>
 
+  <a class="note-nav__back" href="/notes/?stage=S05">← 返回笔记</a>
+</div>
 
 <div class="meta-bar">
   <span class="tag">投资笔记</span>
