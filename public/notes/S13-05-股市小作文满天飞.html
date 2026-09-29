@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>股市"小作文"满天飞？三步辨别真伪，过滤掉大多数虚假消息｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b;
+    --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .case-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--purple); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .case-card h4 { color: var(--purple); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+  .case-card .meta { color: var(--text-mute); font-size: 13px; margin-bottom: 10px; }
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  th { background: var(--surface-2); padding: 12px 16px; text-align: left; font-weight: 700; color: var(--accent); font-size: 14px; }
+  td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text); font-size: 14.5px; }
+  tr:last-child td { border-bottom: none; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } table { font-size: 12px; } th, td { padding: 8px 10px; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 13</span>
+  <span class="stage-name">宏观、市场周期与极端行情</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 11 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 13 · 第 5 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">股市"小作文"满天飞？三步辨别真伪，过滤掉大多数虚假消息</h1>
+  <p class="note-subtitle">你每次刚跟着微信群、朋友圈里的"绝密消息"买进去，股价就立刻变脸暴跌？本文用最通俗的语言教你 3 个辨别真假的实用技巧，过滤市场上绝大多数虚假消息。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>现在的 A 股<span class="hl-red">"小作文"泛滥到令人发指</span>的程度。微信群里一张模糊截图就能在几分钟内传遍成千上万的股民手机；更可怕的是，<span class="hl">有人开始用 AI 批量生产谣言</span>，逻辑顺畅、专业术语一套一套的，普通股民一看觉得"太专业了，肯定是内部人士透露的"，结果一头扎进去成了接盘侠。<strong>辨别小作文不需要专业团队，只需要 3 个步骤：源头清洗 → 内容识别 → 时间逻辑</strong>。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-landscape">A 股小作文泛滥到了什么程度</a></li>
+    <li><a href="#sec-punish">监管重拳：编造传播虚假信息的法律代价</a></li>
+    <li><a href="#sec-step1">第一步 · 给消息做源头清洗</a></li>
+    <li><a href="#sec-step2">第二步 · 看内容是否经得起逻辑推敲</a></li>
+    <li><a href="#sec-step3">第三步 · 看时间节奏与盘口反应</a></li>
+    <li><a href="#sec-rules">3 条铁律让你远离小作文陷阱</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-landscape">
+  <h2 class="section-title">A 股小作文泛滥到了什么程度</h2>
+
+  <p>现在信息传播实在太快了——以前获取市场消息还得看报纸、听广播；现在微信群里一张模糊截图或者一段文字，几分钟就能传遍成千上万个股民的手机。</p>
+
+  <p>更要命的是<span class="hl">AI 时代的到来</span>——有些人开始用 AI 批量生产谣言。AI 写出来的文章逻辑顺理成章，专业术语一套一套的，普通股民一看觉得"太专业了，肯定是内部人士透露的"，结果一头扎进去刚好成了给别个接盘的活雷锋。</p>
+
+  <blockquote>
+    <strong>这绝不是耸人听闻</strong>。证监会 2025 年执法情况综述原文是"<b>严厉打击编排股市小作文等恶性违法，查处相关案件 19 起</b>"。<span class="hl-red">注</span>："19 起"是"<b>查处相关案件</b>"口径；另有"<b>查办操纵市场获利超亿元案件 19 起</b>"另一统计，两者不可混用——前者多见于证监会例行新闻稿，后者多见于重大违法专项通报。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-punish">
+  <h2 class="section-title">监管重拳：编造传播虚假信息的法律代价</h2>
+
+  <div class="case-card">
+    <h4>案例 · 冯某、班某编造芯片订单谣言</h4>
+    <div class="meta">处罚机关：北京证监局｜依据：证券法</div>
+    <p>冯某某为了博眼球赚流量，在微信公众号发布虚构文章，谎称某上市公司芯片订单出现重大变化。随后班某某看到有热度，用 AI 改写后发到自己账号。</p>
+    <p>他们编造的信息偏偏涉及<span class="hl">芯片这个最敏感、资金最关注的黄金赛道</span>，短短两天疯狂扩散，给相关上市公司和整个市场造成巨大扰动。</p>
+    <p><strong>结果</strong>：虽然可能只赚了几百块广告费，但北京证监局根据证券法<span class="hl-red">直接开出没收违法所得并分别处以 20 万和 25 万元罚款的重罚</span>。</p>
+  </div>
+
+  <div class="case-card">
+    <h4>案例 · 弘信电子股东大会谣言</h4>
+    <div class="meta">时间：2025 年 3 月 12 日｜结果：造谣者被依法行政拘留</div>
+    <p>雪球平台有用户恶意捏造散布虚假信息，谎称<span class="hl-red">弘信电子（300657.SZ）</span>当天股东大会上关于银行受信及单保的重大议案没有通过。消息一出市场立刻恐慌，<span class="hl-red">当天股价暴跌 8.98%（几近跌停）</span>，无数低位割肉的股民损失惨重。</p>
+    <p>可真相是当晚弘信电子正式发布的公告显示议案全部顺利审议通过，根本不存在任何问题。公司第一时间固定证据向公安机关报案，<strong>造谣者最终被依法行政拘留</strong>。</p>
+  </div>
+
+  <blockquote class="purple">
+    <strong>为什么没赚多少也罚这么重？</strong>因为《证券法》<span class="hl-red">第 193 条</span>明确规定：编造、传播虚假信息扰乱证券市场的，<b>没收违法所得并处违法所得 1-10 倍罚款</b>；<span class="hl-red">没有违法所得或违法所得不足 10 万元的，处 100 万元以上 1000 万元以下罚款</span>。这就是法律红线，谁碰谁挨打。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-step1">
+  <h2 class="section-title">第一步 · 给消息做源头清洗</h2>
+
+  <p>在股市里，信息的来源决定了它的含金量。我们可以简单做一个三级分类：</p>
+
+  <table>
+    <thead>
+      <tr><th>消息类型</th><th>可信度</th><th>典型特征</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>无根浮萍的"野路子"</td>
+        <td><span class="hl-red">极低</span></td>
+        <td>微信群截图、朋友圈传言、古巴自媒体爆料；无署名、无官方出处；常用"可靠消息透露""业内传闻""知情人士称"</td>
+      </tr>
+      <tr>
+        <td>正规媒体报道</td>
+        <td><span class="hl">较高</span></td>
+        <td>财经网站、证券报纸；正规媒体有严格采编审核流程；但也存在断章取义、解读偏差、把旧文当新闻发</td>
+      </tr>
+      <tr>
+        <td>官方公告与法定披露</td>
+        <td><span class="hl-green">最高</span></td>
+        <td>上市公司在上交所、深交所、北交所官网发布的正式公告；证监会、交易所、统计局等权威机构的发布</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>遇到第一类消息，<span class="hl-red">脑子里立刻亮起红灯</span>：绝大多数情况下，没有明确主体的消息就是别人用来吸引眼球、制造恐慌或拉抬股价的工具。</p>
+</section>
+
+<section class="section" id="sec-step2">
+  <h2 class="section-title">第二步 · 看内容是否经得起逻辑推敲</h2>
+
+  <p>即使消息源看似靠谱，内容也要经得起基本逻辑推敲。重点看 3 个方面：</p>
+
+  <h3 class="sub-title">看主体可信度</h3>
+  <p>消息里提到的当事人是谁？是上市公司高管、监管部门、还是某个模糊的"业内人士"？<span class="hl">真正重大的政策、重组、合作，主体越模糊越可疑</span>。</p>
+
+  <h3 class="sub-title">看利益链动机</h3>
+  <p>消息传出来后，谁会受益？<span class="hl-red">如果精准踩在某个题材、某只妖股启动前夜</span>，那很可能是主力配合出货的诱饵。</p>
+
+  <h3 class="sub-title">看数据逻辑</h3>
+  <p>消息里是否提到具体数字？这些数字是否符合常识？例如"某公司订单暴增 10 倍"——但该公司的产能、产线、客户结构都不支持这种突变，那多半是杜撰。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 警惕 AI 生成的伪专业谣言</div>
+    <p>AI 写出来的内容逻辑顺畅、术语一套一套的，<span class="hl">但往往缺乏真实的细节</span>。它能模仿"专业"，却造不出"内幕"。多问一句"这种细节只有内部人才会知道，那作者是怎么知道的？"</p>
+  </div>
+</section>
+
+<section class="section" id="sec-step3">
+  <h2 class="section-title">第三步 · 看时间节奏与盘口反应</h2>
+
+  <h3 class="sub-title">时间节奏</h3>
+  <p>看消息的<strong>传播时机</strong>：</p>
+  <ul>
+    <li>收盘后、晚间发布的官方公告 → <span class="hl-green">正常节奏</span>，可信度高</li>
+    <li>盘中突然爆出的"重磅内幕" → <span class="hl-red">高度可疑</span>，配合主力出货的概率极大</li>
+    <li>重要会议、财报披露前的"剧透" → <span class="hl-red">几乎可判定为操纵</span></li>
+  </ul>
+
+  <h3 class="sub-title">盘口反应</h3>
+  <p>真正的好消息，<span class="hl">公司一定会第一时间发布正式公告</span>。如果你在朋友圈、微信群看到所谓"重磅消息"，但上市公司官方渠道一片寂静——<span class="hl-red">那消息的可信度基本为零</span>。</p>
+
+  <p>反过来，如果消息是真，<strong>资金已经在二级市场抢筹</strong>，股价会有真金白银的反应。如果消息传得沸沸扬扬但盘面毫无动静，那多半是"假酒"装在"真瓶"里。</p>
+</section>
+
+<section class="section" id="sec-rules">
+  <h2 class="section-title">3 条铁律让你远离小作文陷阱</h2>
+
+  <h3 class="sub-title">铁律一 · 永远等待官方公告</h3>
+  <p>任何"重大消息"在没有公司官方公告或权威部门正式发布之前，<span class="hl-red">一律视为不可信</span>。记住，真正影响股价的信息会有法定披露义务，藏不住的。</p>
+
+  <h3 class="sub-title">铁律二 · 看到消息先想三秒</h3>
+  <p>当你想根据"绝密消息"下单时，<strong>强迫自己先等三秒钟</strong>。这三秒能让你从情绪化决策切换到理性思考，避免被主力收割。</p>
+
+  <h3 class="sub-title">铁律三 · 不在消息驱动型股票上重仓</h3>
+  <p>对于依靠"小作文"反复活跃的概念股、妖股，<span class="hl-red">永远不要重仓</span>。这种股票本身就是谣言发酵的温床，散户进去多半是被主力收割。</p>
+
+  <div class="quote-banner">
+    真正的好消息不需要你从朋友圈里挖，<br>
+    <span class="hl">它会自动出现在法定披露渠道</span>。<br>
+    没有官方背书的消息，一律不值得你花真金白银去验证。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>2025 年证监会查处股市小作文相关案件 <span class="hl-red">19 起</span>（<span class="hl-red">"查处相关案件"原文口径</span>，与"<b>查办操纵市场获利超亿元案件 19 起</b>"属不同统计口径）</li>
+      <li>冯某、班某编造芯片订单谣言被各罚 20-25 万元（《证券法》第 193 条：<strong>无违法所得或不足 10 万元者处 100 万-1000 万</strong>；本案的 20-25 万应理解为"低于法定下限"的早期案例，<span class="hl-red">建议核对证监会行政处罚决定书原文</span>）</li>
+      <li>弘信电子（<span class="hl-red">原笔记写"红信"</span>）股东大会谣言一天跌 <span class="hl-red">8.98%</span>，造谣者被依法行政拘留</li>
+      <li><strong>三步辨别法</strong>：源头清洗 → 内容识别 → 时间节奏 + 盘口反应</li>
+      <li>3 条铁律：<span class="hl">等官方公告 / 想三秒 / 不重仓消息驱动型股票</span></li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 13 · 宏观、市场周期与极端行情</p>
+</footer>
+
+</body>
