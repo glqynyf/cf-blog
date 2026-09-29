@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>股市生存法则：为什么学会止损，是你在金融市场唯一的护身符？｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .formula-box { background: var(--surface); border: 1px solid var(--accent); border-radius: 8px; padding: 22px 26px; margin: 24px 0; text-align: center; }
+  .formula-box .formula { font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; color: var(--accent); font-size: 19px; font-weight: 700; margin-bottom: 12px; }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  table th { background: var(--surface-2); color: var(--accent); padding: 12px 16px; text-align: left; font-weight: 700; font-size: 14px; border-bottom: 1px solid var(--border); }
+  table td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text); font-size: 14.5px; }
+  table tr:last-child td { border-bottom: none; }
+  table tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body: { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 1</span>
+  <span class="stage-name">行为金融学：解码人性弱点</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 14 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 1 · 第 4 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">股市生存法则：为什么学会止损，是你在金融市场唯一的护身符？</h1>
+  <p class="note-subtitle">如果连诺贝尔奖得主的智商和华尔街最顶级的风控系统都无法保住一个拒绝止损的账户，那普通人凭什么指望靠死扛迎来奇迹？这是一篇用 LTCM 46 亿美元爆仓的真实案例，告诉你止损为何是唯一护身符的笔记。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>行为金融学界对海外几十万个真实交易账户进行过十多年全样本追踪：<span class="hl">Barber 等台湾 5 年全样本研究显示，<strong>持续 300 天+的 1,551 人中 97% 亏损</strong>，整体能稳定盈利的<strong>不到 1%</strong></span>。亏损的根源不是不够聪明、运气不好，而是<span class="hl">被基因里的本能直觉彻底出卖</span>。<strong>在金融市场里能够长期稳健生存本身就是最大优势，而生存的唯一护身符是止损——不是意志力，而是用冷冰冰的规则和工具去代替你随时会动摇的情绪。</strong></p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-truth">低价的真相：价格 ≠ 价值</a></li>
+    <li><a href="#sec-mean">均值回归的谎言：跌得多 ≠ 会反弹</a></li>
+    <li><a href="#sec-chain">散户毁灭的连环陷阱</a></li>
+    <li><a href="#sec-ltcm">诺奖得主也扛不住的死扛：LTCM 的 46 亿美元教训</a></li>
+    <li><a href="#sec-disposition">处置效应：急于卖出盈利、长期死守亏损</a></li>
+    <li><a href="#sec-tools">3 套专业级止损工具</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-truth">
+  <h2 class="section-title">低价的真相：价格 ≠ 价值</h2>
+  <p>我们经常在市场里看到这样一种现象：一个刚刚入场的新手，兜里揣着几万块钱，在各种资产列表里反复滑动。当他看到那些价格只有一两块钱甚至只有几毛钱的标的时，眼睛往往会亮起来。</p>
+  <p>他心里会打起一个小算盘：<span class="hl-red">觉得这个东西已经这么便宜了，自己买一万股也花不了多少钱，哪怕它只涨个五毛钱，自己也能实现资产翻倍</span>。相反那些几百块钱一个单位的高价资产，买一手就要花掉大半年的积蓄，想要它翻倍太难了。于是很多人怀着"便宜、安全、筹码多"的满足感，把本金全部砸向了那些所谓的低价资产。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 一句话点破</div>
+    <p>这种直觉在金融世界里实际上是一剂<span class="hl-red">最具毒的慢性毒药</span>。价格和价值完全是两个维度的事情——一个资产每股价格的高低，只是市值除以股本得出的算术结果，<span class="hl">和它到底贵不贵没有半点关系</span>。</p>
+  </div>
+
+  <p>真正决定一个资产价值的，是它<span class="hl-blue">未来能产生多少现金流</span>，也就是它的造血能力。一个资产的价格之所以低到只剩几毛钱，绝对不是因为它慷慨地给普通人留下了上车的机会，而是因为它的<span class="hl-red">基本面已经烂透，造血能力已经枯竭</span>，甚至正在走向清算和退市的边缘。</p>
+
+  <blockquote class="purple">
+    <strong>船票是十块钱还是一块钱没有区别，终点都是海底。</strong>2024 年 A 股退市上市公司数量达 52 家，其中 38 家（占 73%）因股价连续 20 个交易日低于 1 元而触及交易类退市标准。<span class="hl">这些昔日的行业明星公司，没有因为曾经的辉煌而获得豁免，更没有因为股价跌到几毛钱而引来救市主。</span>
+  </blockquote>
+</section>
+
+<section class="section" id="sec-mean">
+  <h2 class="section-title">均值回归的谎言：跌得多 ≠ 会反弹</h2>
+  <p>当新手避开了低价的诱惑，他们往往又会掉进第二个更具有迷惑性的陷阱：<span class="hl">跌得多就会反弹</span>。</p>
+  <p>在很多人的潜意识里有一个根深蒂固的物理学直觉——一个球你把它从高处扔下去，落到地面之后一定会因为弹力而向上反弹。人们把这种直觉原封不动地搬到了金融市场，当看到某项资产从高点跌去 70% 甚至 90% 的时候，他们兴奋地高呼"机会来了"。</p>
+  <p>他们觉得均值回归是铁律，跌了这么多了不可能再跌了，只要反弹一点点自己就能赚大钱。<span class="hl-red">这种建立在物理学直觉上的抄底行为，几乎是所有破产故事的通用大纲。</span></p>
+
+  <div class="formula-box">
+    <div class="formula">100 元 → 跌 90% → 10 元</div>
+    <div class="formula">10 元 → 再跌 90% → 1 元</div>
+    <div class="formula">在 10 元抄底的人：再亏损 90%</div>
+    <div class="desc">只要基本面还在恶化，下跌空间就是无限的</div>
+  </div>
+
+  <p>人们口中念念不忘的均值回归，在现实的金融世界里是有<span class="hl-red">极其严格的前提条件的</span>。均值回归只适用于那些<span class="hl">基本面没有发生根本逆转、行业周期依然健全且具有持续造血能力的优秀资产</span>。当一个行业处于正常的商业周期波动时，价格确实会围绕价值上下波动。</p>
+
+  <blockquote>
+    <strong>但如果这个资产的基本面遭到了毁灭性打击，或者它所处的行业已经被时代无情地淘汰，那么它的均值不仅不会回归，反而会<span class="hl-red">不断地向下重塑</span>。</strong>比如 21 世纪初互联网泡沫破裂期间，纳斯达克指数从最高点跌去了将近 80%。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-chain">
+  <h2 class="section-title">散户毁灭的连环陷阱</h2>
+  <p>散户的致命陷阱往往不是缺乏信息，而是缺乏框架。<span class="hl">信息是碎片化的，框架是系统化的</span>。信息会让你在每天的涨跌中疲于奔命，框架会让你在周期的起伏中保持清醒。</p>
+
+  <p>行为金融学里的困局在现实的交易中从来都不是单独出现的——它们就像一条精心设计、严丝合缝的连环枷锁，<span class="hl-red">一旦你踩中了第一个扣子，剩下的机关就会被瞬间激活</span>：</p>
+
+  <ol>
+    <li><strong>低价让你入局</strong>——本能排斥高价 → 偏好几毛钱的低价股 → 踩中"价格 ≠ 价值"的陷阱</li>
+    <li><strong>跌多让你补仓</strong>——大脑开始感到生理性疼痛 → 损失厌恶基因被唤醒 → 踩中"均值回归是万能神药"的陷阱</li>
+    <li><strong>死扛让你等死</strong>——为了逃避认输的痛苦 → 关上交易软件不看账户 → 踩中"只要不卖就没亏"的自我欺骗陷阱</li>
+  </ol>
+
+  <p>这套连环枷锁配合得天衣无缝，最终的结果就是<span class="hl-red">眼睁睁地看着一个原本充满希望的普通人在绝望中等待资产被清退、被归零的宿命</span>。</p>
+</section>
+
+<section class="section" id="sec-ltcm">
+  <h2 class="section-title">诺奖得主也扛不住的死扛：LTCM 的 46 亿美元教训</h2>
+  <p>如果你觉得这种死扛不肯认输的弱点只是因为普通投资者的金融知识不够丰富或心理素质不够强大，那你就大错特错了。</p>
+  <p>在金融历史的最高殿堂里，曾经发生过一幕最震撼也最残酷的悲剧——<span class="hl">那些站在智商金字塔顶端的华尔街巨擘，在面对人性的这一深渊时表现和普通散户没有任何区别</span>。这就是著名的<strong>长期资本管理公司（LTCM）</strong>的覆灭故事。</p>
+
+  <h3 class="sub-title">神明般的组合</h3>
+  <ul>
+    <li><span class="hl">创始人</span>约翰·梅利韦瑟（John Meriwether）：所罗门兄弟的传奇交易员</li>
+    <li><span class="hl">合伙人</span>：大卫·穆林斯（David W. Mullins Jr.）——<span class="hl-red">曾任纽约联储总裁（不是"美联储前副主席"）</span></li>
+    <li><span class="hl">合伙人</span>：两位诺贝尔经济学奖得主——<strong>迈伦·斯科尔斯</strong>和<strong>罗伯特·莫顿</strong></li>
+  </ul>
+
+  <p>这两位诺奖得主正是现代金融衍生品定价理论的奠基者。他们用极为复杂的数学模型和超级计算机去寻找全球金融市场上那些微小的利差，然后通过极高的杠杆进行套利。</p>
+
+  <p>在最初的几年里，<span class="hl-green">基金的年化回报率一度超过 40%</span>。无数的主权基金和超级富豪排着队把钱送给他们。</p>
+
+  <h3 class="sub-title">1998 年的致命一击</h3>
+  <blockquote class="purple">
+    <strong>8 月 17 日，俄罗斯政府突然宣布卢布贬值并延期偿还国债</strong>——这相当于一个主权国家直接在桌面上宣布违约。这个事件彻底引爆了全球金融恐慌，所有资金开始疯狂逃离信用市场涌向美国国债。
+  </blockquote>
+
+  <p>结果：全球的利差非但没有像该公司计算机模型预测的那样收窄并回归均值，反而像脱缰的野马一样疯狂地扩大。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 杠杆的毁灭性</div>
+    <p>他们的账面杠杆高达 <span class="hl">20 多倍</span>，叠加金融衍生品之后的名义敞口更是超过 <span class="hl-red">1 万亿美元</span>。利差只要稍微扩大一点，他们的亏损就是天文数字。</p>
+  </div>
+
+  <p>在生死存亡的关头，<span class="hl">如果按照严格的风险控制和止损逻辑，他们应该立即平仓认输离场</span>。但这些智商超群的诺贝尔奖得主做出了一个和普通散户一模一样的决定——<span class="hl-red">死扛</span>。</p>
+  <p>他们坚信自己的数学模型是绝对正确的，俄罗斯违约只是一次短暂的非理性市场失灵。市场会回到理性的轨道、利差一定会收窄。为了维持那些亏损的头寸，他们不仅没有平仓止损，反而四处游说试图寻找更多的资金来追加保证金，试图和整个市场的趋势对抗到底。</p>
+
+  <div class="quote-banner">
+    <span class="hl-red">市场可以保持非理性的时间，</span><br>
+    <span class="hl-red">往往比你保持不破产的时间还要长。</span>
+  </div>
+
+  <p>最终这家曾不可一世的金融帝国累计亏损超过 <span class="hl-red">46 亿美元</span>，不得不由美联储出面召集了华尔街 14 家顶级银行联合注资 36 亿多美元接管，才勉强避免了全球金融系统的连锁崩溃。</p>
+
+  <blockquote class="purple">
+    <strong>如果你连诺贝尔奖得主的智商和华尔街最顶级的风控系统都无法保住一个拒绝止损的账户，那你又凭什么认为自己那点可怜的本金和一腔热血就能在死扛中迎来奇迹？</strong>
+  </blockquote>
+</section>
+
+<section class="section" id="sec-disposition">
+  <h2 class="section-title">处置效应：急于卖出盈利、长期死守亏损</h2>
+  <p>为什么死扛绝不可能让你回本？因为这是被大量数据验证过的科学原理。<span class="hl">处置效应</span>这个概念最早由金融学家谢福林和斯塔特曼提出。</p>
+  <p>美国金融学教授特伦斯·奥迪恩曾对上万个真实散户账户进行过长达数年的追踪研究。数据表明：<span class="hl-red">普通投资者卖出盈利资产的概率，比卖出亏损资产的概率高出整整 50%</span>。</p>
+
+  <p>也就是说，绝大多数人稍微赚一点钱就极不可耐地落袋为安，美其名曰锁定利润；而一旦面临亏损就选择装死，<span class="hl">死扛直到本金彻底归零</span>。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 基因层面的科学解释</div>
+    <p>你以为自己是在用坚韧不拔的意志和市场做斗争，但实际上你只是在<span class="hl-red">服从体内的原始基因</span>。这些基因在远古时代保护了我们的祖先，让我们在面对野兽和饥荒时能够通过坚守领地活下来。但在充满了杠杆波动和复杂衍生品的现代金融市场里，这些基因成了<span class="hl">最精准的收割导向</span>。</p>
+  </div>
+
+  <p>如果你无法建立起超越基因的理性，那么你每一次的死扛都不不过是在为下一次更惨烈的毁灭做铺垫。</p>
+</section>
+
+<section class="section" id="sec-tools">
+  <h2 class="section-title">3 套专业级止损工具</h2>
+  <p>既然我们体内的基因和大脑生理结构注定了我们在面对亏损时会选择死扛，想要打破这个魔咒，绝对不能寄希望于自己的意志力。<span class="hl-red">在波动剧烈、情绪高涨的金融市场里，人性的意志力在千万倍的贪婪与恐惧面前比一张纸还要脆弱。</span></p>
+  <p>想要生存下去，你必须<span class="hl">用冷冰冰的规则和工具去代替你那随时会动摇的情绪</span>。下面这套在专业金融机构里被奉为圭臬的三大止损工具：</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>工具</th>
+        <th>适用场景</th>
+        <th>核心规则</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>① 比例止损机制</strong></td>
+        <td>保护最核心的生命线</td>
+        <td>任何单笔交易亏损绝对不能超过总本金的 <span class="hl">2%</span>，或该笔买入价的 <span class="hl">8%</span>。数字被触碰就<span class="hl-red">无条件执行离场</span>，用交易软件的条件单把决策权交给机器。<br><strong>留得青山在，不怕没柴烧——在市场里活着永远比赚钱更重要。</strong></td>
+      </tr>
+      <tr>
+        <td><strong>② 基本面证伪止损</strong></td>
+        <td>打破自我麻醉的"再找找利好"</td>
+        <td>买入当天写下三个最核心的逻辑（比如"现金流健康 / 行业景气度向上 / 估值处于历史低位"），<span class="hl-red">三个逻辑只要任何一个被证伪就立即清仓</span>。逻辑被事实摧毁，就不要给大脑任何"再扛扛"的借口。</td>
+      </tr>
+      <tr>
+        <td><strong>③ 时间止损机制</strong></td>
+        <td>防止"温水煮青蛙"</td>
+        <td>买入时同时设定一个时间窗口（如 3 个月），无论盈亏到期必须<span class="hl">重新审视</span>。如果价格还在原地踏步、逻辑没有兑现，就果断离场。<span class="hl-red">资金是有时间价值的</span>，长期占用本身就是机会成本。</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="quote-banner">
+    在金融市场里<br>
+    <span class="hl">能够长期稳健生存本身就是最大优势</span>。<br>
+    学会止损不是认输，<br>
+    而是你在金融市场<span class="hl">唯一的护身符</span>。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>持续 300 天+的日内交易者中 97% 亏损，能稳定盈利的不到 1%（Barber 等台湾全样本研究）</li>
+      <li><strong>低价不等于便宜，跌得多不等于会反弹</strong>——价格 ≠ 价值</li>
+      <li>散户毁灭的连环陷阱：<span class="hl">低价入局 → 跌多补仓 → 死扛等死</span></li>
+      <li>LTCM 教训：连两位诺奖得主 + 纽约联储前总裁也扛不住死扛，<span class="hl-red">46 亿美元爆仓</span></li>
+      <li>"市场可以保持非理性的时间，比你保持不破产的时间还要长"</li>
+      <li>处置效应：卖出盈利资产的概率比亏损资产高 <span class="hl">50%</span></li>
+      <li>三大止损工具：<span class="hl">比例止损（≤2%）+ 基本面证伪止损 + 时间止损</span></li>
+      <li>意志力在贪婪恐惧面前比纸还脆弱，<strong>必须用规则和工具代替情绪</strong></li>
+      <li>在市场里活着永远比赚钱更重要——<span class="hl">止损是你唯一的护身符</span></li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 1 · 行为金融学</p>
+</footer>
+
+</body>
