@@ -1,60 +1,15 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { getAllNotes } from '../../utils/notes';
 
 /**
- * 笔记索引页：在 Astro build 时扫描 public/notes/ 下的所有 HTML 文件，
- * 按章节前缀（S00-S13）分组生成列表。笔记正文是独立 HTML（深色主题），
+ * 笔记总索引：在 Astro build 时扫描 public/notes/ 下的所有 HTML 文件，
+ * 按章节前缀（S00-S13）分组列出。笔记正文是独立 HTML（深色主题），
  * 不经过 Astro 处理；这里只负责目录和导航。
+ *
+ * 每章另有独立页面 /notes/{stage}/，只列该章笔记。
  */
-
-const NOTES_DIR = join(process.cwd(), 'public', 'notes');
-
-// 章节标题映射（按文件名 SXX 前缀匹配）
-const STAGE_TITLES: Record<string, string> = {
-  S00: '认知重塑 · 破除散户思维',
-  S01: '心态纪律 · 交易心理与情绪管理',
-  S02: 'K线基础 · 单根与组合形态',
-  S03: '量价关系 · 量是因价是果',
-  S04: '均线趋势 · 趋势线与周期选择',
-  S05: '技术指标 · MA / KDJ / MACD / RSI / BOLL',
-  S06: '形态学 · 双重顶底与底部反转',
-  S07: '左侧右侧 · 进出场时机与分时盘口',
-  S08: '止盈止损 · 卖出判断标准',
-  S09: '仓位管理 · 532 法则与凯利公式',
-  S10: '选股方法 · 自上而下与自下而上',
-  S11: '分红回购 · 除权除息与税务',
-  S12: '筹码主力 · 资金面与涨跌停规则',
-  S13: '跨市场配置 · A 股 / 美股 / 黄金 / 债券',
-};
-
-const files = readdirSync(NOTES_DIR)
-  .filter((f) => f.endsWith('.html'))
-  .sort();
-
-// 从文件名解析 slug 和标题
-// 例：S00-01-为什么散户总在市场里亏钱.html
-//   → slug = "S00-01-为什么散户总在市场里亏钱"
-//   → title = "为什么散户总在市场里亏钱"
-//   → num = "01"
-//   → stage = "S00"
-const notes = files.map((filename) => {
-  const stem = filename.replace(/\.html$/, '');
-  const stage = stem.slice(0, 3);
-  const num = stem.slice(4, 6);
-  const title = stem.replace(/^S\d{2}-\d{2}-/, '');
-  return { stage, num, slug: stem, title };
-});
-
-// 按章节分组
-const groups = new Map<string, typeof notes>();
-for (const note of notes) {
-  if (!groups.has(note.stage)) groups.set(note.stage, []);
-  groups.get(note.stage)!.push(note);
-}
-
-const stages = [...groups.keys()].sort();
+const { stages, all: notes } = getAllNotes();
 ---
 
 <BaseLayout
@@ -72,14 +27,14 @@ const stages = [...groups.keys()].sort();
     </header>
 
     {stages.map((stage) => (
-      <section class="stage-group">
+      <section class="stage-group" id={stage.id}>
         <h2 class="stage-group__title">
-          <span class="stage-group__id">{stage}</span>
-          <span class="stage-group__name">{STAGE_TITLES[stage] ?? stage}</span>
-          <span class="stage-group__count">{groups.get(stage)!.length} 篇</span>
+          <span class="stage-group__id">{stage.id}</span>
+          <a class="stage-group__name" href={`/notes/${stage.id}/`}>{stage.title}</a>
+          <span class="stage-group__count">{stage.notes.length} 篇</span>
         </h2>
         <ol class="note-list">
-          {groups.get(stage)!.map((note) => (
+          {stage.notes.map((note) => (
             <li>
               <a class="note-list__link" href={`/notes/${note.slug}`}>
                 <span class="note-list__num">{note.num}</span>
@@ -89,6 +44,9 @@ const stages = [...groups.keys()].sort();
             </li>
           ))}
         </ol>
+        <a class="stage-group__more" href={`/notes/${stage.id}/`}>
+          只看本章 {stage.notes.length} 篇 →
+        </a>
       </section>
     ))}
   </section>
@@ -152,6 +110,13 @@ const stages = [...groups.keys()].sort();
     flex: 1;
     color: var(--text-primary);
     font-weight: 600;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .stage-group__name:hover {
+    color: var(--accent);
+    text-decoration: none;
   }
 
   .stage-group__count {
@@ -159,6 +124,18 @@ const stages = [...groups.keys()].sort();
     font-size: 0.8125rem;
     color: var(--text-muted);
     font-weight: 400;
+  }
+
+  .stage-group__more {
+    display: inline-block;
+    margin-top: var(--space-3);
+    font-size: 0.8125rem;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .stage-group__more:hover {
+    text-decoration: underline;
   }
 
   .note-list {

@@ -3,8 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import { SITE, FEATURED_TAGS } from '../consts';
 import { getSortedPosts, getAllTags } from '../utils';
-import { readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { getAllNotes } from '../utils/notes';
 
 const allPosts = await getSortedPosts();
 const featured = allPosts.filter((p) => p.data.featured);
@@ -15,46 +14,15 @@ const popularTags = [...tagMap.entries()]
   .slice(0, 10)
   .map(([tag]) => tag);
 
-// 笔记章节预览：扫描 public/notes/ 下的文件，按章节聚合
-const NOTE_STAGES: Record<string, string> = {
-  S00: '认知重塑',
-  S01: '心态纪律',
-  S02: 'K线基础',
-  S03: '量价关系',
-  S04: '均线趋势',
-  S05: '技术指标',
-  S06: '形态学',
-  S07: '左侧右侧',
-  S08: '止盈止损',
-  S09: '仓位管理',
-  S10: '选股方法',
-  S11: '分红回购',
-  S12: '筹码主力',
-  S13: '跨市场配置',
-};
-
-const noteFiles = readdirSync(join(process.cwd(), 'public', 'notes'))
-  .filter((f) => f.endsWith('.html'))
-  .sort();
-
-const totalNotes = noteFiles.length;
-
-const stagePreview: Array<{ id: string; title: string; count: number; firstSlug: string; firstTitle: string }> = [];
-const seenStages = new Set<string>();
-for (const f of noteFiles) {
-  const stage = f.slice(0, 3);
-  if (seenStages.has(stage)) continue;
-  seenStages.add(stage);
-  const count = noteFiles.filter((x) => x.startsWith(stage + '-')).length;
-  const stem = f.replace(/\.html$/, '');
-  stagePreview.push({
-    id: stage,
-    title: NOTE_STAGES[stage] ?? stage,
-    count,
-    firstSlug: stem,
-    firstTitle: stem.replace(/^S\d{2}-\d{2}-/, ''),
-  });
-}
+// 笔记章节预览：卡片只展示章节名（不含"·"后的副标题）
+const { stages, all: allNotes } = getAllNotes();
+const totalNotes = allNotes.length;
+const stagePreview = stages.map((s) => ({
+  id: s.id,
+  title: s.title.split(' · ')[0],
+  count: s.notes.length,
+  firstTitle: s.notes[0]?.title ?? '',
+}));
 ---
 
 <BaseLayout>
@@ -97,14 +65,14 @@ for (const f of noteFiles) {
       </p>
       <div class="note-stage-grid">
         {stagePreview.map((stage) => (
-          <a class="note-stage-card" href={`/notes/#${stage.id}`}>
+          <a class="note-stage-card" href={`/notes/${stage.id}/`}>
             <div class="note-stage-card__head">
               <span class="note-stage-card__id">{stage.id}</span>
               <span class="note-stage-card__count">{stage.count} 篇</span>
             </div>
             <h3 class="note-stage-card__title">{stage.title}</h3>
             <p class="note-stage-card__sample">{stage.firstTitle}</p>
-            <span class="note-stage-card__arrow" aria-hidden="true">浏览章节 →</span>
+            <span class="note-stage-card__arrow" aria-hidden="true">只看本章 →</span>
           </a>
         ))}
       </div>
