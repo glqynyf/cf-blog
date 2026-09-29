@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>分红、除权除息与高送转：一份被误读的资本市场账本｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240,136,62,0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); line-height: 1.8;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px;
+    padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent);
+    font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text);
+    display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent);
+    border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface);
+    border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14.5px; }
+  thead th { background: var(--surface-2); color: var(--accent); font-weight: 700;
+    text-align: left; padding: 12px 14px; border-bottom: 2px solid var(--accent); letter-spacing: 0.5px; }
+  tbody td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+  tbody tr:hover { background: var(--surface); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text);
+    font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px;
+    color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255,107,107,0.08), rgba(240,136,62,0.08));
+    border: 1px solid rgba(255,107,107,0.3); border-left: 4px solid var(--red); border-radius: 8px;
+    padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0;
+    text-align: center; font-size: 19px; font-weight: 600; color: var(--accent);
+    line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5;
+    color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .formula-box { background: var(--surface); border: 1px solid var(--accent); border-radius: 8px;
+    padding: 22px 26px; margin: 24px 0; text-align: center; }
+  .formula-box .formula { font-family: 'SF Mono','Monaco','Consolas',monospace; color: var(--accent);
+    font-size: 19px; font-weight: 700; margin-bottom: 12px; }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border);
+    color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } }
+</style>
+</head>
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 11</span>
+  <span class="stage-name">财务报表与公司金融行为</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 12 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 11 · 第 1 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">分红、除权除息与高送转：一份被误读的资本市场账本</h1>
+  <p class="note-subtitle">分红 1000 元到账、股价却被同步扣掉 1000 块——散户以为"左手倒右手"，其实是市值守恒在起作用。本篇把分红的物理机制、四个关键日子、高送转陷阱一次说透。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>分红的本质是<span class="hl">公司把"未分配利润"从企业账户划拨到股东账户</span>，账上的现金减少对应的就是股票市值的等额缩水。除权除息不是交易所对散户的惩罚，而是为了<span class="hl-red">封堵无风险套利</span>的市值守恒机制。<strong>高送转（10 送 10）只是把一张 100 元钞票换成两张 50 元，总价值不变</strong>，却常被包装成"利好"诱惑散户接盘。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-origin">分红的本质：从哪里来，到哪里去</a></li>
+    <li><a href="#sec-dates">四个决定命运的日子</a></li>
+    <li><a href="#sec-math">市值守恒定律：为什么股价必须下跌</a></li>
+    <li><a href="#sec-form">现金分红 vs 送红股 vs 高送转</a></li>
+    <li><a href="#sec-trap">高送转陷阱：10 送 10 真的是好事吗</a></li>
+    <li><a href="#sec-strategy">散户的正确博弈姿势</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-origin">
+  <h2 class="section-title">分红的本质：从哪里来，到哪里去</h2>
+  <p>很多散户听到"每 10 股派 10 元"会立刻脑补：账户里会凭空多出 1000 块现金。错。分红的资金来源，是上市公司资产负债表里的一个核心科目——<span class="hl">未分配利润</span>。</p>
+
+  <blockquote>
+    <strong>未分配利润 = 公司历年赚到的净利润 − 已经分过的红利 − 提取的法定公积金</strong><br>
+    这笔钱从法律上说"属于全体股东"，但平时趴在公司账上，由管理层代为打理。当董事会决定把它以现金或股份的形式"还"给股东时，这就是分红。
+  </blockquote>
+
+  <p>所以分红绝非"凭空变钱"，而是<strong>资产从左口袋转移到右口袋</strong>：</p>
+  <ul>
+    <li>公司账上：<span class="hl-red">现金资产等额减少</span></li>
+    <li>股东账上：<span class="hl-green">现金资产等额增加</span></li>
+    <li>公司整体价值：<strong>没变</strong></li>
+  </ul>
+
+  <h3 class="sub-title">两种分红形式</h3>
+  <ul>
+    <li><span class="hl-blue">现金分红</span>：每 10 股派 10 元——直接把真金白银打到你证券账户</li>
+    <li><span class="hl-blue">送红股</span>：每 10 股送 10 股——把未分配利润转成股本，多送你 10 股股票</li>
+  </ul>
+  <p>两种方式消耗的都是公司账面上的未分配利润，但带来的体验截然不同，<strong>这就是后文所有故事的起点</strong>。</p>
+</section>
+
+<section class="section" id="sec-dates">
+  <h2 class="section-title">四个决定命运的日子</h2>
+  <p>一次完整的分红流程，有四个关键节点。错过任何一个，对你的账户都有完全不同的含义。</p>
+
+  <table>
+    <thead>
+      <tr><th>日期</th><th>含义</th><th>对散户的关键意义</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>预案公告日</td><td>董事会宣布分红方案</td><td>只是提案，还需股东大会通过</td></tr>
+      <tr><td><span class="hl">股权登记日</span></td><td>当天收盘后仍持有即享分红权</td><td>最后买入日；下午 3 点前必须持仓</td></tr>
+      <tr><td><span class="hl-red">除权除息日</span></td><td>股价被强制下调</td><td>此后买入不再享本次分红</td></tr>
+      <tr><td>红利发放日</td><td>现金 / 新股实际到账</td><td>通常与登记日相隔几天</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 散户最容易踩的坑</div>
+    <p>很多人以为"<strong>股权登记日当天买入就不能拿分红了</strong>"，这其实混淆了"证券登记"与"资金交收"。A 股为 T+1 资金交收，但<span class="hl-red">证券在成交当日日终即登记入册</span>——也就是说，<strong>股权登记日当天买入即可享有该次分红</strong>（这就是为什么会出现"抢权资金在登记日尾盘冲进来"的现象）。当天买入的限制是"当日不能卖出"。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-math">
+  <h2 class="section-title">市值守恒定律：为什么股价必须下跌</h2>
+  <p>这是整个分红机制最反直觉的部分。要理解它，请先接受物理学里的<strong>能量守恒定律</strong>，再把它平移到资本市场——它叫做<strong>市值守恒</strong>。</p>
+
+  <div class="formula-box">
+    <div class="formula">公司总市值 = 总股本 × 股价</div>
+    <div class="desc">当公司账上现金流出，对应的市值必须等额从股价里"扣掉"</div>
+  </div>
+
+  <h3 class="sub-title">一个简单的数学题</h3>
+  <p>假设有一家公司：</p>
+  <ul>
+    <li>总股本：<strong>1 亿股</strong></li>
+    <li>当前股价：<strong>10 元</strong></li>
+    <li>总市值：<strong>10 亿元</strong></li>
+  </ul>
+  <p>现在公司决定拿 <strong>1 亿元现金</strong> 分红（每股派 1 元）。分红完成后，这 1 亿元<strong>已经从公司账户划走</strong>，准备发到股东手里。公司实际净资产从 10 亿元变成了 9 亿元，但股本仍然是 1 亿股——</p>
+
+  <blockquote class="purple">
+    <strong>所以除权日的早晨，交易所必须把股价从 10 元强制调整为 9 元。</strong><br>
+    调整后：1 亿股 × 9 元 = 9 亿元，正好等于公司分红后的真实资产。
+  </blockquote>
+
+  <h3 class="sub-title">如果不除权会怎样？</h3>
+  <p>如果不调整股价，<span class="hl-red">金融世界会立刻崩塌</span>：</p>
+  <ul>
+    <li>股权登记日最后两分钟，所有聪明资金会疯狂买入</li>
+    <li>当晚拿到每股 1 元的现金分红</li>
+    <li>第二天开盘以原价格 10 元卖出</li>
+    <li>一夜之间凭空套走 <strong>10% 的无风险收益</strong></li>
+  </ul>
+  <p>这套"无风险印钞机"在有效市场里不可能存在，所以<strong>除权除息是维持公平的唯一选择</strong>。</p>
+
+  <div class="quote-banner">
+    1 张 100 元 = 2 张 50 元 = 4 张 25 元<br>
+    <span class="hl">现金分红 ≠ 财富凭空增长，而是财富形式的转换</span>。
+  </div>
+</section>
+
+<section class="section" id="sec-form">
+  <h2 class="section-title">现金分红 vs 送红股 vs 高送转</h2>
+  <p>理解了市值守恒，再看分红的形式就清晰了：</p>
+
+  <table>
+    <thead>
+      <tr><th>形式</th><th>股东得到什么</th><th>公司发生什么</th><th>对持股价值</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="hl-blue">现金分红</span></td><td>现金到账</td><td>未分配利润 ↓ 现金 ↓</td><td>总价值不变（多现金少股票）</td></tr>
+      <tr><td><span class="hl-blue">送红股</span></td><td>新增股份</td><td>未分配利润 → 股本（总股本变大）</td><td>总价值不变（股数多但单价低）</td></tr>
+      <tr><td><span class="hl-red">高送转</span></td><td>10 送 10 / 10 转 10</td><td>股本大幅扩张（每股净资产被稀释）</td><td>总价值不变，但每股"含金量"暴跌</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-title">送红股的本质</h3>
+  <p>假如一家公司股价 20 元，你持有 1000 股。公司宣布"10 送 10"：</p>
+  <ul>
+    <li>送股前：你持有 1000 股 × 20 元 = 2 万元</li>
+    <li>送股后：你持有 2000 股 × 10 元 = 2 万元</li>
+    <li>体验变化：账户里股数翻倍，单价腰斩，<strong>总市值纹丝不动</strong></li>
+  </ul>
+  <p>唯一对你有利的是：如果未来股价<strong>填权</strong>（涨回 20 元），你就多赚了 1 倍。但这种"上涨"其实是幻觉——因为公司基本面没变。</p>
+</section>
+
+<section class="section" id="sec-trap">
+  <h2 class="section-title">高送转陷阱：10 送 10 真的是好事吗</h2>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 散户最大的错觉</div>
+    <p>看到"10 送 10"就以为公司大方慷慨、股票更"便宜"了。<strong>这恰恰是主力资金想要你产生的错觉</strong>——价格低了才有更多散户敢买入，从而方便他们在高位派发筹码。</p>
+  </div>
+
+  <p>高送转历史上是 A 股经典的派发套路：</p>
+  <ol>
+    <li>主力在低位默默建仓，把股价从 5 元拉到 40 元</li>
+    <li>公司配合发布"10 送 20"高送转方案</li>
+    <li>除权后股价"变成"十几元，散户觉得便宜，纷纷买入</li>
+    <li>主力借着散户的狂热接盘，<strong>把筹码派发干净</strong></li>
+    <li>股价一路阴跌回到几块钱，留下散户站岗</li>
+  </ol>
+
+  <h3 class="sub-title">判断高送转真伪的 3 个信号</h3>
+  <ul>
+    <li><span class="hl-green">真回馈</span>：公司业绩持续增长、现金流充沛、首次高送转后股价能"填权"</li>
+    <li><span class="hl-red">假利好</span>：业绩平平却突击高送转、控股股东刚解禁要减持、董事会成员陆续减持</li>
+    <li><span class="hl-red">危险信号</span>：刚发布高送转预案，紧接着大股东披露减持计划 —— 这是教科书级的派发组合拳</li>
+  </ul>
+</section>
+
+<section class="section" id="sec-strategy">
+  <h2 class="section-title">散户的正确博弈姿势</h2>
+
+  <h3 class="sub-title">如果你想拿现金分红</h3>
+  <ul>
+    <li>重点关注<span class="hl">常年稳定派息、股息率超过 4%</span>的成熟公司（如银行、煤炭、公用事业）</li>
+    <li>股权登记日当天买入即可享分红（但当日不能卖出），红利发放日后择机卖出</li>
+    <li>避开短线炒作、刚解禁、业绩忽上忽下的"高送转"票</li>
+  </ul>
+
+  <h3 class="sub-title">分红前后的实际收益测算</h3>
+  <table>
+    <thead>
+      <tr><th>情形</th><th>登记日买入 1000 股 × 10 元</th><th>持有 30 天后卖出</th></th></tr>
+    </thead>
+    <tbody>
+      <tr><td>除权后股价</td><td>9 元</td><td>9.2 元</td></tr>
+      <tr><td>获得现金分红</td><td>1000 元</td><td>—</td></tr>
+      <tr><td>股票市值</td><td>9000 元</td><td>9200 元</td></tr>
+      <tr><td>卖出股票所得</td><td>—</td><td>9200 元</td></tr>
+      <tr><td><span class="hl-red">红利税（持有 ≤ 1 月，税率 20%）</span></td><td>—</td><td>−200 元</td></tr>
+      <tr><td><strong>实际总收益</strong></td><td>—</td><td><span class="hl-red">−200 元（倒贴）</span></td></tr>
+    </tbody>
+  </table>
+  <p>这就是为什么"<span class="hl">持有不到 1 个月就卖出 = 高分红陷阱</span>"。正确做法：</p>
+  <ul>
+    <li><span class="hl-green">持有 ≥ 1 年卖出</span>：免征红利税，分红才是真金白银的回报</li>
+    <li><span class="hl">持有 1 个月 ~ 1 年</span>：税率 10%，可接受</li>
+    <li><span class="hl-red">持有 < 1 个月卖出</span>：税率 20%，本金倒贴</li>
+  </ul>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>分红的资金来源是<span class="hl">未分配利润</span>，不是凭空印钞</li>
+      <li>四个关键日子：<strong>预案公告日 → 股权登记日 → 除权除息日 → 红利发放日</strong></li>
+      <li><strong>除权除息</strong>是市值守恒的强制调整，目的是封堵无风险套利</li>
+      <li>送红股是"<strong>1 张换 2 张</strong>"，总价值不变；高送转本质是<span class="hl-red">股本膨胀陷阱</span></li>
+      <li>红利税按<span class="hl">持仓时间差异化</span>：< 1 月 = 20%、1 月 ~ 1 年 = 10%、> 1 年 = 0%</li>
+      <li>想真正靠分红赚钱，要么<span class="hl-green">拿稳定派息的长牛股并长期持有</span>，要么避开短线高送转炒作</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 11 · 财务报表与公司金融行为</p>
+</footer>
+
+</body>
+</html>
