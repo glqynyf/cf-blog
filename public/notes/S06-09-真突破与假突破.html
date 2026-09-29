@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>真突破与假突破：K 线走势中常见的多空陷阱｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14.5px; }
+  th { background: var(--surface); color: var(--accent); text-align: left; padding: 12px 14px; border-bottom: 2px solid var(--accent); font-weight: 700; }
+  td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+  tr:hover td { background: var(--surface); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .misuse-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin: 24px 0; display: grid; grid-template-columns: 1fr auto 1fr; gap: 18px; align-items: stretch; }
+  .misuse-card .col { padding: 18px 20px; border-radius: 8px; }
+  .misuse-card .wrong { background: rgba(255, 107, 107, 0.08); border: 1px solid rgba(255, 107, 107, 0.3); }
+  .misuse-card .wrong h4 { color: var(--red); }
+  .misuse-card .right { background: rgba(86, 211, 100, 0.08); border: 1px solid rgba(86, 211, 100, 0.3); }
+  .misuse-card .right h4 { color: var(--green); }
+  .misuse-card .vs { align-self: center; font-size: 24px; font-weight: 800; color: var(--text-mute); }
+  .misuse-card h4 { font-size: 15px; margin-bottom: 10px; }
+  .misuse-card ul { margin: 0; padding-left: 18px; }
+  .misuse-card ul li { font-size: 14px; color: var(--text-dim); }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+    .misuse-card { grid-template-columns: 1fr; }
+    .misuse-card .vs { text-align: center; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 6</span>
+  <span class="stage-name">形态学与缺口理论</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 14 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 6 · 第 9 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">真突破与假突破：K 线走势中常见的多空陷阱</h1>
+  <p class="note-subtitle">为什么教科书上推崇的完美突破，反而常常是投资者最容易踩中的大陷阱？本期把订单流、威科夫四阶段、识别四招、失效五种情况一次性讲透。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>价格波动的本质是<span class="hl">订单流的撮合和流动性的争夺</span>。教科书教你阻力位放量突破就追多，但大资金眼里的阻力位恰恰是<span class="hl-red">流动性最肥的一块肉</span>——散户排队的突破买单 + 空头的高位止损单共同形成了接盘池。<strong>真正的突破陷阱识别需要四招过滤，而任何方法都会失效</strong>。<span class="hl">不去猜，而是等市场先给你答案</span>，才是最高级的交易思维。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-orderflow">价格的本质：订单流的撮合与流动性争夺</a></li>
+    <li><a href="#sec-wyckoff">威科夫四阶段：主力做局的剧本</a></li>
+    <li><a href="#sec-four-tricks">识别真假突破的 4 招</a></li>
+    <li><a href="#sec-five-fail">任何方法都会失效的 5 种情况</a></li>
+    <li><a href="#sec-think">思考框架：旁观者而非炮灰</a></li>
+    <li><a href="#sec-checklist">看不懂就不做的 5 条清清单</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-orderflow">
+  <h2 class="section-title">价格的本质：订单流的撮合与流动性争夺</h2>
+  <p>在普通人的眼里，价格就是买卖的简单结果——买的人多就涨，卖的人多就跌。这话听着没错，但它其实只是个表象。在机构和量化交易眼里，<span class="hl">价格波动的本质是订单流的撮合和流动性的争夺</span>。</p>
+
+  <h3 class="sub-title">流动性的本质</h3>
+  <p>你下单买入的时候，你的单子是凭空就成交的吗？当然不是。你要买一百手，那市场上就必须得有个人愿意在同一个价格卖给你一百手。要是没人卖，你的单子就只能挂在那儿排队——<span class="hl">而这个有没有对手盘来接你的单就叫做流动性</span>。</p>
+
+  <blockquote class="purple">
+    <strong>打个比方</strong>：你去菜市场买两颗白菜，那你随时都能买到。可如果你是个大超市的采购商，今天必须吃下一万吨白菜，那你就会发现你根本没法按市场价一口气买光——你一动手抢购，价格立马就被你自己给顶到天上去了。<span class="hl-red">在这场博弈里，你就是那个手握几百亿资金、永远找不到足够对手盘的主力</span>。
+  </blockquote>
+
+  <p>所以大资金最痛苦的地方从来都不是看不准方向，而是他盘子太大了，<span class="hl">找不到足够的对手盘</span>：</p>
+  <ul>
+    <li>他想买就得有海量的卖单接着</li>
+    <li>他想卖又得有排山倒海的买单托着</li>
+    <li>这么庞大的对手盘，他上哪去找呢？</li>
+  </ul>
+
+  <h3 class="sub-title">教科书教你的陷阱</h3>
+  <p>教科书是这么教你的：价格在压力位盘整，一旦放量突破了就代表上方的套牢盘被扫清了，这时候你应该顺势追多。这逻辑听着挺完美。但你换个角度想想看：</p>
+  <ul>
+    <li>如果全天下的散户都在这个压力位埋伏着，都准备着一突破就往里冲</li>
+    <li>那在大资金眼里这个位置意味着什么？意味着<span class="hl">这里是流动性最肥的一块肉啊</span></li>
+    <li>因为这里挤满了两种单子：散户排队的突破买单 + 空头挂在上方的止损单</li>
+    <li>空头止损的本质是被动的高位埋单，所以压力位的上方是不是密密麻麻堆了一大片买单？</li>
+  </ul>
+
+  <p>如果你就是那个手里攥着一大堆筹码、急着在高位套现的大资金，面对这么一个现成的买单池，你会怎么办？其实很简单：你只需要用一小笔钱，把价格往上轻轻一顶，<span class="hl-red">捅破那个人人都盯著的阻力位就行了</span>。</p>
+</section>
+
+<section class="section" id="sec-wyckoff">
+  <h2 class="section-title">威科夫四阶段：主力做局的剧本</h2>
+  <p>威科夫理论把做局的过程拆成了清清楚楚的四部。这个剧本理解清楚后，你就能识别绝大多数诱多陷阱。</p>
+
+  <h3 class="sub-title">第一步：吸筹与压制</h3>
+  <p>大资金会把价格死死锁在一个窄窄的箱体里来回震荡，碰到上轨就打下去，跌到下轨又给你拖起来。这么折腾的目的只有一个：<span class="hl">磨掉你的耐心</span>。镇着镇着很多人就受不了了，觉得这票没戏了，割肉走人。而大资金就在这个过程里悄悄地把便宜筹码给捡走了。</p>
+
+  <h3 class="sub-title">第二步：试探性突破</h3>
+  <p>等筹码收得差不多了，正式发动行情之前它得先探个路。于是一根大阳线拔地而起，一下子刺破上轨。这一下其实是<span class="hl">投石问路</span>：它要看看到底有多少人会追多，又有多少空头会被迫止损。</p>
+
+  <h3 class="sub-title">第三步：突破后的筹码高位派发</h3>
+  <p>散户一看：这根大阳线，趋势来了，疯狂接盘！空头的止损单也不断变成买单涌进来。就在这个买单密度冲到顶峰的时候，大资金就在这个高位开始把筹码一股脑派给所有人。</p>
+
+  <blockquote>
+    <strong>这里有个特别容易搞混的点</strong>：大资金在高位到底是在出货跑路呢，还是反手做空？这得分两种情况看：<br>
+    • <span class="hl">只能做多的市场</span>（如很多股票）：纯出货，把底部低价的筹码高价卖给你，落袋为安<br>
+    • <span class="hl">双向交易市场</span>（如期货、外汇）：不光是卖光多单，还会趁着这波旺盛的买盘顺手建立一批空头仓位<br>
+    <span class="hl-red">派发筹码和反手做空不矛盾，是同一动作在不同市场里的两张脸</span>。
+  </blockquote>
+
+  <h3 class="sub-title">第四步：弹簧效应（回落砸盘）</h3>
+  <p>等筹码派完了，买力也耗尽了，支撑这么一撤，追高的人开始恐慌抛售，踩踏就发生了。一根大阴线一口就把之前那根突破阳线吞掉，价格快速跌回箱体内部，甚至一路击穿下轨。这种上轨的假突破，威科夫管它叫<span class="hl">上冲</span>，而在现代最火的 SMC 理论里，它还有个更时髦的名字叫<span class="hl">流动性扫荡</span>。</p>
+
+  <blockquote class="purple">
+    <strong>弹簧效应</strong>：想象成一根被拉满的弹簧——拉得越狠，回弹砸下来的力道就越猛。听起来是不是有点后背发凉？<span class="hl">人人都看得到的信号，怎么反倒成了埋伏？</span>
+  </blockquote>
+</section>
+
+<section class="section" id="sec-four-tricks">
+  <h2 class="section-title">识别真假突破的 4 招</h2>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 招数不是让你 100% 看准的</div>
+    <p>以下 4 招是帮你提高概率的，不是让你百分之百看准的。真实的突破背后有真有假，但更重要的是<span class="hl">方法背后的概率思维</span>，而不是具体的招式。</p>
+  </div>
+
+  <h3 class="sub-title">招一：看量价配不配（努力与结果法则）</h3>
+  <p>在威科夫里这叫努力与结果法则——真突破应该是付出多大努力就得有多大结果。你放出了大成交量（努力），那就应该换来价格稳稳站上阻力位（结果）。可如果你看到量放了一大堆，价格却只往上挪了一点点，还拖着一条长长的上影线，那这就叫努力和结果不匹配了——<span class="hl-red">说明上方有更凶的隐藏卖压把你的买单全给吃掉了</span>。</p>
+  <blockquote>
+    <strong>口诀</strong>：量大而价格只涨 / 突破时上影线特别长 = 多留个心眼
+  </blockquote>
+
+  <h3 class="sub-title">招二：等收盘 + 等回踩</h3>
+  <p>散户最要命的一个毛病就是<span class="hl-red">手痒</span>——大阳线还没收盘呢就急吼吼地追进去了。我跟你讲，这就等于拿你的钱去替别人测试市场。</p>
+  <ul>
+    <li>K 线没收盘之前千万别咬定它就是真突破</li>
+    <li>它盘中冲得再高，只要收盘被砸回阻力位下方，在这个周期里它就是个假突破</li>
+    <li>更稳的做法：等回踩——价格真突破后通常不会一飞冲天，而是会回过头来测试一下，看看原来那个压力位现在到底变成支撑了没有</li>
+  </ul>
+  <p>回踩时盯住两点：</p>
+  <ol>
+    <li>成交量得明显萎缩（说明抛压枯竭）</li>
+    <li>别在阻力位上方收根大阴线，最好是收个带下影线的小阳线或十字星（说明底下有新的买盘在托着）</li>
+  </ol>
+
+  <h3 class="sub-title">招三：盯影线（狐狸尾巴）</h3>
+  <p>影线代表什么？代表<span class="hl">价格去过那个位置但是被拒绝了</span>。</p>
+  <ul>
+    <li>价格刺破了压力位却留下一根长长的上影线：这影线越长就说明上方拒绝得越狠</li>
+    <li>这种 K 线有个名字叫<span class="hl">射击之星</span>，很可能就是大资金出货时留下的那条尾巴</li>
+    <li>反过来也一样：价格击穿了支撑却收出一根长长的下影线，那这就可能是诱空陷阱</li>
+  </ul>
+
+  <h3 class="sub-title">招四：先看大趋势，再看突破</h3>
+  <p>这里有个基本规律：<span class="hl">顺势突破成功率就高，逆势突破陷阱就特别多</span>。</p>
+  <ul>
+    <li>大趋势本来就往上走，箱体震荡完了往上突破，那真突破的概率自然就高，因为有大趋势的惯性在后面推着</li>
+    <li>大趋势明明是往下的，只不过反弹了一下却突然拉根阳线破了个局部的小阻力位——<span class="hl-red">这种很大一部分都是假突破</span></li>
+  </ul>
+
+  <div class="quote-banner">
+    4 招背后的统一原则：<br>
+    <span class="hl">努力必须匹配结果 + 等市场自己证明 + 不要孤注一掷</span><br>
+    但请记住——<span class="hl-red">任何招数都可能失效</span>。
+  </div>
+</section>
+
+<section class="section" id="sec-five-fail">
+  <h2 class="section-title">任何方法都会失效的 5 种情况</h2>
+
+  <p>前面讲的是怎么用，但我要是只讲这些就是不负责任了——这套方法什么时候会失效？</p>
+
+  <h3 class="sub-title">失效一：不是每次都有人做局</h3>
+  <p>很多突破就是真实的资金流入，背后压根没什么陷阱。你要是老抱着"这一定是假突破"的想法去做反向，那你就会一次又一次地去做空一个真正的上涨趋势，被反复打脸。<span class="hl-red">方法本身没错，错就错在你把可能当成了必然</span>。</p>
+
+  <h3 class="sub-title">失效二：确认信号自己也会骗人</h3>
+  <p>前面讲的回踩、缩量、下影线、托底这些信号，通通都会失败。最常见的剧情就是：你识别出个假突破，以为它要跌了，结果人家只是洗了个盘，回踩完了继续创新高。<span class="hl-red">假突破的"假突破"也是真实存在的，没有任何信号是绝对的保险箱</span>。</p>
+
+  <h3 class="sub-title">失效三：震荡市里两边的止损都会被扫</h3>
+  <p>在没有明确方向的箱体里，价格上破一次扫掉一批多头止损，下破一次再扫掉一批空头止损，来来回回地抽你耳光。在这种行情里，你追突破也好、做反向也好，<span class="hl-red">都容易两头挨打</span>。这也是为什么看不懂就不做，永远是个正确的选项。</p>
+
+  <h3 class="sub-title">失效四：级别之间会打架</h3>
+  <p>你在 5 分钟图上看到的那个完美真突破，一放到日线上可能就是一根根本不起眼的小上影线。<span class="hl-red">小级别的信号很容易被大级别给否定掉</span>，所以你孤立地去看一根 K 线特别容易误判。</p>
+
+  <h3 class="sub-title">失效五：你现在看到的图是已经走完了的图</h3>
+  <p>这是所有教学案例里最大的一个坑——叫<span class="hl">幸存者偏差</span>。老师拿出来讲的永远是那些事后的、被验证成功的、教科书一样标准的形态；而那些长得一模一样、最后却走成了反方向的案例，几乎没人拿出来说。<span class="hl-red">图上看著一目了然，盘中坐起来步步惊心</span>，这完全是两码事。</p>
+</section>
+
+<section class="section" id="sec-think">
+  <h2 class="section-title">思考框架：旁观者而非炮灰</h2>
+
+  <h3 class="sub-title">核心原则：不去猜，而是等</h3>
+  <p>别再去当那个第一个冲进去堵突破的炮灰了。你试着去做一个<span class="hl">等结构走完了再判断的旁观者</span>——核心就一句话：<span class="hl-green">不去猜，而是等市场先给你答案</span>。</p>
+
+  <ol>
+    <li><strong>锁定区间</strong>：找那种被反复测试过的、时间跨度很长的、明显的阻力位，越多人盯着这里流动性就越集中</li>
+    <li><strong>观察突破</strong>：价格放量突破的时候你别跟着人群一块嗨，先按住手等 K 线收盘</li>
+    <li><strong>确认陷阱</strong>：如果突破阳线收盘被拉回了阻力位下方，或者紧跟着一根大阴线把它吞掉了，那假突破成立的概率就上升了</li>
+    <li><strong>顺势而行</strong>：顺着这个已经被确认的方向去想——如果是真突破就顺势进场；如果是假突破就反向操作。关键是不管哪个方向，<span class="hl">你都必须提前想好"如果错了怎么办"</span></li>
+  </ol>
+
+  <blockquote>
+    <strong>风险控制：比任何指标都重要的东西</strong>。不管你多看好一笔交易，成熟的做法都是你单笔愿意承受的亏损只占你账户总资金很小的一个比例（很多专业书籍会提到 1%–2%，仅供你参考）。<span class="hl">因为我们一定看错，而且会经常看错</span>。只有把每一次看错的代价都压得足够小，你才能在市场上活得足够久。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-checklist">
+  <h2 class="section-title">看不懂就不做的 5 条清清单</h2>
+  <p>很多人嘴上说着"看不懂不做"，可他根本不知道到底什么才算看不懂。这里给你 5 条能直接对照的清单，你只要中了其中一条，就值得把手拿开：</p>
+
+  <ol>
+    <li><strong>大小级别方向打架</strong>：比如日线级别明明往下，5 分钟图却在网上，你却想做多</li>
+    <li><strong>突破的那根 K 线还没收盘</strong>，结局都没定</li>
+    <li><strong>量价明显矛盾</strong>：放了巨量却收了根长长的上影线</li>
+    <li><strong>你压根找不到一个清晰的认错点</strong>：你说不清楚到底跌破哪或者涨过哪你就错了</li>
+    <li><strong>你参与的唯一理由就是怕错过</strong>：你记住，<span class="hl-red">害怕错过从来都不是一个交易的理由</span></li>
+  </ol>
+
+  <div class="quote-banner">
+    在交易里<span class="hl">不做本身就是一种操作</span>，<br>
+    而且它常常是<span class="hl-green">胜率最高的那一种</span>。<br>
+    当下一次价格来到关键十字路口的时候，<br>
+    你不妨问自己一句：<br>
+    <span class="hl">"如果我在这儿做多，万一它是假突破，我错了会怎么样？我扛得住吗？"</span>
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>价格波动的本质是<span class="hl">订单流的撮合和流动性的争夺</span></li>
+      <li>大资金眼里阻力位是<span class="hl-red">流动性最肥的一块肉</span>，散户追突破 = 给主力送接盘池</li>
+      <li>威科夫四阶段剧本：<span class="hl">吸筹 → 试探 → 派发 → 砸盘</span></li>
+      <li>识别 4 招：<strong>努力匹配结果、收盘确认 + 回踩、盯影线、顺势而为</strong></li>
+      <li>任何方法都会失效的 5 种情况，<span class="hl">包括幸存者偏差陷阱</span></li>
+      <li>核心思维：<span class="hl">不去猜，而是等市场先给你答案</span></li>
+      <li>风险控制永远是第一位：<span class="hl">单笔亏损只占账户 1%–2%</span></li>
+      <li><span class="hl-red">"看不懂不做"是胜率最高的操作</span></li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 6 · 形态学与缺口理论</p>
+</footer>
+
+</body>
