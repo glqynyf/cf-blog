@@ -5,7 +5,7 @@
 export const SITE = {
   title: '盘面札记',
   titleEn: 'Trading Notes',
-  description: '一个散户的炒股心得与常用技术指标实战记录——K 线、均线、MACD、KDJ 等指标的系统性整理，以及复盘中的反思。',
+  description: '一个散户写给自己的投资笔记——认知重塑、技术分析、仓位管理、基本面选股与市场周期，共 14 章 115 篇复盘记录，不构成任何投资建议。',
   author: '盘面札记',
   authorEmail: 'service@duckuno.com',
   /** 默认 OG 图片（首页 / 笔记目录等无专属图时使用）。放在 public/ 下。 */
