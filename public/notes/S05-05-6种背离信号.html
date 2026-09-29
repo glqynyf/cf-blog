@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>讲透 6 种背离信号：分清常规与隐藏背离，从形态识别到假背离破解｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px;
+    padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px;
+    display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero);
+    color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--accent);
+    display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px;
+    color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue);
+    border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .key-points { background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative;
+    color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px;
+    color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08));
+    border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red);
+    border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0;
+    text-align: center; font-size: 19px; font-weight: 600; color: var(--accent);
+    line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px;
+    line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  table.signal-table { width: 100%; border-collapse: collapse; margin: 20px 0;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  table.signal-table th { background: var(--surface-2); color: var(--accent);
+    padding: 12px 14px; text-align: left; font-size: 13px; letter-spacing: 1px;
+    text-transform: uppercase; border-bottom: 1px solid var(--border); }
+  table.signal-table td { padding: 12px 14px; color: var(--text); font-size: 14.5px;
+    border-bottom: 1px solid var(--border); }
+  table.signal-table tr:last-child td { border-bottom: none; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border);
+    color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } }
+</style>
+</head>
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 5</span>
+  <span class="stage-name">常用技术指标精讲</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 13 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 5 · 第 5 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">讲透 6 种背离信号：分清常规与隐藏背离，从形态识别到假背离破解</h1>
+  <p class="note-subtitle">为什么你用 MACD 背离总亏钱？看到顶背离就逃顶，结果行情继续大涨；见到底背离就抄底，反而被套半山腰？这一篇从物理常识出发讲透 6 种背离的本质。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>背离的本质是<span class="hl">加速度的衰竭</span>——你看到了"有人踩刹车"，但<span class="hl">"踩刹车 ≠ 倒车"</span>。常规背离是<span class="hl-red">逆势反转信号</span>（胜率偏低），隐藏背离才是<span class="hl-green">顺势入场信号</span>（识别大行情启动点）。背离的真正价值是<span class="hl">"动能预警"</span>而非"买卖信号"，必须等<span class="hl">右侧确认</span>才动手。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-physics">背离的物理本质：踩刹车不等于倒车</a></li>
+    <li><a href="#sec-iron">画线防错铁律</a></li>
+    <li><a href="#sec-regular">常规背离：顶背离 + 底背离</a></li>
+    <li><a href="#sec-hidden">隐藏背离：被教科书忽略的金矿</a></li>
+    <li><a href="#sec-exaggerate">夸大背离：震荡市的相对可靠信号</a></li>
+    <li><a href="#sec-fake">假背离的破解与右侧确认</a></li>
+    <li><a href="#sec-all-six">六大形态对照表</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-physics">
+  <h2 class="section-title">背离的物理本质：踩刹车不等于倒车</h2>
+
+  <p>很多人以为出现背离就意味着行情要反转了。<span class="hl-red">这是交易认知里最大的陷阱。</span></p>
+
+  <blockquote class="purple">
+    <strong>背离从来不代表行情的方向会立刻掉头。</strong>背离在数学和物理层面上衡量的仅仅是<span class="hl">加速度的衰竭</span>。
+  </blockquote>
+
+  <p>想象你开着一辆两吨重的越野车在高速公路上狂奔。当前方出现弯道的时候，你把油门松开了，甚至把刹车踩了下去。</p>
+
+  <ul>
+    <li>在踩下刹车的那一瞬间，汽车是不是立刻就停下了？或者立刻倒退了？</li>
+    <li><strong>根本不会</strong>。由于巨大的惯性，这辆车依然会呼啸着往前冲出好几百米。</li>
+    <li>汽车向前冲的距离依然在增加，但是它向前冲的<span class="hl">加速度和速度已经开始断崖式下跌</span></li>
+  </ul>
+
+  <p>对应到 K 线图上：</p>
+
+  <blockquote>
+    <strong>价格创新高</strong>就好比汽车还在往前滑行；<br>
+    <strong>MACD 或 RSI 指标没有创新高</strong>就好比车速表上的指针已经开始往下掉了。<br>
+    <span class="hl">指标测量的是价格运动背后的推力，K 线展现的只是惯性冲刺的结果。</span>
+  </blockquote>
+
+  <p>如果你在汽车刚松油门的一刹那就认为它马上会倒车，甚至直接站到车头前面去挡车——<span class="hl-red">那你被撞飞就是必然的结果</span>。</p>
+</section>
+
+<section class="section" id="sec-iron">
+  <h2 class="section-title">画线防错铁律</h2>
+  <p>在逐一拆解 6 种形态之前，先送一个<span class="hl">极其关键的画线防错铁律</span>：</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 背离画线铁律</div>
+    <p>凡是看<span class="hl-red">顶背离</span>（不管是常规顶还是隐藏顶），<span class="hl">你的眼睛永远盯住 K 线和指标上方凸起的高点</span>（波峰），<span class="hl-red">绝对不要去看低点</span>。<br><br>
+    凡是看<span class="hl-red">底背离</span>（不管是常规底还是隐藏底），<span class="hl">你的眼睛永远盯住 K 线和指标下方凹陷的低点</span>（波谷），<span class="hl-red">绝对不要去看高点</span>。</p>
+  </div>
+
+  <p>记住了这个基本原则，你在实战画线时大脑就绝对不会出现混乱。</p>
+</section>
+
+<section class="section" id="sec-regular">
+  <h2 class="section-title">常规背离：顶背离 + 底背离</h2>
+
+  <h3 class="sub-title">形态一 · 常规顶背离</h3>
+  <p><strong>价格特征</strong>：价格的高点一个比一个高，走出清晰的"更高的高点"。<br>
+  <strong>指标特征</strong>：对应的动能指标（MACD 或 RSI）高点却一个比一个低，走出"更低的高点"。</p>
+
+  <blockquote>
+    <strong>微观交易心理</strong>：多头资金虽然还在把价格推向新高度，试图诱导场外的追高盘进场，但是<span class="hl-red">实际注入的真实净买入量已经开始大幅萎缩</span>。这就像一个长跑运动员虽然还在拼命往前跑，但是心率已经达到极限、肌肉严重缺氧。<br>
+    <strong>信号含义</strong>：<span class="hl-red">多头动能枯竭的强烈警报</span>，必须开始收紧止盈。
+  </blockquote>
+
+  <h3 class="sub-title">形态二 · 常规底背离</h3>
+  <p><strong>价格特征</strong>：价格的低点一个比一个低，创出"更低的低点"。<br>
+  <strong>指标特征</strong>：动能指标低点却在逐步抬高，走出"更高的低点"。</p>
+
+  <blockquote>
+    <strong>微观交易心理</strong>：盘面往往伴随着漫天飞舞的利空消息和恐慌性抛盘。散户看着跌破前低的 K 线感到绝望，<span class="hl-red">纷纷割肉离场</span>。然而在指标层面，指标探底的深度却一次比一次浅——说明空头砸价格所消耗的筹码越来越大，<span class="hl-green">但能砸出来的下跌空间却越来越小</span>，下方的买盘承接已经开始悄悄进场。<br>
+    <strong>信号含义</strong>：往往是<span class="hl-green">一波恐慌行情的尾声</span>，是潜在反转或级别修正的早期先兆。
+  </blockquote>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 常规背离的致命局限</div>
+    <p>常规背离属于<span class="hl-red">逆势反转信号</strong>。在大级别趋势面前，逆势去接飞刀本身就是概率偏低的动作。<strong>这也是为什么很多人用背离总亏钱——逆势操作本身就违背了高胜率原则</strong>。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-hidden">
+  <h2 class="section-title">隐藏背离：被教科书忽略的金矿</h2>
+  <p>市面上绝大多数教科书对隐藏背离都语焉不详，甚至很多交易了几年的老手都从没听说过。<span class="hl">但如果你去翻看那些单边大行情的启动点，你会震惊地发现——隐藏背离才是真正识别顺势入场时机的关键参考</span>。</p>
+
+  <h3 class="sub-title">形态三 · 隐藏底背离（也叫"隐性牛市背离"）</h3>
+  <p><strong>价格特征</strong>：K 线并没有跌破前一个低点，而是走出了"更高的低点"。<br>
+  <strong>指标特征</strong>：动能指标反而走出"更低的低点"。</p>
+
+  <blockquote class="purple">
+    <strong>这是顺势做多的入场信号。</strong>趋势依然是上升趋势（低点抬高），但指标出现了一次"假摔"（指标走低），这恰恰是主力洗盘结束、新一轮上涨即将启动的最佳入场点。<br>
+    <strong>应用场景</strong>：上升趋势中的回踩买点。
+  </blockquote>
+
+  <h3 class="sub-title">形态四 · 隐藏顶背离（也叫"隐性熊市背离"）</h3>
+  <p><strong>价格特征</strong>：K 线并没有突破前一个高点，而是走出了"更低的高点"。<br>
+  <strong>指标特征</strong>：动能指标反而走出"<span class="hl">更高的高点</span>"<span class="hl-red">（原笔记写"更高的低点"是笔误——与"隐藏底背离＝指标更低的低点"自相矛盾）</span>。</p>
+
+  <blockquote class="purple">
+    <strong>这是顺势做空的入场信号。</strong>趋势依然是下降趋势（高点降低），但指标出现了一次"假反弹"（指标走高），这是反弹结束、继续下跌的入场点。<br>
+    <strong>应用场景</strong>：下降趋势中的反弹做空点。
+  </blockquote>
+
+  <p>四大常规背离和隐藏背离的根本区别可以用一张表概括：</p>
+
+  <table class="signal-table">
+    <thead>
+      <tr><th>类型</th><th>价格走势</th><th>指标走势</th><th>信号性质</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>常规顶背离</td>
+        <td>更高的高点</td><td>更低的高点</td>
+        <td><span class="hl-red">逆势反转预警</span></td>
+      </tr>
+      <tr>
+        <td>常规底背离</td>
+        <td>更低的低点</td><td>更高的低点</td>
+        <td><span class="hl-red">逆势反转预警</span></td>
+      </tr>
+      <tr>
+        <td>隐藏底背离</td>
+        <td>更高的低点</td><td>更低的低点</td>
+        <td><span class="hl-green">顺势做多信号</span></td>
+      </tr>
+      <tr>
+        <td>隐藏顶背离</td>
+        <td>更低的高点</td><td>更高的高点</td>
+        <td><span class="hl-green">顺势做空信号</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="section" id="sec-exaggerate">
+  <h2 class="section-title">夸大背离：震荡市的相对可靠信号</h2>
+  <p>在区间震荡行情里，前面的四种背离都容易反复失真。但还有第五种、第六种——<span class="hl">夸大背离</span>。</p>
+
+  <h3 class="sub-title">形态五 · 夸大顶背离</h3>
+  <p>价格在区间内反复触碰<span class="hl">同一阻力位</span>，但每次触碰时指标高点却一次比一次低——说明每一次冲高的动能都在衰减，<span class="hl">阻力位的有效性极强</span>，<strong>接近阻力位是做空的相对可靠参考</strong>。</p>
+
+  <h3 class="sub-title">形态六 · 夸大底背离</h3>
+  <p>价格在区间内反复触碰<span class="hl">同一支撑位</span>，但每次触碰时指标低点却一次比一次高——说明每一次砸盘的动能在衰减，<span class="hl">支撑位的有效性极强</span>，<strong>接近支撑位是做多的相对可靠参考</strong>。</p>
+
+  <blockquote>
+    <strong>夸大背离的核心用途：</strong>不是预测突破或反转，而是在震荡区间内提供<span class="hl">相对可靠的边界防守参考</span>。在区间高点附近做空、边界低点附近做多，胜率会显著高于随机操作。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-fake">
+  <h2 class="section-title">假背离的破解与右侧确认</h2>
+  <p>背离最大的陷阱是<span class="hl-red">"假背离"</span>——背离出现后指标继续钝化、价格继续同向运行。破解假背离的关键是<span class="hl">"右侧确认"</span>：</p>
+
+  <h3 class="sub-title">破解一 · 趋势线分离</h3>
+  <p>连接价格的两个高点（看顶背离时）或两个低点（看底背离时），如果趋势线被<span class="hl">有效突破</span>，背离信号成立；如果趋势线<span class="hl-red">未突破就回到原趋势</span>，则是假背离。</p>
+
+  <h3 class="sub-title">破解二 · 隔山回轴</h3>
+  <p>MACD 在零轴上方的顶背离才算数（说明原本多头主导）；MACD 在零轴下方的底背离才算数（说明原本空头主导）。如果背离与零轴位置矛盾——<span class="hl-red">很可能是假背离</span>。</p>
+
+  <h3 class="sub-title">破解三 · 右侧信号确认</h3>
+  <p>背离出现<span class="hl">不要立刻动手</span>，必须等右侧信号：</p>
+  <ul>
+    <li>顶背离后，价格跌破某根均线或形态颈线 → 做空确认</li>
+    <li>底背离后，价格放量突破某根均线或形态颈线 → 做多确认</li>
+    <li><span class="hl-red">没有右侧确认的背离，宁可错过也不做错</span></li>
+  </ul>
+</section>
+
+<section class="section" id="sec-all-six">
+  <h2 class="section-title">六大形态对照表</h2>
+  <table class="signal-table">
+    <thead>
+      <tr><th>序号</th><th>形态</th><th>价格</th><th>指标</th><th>信号性质</th><th>适用场景</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>①</td><td>常规顶背离</td>
+        <td>更高的高点</td><td>更低的高点</td>
+        <td><span class="hl-red">逆势反转预警</span></td>
+        <td>上升趋势末端预警</td>
+      </tr>
+      <tr>
+        <td>②</td><td>常规底背离</td>
+        <td>更低的低点</td><td>更高的低点</td>
+        <td><span class="hl-red">逆势反转预警</span></td>
+        <td>下跌趋势末端预警</td>
+      </tr>
+      <tr>
+        <td>③</td><td>隐藏底背离</td>
+        <td>更高的低点</td><td>更低的低点</td>
+        <td><span class="hl-green">顺势做多信号</span></td>
+        <td>上升趋势回踩入场</td>
+      </tr>
+      <tr>
+        <td>④</td><td>隐藏顶背离</td>
+        <td>更低的高点</td><td>更高的高点</td>
+        <td><span class="hl-green">顺势做空信号</span></td>
+        <td>下降趋势反弹做空</td>
+      </tr>
+      <tr>
+        <td>⑤</td><td>夸大顶背离</td>
+        <td>同一阻力位</td><td>更低的高点</td>
+        <td><span class="hl">震荡边界做空参考</span></td>
+        <td>区间高点附近做空</td>
+      </tr>
+      <tr>
+        <td>⑥</td><td>夸大底背离</td>
+        <td>同一支撑位</td><td>更高的低点</td>
+        <td><span class="hl">震荡边界做多参考</span></td>
+        <td>区间低点附近做多</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="quote-banner">
+    <span class="hl">背离 = 踩刹车，不等于倒车。</span><br>
+    <span class="hl-red">常规背离</span>是逆势预警，胜率偏低；<br>
+    <span class="hl-green">隐藏背离</span>才是顺势入场点；<br>
+    <span class="hl">右侧确认</span>是真假背离的最终裁判。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>背离本质：<span class="hl">加速度的衰竭</span>，"踩刹车 ≠ 倒车"</li>
+      <li>画线铁律：看顶背离盯高点、看底背离盯低点，<span class="hl">永远不要混</span></li>
+      <li>常规背离是<span class="hl-red">逆势预警</span>，胜率偏低</li>
+      <li>隐藏背离是<span class="hl-green">顺势入场信号</span>，识别大行情启动点</li>
+      <li>夸大背离：<span class="hl">震荡市的边界防守参考</span></li>
+      <li>假背离破解：趋势线分离 + 隔山回轴 + 右侧确认</li>
+      <li>核心心法：<span class="hl">背离是预警，不是信号</span>——没有右侧确认宁可错过</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 5 · 技术指标精讲</p>
+</footer>
+
+</body>
+</html>
