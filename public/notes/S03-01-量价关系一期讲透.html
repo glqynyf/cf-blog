@@ -84,7 +84,7 @@
   <span class="stage-pill">STAGE 3</span>
   <span class="stage-name">量价关系</span>
 
-  <a class="note-nav__back" href="/notes/?stage=S03">← 返回笔记</a>
+  <a class="note-nav__back" href="/notes/?stage=S03" style="display:inline-flex;align-items:center;gap:6px;margin-left:auto;padding:5px 12px;border-radius:6px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-dim);text-decoration:none;font-size:13px;font-weight:600;line-height:1.4;transition:all .2s;">← 返回笔记</a>
 </div>
 
 <div class="meta-bar">
@@ -159,22 +159,15 @@
   .compare-grid .win h4 { color: var(--green); }
   .compare-grid .trap { background: rgba(255, 107, 107, 0.08); border: 1px solid rgba(255, 107, 107, 0.3); }
   .compare-grid .trap h4 { color: var(--red); }
-    /* 返回入口（由 add-note-nav.py 注入） */
-  .note-nav__back {
-    display: inline-flex; align-items: center; gap: 6px;
-    margin-left: auto; padding: 5px 12px; border-radius: 6px;
-    background: var(--surface-2); border: 1px solid var(--border);
-    color: var(--text-dim); text-decoration: none;
-    font-size: 13px; font-weight: 600; line-height: 1.4;
-    transition: all 0.2s;
-  }
+    /* 返回入口（由 add-note-nav.py 注入）：仅补充 hover / 窄屏行为 */
   .note-nav__back:hover {
-    background: var(--accent-soft); border-color: var(--accent);
-    color: var(--accent); text-decoration: none;
+    background: var(--accent-soft) !important;
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+    text-decoration: none !important;
   }
-  /* 窄屏：按钮不再右推，改为独占一行左侧 */
   @media (max-width: 640px) {
-    .note-nav__back { margin-left: 0; }
+    .note-nav__back { margin-left: 0 !important; }
   }
   </style>
 
