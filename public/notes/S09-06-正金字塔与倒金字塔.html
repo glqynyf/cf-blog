@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>分清"正金字塔"与"倒金字塔"：散户选对股票却亏钱的真正原因｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4;
+    --text-mute: #6b7785; --accent: #f0883e;
+    --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff;
+    --yellow: #e3b341; --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    line-height: 1.8; -webkit-font-smoothing: antialiased;
+  }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+    font-size: 13px; color: var(--text-dim); flex-wrap: wrap;
+  }
+  .stage-bar .stage-pill {
+    display: inline-block; padding: 4px 12px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 700; letter-spacing: 1px; font-size: 12px;
+  }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+    font-size: 13px; color: var(--text-mute); flex-wrap: wrap;
+  }
+  .meta-bar .tag {
+    padding: 4px 10px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 600; letter-spacing: 0.5px;
+  }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border); border-left: 4px solid var(--accent);
+    border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow);
+  }
+  .summary-card h3 {
+    font-size: 14px; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px;
+  }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px 24px; margin-bottom: 48px;
+  }
+  .toc h4 {
+    font-size: 13px; color: var(--text-mute); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a {
+    color: var(--text-dim); text-decoration: none; font-size: 14.5px;
+    display: flex; align-items: baseline; transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before {
+    content: counter(toc-counter, decimal-leading-zero);
+    color: var(--accent); font-weight: 700; margin-right: 12px;
+    font-variant-numeric: tabular-nums; min-width: 28px;
+  }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title {
+    font-size: 26px; font-weight: 700; margin-bottom: 24px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--accent);
+    display: inline-block; letter-spacing: -0.3px;
+  }
+  h3.sub-title {
+    font-size: 19px; font-weight: 600; margin: 28px 0 14px;
+    color: var(--text); display: flex; align-items: center;
+  }
+  h3.sub-title::before {
+    content: ""; width: 4px; height: 18px;
+    background: var(--accent); border-radius: 2px; margin-right: 12px;
+  }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote {
+    margin: 20px 0; padding: 16px 22px;
+    background: var(--surface); border-left: 4px solid var(--blue);
+    border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px;
+  }
+  blockquote strong { color: var(--blue); }
+  blockquote.red { border-left-color: var(--red); }
+  blockquote.red strong { color: var(--red); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .formula-box {
+    background: var(--surface); border: 1px solid var(--accent);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+    text-align: center;
+  }
+  .formula-box .formula {
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: var(--accent); font-size: 19px; font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; }
+  .key-points {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+  }
+  .key-points h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li {
+    padding: 8px 0 8px 30px; position: relative;
+    color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border);
+  }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before {
+    content: "✓"; position: absolute; left: 0; top: 8px;
+    color: var(--green); font-weight: 800; font-size: 18px;
+  }
+  .warning-card {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08));
+    border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red);
+    border-radius: 8px; padding: 18px 22px; margin: 20px 0;
+  }
+  .warning-card .label {
+    color: var(--red); font-weight: 700; font-size: 13px;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--accent); border-radius: 10px;
+    padding: 28px 32px; margin: 32px 0;
+    text-align: center; font-size: 19px;
+    font-weight: 600; color: var(--accent);
+    line-height: 1.6; box-shadow: var(--shadow);
+  }
+  .quote-banner::before {
+    content: """; display: block; font-size: 48px;
+    line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5;
+  }
+  .recover-table {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+  }
+  .recover-table h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .recover-table table { width: 100%; border-collapse: collapse; }
+  .recover-table th, .recover-table td {
+    padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);
+    color: var(--text); font-size: 14.5px;
+  }
+  .recover-table th { color: var(--text-dim); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .recover-table .lose { color: var(--red); font-weight: 700; }
+  .recover-table .gain { color: var(--green); font-weight: 700; }
+  footer.note-footer {
+    margin-top: 72px; padding-top: 28px;
+    border-top: 1px solid var(--border);
+    color: var(--text-mute); font-size: 13.5px; text-align: center;
+  }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 9</span>
+  <span class="stage-name">仓位管理与资金管理</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 12 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 9 · 第 6 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">分清"正金字塔"与"倒金字塔"：散户选对股票却亏钱的真正原因</h1>
+  <p class="note-subtitle">你选对了一只走出大行情的股票，账户却从头到尾是亏的。这不是运气差，而是你从买入的第一秒起就在玩一种<span class="hl">头重脚轻、一推就倒的倒金字塔游戏</span>。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>绝大多数散户天然喜欢做<span class="hl">倒金字塔</span>——底部轻仓试探、顶部重仓追涨，平均成本被死死钉在高位，市场随便打个喷嚏就先倒下。<span class="hl">正金字塔</span>反其道而行：底部敢下重笔建立底仓，趋势确认后逐笔递减加仓，<strong>底座巨大、重心极低，市场怎么震荡都很难把你颠下车</strong>。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-inverted">倒金字塔的形成：人性把你推到了那个位置</a></li>
+    <li><a href="#sec-dopa">多巴胺奖赏：底部恐惧 vs 顶部贪婪</a></li>
+    <li><a href="#sec-pyramid">正金字塔买入法：反人性的交易智慧</a></li>
+    <li><a href="#sec-compare">正倒对比：100 万资金的两种建仓路径</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-inverted">
+  <h2 class="section-title">倒金字塔的形成：人性把你推到了那个位置</h2>
+  <p>回忆一下你是不是经常有这样的经历：</p>
+
+  <ul>
+    <li>看中一只股票，<span class="hl">一开始心里没底，只敢拿 5000 块钱试试水</span></li>
+    <li>结果它啪的一声开始往上走，你心里那个美啊，觉得自己简直是天生的股神</li>
+    <li>股票涨了 20% 之后，你彻底沉不住气，<span class="hl-red">一把加仓 50 万进去</span></li>
+    <li>股价只是很正常的回调了 5%，你之前辛辛苦苦攒的浮盈一瞬间就被抹得干干净净</li>
+    <li>甚至开始倒亏本金……</li>
+  </ul>
+
+  <blockquote class="red">
+    <strong>市场根本不认识你</strong>，它也不在乎你。真正把你推进绝境的从来不是什么主力、也不是什么运气，而是你自己那个<span class="hl">头重脚轻的倒金字塔持仓结构</span>——底部买的轻飘飘，顶部买的沉甸甸。你的平均成本被死死钉在了高位，市场随便打个喷嚏你就先倒下了。
+  </blockquote>
+
+  <h3 class="sub-title">为什么人性天然喜欢做倒金字塔？</h3>
+  <p>这背后是一场人性的必然。我们大脑里有一套<span class="hl">多巴胺奖赏系统</span>，它有一个非常拧巴的特点：<span class="hl">既极度厌恶风险，又极度贪婪</span>。</p>
+
+  <p>底部时：股价趴在地上，未来一片迷雾，你看不清方向，内心充满恐惧——<span class="hl">所以你只敢轻仓试探</span>。</p>
+
+  <p>上涨后：股价一路涨起来，媒体开始报道，身边朋友热烈讨论，赚钱效应扑面而来——内心的恐惧突然消失了，取而代之的是<span class="hl">更折磨人的情绪：怕错过（FOMO）</span>。你的大脑会给你一个巨大的错觉，让你觉得现在很安全、现在最确定。于是你开始<span class="hl">疯狂加码、越买越多</span>。</p>
+
+  <blockquote>
+    <strong>这就是倒金字塔形成的完整心理路径</strong>——不是散户笨，是人性把你推到了那个位置上。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-dopa">
+  <h2 class="section-title">多巴胺奖赏：底部恐惧 vs 顶部贪婪</h2>
+  <p>我们可以把这个心理过程画成一张倒金字塔图，更直观地看到：</p>
+
+  <div class="recover-table">
+    <h4>倒金字塔加仓过程（股价上涨时）</h4>
+    <table>
+      <thead>
+        <tr><th>价格阶段</th><th>心理状态</th><th>加仓金额</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>底部 10 元</td><td>恐惧、迷茫</td><td>5000 元（试探）</td></tr>
+        <tr><td>上涨 12 元</td><td>惊喜、确认</td><td>2 万（追加）</td></tr>
+        <tr><td>上涨 15 元</td><td>贪婪、怕错过</td><td>10 万（重仓）</td></tr>
+        <tr><td>上涨 20 元</td><td>狂热、加杠杆</td><td class="lose">50 万（梭哈）</td></tr>
+        <tr><td>回调 19 元</td><td>5% 回调抹平浮盈</td><td class="lose">整体开始亏损</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula">底部 1% 仓位 + 顶部 99% 仓位</div>
+    <div class="desc">= 平均成本被钉在接近顶部的高位</div>
+  </div>
+
+  <blockquote class="red">
+    <strong>如此重心极高的结构</strong>，市场稍微打一个喷嚏——一次 5% 的回调就能让你之前的浮盈全部归零，一次 10% 的洗盘就能让你开始亏本金。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-pyramid">
+  <h2 class="section-title">正金字塔买入法：反人性的交易智慧</h2>
+  <p>反过来看，那些在资本市场里摸爬滚打了几十年还能活下来的老猎人，他们最核心的本事压根就不是<span class="hl">预测涨跌</span>，而是<span class="hl">管理自己手里的筹码</span>。这就引出了真正的主角——<span class="hl">正金字塔买入法</span>。</p>
+
+  <p>这套方法的本质是一种<span class="hl">反人性的交易智慧</span>：它要求你在大家还在犹豫不决、市场还笼罩在一片迷雾当中的时候——也就是在风险收益比往往最划算的那个区域——<span class="hl">敢于下出你相对最重的一笔</span>。</p>
+
+  <h3 class="sub-title">容错空间：底仓为什么必须重</h3>
+  <p>很多人会反驳：底部风险那么大，万一继续跌怎么办？这个问题问得非常好，它牵扯出一个极其重要的概念——<span class="hl">容错空间</span>。</p>
+
+  <p>当下市场波动率显著放大，很多个股一天之内上下摆动 3%—5% 都算家常便饭。这意味着如果你没有一块足够厚实的底仓作为安全垫，<span class="hl">你的心理防线会薄得像张纸</span>，任何一次正常的洗盘都足以把你从一波大行情里颠下车。</p>
+
+  <blockquote>
+    <strong>所以正金字塔建仓有一个核心要求</strong>：在你第一笔交易的时候就投入你这笔计划资金的 <span class="hl">40%—50%</span>。只有底仓足够重，你的整体平均成本才能被牢牢钉在相对低的位置上。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-compare">
+  <h2 class="section-title">正倒对比：100 万资金的两种建仓路径</h2>
+  <p>用一个具体场景来做对比：你有 <strong>100 万资金</strong>，看中了一只基本面不错的股票。</p>
+
+  <h3 class="sub-title">倒金字塔路径（散户本能）</h3>
+  <div class="recover-table">
+    <h4>倒金字塔：底部轻仓、顶部重仓</h4>
+    <table>
+      <thead>
+        <tr><th>价格阶段</th><th>加仓金额</th><th>累计仓位</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>底部 10 元</td><td>5 万（试探）</td><td>5%</td></tr>
+        <tr><td>上涨 12 元</td><td>15 万</td><td>20%</td></tr>
+        <tr><td>上涨 15 元</td><td>30 万（贪婪）</td><td>50%</td></tr>
+        <tr><td>上涨 20 元</td><td>50 万（梭哈）</td><td>100%</td></tr>
+        <tr><td>回调 19 元</td><td class="lose">浮盈清零</td><td class="lose">整体开始亏</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub-title">正金字塔路径（职业做法）</h3>
+  <div class="recover-table">
+    <h4>正金字塔：底仓重、加仓轻</h4>
+    <table>
+      <thead>
+        <tr><th>价格阶段</th><th>加仓金额</th><th>累计仓位</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>底部 10 元</td><td>40 万（<span class="hl">底仓要重</span>）</td><td>40%</td></tr>
+        <tr><td>突破 11 元（+10%）</td><td>30 万（趋势确认）</td><td>70%</td></tr>
+        <tr><td>突破 12 元（+20%）</td><td>20 万（进一步确认）</td><td>90%</td></tr>
+        <tr><td>机动资金</td><td>10 万（永远留着）</td><td>100%</td></tr>
+        <tr><td>回调 5%</td><td class="gain">底仓托底，心理安稳</td><td class="gain">从容应对</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>注意真正关键的细节：你第二笔加仓买的不是"价格"，而是<span class="hl">"确定性"</span>。因为趋势已经初步走出来，前面那笔 40 万的浮盈已经提前帮你垫好了风险的底。再往上加仓，逐笔递减，让你<span class="hl">底座巨大、重心极低</span>，市场怎么震荡都很难把你颠下车。</p>
+
+  <div class="quote-banner">
+    <span class="hl">正金字塔：底座巨大、重心极低</span><br>
+    倒金字塔：<span class="hl-red">头重脚轻、摇摇欲坠</span><br>
+    <strong>你敢在底部下重笔，</strong>市场才会给你从容奔跑的机会
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 散户最容易犯的两个错误</div>
+    <p>第一，<span class="hl">把"建仓成本"误认为"建仓位置"</span>。第二笔加仓时你觉得"成本买高了"，其实你买的不是价格而是确定性。第二，<span class="hl">把"满仓单吊"等同于"看好"</span>。无论你多看好一只股票，正金字塔的核心永远是<span class="hl">底仓要重、机动要留、纪律要严</span>，而不是一路梭哈到顶部。</p>
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li><span class="hl">倒金字塔</span> = 底部轻仓试探 + 顶部重仓追涨 = 平均成本钉在高位</li>
+      <li><span class="hl">正金字塔</span> = 底部重仓建立底仓 + 趋势确认后逐笔递减</li>
+      <li>多巴胺奖赏的拧巴：底部恐惧只敢轻仓，顶部贪婪疯狂加码</li>
+      <li>正金字塔的核心要求：第一笔投入 <strong>40%—50%</strong> 计划资金</li>
+      <li>第二笔加仓买的不是<span class="hl">价格</span>，而是<span class="hl">确定性</span></li>
+      <li>正金字塔 100 万案例：40 万底仓 + 30 万突破加仓 + 20 万确认加仓 + 10 万机动</li>
+      <li>结果：底座巨大、重心极低，市场怎么震荡都很难把你颠下车</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 9 · 仓位管理</p>
+</footer>
+
+</body>
