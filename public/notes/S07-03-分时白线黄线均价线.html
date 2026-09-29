@@ -89,10 +89,59 @@
   @media (max-width: 640px) {
     .note-nav__back { margin-left: 0 !important; }
   }
+  /* 左侧悬浮目录（由 add-note-toc.py 注入） */
+  .note-sidenav { display: none; }
+  .note-sidenav__title {
+    margin: 0 0 10px; font-size: 11px; font-weight: 700;
+    color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .note-sidenav ol { list-style: none; margin: 0; padding: 0; counter-reset: snav; }
+  .note-sidenav li { margin: 0; }
+  .note-sidenav a {
+    display: block; padding: 5px 8px; border-radius: 5px;
+    color: var(--text-dim); text-decoration: none;
+    border-left: 2px solid transparent; transition: all 0.2s;
+  }
+  .note-sidenav a::before {
+    counter-increment: snav; content: counter(snav, decimal-leading-zero) "  ";
+    color: var(--text-mute); font-weight: 700; font-size: 10px;
+  }
+  .note-sidenav a:hover { background: var(--surface-2); color: var(--text); text-decoration: none; }
+  .note-sidenav a.is-active {
+    background: var(--accent-soft); color: var(--accent);
+    border-left-color: var(--accent); font-weight: 600;
+  }
+  .note-sidenav__foot {
+    margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);
+  }
+  .note-sidenav__top {
+    display: block; text-align: center; padding: 5px 0; border-radius: 5px;
+    color: var(--text-mute); text-decoration: none; font-size: 11.5px;
+  }
+  .note-sidenav__top:hover { background: var(--surface-2); color: var(--accent); text-decoration: none; }
+  /* 宽屏才显示；窄屏继续用正文里原有的目录块 */
+  @media (min-width: 1280px) {
+    .note-sidenav { display: block; }
+  }
 </style>
 
 <body>
 
+<nav class="note-sidenav" style="position:fixed;left:24px;top:96px;width:210px;z-index:20;max-height:calc(100vh - 140px);overflow-y:auto;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 12px;font-size:12.5px;line-height:1.6;box-shadow:var(--shadow);" aria-label="本文目录">
+  <h4 class="note-sidenav__title">本文目录</h4>
+  <ol>
+      <li><a href="#sec-basics">分时图基础：一天交易的"心电图"</a></li>
+      <li><a href="#sec-index">大盘白黄线：判断大票墙还是小票墙</a></li>
+      <li><a href="#sec-stock">个股白黄线：白线 = 现价，黄线 = 均价线</a></li>
+      <li><a href="#sec-avg">均价线的核心：判断多空强弱的"成本分水岭"</a></li>
+      <li><a href="#sec-volume">红绿柱成交量：4 个量价组合</a></li>
+      <li><a href="#sec-stages">分时四时段：早盘、午前、午后、尾盘</a></li>
+      <li><a href="#sec-trap">主力 4 个常见陷阱：假拉升 / 假摔 / 忽视大盘 / 神化分时</a></li>
+  </ol>
+  <div class="note-sidenav__foot">
+    <a class="note-sidenav__top" href="#">↑ 回到顶部</a>
+  </div>
+</nav>
 <div class="stage-bar">
   <span class="stage-pill">STAGE 7</span>
   <span class="stage-name">买入策略：分时图精读</span>
@@ -384,4 +433,38 @@
   <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 7 · 买入策略</p>
 </footer>
 
+<script>
+
+(function () {
+  var nav = document.querySelector('.note-sidenav');
+  if (!nav) return;
+  var links = nav.querySelectorAll('a[href^="#"]');
+  if (!links.length) return;
+  var map = {};
+  var targets = [];
+  links.forEach(function (a) {
+    var id = a.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if (el) { map[id] = a; targets.push(el); }
+  });
+  function clear() {
+    links.forEach(function (a) { a.classList.remove('is-active'); });
+  }
+  function onScroll() {
+    var best = null, bestTop = -Infinity;
+    for (var i = 0; i < targets.length; i++) {
+      var t = targets[i].getBoundingClientRect().top;
+      if (t <= 120 && t > bestTop) { bestTop = t; best = targets[i]; }
+    }
+    if (!best && targets.length) best = targets[0];
+    if (!best) return;
+    var active = map[best.id];
+    if (!active) return;
+    clear();
+    active.classList.add('is-active');
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
 </body>
