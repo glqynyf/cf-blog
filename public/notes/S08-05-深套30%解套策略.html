@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>深套 30% 以上，死扛还是割肉？不同亏损幅度的解套策略｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .formula-box { background: var(--surface); border: 1px solid var(--accent); border-radius: 8px; padding: 22px 26px; margin: 24px 0; text-align: center; }
+  .formula-box .formula { font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; color: var(--accent); font-size: 19px; font-weight: 700; margin-bottom: 12px; }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  table th { background: var(--surface-2); color: var(--accent); padding: 12px 16px; text-align: left; font-weight: 700; font-size: 14px; border-bottom: 1px solid var(--border); }
+  table td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text); font-size: 14.5px; }
+  table tr:last-child td { border-bottom: none; }
+  table tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 8</span>
+  <span class="stage-name">止盈止损与卖出体系</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 15 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 8 · 第 5 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">深套 30% 以上，死扛还是割肉？不同亏损幅度的解套策略</h1>
+  <p class="note-subtitle">亏 30% 要涨 43% 才能回本，亏 50% 需要翻倍。这是一篇按亏损幅度分层给出差异化方案的阶梯式解套框架——不是教你不死扛，而是先帮你做一次冷酷的五维体检。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>在最终割肉离场的股民里，绝大多数<span class="hl-red">不是倒在市场最底部的寒冬里，而是倒在盲目补仓、平凡死亡、毫无纪律的自救过程中</span>。科学的解套第一步是<span class="hl">砸碎"保本执念"</span>，第二步是做一次冷酷的五维体检，第三步才是按亏损幅度分层匹配差异化方案——轻度（≤10%）移动止损、中度（10-30%）正金字塔补仓 + 作 T、深度（30%+）三选一：换股 / 双账户 / 壮士断腕。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-math">亏损的非对称数学：回本需要多少涨幅</a></li>
+    <li><a href="#sec-mindset">砸碎"保本执念"的枷锁</a></li>
+    <li><a href="#sec-checkup">五维深度体检：判断持仓该不该继续守</a></li>
+    <li><a href="#sec-light">轻度套牢（≤10%）：移动止损法</a></li>
+    <li><a href="#sec-mid">中度套牢（10-30%）：正金字塔 + 作 T</a></li>
+    <li><a href="#sec-deep">深度套牢（30%+）：三大终极破局方案</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-math">
+  <h2 class="section-title">亏损的非对称数学：回本需要多少涨幅</h2>
+  <div class="formula-box">
+    <div class="formula">亏损 30% → 需上涨 43% 回本</div>
+    <div class="formula">亏损 50% → 需上涨 100% 回本（翻倍）</div>
+    <div class="formula">亏损 70% → 需上涨 233% 回本</div>
+    <div class="desc">回本所需涨幅 = 1 / (1 − 亏损幅度) − 1</div>
+  </div>
+
+  <p>亏损 50% 的股票需要一场 100% 的翻倍行情才能解套，而一支股票在没有超级大牛市的背景下实现股价翻倍，往往需要经历极其漫长的时间，甚至需要整个宏观经济周期的彻底逆转。</p>
+
+  <blockquote class="purple">
+    <strong>你的资金是有时间成本和机会成本的。</strong>被套在没有希望的垃圾资产里，你损失的不只是浮亏的数字，更是在未来整个大牛市和大反弹中，本可以用这笔钱去捕捉更好机会的<span class="hl">核心本金</span>。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-mindset">
+  <h2 class="section-title">砸碎"保本执念"的枷锁</h2>
+  <p>科学解套的第一步绝对不是按买入价去补仓，也不是两眼一闭清仓割肉，而是<span class="hl">立刻给你的持仓做一次冷酷无情的五维深度体检</span>。</p>
+
+  <p>每次打开账户，你是不是眼睛死死盯着那个红色或绿色的买入成本价，心里一遍遍默念：<span class="hl-red">"只要这支股票让我回本，我发誓以后再也不碰它了"</span>？</p>
+
+  <p>但请冷静想一想——这个浩瀚的资本市场，每天千亿甚至上万亿资金在博弈，主力资金在拉升或出货、宏观经济在周期轮动时，<span class="hl-red">有哪一个机构会关心你的成本是多少？</span></p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 保本执念的本质</div>
+    <p>你的买入成本在交易软件撮合成交的那一瞬间就已经变成了经济学上的<span class="hl">沉没成本</span>。它只代表你过去的某一次决策，但<span class="hl-red">绝对无法决定这支股票未来的命运</span>。这就像你发现买了一张开往悬崖方向的火车票，明知道前面是万丈深渊，但因为舍不得那张车票钱，硬是坐在座位上不肯中途下车——<strong>你的资金不是被"套牢"，是被一列正在驶向悬崖的列车绑架。</strong></p>
+  </div>
+</section>
+
+<section class="section" id="sec-checkup">
+  <h2 class="section-title">五维深度体检：判断持仓该不该继续守</h2>
+  <p>这五个维度哪怕是专业基金经理在调仓换股时也必须严格执行：</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>维度</th>
+        <th>核心问题</th>
+        <th>危险信号</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>① 现金流与资产负债</strong></td>
+        <td>经营性现金流是否为正？货币资金能否覆盖短期到期负债？</td>
+        <td>主营业务收不回真金白银，靠借新债还旧债，应收账款占营收过半</td>
+      </tr>
+      <tr>
+        <td><strong>② 行业生命周期</strong></td>
+        <td>是周期性底部还是赛道消亡？</td>
+        <td>行业被新技术颠覆、市场需求永久性萎缩</td>
+      </tr>
+      <tr>
+        <td><strong>③ 管理层资本分配</strong></td>
+        <td>管理层是回报股东还是掏空股东？</td>
+        <td>巨额定增融资、大股东股权质押比例惊人、高管反弹即减持</td>
+      </tr>
+      <tr>
+        <td><strong>④ 估值分位数</strong></td>
+        <td>动态市盈率 / 市净率处于历史 5% 分位还是依然高悬？</td>
+        <td>市净率仍远高于中长期国债收益率，毫无安全垫</td>
+      </tr>
+      <tr>
+        <td><strong>⑤ 筹码结构</strong></td>
+        <td>上方套牢盘密如大山？底部筹码是否聚集？</td>
+        <td>每个反弹台阶都堆积海量历史套牢盘</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <blockquote class="purple">
+    <strong>体检结论对应不同处理：</strong><br>
+    • 通过 ≥4 个维度 → 可以考虑继续持有 + 阶梯式自救<br>
+    • 通过 2-3 个维度 → 必须警惕，严格控制仓位<br>
+    • 通过 ≤1 个维度 → <span class="hl-red">请认真考虑换股或断腕</span>
+  </blockquote>
+</section>
+
+<section class="section" id="sec-light">
+  <h2 class="section-title">轻度套牢（≤10%）：移动止损法</h2>
+  <p>这个幅度的亏损在整个投资生涯中根本不算受伤，它只是你为了防范毁灭性风险所支付的一笔微不足道的<span class="hl">操作保险费</span>。</p>
+
+  <p>如果你经过体检发现基本面没有任何问题，这支股票只是跟随整个大盘在缩量洗盘，均线系统依然处于多头排列——</p>
+  <ul>
+    <li>采用<span class="hl">移动止损法</span></li>
+    <li>止损底线设定在前期箱体震荡的下沿，或重要均线下方 2 个点位置</li>
+    <li>只要没有跌破这个铁律底线，就给行情留出正常的呼吸空间</li>
+    <li><span class="hl-red">切记：轻度套牢阶段绝对不要急着去补仓</span></li>
+    <li><span class="hl">保持账户现金的流动性</span>永远比基于贪图微小的成本重要十倍</li>
+  </ul>
+
+  <div class="quote-banner">
+    轻度套牢的解套核心：<br>
+    <span class="hl">移动止损锁住风险底线</span>，<br>
+    <span class="hl-red">绝对不要在这个阶段急于补仓</span>。
+  </div>
+</section>
+
+<section class="section" id="sec-mid">
+  <h2 class="section-title">中度套牢（10-30%）：正金字塔 + 作 T</h2>
+  <p>亏了 20 多个点时，心理压力已经开始显现。散户最容易犯两个极端错误：</p>
+  <ul>
+    <li><span class="hl-red">躺平装死</span>：连看盘都不看，任由资产缩水</li>
+    <li><span class="hl-red">赌徒式满仓抄底</span>：把剩余资金全部砸进去，结果抄在半山腰被打入深渊</li>
+  </ul>
+
+  <h3 class="sub-title">战术一：非线性正金字塔补仓</h3>
+  <p>很多散户补仓越补越亏，是因为他们采用了<span class="hl-red">等额补仓甚至到金字塔补仓</span>（跌了 5 个点补 2 万，再跌 10 个点再补 2 万）。这种补仓对拉低持仓成本的效果极其微弱，反而让你的整体仓位在下跌趋势中迅速膨胀。</p>
+
+  <div class="formula-box">
+    <div class="formula">1 : 2 : 3 : 4 四分资金</div>
+    <div class="formula">第一次补 1 万（跌 5-10%）</div>
+    <div class="formula">第二次补 2 万（更极端支撑位）</div>
+    <div class="formula">第三次补 3 万（量能极致萎缩）</div>
+    <div class="formula">第四次补 4 万（极端估值底）</div>
+    <div class="desc">下重上轻，让底部权重绝对压倒高位</div>
+  </div>
+
+  <p>核心逻辑只有一个：<span class="hl">下重上轻，让底部的权重绝对压倒高位</span>。只需要后面来一波中等级别的反弹，综合成本线就会被迅速击穿，实现提前盈利出局。</p>
+
+  <h3 class="sub-title">战术二：底仓作 T，主动降成本</h3>
+  <p>在中度套牢的漫长震荡期里，必须学会<span class="hl">利用底仓进行分时作 T</span>，主动抽取市场的现金流。</p>
+  <ul>
+    <li><span class="hl-red">绝对不能动用超过总持仓 1/3 的资金参与日内博弈</span></li>
+    <li>你原有的套牢筹码是你的盾牌，绝对不能动</li>
+  </ul>
+
+  <div class="compare-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0;">
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px;">
+      <h4 style="color: var(--blue); font-size: 16px; margin-bottom: 12px; font-weight: 700;">正 T：低吸高抛</h4>
+      <p style="font-size: 14px; color: var(--text-dim); margin-bottom: 0;">早盘分时偏离 5 日均线过远 + 15 分钟级别底背离 → 缝低买入；午后触及分时均线压力位 → 卖出原油仓。一进一出，总数不变，落袋中间差。</p>
+    </div>
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px;">
+      <h4 style="color: var(--green); font-size: 16px; margin-bottom: 12px; font-weight: 700;">倒 T：高抛低吸</h4>
+      <p style="font-size: 14px; color: var(--text-dim); margin-bottom: 0;">早盘无量冲高、分时严重偏离均线 → 高位卖出底仓；盘中冲高回落买盘衰竭 → 在低位把等量筹码接回。</p>
+    </div>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 作 T 的核心纪律</div>
+    <p><span class="hl-red">当天进、当天出</span>，绝不做成过夜的加仓。做 T 做反越做成本越高的情况非常普遍——它拼的是纪律和熟练度，<strong>没把握的时候宁可不做</strong>。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-deep">
+  <h2 class="section-title">深度套牢（30%+）：三大终极破局方案</h2>
+  <p>当你的账户走到这一步时，所有常规修修补补都很难在短时间内解决问题了。深度套牢有三大经过实战检验的终极破局方案：</p>
+
+  <h3 class="sub-title">方案一：资产质量评移法（跨品种换股自救）</h3>
+  <blockquote class="purple">
+    <strong>请把"我必须在 A 股票上把钱赚回来，否则就是认输"这种心理洁癖彻底清除。</strong>钞票上面没有印着股票的名字——资本市场里每一块钱的购买力都是完全平等的。你在 A 股票上亏损的 5 万块钱和你把剩余资金换到 B 股票上赚回来的 5 万块钱在现实生活中的购买力一模一样，<span class="hl-red">没有任何高低贵贱之分</span>。
+  </blockquote>
+
+  <p>如果体检发现持仓属于行业衰退股 / 高估值概念泡沫股 / 财务爆雷股——继续守在里面就像守着一块正在融化的冰块，时间越久本金化得越干净。</p>
+
+  <p>最理智的做法是<span class="hl">把剩余资金果断提出，平移到被砸出黄金坑、基本面扎实、现金流充沛、稳定高比例分红的高股息资产</span>，或行业处于周期最至暗时刻但龙头地位不可撼动的周期反转股上。用优质资产未来相对更强的修复潜力，对冲和消化烂资产已经发生的亏损——<strong>这是职业投资人最核心的破局思维</strong>。</p>
+
+  <h3 class="sub-title">方案二：双账户隔离 + 非等距网格现金流重构</h3>
+  <p>如果深度被套的股票经过反复推演确认是底蕴深厚、没有退市风险、每年分红稳定、只是因为整个大行业处于逆周期而被深埋的行业龙头——</p>
+
+  <ol>
+    <li><span class="hl">把这个深度套牢的账户彻底封存</span>——不要每天去盯着让你心态崩溃的亏损数字</li>
+    <li>用场外增量闲钱或重新开新账户</li>
+    <li>在新账户里针对这支股票设定<span class="hl">非等距逆向网格</span>：
+      <ul>
+        <li>下跌 10% → 买入第一笔</li>
+        <li>下跌 15% → 买入第二笔</li>
+        <li>下跌 20% → 买入第三笔</li>
+        <li>越往下跌，间距拉得越宽</li>
+      </ul>
+    </li>
+    <li>把每年收到的现金分红在历史估值最底部进行<span class="hl">红利再投资</span></li>
+    <li>把每笔网格利润源源不断提取出来分批冲抵主账户历史亏损</li>
+  </ol>
+
+  <blockquote class="purple">
+    <strong>把一场被动的死扛，转变为主动的持久战。</strong>用时间的复利去主动稀释最初的高位成本。
+  </blockquote>
+
+  <h3 class="sub-title">方案三：壮士断腕，保留火种</h3>
+  <div class="warning-card">
+    <div class="label">⚠️ 最痛苦但有时是唯一的选择</div>
+    <p>如果你的股票已经深套 50% 甚至更多，而公司已被实施风险警示、大股东资金链断裂、主营业务全线崩溃、财务造假的实锤已经落地——<span class="hl-red">请你收起所有的幻想和侥幸</span>。哪怕割肉后只剩下一万块两万块，也必须坚决把最后的火种从废墟里抢救出来。</p>
+  </div>
+
+  <p>很多人觉得"反正跌了 80% 跌无可跌了，留着做个纪念"——但在严格的注册制和常态化退市机制下，很多垃圾股最终的结局是<span class="hl-red">直接退市甚至进入破产重整</span>，到那时你失去的将是 100% 的本金。</p>
+
+  <blockquote class="purple">
+    <strong>留得青山在，不怕没柴烧。</strong>只要你手里还握着能够调动的现金，你在未来的市场里就永远保有重新翻盘的希望。但如果连最后的火种都化为了灰烬，你在股市这个战场上就<span class="hl-red">彻底丧失了站起来的资格</span>。
+  </blockquote>
+
+  <div class="quote-banner">
+    解套的核心本质，<br>
+    从来不是什么玄妙的神奇指标，<br>
+    也不是到处去打听的所谓内幕消息——<br>
+    它本质上是<span class="hl">对自我人性弱点的全面克服</span>，<br>
+    是<span class="hl">对资金管理纪律的绝对服从</span>，<br>
+    是<span class="hl">对商业周期客观规律的深度敬畏</span>。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>亏损的非对称：30% / 50% / 70% 需要分别上涨 43% / 100% / 233% 才能回本</li>
+      <li>科学解套第一步是<span class="hl">砸碎"保本执念"</span>——沉没成本不决定未来</li>
+      <li><strong>五维深度体检</strong>：现金流 / 行业 / 管理层 / 估值 / 筹码结构</li>
+      <li>轻度（≤10%）：移动止损 + <span class="hl-red">绝对不要急于补仓</span></li>
+      <li>中度（10-30%）：<span class="hl">正金字塔补仓</span>（1:2:3:4 下重上轻）+ 作 T 主动降成本</li>
+      <li>深度（30%+）方案一：<span class="hl">跨品种换股自救</span>（平移到优质资产）</li>
+      <li>深度方案二：<span class="hl">双账户隔离 + 非等距网格</span>（把死扛变持久战）</li>
+      <li>深度方案三：<span class="hl-red">壮士断腕</span>（基本面已死就保留火种）</li>
+      <li>解套的核心是<span class="hl">克服人性弱点 + 服从资金管理纪律 + 敬畏商业周期</span></li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 8 · 止盈止损与卖出体系</p>
+</footer>
+
+</body>
