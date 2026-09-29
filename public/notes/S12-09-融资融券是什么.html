@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>融资融券是什么？为什么两融余额这么重要？｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b;
+    --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14.5px; }
+  th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { background: var(--surface); color: var(--accent); font-weight: 700; }
+  td { color: var(--text-dim); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } }
+</style>
+</head>
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 12</span>
+  <span class="stage-name">市场生态与主力资金</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 13 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 12 · 第 9 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">融资融券是什么？为什么两融余额这么重要？</h1>
+  <p class="note-subtitle">如果明天早上醒来，A 股所有的杠杆资金突然被强制平仓，你手里的股票会发生什么？2026 年沪深北三市两融余额历史上首次突破 3 万亿。这背后究竟是不可摧的冲锋号，还是通往爆仓深渊的隐形诱饵？</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>两融 = <span class="hl">融资（借钱买股）</span> + <span class="hl">融券（借股卖钱）</span>。<span class="hl">2024 年 7 月 11 日转融券业务被<span class="hl-red">暂停</span></span>（<span class="hl-red">非"永久"</span>），A 股<span class="hl-red">融券余额被压缩到仅 224 亿</span>，<span class="hl">两融已变成几乎纯多头的单边放大器</span>。<span class="hl">两融余额的每一次剧烈波动都等同于"用真金白银做赌注的最激进资金的进退表"</span>。<strong>它是 A 股唯一的情绪核武器</strong>。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-basic">融资融券的基础：一场和券商的高风险借贷</a></li>
+    <li><a href="#sec-margin">融资：借钱买股的杠杆放大</a></li>
+    <li><a href="#sec-short">融券：借股卖钱的反向博弈</a></li>
+    <li><a href="#sec-transfer">转融券：曾被永久封死</a></li>
+    <li><a href="#sec-3trillion">3 万亿时代：两融余额成为情绪核武器</a></li>
+    <li><a href="#sec-2015">2015 年杠杆牛崩盘的历史教训</a></li>
+    <li><a href="#sec-strategy">散户应对：看懂两融的进退</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-basic">
+  <h2 class="section-title">融资融券的基础：一场和券商的高风险借贷</h2>
+  <p>两融的全称就是"<span class="hl">融资融券</span>"，本质上就是<span class="hl">你和证券公司的"高风险借贷"</span>。包含融资（看多）和融券（看空）两个方向：</p>
+
+  <blockquote class="purple">
+    <strong>融资</strong>：你看多某只股票，<span class="hl">觉得它要暴涨但手里的资金不够</span>，于是跑到券商那里拿股票或现金做抵押，借钱买更多股票。<br>
+    <span class="hl-blue">本质</span>：借钱买股，放大多头杠杆。<br><br>
+    <strong>融券</strong>：你看空某只股票，<span class="hl">觉得已吹起巨大泡沫即将暴跌</span>，但手里没有这只股票不能直接卖出。<br>
+    <span class="hl-blue">操作</span>：向券商借股票 → 立刻按市价卖掉换成现金 → 等股价腰斩 → 再低价买回归还 → 赚取差价利润。<br>
+    <span class="hl-red">本质</span>：借股做空，加杠杆反向。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-margin">
+  <h2 class="section-title">融资：借钱买股的杠杆放大</h2>
+
+  <h3 class="sub-title">杠杆效应</h3>
+  <p>融资的核心是<span class="hl">用保证金撬动更大的持仓</span>。举个例子：</p>
+  <ul>
+    <li>你有 100 万本金 + 100 万融资保证金（共 200 万）</li>
+    <li>买入某只股票 200 万</li>
+    <li>股价上涨 10% → <span class="hl-green">你的总资产变成 220 万，净赚 20 万</span>（相对于本金翻倍）</li>
+    <li>股价下跌 10% → 你的总资产变成 180 万，<span class="hl-red">净亏 20 万</span></li>
+  </ul>
+  <p>这就是<span class="hl">典型的杠杆放大效应</span>——收益和亏损都被成倍放大。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 强平线</div>
+    <p>融资有<span class="hl-red">"维持担保比例 130%"</span>的硬约束。一旦股价大跌导致担保比例低于此线，券商<span class="hl">强制平仓</span>——这正是 2015 年杠杆牛崩盘的直接技术原因。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-short">
+  <h2 class="section-title">融券：借股卖钱的反向博弈</h2>
+  <p>融券是看空者赚钱的手段。听起来很完美——<span class="hl">多空双向都能赚钱</span>。但在过去很长时间里，散户们都在抱怨"<span class="hl-red">两融制度是不公平的收割机</span>"：</p>
+  <blockquote>
+    <strong>为什么散户融不到券？</strong><br>
+    因为<span class="hl">券商手头能有多少股票可借？</span>一旦市场火爆或大家都想做空问题股，券池瞬间被掏空。这时候 <span class="hl-blue">转融券</span>登场。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-transfer">
+  <h2 class="section-title">转融券：曾被永久封死</h2>
+
+  <h3 class="sub-title">转融券是什么？</h3>
+  <p>过去，转融券指<span class="hl">中国证券金融股份有限公司（中证金融）</span>作为"超级中介"，向长期持股不卖的大股东、战略投资者、公募基金等借入"锁定的底仓股票"，再转介给证券公司，最终由证券公司提供给想"做空"的机构投资者。</p>
+  <p>这在历史上形成了<span class="hl-red">极度不平等的博弈画面</span>：</p>
+  <ul>
+    <li><strong>散户</strong>：因资金门槛 + 信息劣势，几乎拿不到优质券源做空</li>
+    <li><strong>机构</strong>：拥有 VIP 通道 + 量化私募 + 主力，通过转融券源源不断拿到"廉价筹码"</li>
+  </ul>
+  <p>机构在股票估值高位时<span class="hl-red">精准做空 + 套利</span>，压制股价上涨空间，<span class="hl-red">这种制度倾斜一度让 A 股生态失衡</span>。</p>
+
+  <h3 class="sub-title">2024 年 7 月的"暂停"</h3>
+  <p>2024 年 7 月 10 日晚，证监会发布公告：</p>
+  <blockquote class="purple">
+    <strong>为切实维护市场稳定，依法批准中证金融暂停转融券业务</strong>，自 <strong>2024-07-11</strong> 起正式实施，存量合约 <strong>2024-09-30 前</strong> 全部了结。<br>
+    另一份通知（<strong>2024-07-22 起实施</strong>）将<strong>融券保证金比例由 80% 调高至 100%</strong>，<strong>私募等机构由 100% 调高至 120%</strong>。
+  </blockquote>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 历史性转折</div>
+    <p>证监会公告原文措辞为"<strong>暂停</strong>"转融券业务（并未言"永久"），并区分了两个生效日：<strong>暂停转融券自 7-11</strong>、<strong>融券保证金调高自 7-22</strong>。这次调整后，A 股融券规模出现断崖式下跌。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-3trillion">
+  <h2 class="section-title">3 万亿时代：两融余额成为情绪核武器</h2>
+
+  <h3 class="sub-title">一组震撼数据</h3>
+  <p>截至 2026 年 7 月初：</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>指标</th>
+        <th>数据</th>
+        <th>含义</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>两融总余额</strong></td>
+        <td>约 <span class="hl">3.02 万亿</span></td>
+        <td>首次突破 3 万亿大关</td>
+      </tr>
+      <tr>
+        <td><strong>融资余额</strong></td>
+        <td>约 <span class="hl">3 万亿</span></td>
+        <td>几乎全部是两融的"内胆"</td>
+      </tr>
+      <tr>
+        <td><strong>融券余额</strong></td>
+        <td>仅 <span class="hl-red">224 亿</span></td>
+        <td><span class="hl-red">被打到历史的尘埃里</span></td>
+      </tr>
+      <tr>
+        <td><strong>融资 / 融券比</strong></td>
+        <td>约 <span class="hl">134 : 1</span></td>
+        <td>几乎是<span class="hl-red">纯多头</span>单边放大器</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <blockquote class="purple">
+    <strong>重要意义</strong>：曾经所谓"两融"，在今天的 A 股市场已经变成了<span class="hl">几乎纯粹由多头组成的单边放大器</span>。<br>
+    <span class="hl-red">融券做空的力量已经被压缩到了历史的尘埃里</span>。
+  </blockquote>
+
+  <h3 class="sub-title">为什么两融余额被称为"情绪核武器"？</h3>
+  <p>由于两融里几乎 <span class="hl">99%+ 都是融资（借钱买股的资金）</span>，那么：</p>
+  <blockquote>
+    <strong>两融余额的每一次上升</strong>，都代表着<span class="hl">市场上最敏感、最激进、最敢于冒险的那批人</span>，正在用<span class="hl">他们自己的信用和全部身家做赌注</span>，<span class="hl">疯狂给市场注入增量资金</span>。<br><br>
+    <strong>两融余额的每一次暴跌</strong>，都代表着<span class="hl-red">最激进的杠杆资金被迫平仓 / 主动撤退</span>，<span class="hl-red">这往往是恐慌性下跌的领先信号</span>。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-2015">
+  <h2 class="section-title">2015 年杠杆牛崩盘的历史教训</h2>
+
+  <h3 class="sub-title">2015 年 6 月的两融峰值</h3>
+  <p>要把杠杆这个逻辑理解透，必须回看 11 年前的那个夏天。</p>
+  <p>2015 年 6 月 12 日，上证指数在万众狂欢中冲上 <span class="hl">5178 点</span>，所有人高喊"一万点不是梦"。而支撑那场牛市的底层燃料正是<span class="hl-red">疯狂暴涨的杠杆资金</span>：</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>时间</th>
+        <th>两融余额 / 保证金比例</th>
+        <th>关键事件</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>2015 年 6 月 18 日</strong></td>
+        <td>两融余额峰值 <span class="hl">2.27 万亿</span></td>
+        <td>上证 6 月 12 日盘中触及 5178 点历史高点</td>
+      </tr>
+      <tr>
+        <td><strong>融资保证金最低比例（2015 年 6 月股灾时）</strong></td>
+        <td><span class="hl-red">50%</span>（2 倍杠杆）</td>
+        <td>2006-08 起即执行，2015 年股灾时仍为 50%</td>
+      </tr>
+      <tr>
+        <td><strong>数月内</strong></td>
+        <td>出现 <span class="hl-red">断崖式暴跌</span></td>
+        <td>千股跌停 + 千股停牌</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-title">融资保证金比例的完整沿革（便于读者理解）</h3>
+  <p>这段历史被广泛误传，下表给出可核对的官方节点：</p>
+  <table>
+    <thead>
+      <tr><th>时间</th><th>比例</th><th>杠杆</th><th>依据</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2006-08 起</td><td>50%</td><td>2 倍</td><td>沪深交易所初始比例</td></tr>
+      <tr><td>2015-11-23 起</td><td>100%</td><td>1 倍</td><td>上证发〔2015〕89 号（股灾后调整）</td></tr>
+      <tr><td>2023-09-08 收市后</td><td>80%</td><td>1.25 倍</td><td>三所下调</td></tr>
+      <tr><td>2026-01-19 起</td><td>100%</td><td>1 倍（仅新开仓）</td><td>2026-01-14 三所通知</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-title">崩盘的算术</h3>
+  <p>当时 50% 保证金比例 + 强制平仓机制组合下：</p>
+  <blockquote class="purple">
+    <strong>假设你以 50% 保证金融资 100 万</strong>（自掏 50 万 + 借 50 万），买入 100 万市值。一旦股价下跌 25%，100 万市值剩 75 万，扣除归还借款 50 万，<span class="hl">本金还剩 25 万</span>；跌 33.3% 时市值剩 66.7 万，扣 50 万借款后<span class="hl">本金归零</span>，券商强制平仓。<br>
+    这种强平又砸盘、砸盘又强平的<span class="hl">死亡螺旋</span>，在 2015 年的股灾里留下了<span class="hl">无数散户的血泪</span>。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-strategy">
+  <h2 class="section-title">散户应对：看懂两融的进退</h2>
+
+  <h3 class="sub-title">3 个观察指标</h3>
+  <ol>
+    <li><strong>两融余额的绝对体量</strong>：<span class="hl">3 万亿</span>已经是历史峰值附近，需要警惕"继续上行的边际空间"</li>
+    <li><strong>两融余额的环比变化</strong>：<span class="hl-green">持续增长</span>说明激进资金在加仓；<span class="hl-red">连续下滑</span>说明杠杆资金在撤退</li>
+    <li><strong>融资余额占成交额比重</strong>：<span class="hl">8%-10%</span>是健康区间；<span class="hl-red">超过 12%</span>意味着过度杠杆化</li>
+  </ol>
+
+  <h3 class="sub-title">关键操作纪律</h3>
+  <div class="warning-card">
+    <div class="label">⚠️ 散户的"融资纪律"</div>
+    <p>① <span class="hl-red">不要用融资来放大已经盈利的仓位</span>——这是赌博而非投资<br>
+    ② 永远留出 <span class="hl">30% 以上</span> 的现金缓冲，防止强平<br>
+    ③ 股价大跌时 <span class="hl-red">不要"补仓救火"</span>，那是加杠杆送死<br>
+    ④ <span class="hl">杠杆是把双刃剑</span>——上涨时加速、<span class="hl-red">下跌时是无情绞肉机</span>
+  </div>
+
+  <div class="quote-banner">
+    <span class="hl">两融余额</span>是 A 股唯一的<span class="hl">情绪核武器</span>：<br>
+    它上涨时 <span class="hl">给你最强的进攻信号</span>，<br>
+    它下跌时 <span class="hl-red">给你最无情的市场警报</span>。<br>
+    <span class="hl">看懂它的进退</span>，你就看懂了<span class="hl">最激进资金的胆量</span>。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>两融 = <span class="hl">融资（借钱买股）</span> + <span class="hl">融券（借股卖钱）</span>，都是<span class="hl">杠杆放大</span></li>
+      <li><span class="hl">2017 年老问题</span>：散户因资金门槛 + 信息劣势几乎融不到券</li>
+      <li><strong>转融券</strong>：曾是大股东 / 公募底仓借出 → 券商 → 做空机构的"通道"</li>
+      <li><strong>2024.7.11 历史转折</strong>：证监会<span class="hl-red">暂停</span>转融券业务（<span class="hl-red">非"永久"</span>），存量合约 2024-09-30 前了结；融券保证金 80%→100%（私募 100%→120%）自 <strong>2024-07-22</strong> 起实施</li>
+      <li>2026 年数据：<span class="hl">两融总余额 3.02 万亿</span>，其中融资 <span class="hl">3 万亿</span>、融券仅 <span class="hl-red">224 亿</span></li>
+      <li>融资 / 融券 ≈ <span class="hl">134 : 1</span>，两融已变成<span class="hl-red">几乎纯多头的单边放大器</span></li>
+      <li><span class="hl">两融余额上涨 = 最激进资金加仓</span>；<span class="hl-red">两融余额下跌 = 恐慌性抛售信号</span></li>
+      <li><strong>2015 年 6 月历史</strong>：两融峰值 <span class="hl">2.27 万亿</span>（6 月 18 日），融资保证金比例 60%，<span class="hl-red">数月内断崖暴跌</span></li>
+      <li>散户纪律：<span class="hl-red">不要用融资放大已盈利仓位</span>、留 30% 现金、不补仓救火</li>
+      <li>观察指标：绝对体量、<span class="hl">环比变化</span>、<span class="hl">融资占成交比重</span>（8-10% 健康，&gt; 12% 过度杠杆）</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 12 · 市场生态与主力资金</p>
+</footer>
+
+</body>
+</html>
