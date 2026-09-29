@@ -119,15 +119,16 @@
     color: var(--text-mute); text-decoration: none; font-size: 11.5px;
   }
   .note-sidenav__top:hover { background: var(--surface-2); color: var(--accent); text-decoration: none; }
-  /* 宽屏才显示；窄屏继续用正文里原有的目录块 */
-  @media (min-width: 1280px) {
+  /* 宽屏才显示：正文占 944px 居中，需 ≥1440px 才能在左侧空出 200px 侧栏而不重叠。
+     窄屏继续用正文里原有的「本文目录」块，两种视口都能导航。 */
+  @media (min-width: 1440px) {
     .note-sidenav { display: block; }
   }
 </style>
 
 <body>
 
-<nav class="note-sidenav" style="position:fixed;left:24px;top:96px;width:210px;z-index:20;max-height:calc(100vh - 140px);overflow-y:auto;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 12px;font-size:12.5px;line-height:1.6;box-shadow:var(--shadow);" aria-label="本文目录">
+<nav class="note-sidenav" style="position:fixed;left:calc(50vw - 696px);top:96px;width:200px;z-index:20;max-height:calc(100vh - 140px);overflow-y:auto;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 12px;font-size:12.5px;line-height:1.6;box-shadow:var(--shadow);" aria-label="本文目录">
   <h4 class="note-sidenav__title">本文目录</h4>
   <ol>
       <li><a href="#sec-mindset">行为金融学：处置效应与两种固有思维</a></li>
