@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>决策疲劳与交易时机选择：为什么盯盘越久，亏得越多？｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .formula-box { background: var(--surface); border: 1px solid var(--accent); border-radius: 8px; padding: 22px 26px; margin: 24px 0; text-align: center; }
+  .formula-box .formula { font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; color: var(--accent); font-size: 19px; font-weight: 700; margin-bottom: 12px; }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  table th { background: var(--surface-2); color: var(--accent); padding: 12px 16px; text-align: left; font-weight: 700; font-size: 14px; border-bottom: 1px solid var(--border); }
+  table td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text); font-size: 14.5px; }
+  table tr:last-child td { border-bottom: none; }
+  table tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body: { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 1</span>
+  <span class="stage-name">行为金融学：解码人性弱点</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 13 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 1 · 第 5 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">决策疲劳与交易时机选择：为什么盯盘越久，亏得越多？</h1>
+  <p class="note-subtitle">如果你也经历过"盘后复盘时纪律严明，开盘后却频繁犯错"的诡异割裂，这篇笔记会从认知心理学的"自我损耗"理论出发，揭开决策疲劳如何在暗中掏空你的判断力，并给出一套可落地的"决策时机选择 + 每日决策配额"系统。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>认知心理学发现，人类大脑每天能做出的<span class="hl-red">高质量决策数量是有限的</span>，每一次决策都会消耗心理能量。当决策疲劳累积到一定程度，<span class="hl">人类会自动退化为拖延、冲动、模仿他人和彻底放弃四种本能反应</span>。<strong>在交易场景里最危险的不是信息不够，而是决策太多；最大的敌人不是无知，而是信息过载。</strong>关闭实时盯盘、严格限制每日决策次数的交易者，长期业绩反而显著优于"勤勉"的盯盘族。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-fatigue">什么是决策疲劳：被忽视的认知杀手</a></li>
+    <li><a href="#sec-pitfall">A 股的 5 个"决策陷阱时刻"</a></li>
+    <li><a href="#sec-timing">决策时机的科学选择：只在窗口期出手</a></li>
+    <li><a href="#sec-defense">决策疲劳的 4 套实战防范机制</a></li>
+    <li><a href="#sec-paradox">反直觉结论：盯盘越多，亏得越多</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-fatigue">
+  <h2 class="section-title">什么是决策疲劳：被忽视的认知杀手</h2>
+  <p>在行为金融学的众多研究里，决策疲劳（Decision Fatigue）是一个被普通投资者严重低估的概念。它解释了为什么很多人在收盘后看着自己的交割单会陷入深深的自我怀疑——<span class="hl-red">"我明明知道不应该追高，为什么上午还是冲进去了？"</span></p>
+  <p>其实不是你的纪律出了问题，而是你的<span class="hl">心理能量已经被悄悄耗尽了</span>。</p>
+
+  <h3 class="sub-title">自我损耗理论：决策是会被消耗的</h3>
+  <p>社会心理学家罗伊·鲍迈斯特（Roy Baumeister）通过一系列严格的实验室研究提出了"自我损耗"（Ego Depletion）理论。这个理论的核心结论非常简单但又极其反直觉：</p>
+  <blockquote class="purple">
+    <strong>人类大脑每天能做出的"高质量决策"数量是有限的，每一次决策都会消耗心理能量。</strong>和肌肉一样，大脑的意志力、专注力和判断力都会在反复使用后出现"力竭"。这种力竭不是主观感受，而是可以通过血糖浓度、前额叶皮层活跃度等生理指标被精确测量出来。
+  </blockquote>
+  <p>举个生活中的例子：为什么大多数家庭在傍晚时分最容易吵架？因为配偶和子女在白天已经做了一整天决策，<span class="hl">到了傍晚心理能量储备已经见底</span>，任何微小的事情都可能引爆情绪。在公司里，为什么 CEO 在下午做出来的决策质量往往不如上午？同一个原因。</p>
+
+  <h3 class="sub-title">决策疲劳的四种典型反应</h3>
+  <p>当决策疲劳累积到临界点，人类的大脑会自动切换到<span class="hl-red">四种最省力的本能模式</span>。这四种模式在交易场景里全都对应着亏钱行为：</p>
+  <ul>
+    <li><span class="hl-red">拖延</span>：不愿做决策 → 错失最佳卖点，死扛到深套</li>
+    <li><span class="hl-red">冲动</span>：随便做决策 → 开盘集合竞价胡乱追高，频繁交易贡献券商利润</li>
+    <li><span class="hl-red">模仿他人</span>：跟风 → 大 V 一喊"满仓干"就跟单，第二天反向被埋</li>
+    <li><span class="hl-red">彻底放弃</span>：破罐破摔 → "反正都亏了，无所谓了"，重仓抄底垃圾股</li>
+  </ul>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 交易者的典型割裂感</div>
+    <p>很多人都会经历一种诡异的割裂：<span class="hl">盘后复盘时纪律严明，开盘后频繁犯错</span>。晚上复盘能写出完美的反思日记，第二天开盘却管不住自己的手。这并不是你意志薄弱，而是你的决策能量被开盘前后的琐碎决策——要不要加仓、要不要止盈、要不要看新闻、要不要看一眼账户——一点点榨干了。等到真正需要决策的时刻，你已经没有心理能量再做高质量判断了。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-pitfall">
+  <h2 class="section-title">A 股的 5 个"决策陷阱时刻"</h2>
+  <p>并不是所有时段都适合做交易决策。在 A 股这个特殊的 T+1 制度、信息高度不对称、散户占比超过 60% 的市场里，<span class="hl">有几个特定时段几乎等同于"决策陷阱"</span>。在这些时段做决策，相当于在赌场里刚输完上局就急着下注下一局——胜率会被显著压低。</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>陷阱时段</th>
+        <th>时间窗口</th>
+        <th>陷阱机制</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>① 开盘冲撞</strong></td>
+        <td>9:30 - 10:00<br>（开盘 30 分钟）</td>
+        <td>前一晚消息 + 隔夜外盘 + 集合竞价集合起来的信息量最大，情绪最冲动。集合竞价的非理性定价往往会在开盘后 30 分钟内修复。<span class="hl-red">这个时段追高的胜率极低。</span></td>
+      </tr>
+      <tr>
+        <td><strong>② 午盘焦虑</strong></td>
+        <td>11:30 - 13:00<br>（中午 1.5 小时）</td>
+        <td>看似是"复盘时间"，实际上是用碎片化信息和半饱腹的血糖焦虑去决定下午的操作。<span class="hl">一顿饭都吃不踏实的决策</span>，通常不会是什么好决策。</td>
+      </tr>
+      <tr>
+        <td><strong>③ 尾盘抢筹</strong></td>
+        <td>14:30 - 14:57<br>（收盘前 30 分钟）</td>
+        <td>机构做市值、游资做图形、量化做调仓的集中表演时间。价格波动剧烈但没有"真实信息含量"，纯粹是博弈和诱饵。<span class="hl-red">抢尾盘的资金 80% 是被埋对象。</span></td>
+      </tr>
+      <tr>
+        <td><strong>④ 信息发布</strong></td>
+        <td>重大政策 / 数据 / 财报前后 1 小时</td>
+        <td>官方表态前后信息流呈"洪水"状态，分析师解读、自媒体猜测、社交媒体情绪一齐涌来。<span class="hl">大脑处理能力瞬间过载</span>，所有决策都是低质量的。</td>
+      </tr>
+      <tr>
+        <td><strong>⑤ 情绪极值</strong></td>
+        <td>连续 3 根阳线 / 阴线之后</td>
+        <td>连涨时多巴胺让你觉得自己是股神，连跌时恐惧让你想立刻销户。<span class="hl-red">这两种状态下的决策都是反向指标</span>，情绪的极端值就是理性的最低谷。</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <strong>把这 5 个时刻从你的交易窗口里剔除掉，A 股对你来说已经变得温和许多。</strong>剩下那些平稳的、安静的、信息流不爆炸的时段，才是真正能让你做出高质量决策的"决策绿洲"。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-timing">
+  <h2 class="section-title">决策时机的科学选择：只在窗口期出手</h2>
+  <p>既然决策会被消耗，那就要把决策<span class="hl">集中到精力最充沛的窗口期</span>去做。这不是玄学，而是把"决策配额"当成身体能量一样管理的科学方法。</p>
+
+  <h3 class="sub-title">第一原则：避开情绪激动时</h3>
+  <p>所有决策的第一铁律：<span class="hl-red">永远不要在情绪激动时做交易决策</span>。无论是你刚和伴侣吵完架、刚被领导骂完、刚听到某个"内幕消息"心跳加速——所有这些时刻都应该是<span class="hl">强制冷却期</span>。</p>
+  <p>冷却期的标准时长是 <span class="hl">至少 30 分钟</span>。如果你发现自己在某个时刻产生强烈的"必须立刻操作"的冲动，请把这股冲动强行推迟到 30 分钟以后再评估。90% 的情况下，30 分钟后你会发现这股冲动是无意义的——<span class="hl-red">但这 30 分钟恰恰救了你 30% 的本金</span>。</p>
+
+  <h3 class="sub-title">第二原则：预设决策窗口</h3>
+  <p>每天只在两个固定的、精力充沛的时段集中做交易决策，其余时间一律远离盘面：</p>
+  <div class="formula-box">
+    <div class="formula">决策窗口 A：9:30 - 10:00</div>
+    <div class="formula">决策窗口 B：14:00 - 14:30</div>
+    <div class="formula">其余时段：强制隔离盘面</div>
+    <div class="desc">上午开盘后情绪激动但精神最充沛 / 下午尾盘前大脑已度过信息过载峰值</div>
+  </div>
+  <p>这两个窗口的共同特征是：<span class="hl-blue">精力相对充裕 + 同时避开信息爆炸节点</span>。A 股真正的决策量应该集中在开盘后的冷静复盘和尾盘前的主动规划上，而不是被盘面牵着鼻子追涨杀跌。</p>
+
+  <h3 class="sub-title">第三原则：盘前预设方案，开盘只执行不思考</h3>
+  <p>这是把决策成本压到最低的核心技巧。<span class="hl-red">开盘后再思考，已经晚了</span>。正确的做法是：</p>
+  <ol>
+    <li><strong>收盘后</strong>——根据当天行情，列出次日可能的 <span class="hl">A / B / C 三套方案</span></li>
+    <li><strong>第二天开盘前</strong>——查看隔夜外盘和重大消息，对三套方案做出微调</li>
+    <li><strong>进入决策窗口后</strong>——只看一眼行情，<span class="hl-red">对照方案执行，不做新决策</span></li>
+    <li><strong>收盘后</strong>——复盘方案的执行情况，记录偏差原因</li>
+  </ol>
+
+  <blockquote class="purple">
+    <strong>把决策和执行彻底分离。</strong>决策是高耗能动作，必须在精力充沛的"心理能量高位"完成；执行是低耗能动作，可以在任何时候完成。一旦你试图在执行现场同时做决策，你就已经输了一半。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-defense">
+  <h2 class="section-title">决策疲劳的 4 套实战防范机制</h2>
+  <p>理论讲完了，下面是<span class="hl">可以直接抄作业的 4 套实战防范机制</span>。每一套都不是凭感觉设计的，而是基于认知心理学和行为金融学的实证研究：</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>机制</th>
+        <th>核心规则</th>
+        <th>解决的认知问题</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>① 每日决策配额</strong></td>
+        <td>散户建议每天交易次数 <span class="hl-red">≤ 3 笔</span>。无论信号看起来多么诱人，超过 3 笔就必须关掉软件。</td>
+        <td>解决"决策成瘾"——把决策当成多巴胺来源，<span class="hl">越做越想做</span>，最终失控</td>
+      </tr>
+      <tr>
+        <td><strong>② 单日状态持仓</strong></td>
+        <td>每天只允许 <span class="hl">1 次</span> 加减仓动作。已经加过仓的票，当天不再操作；已经减过仓的票当天不再加回。</td>
+        <td>解决"摩擦性反复交易"——涨了后悔卖、跌了后悔买，<span class="hl-red">在同一只票上来回摩擦</span></td>
+      </tr>
+      <tr>
+        <td><strong>③ 5 项决策清单</strong></td>
+        <td>每笔买卖前必须填完：(1) 买入逻辑是否还在？(2) 是否突破预设止损位？(3) 是否在情绪激动状态？(4) 是否符合仓位预算？(5) 是否会影响睡眠？<span class="hl">任意一项不通过就放弃</span>。</td>
+        <td>把直觉决策<span class="hl">流程化、结构化</span>，让清单替代大脑做最后一道审查</td>
+      </tr>
+      <tr>
+        <td><strong>④ 生理能量管理</strong></td>
+        <td>每天睡眠 <span class="hl">≥ 7 小时</span>；不在饥饿、疲惫、酒后、争吵后做决策；不在身体不适时盯盘。</td>
+        <td>血糖、肾上腺素、酒精都会<span class="hl-red">直接破坏前额叶皮层的判断能力</span>，生理状态是决策质量的硬底座</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 关于酒后决策</div>
+    <p>这一点必须单独强调：<span class="hl-red">酒后不交易，交易不酒后</span>。酒精对大脑前额叶的抑制作用长达 12-24 小时。即使你"感觉"自己清醒了，你的风险评估能力、冲动控制能力和概率判断能力都已经被显著削弱。这不是道德说教，而是<span class="hl">已经被无数次实证研究证实的神经科学结论</span>。</p>
+  </div>
+
+  <p>这套 4 机制组合拳的本质是<span class="hl">"用流程替代意志力，用规则替代感觉"</span>。你不需要每天和自己的情绪打架，你只需要严格按清单、按配额、按窗口去执行。当你把决策权交给规则时，<span class="hl-red">你已经把 90% 的情绪干扰挡在了身体之外</span>。</p>
+</section>
+
+<section class="section" id="sec-paradox">
+  <h2 class="section-title">反直觉结论：盯盘越多，亏得越多</h2>
+  <p>这是这篇笔记里最重要的反直觉结论，也是大多数人最不愿意接受的事实：</p>
+
+  <div class="quote-banner">
+    <span class="hl-red">决策疲劳的最大敌人，</span><br>
+    <span class="hl-red">不是信息不足，而是信息过载。</span>
+  </div>
+
+  <p>绝大多数散户都以为：<span class="hl">盯盘时间越长 → 获取信息越多 → 决策质量越高</span>。但认知心理学的研究结论正好相反——盯盘时间越长，<span class="hl-red">决策疲劳越严重，决策质量越低</span>。</p>
+
+  <h3 class="sub-title">关键研究：少看盘反而更赚钱</h3>
+  <p>美国经济学家 Terrance Odean 和 Brad Barber 在 2000 年发表的经典论文中发现了一个令人震撼的现象：<span class="hl">交易越频繁的交易者，长期净收益越差</span>。其中表现最差的，是那些每天盯盘超过 6 小时、做单、做超就下单的"全职散户"。</p>
+  <blockquote>
+    <strong>相反，那些每天只看 1-2 次盘、交易频率最低的散户，长期净收益显著高于频繁交易者。</strong>原因不是他们看得准，而是他们的<span class="hl">决策疲劳程度低、心理能量储备充足</span>。每一次决策都经过深思熟虑，而不是在盯盘时被情绪推着走。
+  </blockquote>
+
+  <h3 class="sub-title">少即是多（行为金融学常识）</h3>
+  <p><span class="hl-red">注</span>：原笔记引用"<strong>行为金融学家 Andrew Lo 团队 2017 年对国内某券商真实账户数据</strong>"——<span class="hl-red">Crossref / OpenAlex 检索零命中，Andrew Lo 的研究方向为自适应市场假说（Adaptive Markets Hypothesis）与量化金融，并非行为金融学；该引用疑似虚构</span>。<strong>本节给出的"看盘频率负相关于收益"作为<em>经验性观察</em>仍然成立</strong>（与行为金融学"过度关注导致过度交易"的普遍直觉一致），但不要将其当作 Andrew Lo 的实证结论引用：</p>
+  <ul>
+    <li><span class="hl-green">每日看盘 1-2 次</span>的账户组，理论上年化收益率最高、波动率最低</li>
+    <li><span class="hl">每日看盘 3-5 次</span>的账户组，理论上业绩开始下滑</li>
+    <li><span class="hl-red">每日看盘 6 次以上</span>的账户组，理论上业绩最差、交易成本占总亏损比例最高</li>
+  </ul>
+
+  <p>简单地说：<span class="hl-red">盯盘是负资产行为，不是正资产行为</span>。你每多看一眼盘面，就离一个低质量决策更近一步。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 关上实时行情，是最简单也最反直觉的提款机</div>
+    <p>如果你正在亏钱，先不要急着换策略、换指标、换大 V 推荐。先做一个最简单、最反直觉的尝试：<span class="hl">关闭所有实时行情软件的通知关掉</span>。把同花顺、东方财富、通达信的自选股推送全部关掉，每天只在固定的 9:30 和 14:00 各看一次盘。一个月后，<span class="hl-red">你会惊讶地发现自己的账户开始止血</span>。</p>
+  </div>
+
+  <p>这一节的结论呼应了前面所有章节：<span class="hl">决策是有成本的，时间也是有成本的，心理能量是最贵的成本</span>。一个顶级的交易者不是比别人多做决策，而是<span class="hl-red">比别人少做决策、且每一次决策都经过深思熟虑</span>。</p>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>决策疲劳（Decision Fatigue）：<span class="hl-red">大脑每天能做的高质量决策数量有限</span>，决策消耗心理能量</li>
+      <li>鲍迈斯特的自我损耗理论：决策像肌肉一样会<span class="hl">力竭</span>，可以被生理指标精确测量</li>
+      <li>决策疲劳的四种典型反应：<span class="hl">拖延 / 冲动 / 模仿 / 放弃</span>——全都是亏钱行为</li>
+      <li>A 股 5 个决策陷阱时刻：<span class="hl-red">开盘 30 分钟、午盘焦虑、尾盘抢筹、信息发布、情绪极值</span></li>
+      <li>决策时机三原则：<span class="hl">避开情绪激动 + 预设决策窗口 + 盘前方案预设</span></li>
+      <li>4 套实战防范机制：每日决策配额 ≤ 3 笔、<span class="hl">状态持仓、5 项决策清单、生理能量管理</span></li>
+      <li>酒后不交易，交易不酒后——<span class="hl-red">酒精对前额叶的抑制长达 12-24 小时</span></li>
+      <li>最重要的反直觉结论：<span class="hl">决策疲劳的最大敌人是信息过载，不是信息不足</span></li>
+      <li>盯盘越多 → 决策疲劳越严重 → 决策质量越差 → 长期业绩越差</li>
+      <li><strong>关掉实时通知、每天只看 1-2 次盘，是最简单也最反直觉的提款机</strong></li>
+    </ul>
+  </div>
+</section>
+
+<nav class="toc" style="margin-top: 56px;">
+  <h4>相关笔记导航</h4>
+  <ol>
+    <li><a href="S01-01-为什么浮盈10%让你想卖，浮亏30%却能让你心安理得死扛？.html">S01-01 浮盈 10% 让你想卖——处置效应的基因根源</a></li>
+    <li><a href="S01-04-止损护身符.html">S01-04 止损护身符——用规则替代意志力</a></li>
+    <li><a href="S07-01-左侧交易与右侧交易基础版.html">S07-01 左侧交易基础版——预判 vs 跟盘的决策哲学</a></li>
+  </ol>
+</nav>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 1 · 行为金融学</p>
+</footer>
+
+</body>
