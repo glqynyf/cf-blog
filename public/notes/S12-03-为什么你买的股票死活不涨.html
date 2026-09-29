@@ -28,14 +28,127 @@
   .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
   .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
   .summary-card p { color: var(--text); font-size: 15.5px; }
-  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
-  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
-  .toc ol { list-style: none; counter-reset: toc-counter; }
-  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
-  .toc li:last-child { border-bottom: none; }
-  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
-  .toc a:hover { color: var(--accent); }
-  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  .toc   /* 本文目录：卡片 + 编号徽章 + 时间轴引导线 */
+  .toc {
+    position: relative;
+    margin-bottom: 48px;
+    padding: 20px 24px 18px;
+    background:
+      radial-gradient(120% 130% at 0% 0%, var(--accent-soft), transparent 55%),
+      var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .toc::before {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; top: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent 72%);
+  }
+  .toc h4 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .toc h4::before {
+    content: '';
+    width: 4px; height: 14px;
+    flex-shrink: 0;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+  .toc__count {
+    margin-left: auto;
+    padding: 2px 9px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    border: 1px solid rgba(240, 136, 62, 0.3);
+    color: var(--accent);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: none;
+  }
+  .toc ol {
+    position: relative;
+    list-style: none;
+    counter-reset: toc-counter;
+    margin: 0;
+    padding: 0;
+  }
+  .toc ol::before {
+    content: '';
+    position: absolute;
+    left: 25px; top: 20px; bottom: 20px;
+    width: 1px;
+    background: linear-gradient(180deg, var(--border) 0%, var(--border) 72%, transparent 100%);
+  }
+  .toc li {
+    counter-increment: toc-counter;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border-bottom: none;
+  }
+  .toc a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 12px;
+    border-radius: 8px;
+    color: var(--text-dim);
+    font-size: 14.5px;
+    line-height: 1.5;
+    text-decoration: none;
+    transition: background 0.18s, color 0.18s;
+  }
+  .toc a::before {
+    content: counter(toc-counter, decimal-leading-zero);
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    border-radius: 7px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-mute);
+    font-size: 11.5px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    transition: background 0.18s, color 0.18s, border-color 0.18s;
+  }
+  .toc a:hover {
+    background: var(--surface-2);
+    color: var(--text);
+    text-decoration: none;
+  }
+  .toc a:hover::before {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .toc a.is-active {
+    background: var(--accent-soft);
+    box-shadow: inset 3px 0 0 var(--accent);
+    color: var(--text);
+  }
+  .toc a.is-active::before {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0f1419;
+  }
+
   section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
   h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
   h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
@@ -167,7 +280,7 @@
 </div>
 
 <nav class="toc">
-  <h4>本文目录</h4>
+  <h4>本文目录<span class="toc__count">6</span></h4>
   <ol>
     <li><a href="#sec-whatschanged">变了什么：玩家、筹码、退出路径</a></li>
     <li><a href="#sec-finance">底层主线一：土地财政 → 投资财政</a></li>
@@ -356,34 +469,45 @@
 
 <script>
 
+/* 目录滚动高亮：同时驱动左侧悬浮目录与正文「本文目录」 */
 (function () {
-  var nav = document.querySelector('.note-sidenav');
-  if (!nav) return;
-  var links = nav.querySelectorAll('a[href^="#"]');
-  if (!links.length) return;
-  var map = {};
+  var groups = [document.querySelector('.note-sidenav'), document.querySelector('.toc')];
   var targets = [];
-  links.forEach(function (a) {
-    var id = a.getAttribute('href').slice(1);
-    var el = document.getElementById(id);
-    if (el) { map[id] = a; targets.push(el); }
+  var seen = {};
+  var valid = false;
+
+  groups.forEach(function (nav) {
+    if (!nav) return;
+    var links = nav.querySelectorAll('a[href^="#"]');
+    valid = valid || links.length > 0;
+    Array.prototype.forEach.call(links, function (a) {
+      var id = a.getAttribute('href').slice(1);
+      var el = document.getElementById(id);
+      if (el && !seen[id]) { seen[id] = true; targets.push(el); }
+    });
   });
-  function clear() {
-    links.forEach(function (a) { a.classList.remove('is-active'); });
-  }
+
+  if (!valid || !targets.length) return;
+
   function onScroll() {
-    var best = null, bestTop = -Infinity;
+    var best = null;
+    var bestTop = -Infinity;
     for (var i = 0; i < targets.length; i++) {
-      var t = targets[i].getBoundingClientRect().top;
-      if (t <= 120 && t > bestTop) { bestTop = t; best = targets[i]; }
+      var top = targets[i].getBoundingClientRect().top;
+      if (top <= 120 && top > bestTop) { bestTop = top; best = targets[i]; }
     }
-    if (!best && targets.length) best = targets[0];
-    if (!best) return;
-    var active = map[best.id];
-    if (!active) return;
-    clear();
-    active.classList.add('is-active');
+    if (!best) best = targets[0];
+    var id = best.id;
+
+    groups.forEach(function (nav) {
+      if (!nav) return;
+      Array.prototype.forEach.call(nav.querySelectorAll('a[href^="#"]'), function (a) {
+        if (a.getAttribute('href').slice(1) === id) a.classList.add('is-active');
+        else a.classList.remove('is-active');
+      });
+    });
   }
+
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 })();
