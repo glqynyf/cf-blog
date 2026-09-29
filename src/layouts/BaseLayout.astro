@@ -30,18 +30,18 @@ const canonical = new URL(pathname, Astro.site ?? 'https://example.pages.dev');
     <meta name="generator" content={Astro.generator} />
 
     <!-- 主题初始化内联脚本：在渲染前设定，避免刷新闪烁。
-         默认深色（不跟随系统）；用户点过切换按钮则用其选择。 -->
+         站点只保留深色主题，这里固定写入 data-theme="dark"：
+         1. 保证首屏不闪白
+         2. Shiki 代码块的暗色覆盖规则（:root[data-theme="dark"] .astro-code）
+            依赖该属性，缺失会导致代码块渲染成白底黑字 -->
     <script is:inline>
-      (function () {
-        try {
-          var stored = localStorage.getItem('theme');
-          document.documentElement.dataset.theme =
-            stored === 'light' ? 'light' : 'dark';
-        } catch (e) {
-          // localStorage 不可用时用深色
-          document.documentElement.dataset.theme = 'dark';
-        }
-      })();
+      document.documentElement.dataset.theme = 'dark';
+      try {
+        // 清理早期版本遗留的浅色偏好，避免 localStorage 一直占着
+        localStorage.removeItem('theme');
+      } catch (e) {
+        /* localStorage 不可用时忽略 */
+      }
     </script>
 
     <title>{fullTitle}</title>
