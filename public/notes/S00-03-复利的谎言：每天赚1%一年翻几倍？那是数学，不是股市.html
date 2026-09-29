@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>复利的谎言：每天赚 1% 一年翻几倍？那是数学，不是股市｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4;
+    --text-mute: #6b7785; --accent: #f0883e;
+    --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff;
+    --yellow: #e3b341; --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 34px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  .hl-purple { color: var(--purple); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.red { border-left-color: var(--red); }
+  blockquote.red strong { color: var(--red); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .number-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 20px 0; }
+  .number-cell { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 18px 22px; text-align: center; }
+  .number-cell .num { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 8px; }
+  .number-cell .label { font-size: 13px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  table th, table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14.5px; color: var(--text); }
+  table th { background: var(--surface-2); color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 12.5px; }
+  table tr:last-child td { border-bottom: none; }
+  table td:first-child { font-weight: 600; color: var(--accent); }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } .number-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 0</span>
+  <span class="stage-name">认知重塑（破除散户思维，先破后立）</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 11 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 0 · 第 3 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">复利的谎言：每天赚 1% 一年翻几倍？那是数学，不是股市</h1>
+  <p class="note-subtitle">复利是世界第八大奇迹——但<span class="hl">真正的复利不是每天赚 1%，而是尽量不亏损</span>。那些鼓吹日赚 1% 的人，要么蠢，要么就是想把你的骨髓都吸干。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>"每天赚 1%，一年 377 万"——这是<span class="hl">算术复利</span>编出来的童话。真实世界是<span class="hl">几何复利</span>：赚 100% 再亏 50%，你以为打平，本金实打实缩水 25%。更残酷的是交易成本黑洞和波动率税——本文用 4 个数学真相 + 2 个杀手级幻觉，彻底拆穿日赚 1% 的谎言。<span class="hl">活下来比赚得快重要一万倍</span>。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-lie">谎言一 · 50% 涨 + 50% 跌 ≠ 不亏不赚</a></li>
+    <li><a href="#sec-tax">杀手一 · 波动率税：期望值为正也会破产</a></li>
+    <li><a href="#sec-cost">杀手二 · 交易成本黑洞：每天 1 次，年化 -25%</a></li>
+    <li><a href="#sec-95">杀手三 · 90% 垃圾时间里的执念</a></li>
+    <li><a href="#sec-truth">真相 · 巴菲特的秘密：不是抓涨停，而是躲过暴跌</a></li>
+    <li><a href="#sec-action">三步行动清单：忘掉 1%，学会不亏</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-lie">
+  <h2 class="section-title">谎言一 · 50% 涨 + 50% 跌 ≠ 不亏不赚</h2>
+  <p>假设你拿 100 元：</p>
+  <ul>
+    <li><span class="hl-green">第一年赚 50%</strong>，变成 150 元，股神附体</li>
+    <li><span class="hl-red">第二年亏 50%</strong>，变成 75 元</li>
+  </ul>
+  <p>你心里想："赚 50% 亏 50%，刚打平。" 错。<strong>你的本金实打实缩水了 25%</strong>。两次操作过后，你手里的钱从 100 元变成了 75 元。</p>
+
+  <blockquote class="red">
+    <strong>这就是复利最阴暗的一面</strong>：<span class="hl">亏损对账户的伤害，远远大于盈利对账户的贡献</span>。亏损和盈利是不对称的——这种不对称叫做<strong>几何平均</strong>，远比算术平均更残酷。
+  </blockquote>
+
+  <h3 class="sub-title">亏损幅度与回本难度的非线性对应</h3>
+  <p>数学铁律：在 A 股这种有涨跌停限制的市场，<span class="hl-red">亏得越深，回本越像登天</span>。</p>
+
+  <table>
+    <thead>
+      <tr><th>亏损幅度</th><th>回本所需涨幅</th><th>难度系数</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>-10%</td><td>+11%</td><td>勉强</td></tr>
+      <tr><td>-30%</td><td>+43%</td><td>明显吃力</td></tr>
+      <tr><td>-50%</td><td>+100%</td><td>翻倍才能回本</td></tr>
+      <tr><td>-70%</td><td>+233%</td><td>几乎不可能在一次牛市中完成</td></tr>
+      <tr><td>-90%</td><td>+900%</td><td>需要 9 倍涨幅——比中彩票还难</td></tr>
+    </tbody>
+  </table>
+
+  <p>市场不是你家开的提款机，它是<span class="hl">一台随机漫步机</span>。Excel 表格里的 1% 是静态的、没有波动的；股市里为了赚这 1%，你必须承担风险。</p>
+</section>
+
+<section class="section" id="sec-tax">
+  <h2 class="section-title">杀手一 · 波动率税：期望值为正也会破产</h2>
+  <p>就算你胜率很高、每次盈利又高又稳，也可能在数学上破产。这就是<span class="hl">波动率税</span>（Volatility tax）——专业领域里的 <strong>"路径杀手"</strong>。</p>
+
+  <blockquote>
+    <strong>抛硬币实验</strong>：每天抛硬币，正面赢 20%，反面输 15%。<span class="hl">数学期望值 = +2.5%（正期望值游戏）</span>。看起来很划算对吧。如果你一直玩下去，根据数学定律你应该发财。<br><br>
+    但现实中<span class="hl-red">如果你全仓去赌，时间拉得足够长，资产最终会趋向于零</span>。因为只要出现连续几次反面，本金就会被削弱到无法翻身的程度——这叫<strong>破产性破灭</strong>。
+  </blockquote>
+
+  <p>那些每天追求 1% 的人，本质上是在刀尖上跳舞。<span class="hl">为了维持这个极高的频率</span>，你必须在<strong>任何</strong>市场环境下都强行交易：</p>
+  <ul>
+    <li>牛市要冲</li>
+    <li>熊市要冲</li>
+    <li>震荡市更要冲</li>
+  </ul>
+  <p>就像一个农夫<span class="hl-red">不管外面下刀子还是下冰雹，他每天都要下地割一把麦子回来</span>。结果麦子没割到，人先冻死在外面了。</p>
+</section>
+
+<section class="section" id="sec-cost">
+  <h2 class="section-title">杀手二 · 交易成本黑洞</h2>
+  <p>"万几的手续费算什么？"——咱们来算一笔账：</p>
+  <p>如果你真的<span class="hl">每天交易一次</span>，一年 250 个交易日，印花税 + 佣金 + 过户费加起来按万 5 算，单次买+卖来回就是千分之一：</p>
+
+  <div class="number-grid">
+    <div class="number-cell">
+      <div class="num">0.1%</div>
+      <div class="label">单次买卖摩擦</div>
+    </div>
+    <div class="number-cell">
+      <div class="num">25%</div>
+      <div class="label">年化交易成本</div>
+    </div>
+  </div>
+
+  <blockquote class="red">
+    <strong>真正讽刺的数字</strong>：意味着你还没开始赚钱，就先背上了 <strong>25% 的负债</strong>。你必须先从市场里虎口夺食赚回 25% 才能刚刚打平手续费。而巴菲特一辈子的年化也就 20% 出头——<span class="hl">你凭什么觉得自己能比巴菲特多赚出一个手续费黑洞？</span>
+  </blockquote>
+
+  <h3 class="sub-title">更隐蔽的"滑点"杀手</h3>
+  <p>你以为的"成交价 10 元"，实际往往是 10.02 元或 9.98 元——这就是滑点。情绪一激动追高，半秒之差就要多付 0.5%-2%。这还没算<span class="hl">买卖价差</span>、<span class="hl">冲击成本</span>。这些隐形的"液态成本"，每天都在悄悄吮吸你的本金。</p>
+</section>
+
+<section class="section" id="sec-95">
+  <h2 class="section-title">杀手三 · 90% 垃圾时间里的执念</h2>
+  <p>A 股也好，美股也好，<span class="hl">真正的利润往往是集中在极少数的几天里产生的</span>。</p>
+
+  <div class="number-grid">
+    <div class="number-cell">
+      <div class="num">90%</div>
+      <div class="label">垃圾时间（震荡/磨损/骗线）</div>
+    </div>
+    <div class="number-cell">
+      <div class="num">10%</div>
+      <div class="label">真正的主升浪</div>
+    </div>
+  </div>
+
+  <p>真正的聪明资金是在 90% 的时间里<span class="hl-blue">装死等待布局</span>，然后抓住 10% 的主升浪<span class="hl">一把吃饱</span>。</p>
+  <p>而日赚 1% 的思维，是逼着你在 90% 的垃圾时间里去和量化机器、内幕资金肉搏。<span class="hl-red">你有什么胜算？</span></p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 顶级高手的真正风格</div>
+    <p>顶级的钱不是每天磨出来的，而是<span class="hl">看准大趋势、重仓出击</span>，在哪怕只有 30% 胜率的情况下，通过超高盈亏比一把赚普通人十辈子的钱。他们懂得<span class="hl">只有大风来了才能起飞</span>，而散户却在没风的日子里拼命对着风车吹气。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-truth">
+  <h2 class="section-title">真相 · 巴菲特的秘密</h2>
+  <p>复利当然是存在的，它是世界第八大奇迹——<span class="hl">但真正的复利不是每天赚 1%，而是尽量不亏损</span>。</p>
+
+  <blockquote>
+    <strong>查理·芒格说过一句话</strong>：如果我知道我会死在哪里，那我就不去那个地方。<br><br>
+    真正的复利高手，<span class="hl">他们的核心能力不是进攻，而是防守</span>。他们不是在想怎么每天赚 1%，而是在想"如果明天市场崩盘跌了 50%，我怎么才能活下来"。
+  </blockquote>
+
+  <h3 class="sub-title">一个"无聊但有效"的算法</h3>
+  <p>假设你真的做到：</p>
+  <ul>
+    <li>第一年赚 20%</li>
+    <li>第二年赚 20%</li>
+    <li><strong>第三年不亏（最关键）</strong></li>
+    <li>第四年再赚 20%</li>
+  </ul>
+  <p>十年下来你的收益会惊掉下巴——这才是<span class="hl">巴菲特的真正秘密</span>：他的秘密不是因为能抓涨停，而是<span class="hl-red">在几十年的美股历史中躲过了大部分毁灭性的暴跌</span>。他活着，一直活着，活到对手都死光了，他的钱自然就变成了最多的。</p>
+
+  <div class="quote-banner">
+    想要在这个残酷的丛林里利用复利，<br>
+    你必须戒掉报复的瘾——<br>
+    <span class="hl">忘掉日收益，关注年收益；</span><br>
+    <span class="hl">降低预期，承认自己是普通人；</span><br>
+    <span class="hl">控制回撤，永远不要全仓梭哈。</span>
+  </div>
+</section>
+
+<section class="section" id="sec-action">
+  <h2 class="section-title">三步行动清单</h2>
+
+  <h3 class="sub-title">第一步 · 忘掉日收益，关注年收益</h3>
+  <p>把时间拉长。不要因为一天没赚钱就焦虑，不要因为一周回撤了就崩溃。<span class="hl">给资金一点呼吸的空间，给趋势一点发酵的时间</span>。</p>
+
+  <h3 class="sub-title">第二步 · 降低预期，承认自己是普通人</h3>
+  <p>如果你能做到年化 15%，你已经是顶尖高手了。不要跟那些晒图的妖魔鬼怪比，他们晒的是诱饵，你看的是陷阱。<span class="hl">复利真正的神效来自"持续"而非"暴利"</span>。</p>
+
+  <h3 class="sub-title">第三步 · 控制回撤，永不全仓梭哈</h3>
+  <p>永远给自己留一张底牌。在市场里<span class="hl-red">本金就是你的命</span>，丢了命，再好的行情也跟你没关系了。</p>
+
+  <blockquote>
+    巴菲特说过：<strong>"普通人最难接受的一件事，就是慢慢变富。"</strong><br>
+    所有人都急于一夜报复，却忽略了复利才是财富增长真正的底层力量。<br>
+    <span class="hl">耐得住市场漫长周期，守好仓位与本金，时间自会兑现复利的威力。</span>
+  </blockquote>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li><strong>50% 涨 + 50% 跌 ≠ 打平</strong>——账户实亏 25%。复利是几何而非算术</li>
+      <li><strong>回本难度非线性</strong>：亏 50% 要翻倍；亏 90% 要涨 900%，比中彩票还难</li>
+      <li><strong>波动率税</strong>：期望值为正也会破产——全仓高频是路径杀手</li>
+      <li><strong>交易成本黑洞</strong>：每天交易 1 次，年化 -25% 的隐形负债</li>
+      <li><strong>90/10 法则</strong>：90% 的利润来自 10% 的主升浪，剩下时间就是垃圾时间</li>
+      <li>巴菲特真正秘密：<strong>不是抓涨停，而是躲暴跌 + 活得够久</strong></li>
+      <li>三步行动：<strong>关注年收益 + 承认普通人 + 永不全仓</strong></li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 0 · 认知重塑</p>
+</footer>
+
+</body>
+</html>
