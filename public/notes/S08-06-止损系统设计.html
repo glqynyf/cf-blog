@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>止损系统设计：追踪止损、时间止损、波动率止损｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  .hl-yellow { color: var(--yellow); font-weight: 600; }
+  .hl-purple { color: var(--purple); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  blockquote.red { border-left-color: var(--red); }
+  blockquote.red strong { color: var(--red); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .formula-box { background: var(--surface); border: 1px solid var(--accent); border-radius: 8px; padding: 22px 26px; margin: 24px 0; text-align: center; }
+  .formula-box .formula { font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; color: var(--accent); font-size: 19px; font-weight: 700; margin-bottom: 12px; }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; }
+  .formula-box .formula-list { display: flex; flex-direction: column; gap: 14px; align-items: center; }
+  .formula-box .formula-item { width: 100%; padding: 12px 16px; background: var(--surface-2); border-radius: 6px; }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 24px 0; }
+  .compare-grid .col { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px; }
+  .compare-grid .col h4 { color: var(--accent); font-size: 16px; margin-bottom: 12px; font-weight: 700; }
+  .compare-grid .col.blue h4 { color: var(--blue); }
+  .compare-grid .col.green h4 { color: var(--green); }
+  .compare-grid .col.purple h4 { color: var(--purple); }
+  .compare-grid .col.red h4 { color: var(--red); }
+  .compare-grid ul { margin: 0; padding-left: 18px; }
+  .compare-grid ul li { font-size: 14px; color: var(--text-dim); margin-bottom: 6px; }
+  .compare-grid ul li strong { color: var(--text); }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  table th { background: var(--surface-2); color: var(--accent); padding: 12px 16px; text-align: left; font-weight: 700; font-size: 14px; border-bottom: 1px solid var(--border); }
+  table td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text); font-size: 14.5px; }
+  table tr:last-child td { border-bottom: none; }
+  table tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+  .nav-related { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-top: 56px; }
+  .nav-related h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .nav-related ul { list-style: none; margin: 0; padding: 0; }
+  .nav-related ul li { padding: 10px 0; border-bottom: 1px dashed var(--border); }
+  .nav-related ul li:last-child { border-bottom: none; }
+  .nav-related a { color: var(--text); text-decoration: none; font-size: 14.5px; transition: color 0.2s; display: flex; align-items: center; gap: 12px; }
+  .nav-related a:hover { color: var(--accent); }
+  .nav-related .nav-tag { font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; color: var(--accent); font-size: 12.5px; padding: 2px 8px; background: var(--accent-soft); border-radius: 4px; font-weight: 700; }
+  footer.note-footer { margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } .compare-grid { grid-template-columns: 1fr; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 8</span>
+  <span class="stage-name">止盈止损与卖出体系</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 16 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 8 · 第 6 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">止损系统设计：追踪止损、时间止损、波动率止损</h1>
+  <p class="note-subtitle">"亏 10% 就止损"是教科书最懒的答案。本篇拆解三种可量化的止损方法（追踪 / 时间 / 波动率），给不同场景匹配不同止损参数，并给出可落地的执行铁律。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>固定百分比止损<span class="hl-red">看起来简单，实际上是缺陷最严重</span>的止损方式——它忽略了<span class="hl">个股波动率差异</span>，对高波动股容易被正常震荡甩出去，对低波动股又可能在底部反转前被错杀。真正可执行的止损系统，必须<span class="hl">基于波动率自适应</span>，并且把<span class="hl-blue">追踪、时间、波动率</span>三种方法按交易场景组合使用。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-fixed">固定百分比止损的三大陷阱</a></li>
+    <li><a href="#sec-trailing">追踪止损：让利润奔跑的核心机制</a></li>
+    <li><a href="#sec-time">时间止损：解放被无效占用的资金</a></li>
+    <li><a href="#sec-volatility">波动率止损：自适应个股的 ATR 系统</a></li>
+    <li><a href="#sec-combo">实战组合：不同场景的止损参数表</a></li>
+    <li><a href="#sec-rules">止损的金规则与 5 大禁忌</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-fixed">
+  <h2 class="section-title">固定百分比止损的三大陷阱</h2>
+  <p>很多散户第一次学止损，都是从一句话开始的：<span class="hl">"亏 10% 就止损"</span>。听起来干脆利落，执行起来也方便——设个条件单，等着触发就行。</p>
+
+  <p>但如果你在真实市场里用上一段时间就会发现，这句话<span class="hl-red">几乎从来赚不到大钱，却总在该赚的时候把你甩下车</span>。问题出在哪里？它忽略了三个根本性的差异。</p>
+
+  <div class="compare-grid">
+    <div class="col blue">
+      <h4>陷阱一：忽略波动率差异</h4>
+      <ul>
+        <li><strong>高波动股</strong>（题材股、次新股）：10% 是日均波幅</li>
+        <li>正常震荡就会被甩出</li>
+        <li>频繁止损 = 反复被消耗</li>
+      </ul>
+    </div>
+    <div class="col green">
+      <h4>陷阱二：忽略底部反转</h4>
+      <ul>
+        <li><strong>低波动股</strong>（蓝筹、价值股）：10% 可能是深度回踩</li>
+        <li>割肉在黎明前</li>
+        <li>错过主升浪</li>
+      </ul>
+    </div>
+    <div class="col red">
+      <h4>陷阱三：忽略市场状态</h4>
+      <ul>
+        <li>牛市里 10% 是绝佳加仓点</li>
+        <li>熊市里 5% 都嫌多</li>
+        <li>震荡市里 10% 反复触发</li>
+      </ul>
+    </div>
+  </div>
+
+  <blockquote class="red">
+    <strong>核心结论：</strong>固定百分比是<span class="hl-red">最懒、最机械、最容易导致亏损扩大</span>的止损方式。真正可执行的止损，必须<span class="hl">根据个股波动特征、持仓周期、市场状态</span>动态调整。下面三种方法，分别解决不同维度的问题。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-trailing">
+  <h2 class="section-title">追踪止损：让利润奔跑的核心机制</h2>
+  <p><span class="hl">追踪止损（Trailing Stop）</span>是趋势交易者最常用的工具。它的核心思路不是"在固定价位止损"，而是"股价创新高后，止损位跟着上调，但永远不上调"——一旦股价回落触发，已经上调的止损位，就锁定一部分利润。</p>
+
+  <h3 class="sub-title">原理与公式</h3>
+  <p>追踪止损的价格会随着股价创新高而同步上移，但永远不会下移——这相当于一个"只能往上抬，不能往下降"的滑轨。</p>
+
+  <div class="formula-box">
+    <div class="formula-list">
+      <div class="formula-item">
+        <div class="formula">止损价 = max( 最高价 × (1 − K), 买入价 × (1 + M) )</div>
+        <div class="desc">K 为追踪系数（15-25%），M 为保本缓冲（通常 0-3%）</div>
+      </div>
+    </div>
+  </div>
+
+  <p>实际使用中，更常见的简化版本是：<span class="hl">股价突破买入价后激活</span>，止损位始终跟随最高价回调 K%。这样在浮亏阶段止损不动，浮盈阶段才开始追踪，既能保护本金又能锁定利润。</p>
+
+  <h3 class="sub-title">实战案例</h3>
+  <p>假设你 10 元买入一只股票，设 20% 追踪止损（K = 20%）：</p>
+  <ul>
+    <li>股价涨到 12 元：止损位 = 12 × 0.8 = <span class="hl-green">9.6 元</span>（仍允许小幅回撤）</li>
+    <li>股价涨到 15 元：止损位 = 15 × 0.8 = <span class="hl-green">12 元</span>（已锁定 2 元利润）</li>
+    <li>股价涨到 20 元：止损位 = 20 × 0.8 = <span class="hl-green">16 元</span>（已锁定 60% 利润）</li>
+    <li>股价回落到 16 元：触发止损，<span class="hl">盈利 60% 出场</span></li>
+  </ul>
+
+  <h3 class="sub-title">优点与缺点</h3>
+
+  <div class="compare-grid">
+    <div class="col green">
+      <h4>优点</h4>
+      <ul>
+        <li><strong>永远锁定部分利润</strong></li>
+        <li>趋势行情中收益巨大</li>
+        <li>心理上更容易执行</li>
+      </ul>
+    </div>
+    <div class="col red">
+      <h4>缺点</h4>
+      <ul>
+        <li><strong>震荡市容易被洗出</strong></li>
+        <li>K 太大 → 利润回吐过多</li>
+        <li>K 太小 → 正常波动被甩</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="sec-time">
+  <h2 class="section-title">时间止损：解放被无效占用的资金</h2>
+  <p>很多散户的最大痛点不是亏钱，而是<span class="hl-red">钱被套着没亏也没赚，机会成本却被悄悄吞噬</span>。一笔交易开了仓，价格横盘不动，一个月后还在原地——这时候你错过了其他可能更好的标的，机会成本已经大到不可忽略。</p>
+
+  <p><span class="hl-blue">时间止损（Time Stop）</span>专门解决这个问题：</p>
+
+  <div class="formula-box">
+    <div class="formula-list">
+      <div class="formula-item">
+        <div class="formula">持有天数达到 T，无论盈亏都出场</div>
+        <div class="desc">短线 T = 5-10 个交易日，中线 T = 30-90 天</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="sub-title">三种典型场景</h3>
+  <ul>
+    <li><span class="hl">短线追板：</span>题材股讲究时效性，第 3-5 天没动静就说明资金不认可，T = 5 天</li>
+    <li><span class="hl">中线波段：</span>基本面没问题但走势磨蹭，30 天没走出预期形态就该重新评估</li>
+    <li><span class="hl">长线价值：</span>季度财报未达预期或行业逻辑兑现滞后，T = 90 天</li>
+  </ul>
+
+  <blockquote class="purple">
+    <strong>时间止损的本质：</strong>承认"我对这只股票的判断是有时间窗口的"。一旦市场没有在合理时间内给出回应，<span class="hl">不要把"等等看"当成免费选项</span>——资金是有成本的，机会也是有时效的。
+  </blockquote>
+
+  <h3 class="sub-title">优点与缺点</h3>
+
+  <div class="compare-grid">
+    <div class="col green">
+      <h4>优点</h4>
+      <ul>
+        <li><strong>避免资金被无效占用</strong></li>
+        <li>强制提高资金周转率</li>
+        <li>把错误头寸快速止损</li>
+      </ul>
+    </div>
+    <div class="col red">
+      <h4>缺点</h4>
+      <ul>
+        <li><strong>可能错过慢牛启动</strong></li>
+        <li>横盘蓄势被误判</li>
+        <li>忽略了个股节奏差异</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="sec-volatility">
+  <h2 class="section-title">波动率止损：自适应个股的 ATR 系统</h2>
+  <p>如果只能用一种止损方法做长期组合，<span class="hl">波动率止损（Volatility Stop）</span>是专业交易员的首选。它的核心思想是：止损空间应该跟个股自身的"脾气"匹配——波动大的股给宽一点，波动小的股给紧一点。</p>
+
+  <h3 class="sub-title">ATR 是什么</h3>
+  <p><span class="hl-blue">ATR（Average True Range，平均真实波幅）</span>衡量的是一段时间里股价的平均波动幅度。参数 14 是默认值——用过去 14 个交易日的真实波幅取移动平均。</p>
+
+  <p>举个例子：</p>
+  <ul>
+    <li>某白马股 ATR = 0.3 元 → 日均波动 3%，ATR 止损通常给 2 倍 = 0.6 元</li>
+    <li>某题材股 ATR = 1.5 元 → 日均波动 8%，ATR 止损通常给 2 倍 = 3 元</li>
+  </ul>
+
+  <h3 class="sub-title">公式</h3>
+
+  <div class="formula-box">
+    <div class="formula-list">
+      <div class="formula-item">
+        <div class="formula">止损价 = 买入价 − K × ATR</div>
+        <div class="desc">K 一般取 2-3，低波动股 K 取 2，高波动股 K 取 3</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="sub-title">为什么波动率止损更好</h3>
+
+  <blockquote class="purple">
+    <strong>波动率止损的最大优势是"自适应"</strong>：<span class="hl">同一个 K 值，对不同波动特征的股票，会自动给出完全不同的止损空间</span>。对白马股（股价 40 元、ATR=0.3）0.6 元止损（占股价 <span class="hl-red">1.5%</span>）够紧，对题材股（股价 50 元、ATR=5）3 元止损（占股价 <span class="hl-red">6%</span>）才合理——这一切都是 ATR 自动算出来的，不需要人为判断。<span class="hl-red">原笔记此处百分比与文内 ATR 数据矛盾——若 ATR=0.3 × K=2 = 0.6 元，40 元股占 1.5%；若 ATR=5 × K=2 = 10 元，50 元股占 20%（而非 6%）</span>。
+  </blockquote>
+
+  <p>这彻底解决了固定百分比止损的核心缺陷。<span class="hl-red">它把"个股脾气"这个变量，从交易者的脑子里搬到了公式里</span>。</p>
+
+  <h3 class="sub-title">优点与缺点</h3>
+
+  <div class="compare-grid">
+    <div class="col green">
+      <h4>优点</h4>
+      <ul>
+        <li><strong>自适应个股波动</strong></li>
+        <li>不同波动股自动适配</li>
+        <li>数学可量化、可回测</li>
+      </ul>
+    </div>
+    <div class="col red">
+      <h4>缺点</h4>
+      <ul>
+        <li><strong>需要历史数据计算</strong></li>
+        <li>新上市股票 ATR 不稳定</li>
+        <li>小资金难以执行宽止损</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="sec-combo">
+  <h2 class="section-title">实战组合：不同场景的止损参数表</h2>
+  <p>三种止损方法各有优劣，<span class="hl">实战中通常不会单独使用</span>。下面给出一套经过验证的"场景-止损方式"对照表，你可以根据自己的交易风格选用：</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>交易场景</th>
+        <th>推荐止损方式</th>
+        <th>参数设置</th>
+        <th>理由</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="hl">短线追板</span></td>
+        <td>时间止损为主</td>
+        <td>3-5 个交易日</td>
+        <td>题材时效性强，未启动即走弱</td>
+      </tr>
+      <tr>
+        <td><span class="hl-blue">中线波段</span></td>
+        <td>波动率止损为主</td>
+        <td>2-3 倍 ATR</td>
+        <td>自适应波动，容错空间合理</td>
+      </tr>
+      <tr>
+        <td><span class="hl-green">长线价值</span></td>
+        <td>追踪止损为主</td>
+        <td>20% 追踪系数</td>
+        <td>让利润奔跑，长期复利</td>
+      </tr>
+      <tr>
+        <td><span class="hl-purple">题材股</span></td>
+        <td>时间 + 百分比</td>
+        <td>5 天 / 10%</td>
+        <td>双保险，触发任一即离场</td>
+      </tr>
+      <tr>
+        <td><span class="hl-yellow">指数 ETF</span></td>
+        <td>波动率止损</td>
+        <td>2 倍 ATR</td>
+        <td>波动温和，ATR 区间清晰</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="quote-banner">
+    没有完美的止损方法，<br>
+    只有<span class="hl">适配场景的止损组合</span>。<br>
+    把"亏 10% 就走"换成<br>
+    "<span class="hl">根据波动率动态调整</span>"，
+    你的止损系统<br>
+    才真正进入了<span class="hl">专业级别</span>。
+  </div>
+</section>
+
+<section class="section" id="sec-rules">
+  <h2 class="section-title">止损的金规则与 5 大禁忌</h2>
+
+  <h3 class="sub-title">四条金规则</h3>
+  <p>止损系统设计的成败，<span class="hl-red">90% 取决于执行纪律，而不是方法本身</span>。下面四条金规则，是无数交易者用真金白银换来的经验：</p>
+
+  <div class="key-points">
+    <h4>止损的四条金规则</h4>
+    <ul>
+      <li><strong>永远不要临时改动止损</strong>——除非系统性原因（财报暴雷、行业政策剧变），否则盘中不允许移动止损位</li>
+      <li><strong>止损要写下来</strong>——口头止损或"心里想"的止损，等于没设；买入时同步写下止损位和触发条件</li>
+      <li><strong>单笔止损不超过总资金 1-2%</strong>——计算公式：<span class="hl">开仓股数 = 单笔可承受金额 ÷ 每股止损空间</span>，要得到"仓位比例"还需再除以总资金（即 <code>仓位 = (可承受金额 / 止损空间) / 总资金</code>）</li>
+      <li><strong>止损后强制冷静 24 小时</strong>——触发止损后至少一天不交易，避免情绪化"报复性交易"</li>
+    </ul>
+  </div>
+
+  <h3 class="sub-title">止损的 5 大禁忌</h3>
+
+  <p>比"怎么做"更重要的，是"绝对不要这么做"。下面 5 个禁忌，几乎每一个都对应着一笔真实的爆仓故事：</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 禁忌 1：把止损位设在整数位</div>
+    <p>整数位（10 元、50 元、100 元）是<span class="hl-red">全市场散户的共识挂单位置</span>，也是机构最容易扫止损的区域（参见 S08-04 流动性猎杀）。<span class="hl">止损位应该设在整数位 ±0.5%-1% 的"非共识区"</span>，避开火把堆。</p>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 禁忌 2：不设止损（"再看看"）</div>
+    <p>"再看看"是散户最贵的三个字。<span class="hl-red">每一笔"再看看"最终都变成了深度套牢</span>，而深度套牢又变成了"再等等"——直到账户亏损 50% 才幡然醒悟。<span class="hl">买入的那一刻，止损位就已经存在</span>，不接受事后讨论。</p>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 禁忌 3：在大跌中临时下调止损</div>
+    <p>价格快速下跌时，人的本能是<span class="hl-red">把止损往下挪</span>，希望"少亏一点"——这叫<span class="hl">追跌</span>，是技术性小亏变成实质性大亏的最常见路径。<span class="hl">止损位只许上调不许下调</span>，下跌时它就是锚。</p>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 禁忌 4：用情绪代替规则</div>
+    <p>"这次我觉得会反弹"——这是 90% 散户爆仓前的最后一句话。<span class="hl">交易系统的规则一旦制定，就不接受临场修改</span>。情绪交易没有赢家，市场永远比你更情绪化。</p>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 禁忌 5：在止损位附近反向加仓</div>
+    <p>"已经亏 10% 了，再买 2 倍仓位摊低成本"——这叫<span class="hl-red">加倍下注（Martingale）</span>，是赌场里被数学证明必输的策略。<span class="hl">每一笔交易都是独立事件</span>，过去的亏损不能通过加仓抹平。</p>
+  </div>
+
+  <div class="quote-banner">
+    <span class="hl">止损不是认错</span>，<br>
+    是给规则保留<span class="hl">重新上场的资格</span>。<br>
+    一次止损出局只是<span class="hl-blue">单笔试错成本</span>，<br>
+    没有止损出局<br>
+    才是<span class="hl-red">整个交易生涯的终结</span>。
+  </div>
+</section>
+
+<nav class="nav-related">
+  <h4>相关笔记</h4>
+  <ul>
+    <li><a href="S08-01-一只股该不该卖？给你4个受用终身的判断标准.html"><span class="nav-tag">S08-01</span>一只股该不该卖</a></li>
+    <li><a href="S08-04-流动性猎杀止损避坑.html"><span class="nav-tag">S08-04</span>流动性猎杀止损避坑</a></li>
+    <li><a href="S08-05-深套30%解套策略.html"><span class="nav-tag">S08-05</span>深套 30% 解套策略</a></li>
+  </ul>
+</nav>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 8 · 止盈止损与卖出体系</p>
+</footer>
+
+</body>
