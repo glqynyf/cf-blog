@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>财报造假识别：10 个关键预警信号｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  .hl-purple { color: var(--purple); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  blockquote.red { border-left-color: var(--red); }
+  blockquote.red strong { color: var(--red); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14.5px; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { background: var(--surface-2); color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; }
+  td { color: var(--text); }
+  tr:last-child td { border-bottom: none; }
+  .signal-group { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin: 24px 0; }
+  .signal-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px; transition: border-color 0.2s; }
+  .signal-card:hover { border-color: var(--accent); }
+  .signal-card .num { display: inline-block; padding: 2px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 13px; margin-bottom: 12px; letter-spacing: 0.5px; }
+  .signal-card h4 { font-size: 16px; color: var(--text); margin-bottom: 10px; font-weight: 700; }
+  .signal-card .formula { color: var(--purple); font-family: 'SF Mono', Monaco, Consolas, monospace; font-size: 14px; background: var(--bg); padding: 8px 12px; border-radius: 4px; margin: 10px 0; }
+  .signal-card .threshold { color: var(--green); font-size: 14px; margin-bottom: 8px; }
+  .signal-card .threshold strong { color: var(--green); }
+  .signal-card .alert { color: var(--red); font-size: 14px; }
+  .signal-card .alert strong { color: var(--red); }
+  .signal-card p { font-size: 14px; color: var(--text-dim); margin-bottom: 8px; line-height: 1.7; }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .formula-box { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--purple); border-radius: 8px; padding: 20px 24px; margin: 20px 0; }
+  .formula-box .label { color: var(--purple); font-weight: 700; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
+  .formula-box .formula { font-family: 'SF Mono', Monaco, Consolas, monospace; font-size: 17px; color: var(--accent); margin: 8px 0; font-weight: 600; padding: 10px 14px; background: var(--bg); border-radius: 4px; border: 1px dashed var(--border); }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; margin-top: 8px; line-height: 1.7; }
+  .formula-box .desc strong { color: var(--green); }
+  .formula-box .desc .bad { color: var(--red); }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 24px 0; }
+  .compare-grid .col { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 24px; }
+  .compare-grid .col h4 { font-size: 16px; margin-bottom: 12px; }
+  .compare-grid .col.ok h4 { color: var(--green); }
+  .compare-grid .col.bad h4 { color: var(--red); }
+  .compare-grid .col ul { margin: 0; padding-left: 18px; }
+  .compare-grid .col ul li { font-size: 14.5px; color: var(--text-dim); }
+  .behave-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 24px 0; }
+  .behave-grid .item { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; display: flex; gap: 16px; align-items: flex-start; }
+  .behave-grid .letter { font-size: 24px; font-weight: 800; color: var(--accent); min-width: 36px; line-height: 1; padding-top: 2px; font-family: 'SF Mono', Monaco, Consolas, monospace; }
+  .behave-grid .body { flex: 1; }
+  .behave-grid .body h4 { font-size: 15px; color: var(--text); margin-bottom: 6px; font-weight: 700; }
+  .behave-grid .body p { font-size: 14px; color: var(--text-dim); margin-bottom: 0; line-height: 1.7; }
+  .related-notes { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin-top: 56px; }
+  .related-notes h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .related-notes ul { list-style: none; margin: 0; }
+  .related-notes ul li { padding: 8px 0 8px 22px; position: relative; color: var(--text); font-size: 14.5px; border-bottom: 1px dashed var(--border); }
+  .related-notes ul li:last-child { border-bottom: none; }
+  .related-notes ul li::before { content: "→"; position: absolute; left: 0; color: var(--accent); }
+  .related-notes ul li a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
+  .related-notes ul li a:hover { color: var(--accent); }
+  .related-notes ul li .id { color: var(--accent); font-weight: 700; margin-right: 8px; font-family: 'SF Mono', Monaco, Consolas, monospace; font-size: 13px; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } .signal-group, .compare-grid, .behave-grid { grid-template-columns: 1fr; } table { font-size: 13px; } th, td { padding: 10px 12px; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 10</span>
+  <span class="stage-name">选股框架与基本面分析</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 15 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 10 · 第 13 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">财报造假识别：10 个关键预警信号</h1>
+  <p class="note-subtitle">每年都有"白马股"突然暴雷——康得新账上 122 亿现金是假的，瑞幸伪造 22 亿销售额，康美虚增 300 亿货币资金。从安然到瑞幸，造假手段在进化，散户识别财报陷阱的方法也必须跟上。这一篇把 10 个最关键的预警信号系统化，让你用三张报表自己抓到造假的尾巴。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>财报造假不可怕，可怕的是你拿着真金白银去接假财报的盘。<span class="hl">识别造假的本质是看"科目之间的逻辑自洽性"</span>——货币资金有没有对应的利息收入？利润有没有对应的经营现金流？收入增长有没有对应的应收增长？当数字之间的勾稽关系断裂，造假往往已经在发生了。学会下面 10 个信号，你就能在三张报表里看出 90% 的造假痕迹。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-why">为什么财报造假难以识别：4 个经典案例</a></li>
+    <li><a href="#sec-signals">10 大核心预警信号（资金 / 收入 / 治理 / 资产）</a></li>
+    <li><a href="#sec-behave">Behave 模型：财报体检 7 维度</a></li>
+    <li><a href="#sec-methods">5 类经典造假手段（识别套路，反向应用）</a></li>
+    <li><a href="#sec-quant">量化筛选：3 个必查指标</a></li>
+    <li><a href="#sec-rules">3 个常见误区 + 避雷 5 条铁律</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-why">
+  <h2 class="section-title">为什么财报造假难以识别</h2>
+
+  <p>A 股市场每年都在和"造假股"搏斗。从康得新到康美药业，从辉山乳业到尔康制药，造假手段不断升级，散户的识别难度也在增加。我们先看 4 个著名的造假案例：</p>
+
+  <table>
+    <thead>
+      <tr><th>公司</th><th>暴雷时间</th><th>造假手段</th><th>涉案金额</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>安然（Enron）</strong></td><td>2001 年</td><td>通过 SPV 隐藏负债，操纵利润表</td><td>破产前 5 年系统性造假</td></tr>
+      <tr><td><strong>康得新</strong></td><td>2019 年</td><td>虚构货币资金</td><td>账面 122 亿现金是假的</td></tr>
+      <tr><td><strong>康美药业</strong></td><td>2019 年</td><td>虚增货币资金 + 关联方占款</td><td>承认虚增 300 亿货币资金</td></tr>
+      <tr><td><strong>瑞幸咖啡</strong></td><td>2020 年</td><td>伪造销售订单和银行流水</td><td>伪造 22 亿销售额</td></tr>
+    </tbody>
+  </table>
+
+  <p>这些公司都不是小盘股、不是 ST 股。它们在被暴雷之前，绝大多数都头顶"白马""龙头""核心资产"的光环，市值动辄几百上千亿，机构持仓满满，研报铺天盖地——<span class="hl-red">造假之所以危险，是因为它通常披着最漂亮的外衣。</span></p>
+
+  <h3 class="sub-title">造假为什么难识别？三个原因</h3>
+  <ul>
+    <li><strong>利润表"看上去很美"</strong>：造假公司往往选择行业景气期造假，用真实行业的增长掩盖假账的窟窿</li>
+    <li><strong>审计师被收买或配合</strong>：配合造假的审计机构会出具标准无保留意见，让散户彻底失去最后一道防线</li>
+    <li><strong>信息不对称</strong>：散户只能看到公开数据，无法获取真实银行流水、海关报关单、客户合同等底层证据</li>
+  </ul>
+
+  <blockquote class="red">
+    <strong>散户唯一的武器：</strong>在公开的三张报表里，找科目之间勾稽关系的"裂缝"。造假再精心，也很难让每一张表、每一个科目都自洽——这就是 10 个信号存在的意义。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-signals">
+  <h2 class="section-title">10 大核心预警信号</h2>
+
+  <p>下面 10 个信号是从无数造假案例中提炼出来的<span class="hl">"最低必要检查清单"</span>。每一条都有对应的公式或阈值，可以直接套用。把这 10 条背下来，你就已经超过了 90% 的散户。</p>
+
+  <div class="signal-group">
+
+    <div class="signal-card">
+      <span class="num">信号 01</span>
+      <h4>货币资金与利息收入严重背离</h4>
+      <div class="formula">利息收入 ÷ 货币资金余额</div>
+      <p class="threshold"><strong>健康值：2 ~ 4%</strong>（银行存款利率）</p>
+      <p class="alert"><strong>预警：货币资金 100 亿，利息收入仅 100 万 ≈ 0%</strong></p>
+      <p>账面趴着 100 亿现金，一年利息只有 100 万——这钱不是真的趴在账上，要么被大股东挪走，要么根本就是凭空捏造的科目。</p>
+    </div>
+
+    <div class="signal-card">
+      <span class="num">信号 02</span>
+      <h4>应收账款增速远超营收</h4>
+      <div class="formula">Δ应收 ÷ Δ营收</div>
+      <p class="threshold"><strong>健康值：1.0 ~ 1.5 倍</strong></p>
+      <p class="alert"><strong>预警：营收增 20%，应收增 100%</strong></p>
+      <p>营收和应收应该同步增长。如果应收增速远超营收，说明客户不付款——可能是<span class="hl-red">收入是虚增的</span>，或者放宽信用销售硬撑报表。</p>
+    </div>
+
+    <div class="signal-card">
+      <span class="num">信号 03</span>
+      <h4>经营现金流长期为负</h4>
+      <div class="formula">连续 3 年经营现金流 / 净利润</div>
+      <p class="threshold"><strong>健康值：&gt; 0.8</strong></p>
+      <p class="alert"><strong>预警：连续 3 年经营现金流为负</strong></p>
+      <p>净利为正、现金流为负 = 利润是"纸面富贵"。利润是会计算出来的，现金流是银行打过来的——<span class="hl">现金不会撒谎</span>。</p>
+    </div>
+
+    <div class="signal-card">
+      <span class="num">信号 04</span>
+      <h4>存货周转率突然恶化</h4>
+      <div class="formula">存货周转率 = 销售成本 ÷ 平均存货<br>存货周转天数 = 365 ÷ 周转率 = 平均存货 ÷ 销售成本 × 365</div>
+      <p class="threshold"><strong>健康值：周转率相对稳定</strong></p>
+      <p class="alert"><strong>预警：销售没变，存货大幅增加</strong></p>
+      <p>存货突然堆积，要么是卖不动了，要么是<span class="hl-red">存货虚增</span>（康得新、獐子岛"扇贝跑了"都是这个套路）。<span class="hl-red">注</span>：原笔记公式"存货 ÷ 销售成本 × 365"实际算的是<span class="hl">周转天数</span>，不是周转率——两个概念务必分清。</p>
+    </div>
+
+    <div class="signal-card">
+      <span class="num">信号 05</span>
+      <h4>销售费用率异常下降</h4>
+      <div class="formula">销售费用 ÷ 营业收入</div>
+      <p class="threshold"><strong>行业参考：5 ~ 10%</strong></p>
+      <p class="alert"><strong>预警：同行为 8%，这家突然降到 1%</strong></p>
+      <p>同行都在正常花钱做销售，这家公司突然不花钱了——可能<span class="hl-red">少计费用粉饰利润</span>，或者把销售费用挪到了别的科目里藏起来。</p>
+    </div>
+
+    <div class="signal-card">
+      <span class="num">信号 06</span>
+      <h4>频繁更换会计师事务所</h4>
+      <p class="threshold"><strong>正常：5 年以上不更换</strong></p>
+      <p class="alert"><strong>预警：1 年内换 2 家、换到非头部所</strong></p>
+      <p>换所通常意味着上一家<span class="hl-red">不愿意配合出标准意见</span>。尤其是从四大换到本地小所，几乎一定是审计师和公司谈崩了。</p>
+    </div>
+
+    <div class="signal-card">
+      <span class="num">信号 07</span>
+      <h4>大股东高比例质押</h4>
+      <div class="formula">质押股数 ÷ 持股总数</div>
+      <p class="threshold"><strong>健康值：&lt; 50%</strong></p>
+      <p class="alert"><strong>预警：质押率 &gt; 80%</strong></p>
+      <p>大股东把自己的股票几乎全部质押出去 = 他极度缺钱。缺钱可能引发<span class="hl-red">套现、关联交易、资金占用</span>。一旦股价下跌触发平仓，崩盘随时发生。</p>
+    </div>
+
+    <div class="signal-card">
+      <span class="num">信号 08</span>
+      <h4>关联交易复杂且金额大</h4>
+      <div class="formula">关联销售 ÷ 营业收入</div>
+      <p class="threshold"><strong>健康值：&lt; 30%</strong></p>
+      <p class="alert"><strong>预警：&gt; 30% 或关联交易异常复杂</strong></p>
+      <p>母公司、子公司之间频繁拆借、互相销售——价格可以人为操纵。<span class="hl-red">销售给关联方的比例超过 30%</span>，价格很可能不公允，是利润造假的高发区。</p>
+    </div>
+
+    <div class="signal-card">
+      <span class="num">信号 09</span>
+      <h4>商誉占总资产比例过高</h4>
+      <div class="formula">商誉 ÷ 总资产</div>
+      <p class="threshold"><strong>健康值：&lt; 10%</strong></p>
+      <p class="alert"><strong>预警：&gt; 30%</strong></p>
+      <p>商誉是"并购溢价"——当年收购花 10 亿，被收购公司账面只有 3 亿净资产，差额 7 亿就是商誉。<span class="hl-red">商誉高 + 子公司业绩不达预期 = 巨额减值</span>，足以一年亏掉 5 年的利润。</p>
+    </div>
+
+    <div class="signal-card">
+      <span class="num">信号 10</span>
+      <h4>审计意见"非标"</h4>
+      <p class="threshold"><strong>健康：标准无保留意见</strong></p>
+      <p class="alert"><strong>预警：带强调事项段 / 无法表示意见 / 否定意见</strong></p>
+      <p>审计师用词非常讲究，<span class="hl-red">"非标"意见 = 审计师认为这份财报有问题</span>。一旦看到"保留""否定""无法表示"这几个词，请立即远离。</p>
+    </div>
+
+  </div>
+
+  <blockquote class="purple">
+    <strong>记忆口诀：</strong>2 个资金信号（1、3）+ 3 个收入信号（2、4、5）+ 3 个治理信号（6、7、8）+ 2 个资产信号（9、10）。一条都不用背全，<span class="hl">先看信号 1、3、10 三条</span>，能躲过 80% 的雷。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-behave">
+  <h2 class="section-title">Behave 模型：财报体检 7 维度</h2>
+
+  <p>10 个信号是"点"，真正系统化的财报体检需要"面"。这里推荐一个 <strong>BECRHAN 七维框架</strong>，把 10 个信号装进结构化的分析框架：</p>
+
+  <div class="behave-grid">
+    <div class="item">
+      <div class="letter">B</div>
+      <div class="body">
+        <h4>Balance Sheet 资产负债表</h4>
+        <p>看<span class="hl">应收、存货、商誉、有息负债</span>。重点关注应收账款增速、商誉占比、短期借款规模。</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="letter">E</div>
+      <div class="body">
+        <h4>Earnings 利润表</h4>
+        <p>看<span class="hl">营收增速、净利润含金量、销售费用率</span>。警惕营收增速远超行业、净利润大幅高于经营现金流。</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="letter">C</div>
+      <div class="body">
+        <h4>Cash Flow 现金流量表</h4>
+        <p>看<span class="hl">经营现金流、净利现金比</span>。经营现金流连续 3 年为负的，直接进入观察清单。</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="letter">R</div>
+      <div class="body">
+        <h4>Ratio 关键比率</h4>
+        <p>看<span class="hl">毛利率、ROE、资产负债率、流动比率</span>。毛利率异常高于同行、ROE 突然飙升都需要警觉。</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="letter">H</div>
+      <div class="body">
+        <h4>Hidden Risk 隐藏风险</h4>
+        <p>看<span class="hl">表外担保、关联交易、商誉</span>。这些科目不在主表里，但可能在附注中埋雷。</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="letter">A</div>
+      <div class="body">
+        <h4>Audit Opinion 审计意见</h4>
+        <p><span class="hl-red">非标 = 警报</span>。标准无保留才放心。带强调事项段就要警惕，否定或无法表示就是直接离开。</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="letter">N</div>
+      <div class="body">
+        <h4>Non-financial 非财务信号</h4>
+        <p>看<span class="hl">高管离职、负面新闻、监管处罚</span>。CFO 突然换人、收到问询函、媒体质疑，都是预警信号。</p>
+      </div>
+    </div>
+  </div>
+
+  <p>7 个维度全部走一遍，至少要花 30 分钟。但这是<span class="hl">建立完整防御体系</span>的最低成本——当你用这套框架把 100 只股票过一遍，那些"造假股"会自动浮出水面。</p>
+</section>
+
+<section class="section" id="sec-methods">
+  <h2 class="section-title">5 类经典造假手段</h2>
+
+  <p>反过来看，了解造假手段可以帮你建立"反向识别"能力。下面 5 类是 A 股最经典的造假套路，对应到上面的 10 个信号几乎是 1:1 映射：</p>
+
+  <table>
+    <thead>
+      <tr><th>造假类型</th><th>典型手法</th><th>对应预警信号</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>虚增收入</strong></td><td>提前确认收入、与关联方虚构交易、一次性确认多年合同</td><td>信号 2（应收）/ 信号 5（费用率）</td></tr>
+      <tr><td><strong>虚增资产</strong></td><td>货币资金（康得新）、存货（獐子岛扇贝）、应收账款（长园集团）</td><td>信号 1（资金利息）/ 信号 4（存货）</td></tr>
+      <tr><td><strong>虚减负债</strong></td><td>表外担保（康美药业）、关联方资金占用</td><td>信号 8（关联）/ 信号 10（审计意见）</td></tr>
+      <tr><td><strong>资金占用</strong></td><td>大股东借款、拆借给关联方</td><td>信号 7（质押）/ 信号 1（利息背离）</td></tr>
+      <tr><td><strong>业绩洗澡</strong></td><td>本年大额计提，第二年轻装上阵</td><td>信号 9（商誉）+ 审计意见关注</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-title">造假套路的共同特征</h3>
+
+  <p>无论哪种手段，造假公司都有一个共同特征：<span class="hl-red">"某一项资产或利润数字，远超其底层业务逻辑能支撑的范围"</span>。这是识别造假的根本抓手——</p>
+
+  <ul>
+    <li>账上趴 100 亿现金，却没有 100 亿对应的利息收入 → 资金是假的</li>
+    <li>营收增长 50%，但应收账款增长 200% → 收入可能是假的</li>
+    <li>连续 5 年净利为正，但经营现金流从没正过 → 利润可能是假的</li>
+  </ul>
+
+  <blockquote>
+    <strong>记住：</strong>真实的业务一定会留下真实的痕迹——收过钱的客户会付款、买过货的分销商会进货、贷过款的银行会有流水。<span class="hl-blue">造假公司最难伪造的，是这些痕迹之间的"相互印证"</span>。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-quant">
+  <h2 class="section-title">量化筛选：3 个必查指标</h2>
+
+  <p>如果你没有时间把 10 个信号全过一遍，下面这 3 个指标是最精简的"避雷清单"。任何一个指标超阈值，<span class="hl-red">建议立即进入观察清单</span>，而不是直接买入。</p>
+
+  <table>
+    <thead>
+      <tr><th>指标</th><th>计算方式</th><th>健康阈值</th><th>预警含义</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>净利现金比</strong></td><td>经营现金流 ÷ 净利润</td><td>&gt; 0.8</td><td>利润有没有真金白银支撑</td></tr>
+      <tr><td><strong>应收 / 营收</strong></td><td>应收账款 ÷ 营业收入</td><td>&lt; 30%</td><td>收入质量好不好</td></tr>
+      <tr><td><strong>商誉 / 总资产</strong></td><td>商誉 ÷ 总资产</td><td>&lt; 10%</td><td>未来减值风险大不大</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-title">核心公式：净利现金比</h3>
+
+  <div class="formula-box">
+    <div class="label">核心公式</div>
+    <div class="formula">净利现金比 = 经营现金流净额 ÷ 净利润</div>
+    <div class="desc">
+      这是判断<span class="hl">"利润是不是真利润"</span>的最关键指标。<br>
+      <strong>健康公司：</strong>经营现金流 ≥ 净利润的 80%（即净利现金比 ≥ 0.8）<br>
+      <span class="bad"><strong>预警公司：</strong>净利现金比 &lt; 0.5</span>，或经营现金流连续 3 年为负，意味着账面利润可能完全是会计做出来的，没有任何真实现金流入。
+    </div>
+  </div>
+
+  <h3 class="sub-title">实操：三步筛股法</h3>
+
+  <ol>
+    <li><strong>第一步：净利现金比</strong>——剔除 3 年平均 &lt; 0.5 的公司（直接砍掉一半候选）</li>
+    <li><strong>第二步：应收 / 营收</strong>——剔除该比例 &gt; 30% 的公司（剔除收入质量差的）</li>
+    <li><strong>第三步：商誉 / 总资产</strong>——剔除该比例 &gt; 30% 的公司（剔除未来暴雷风险高的）</li>
+  </ol>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 三个指标同时过关 ≠ 一定没造假</div>
+    <p>这只是"必查项"，不是"充分条件"。三个指标同时过关的公司仍可能造假（如康得新曾同时过关），但三个指标都不合格的公司一定不能碰。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-rules">
+  <h2 class="section-title">3 个常见误区 + 避雷 5 条铁律</h2>
+
+  <h3 class="sub-title">最常见的 3 个误区</h3>
+
+  <div class="compare-grid">
+    <div class="col bad">
+      <h4>✗ 误区 1：只看利润</h4>
+      <p>利润表是<span class="hl-red">最容易造假</span>的表。会计政策和估计都可以调整，唯独现金流是银行打过来的、做不了假。忽略现金流等于自废武功。</p>
+    </div>
+    <div class="col bad">
+      <h4>✗ 误区 2：信公司公告</h4>
+      <p>很多公告本身就是<span class="hl-red">埋雷工具</span>。减持公告、增持公告、业绩预告修改——背后都可能是配合造假的烟雾弹。公告要交叉验证，不能单方面采信。</p>
+    </div>
+    <div class="col bad">
+      <h4>✗ 误区 3：信媒体推荐</h4>
+      <p>媒体经常<span class="hl-red">配合炒作</span>。一篇深度调研、一篇券商研报、一个大 V 推荐，背后可能都是利益链条。媒体的角色是放大器，不是过滤器。</p>
+    </div>
+  </div>
+
+  <h3 class="sub-title">避雷 5 条铁律</h3>
+
+  <div class="key-points">
+    <h4>请把以下 5 条当作投资纪律</h4>
+    <ul>
+      <li><strong>连续 3 年财报"非标"的，碰都不要碰</strong>——审计师已经用专业判断告诉你有问题，散户没必要再赌</li>
+      <li><strong>商誉占总资产 &gt; 30% 的，碰都不要碰</strong>——一次减值就足以把 5 年的利润亏光，暴雷只是时间问题</li>
+      <li><strong>货币资金有 100 亿但同时有 100 亿短期借款的 = 警惕</strong>——明明有钱为什么要借？要么是钱是假的，要么是被占用</li>
+      <li><strong>销售费用率突然下降 50% 的 = 警惕</strong>——同行都在花钱做销售，这家突然不花了，要么收入是假的，要么费用被藏起来了</li>
+      <li><strong>大股东质押率 &gt; 80% 的，碰都不要碰</strong>——大股东把自己的股票几乎全质押，等于把地雷绑在你身上</li>
+    </ul>
+  </div>
+
+  <div class="quote-banner">
+    利润是会计算出来的<br>
+    现金流是银行打过来的<br>
+    <span class="hl">永远相信后者，前者只是参考</span>
+  </div>
+</section>
+
+<div class="related-notes">
+  <h4>相关笔记导航</h4>
+  <ul>
+    <li><a href="S10-05-净利润涨30%全仓后跌40%.html"><span class="id">S10-05</span>净利润涨 30% 全仓后跌 40%</a>——单季度业绩暴增可能是假象</li>
+    <li><a href="S10-06-真亏还是洗澡（财报藏钱术）.html"><span class="id">S10-06</span>真亏还是洗澡（财报藏钱术）</a>——区分合规出清与违规操纵</li>
+    <li><a href="S10-09-如何识别真护城河和假护城河.html"><span class="id">S10-09</span>如何识别真护城河和假护城河</a>——基本面深度的下一站</li>
+  </ul>
+</div>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 10 · 选股框架与基本面分析</p>
+</footer>
+
+</body>
