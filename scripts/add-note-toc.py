@@ -22,8 +22,11 @@ import sys
 NOTES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'public', 'notes')
 
 # 左侧悬浮目录的静态外观内联在标签上：即使 <style> 解析异常也能正确定位。
+# 正文 max-width:880 + padding 32*2 = 944px 居中，
+# 侧栏 200px 放在正文左侧 24px 处 → left = (100vw - 944)/2 - 224
+# 该值在视口 ≥1440px 时为正（见 NAV_CSS 的 display 断点），不会压住正文。
 SIDENAV_STYLE = (
-    "position:fixed;left:24px;top:96px;width:210px;z-index:20;"
+    "position:fixed;left:calc(50vw - 696px);top:96px;width:200px;z-index:20;"
     "max-height:calc(100vh - 140px);overflow-y:auto;"
     "background:var(--surface);border:1px solid var(--border);"
     "border-radius:8px;padding:14px 12px;font-size:12.5px;line-height:1.6;"
@@ -60,8 +63,9 @@ NAV_CSS = """  /* 左侧悬浮目录（由 add-note-toc.py 注入） */
     color: var(--text-mute); text-decoration: none; font-size: 11.5px;
   }
   .note-sidenav__top:hover { background: var(--surface-2); color: var(--accent); text-decoration: none; }
-  /* 宽屏才显示；窄屏继续用正文里原有的目录块 */
-  @media (min-width: 1280px) {
+  /* 宽屏才显示：正文占 944px 居中，需 ≥1440px 才能在左侧空出 200px 侧栏而不重叠。
+     窄屏继续用正文里原有的「本文目录」块，两种视口都能导航。 */
+  @media (min-width: 1440px) {
     .note-sidenav { display: block; }
   }
 """
