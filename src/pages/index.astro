@@ -1,18 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PostCard from '../components/PostCard.astro';
-import { SITE, FEATURED_TAGS } from '../consts';
-import { getSortedPosts, getAllTags } from '../utils';
+import { SITE } from '../consts';
 import { getAllNotes } from '../utils/notes';
-
-const allPosts = await getSortedPosts();
-const featured = allPosts.filter((p) => p.data.featured);
-const recent = allPosts.slice(0, 6);
-const tagMap = await getAllTags();
-const popularTags = [...tagMap.entries()]
-  .sort((a, b) => b[1] - a[1])
-  .slice(0, 10)
-  .map(([tag]) => tag);
 
 // 笔记章节预览：卡片只展示章节名（不含"·"后的副标题）
 const { stages, all: allNotes } = getAllNotes();
@@ -40,20 +29,6 @@ const stagePreview = stages.map((s) => ({
     </div>
   </section>
 
-  {featured.length > 0 && (
-    <section class="section">
-      <div class="container">
-        <header class="section__header">
-          <h2>精选文章</h2>
-          <span class="section__divider" aria-hidden="true"></span>
-        </header>
-        <div class="grid grid--featured">
-          {featured.map((post) => <PostCard post={post} />)}
-        </div>
-      </div>
-    </section>
-  )}
-
   <section class="section">
     <div class="container">
       <header class="section__header">
@@ -78,33 +53,14 @@ const stagePreview = stages.map((s) => ({
       </div>
     </div>
   </section>
-
-  <section class="section">
-    <div class="container container--narrow">
-      <header class="section__header">
-        <h2>按主题浏览</h2>
-      </header>
-      <div class="tag-cloud">
-        {[...FEATURED_TAGS, ...popularTags.filter((t) => !FEATURED_TAGS.includes(t as never))]
-          .slice(0, 10)
-          .map((tag) => (
-            <a class="tag-cloud__chip" href={`/tags/${tag}/`}>
-              # {tag}
-              <span class="tag-cloud__count">{tagMap.get(tag) ?? 0}</span>
-            </a>
-          ))}
-      </div>
-    </div>
-  </section>
 </BaseLayout>
 
 <style>
-  .hero {
+  .hero{
     padding: var(--space-12) 0 var(--space-16);
     text-align: center;
   }
-
-  .hero__eyebrow {
+  .hero__eyebrow{
     font-family: var(--font-mono);
     font-size: 0.875rem;
     color: var(--accent);
@@ -112,128 +68,54 @@ const stagePreview = stages.map((s) => ({
     text-transform: uppercase;
     margin: 0 0 var(--space-3);
   }
-
-  .hero__title {
+  .hero__title{
     margin: 0 0 var(--space-4);
     font-size: 3rem;
     font-weight: 700;
     letter-spacing: -0.02em;
   }
-
-  .hero__lead {
+  .hero__lead{
     margin: 0 auto var(--space-4);
     max-width: 36em;
     font-size: 1.125rem;
     color: var(--text-secondary);
     line-height: 1.7;
   }
-
-  .hero__notice {
+  .hero__notice{
     margin: 0;
     font-size: 0.875rem;
     color: var(--text-muted);
   }
-
-  .section {
+  .section{
     margin: var(--space-16) 0;
   }
-
-  .section__header {
+  .section__header{
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-4);
     margin-bottom: var(--space-8);
   }
-
-  .section__header h2 {
+  .section__header h2{
     margin: 0;
     font-size: 1.5rem;
   }
-
-  .section__divider {
-    flex: 1;
-    height: 1px;
-    background: var(--border-default);
-  }
-
-  .section__more {
+  .section__more{
     font-size: 0.9375rem;
     color: var(--accent);
   }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: var(--space-6);
-  }
-
-  .grid--featured {
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  }
-
-  .empty {
-    padding: var(--space-8);
-    text-align: center;
-    color: var(--text-muted);
-    background: var(--bg-subtle);
-    border-radius: var(--radius-lg);
-    border: 1px dashed var(--border-default);
-  }
-
-  .tag-cloud {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    justify-content: center;
-  }
-
-  .tag-cloud__chip {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-4);
-    background: var(--bg-surface);
-    border: 1px solid var(--border-default);
-    border-radius: 999px;
-    color: var(--text-secondary);
-    font-size: 0.9375rem;
-    transition: all var(--transition-fast);
-  }
-
-  .tag-cloud__chip:hover {
-    color: var(--accent-hover);
-    border-color: var(--accent);
-    background: var(--accent-subtle);
-    text-decoration: none;
-    transform: translateY(-1px);
-  }
-
-  .tag-cloud__count {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    background: var(--bg-subtle);
-    padding: 0 var(--space-2);
-    border-radius: 999px;
-    min-width: 24px;
-    text-align: center;
-  }
-
-  .section__lead {
+  .section__lead{
     margin: 0 0 var(--space-6);
     color: var(--text-secondary);
     font-size: 0.9375rem;
     line-height: 1.7;
   }
-
-  .note-stage-grid {
+  .note-stage-grid{
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: var(--space-4);
   }
-
-  .note-stage-card {
+  .note-stage-card{
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
@@ -245,22 +127,19 @@ const stagePreview = stages.map((s) => ({
     color: inherit;
     transition: all var(--transition-fast);
   }
-
-  .note-stage-card:hover {
+  .note-stage-card:hover{
     border-color: var(--accent);
     box-shadow: var(--shadow-md);
     transform: translateY(-2px);
     text-decoration: none;
   }
-
-  .note-stage-card__head {
+  .note-stage-card__head{
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: var(--space-1);
   }
-
-  .note-stage-card__id {
+  .note-stage-card__id{
     font-family: var(--font-mono);
     font-size: 0.75rem;
     font-weight: 700;
@@ -270,21 +149,18 @@ const stagePreview = stages.map((s) => ({
     border-radius: 4px;
     letter-spacing: 0.05em;
   }
-
-  .note-stage-card__count {
+  .note-stage-card__count{
     font-family: var(--font-mono);
     font-size: 0.75rem;
     color: var(--text-muted);
   }
-
-  .note-stage-card__title {
+  .note-stage-card__title{
     margin: 0;
     font-size: 1.0625rem;
     font-weight: 600;
     color: var(--text-primary);
   }
-
-  .note-stage-card__sample {
+  .note-stage-card__sample{
     margin: 0;
     font-size: 0.8125rem;
     color: var(--text-muted);
@@ -293,18 +169,13 @@ const stagePreview = stages.map((s) => ({
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-
-  .note-stage-card__arrow {
+  .note-stage-card__arrow{
     margin-top: auto;
     padding-top: var(--space-2);
     font-size: 0.8125rem;
     color: var(--accent);
     font-weight: 500;
   }
-
-  @media (max-width: 640px) {
-    .hero__title { font-size: 2.25rem; }
-    .hero { padding: var(--space-8) 0 var(--space-12); }
-    .note-stage-grid { grid-template-columns: 1fr; }
-  }
-</style>
+  .hero__title{ font-size: 2.25rem; }
+  .hero{ padding: var(--space-8) 0 var(--space-12); }
+  .note-stage-grid{ grid-template-columns: 1fr; }</style>
