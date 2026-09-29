@@ -29,20 +29,17 @@ const canonical = new URL(pathname, Astro.site ?? 'https://example.pages.dev');
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- 主题初始化内联脚本：在渲染前设定，避免刷新闪烁 -->
+    <!-- 主题初始化内联脚本：在渲染前设定，避免刷新闪烁。
+         默认深色（不跟随系统）；用户点过切换按钮则用其选择。 -->
     <script is:inline>
       (function () {
         try {
           var stored = localStorage.getItem('theme');
-          var theme =
-            stored === 'light' || stored === 'dark'
-              ? stored
-              : window.matchMedia('(prefers-color-scheme: dark)').matches
-                ? 'dark'
-                : 'light';
-          document.documentElement.dataset.theme = theme;
+          document.documentElement.dataset.theme =
+            stored === 'light' ? 'light' : 'dark';
         } catch (e) {
-          // localStorage 不可用时静默回退
+          // localStorage 不可用时用深色
+          document.documentElement.dataset.theme = 'dark';
         }
       })();
     </script>
@@ -73,9 +70,8 @@ const canonical = new URL(pathname, Astro.site ?? 'https://example.pages.dev');
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- 字体预连接（可换成自定义 Web Font 源） -->
-    <meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+    <!-- 浏览器地址栏配色：默认深色（站点默认主题） -->
+    <meta name="theme-color" content="#0a0a0a" />
   </head>
   <body>
     <Header currentPath={pathname} />

@@ -1,8 +1,8 @@
 ---
 /**
  * 主题切换按钮。
- * 通过 data-theme 控制 root，跟随 prefers-color-scheme 兜底。
- * 切换时写入 localStorage，避免刷新闪烁。
+ * 通过 data-theme 控制 root。默认深色、不跟随系统；
+ * 点击切换时写入 localStorage，避免刷新闪烁。
  */
 ---
 <button
@@ -90,12 +90,9 @@
 
   const STORAGE_KEY = 'theme';
 
+  // 默认深色，不跟随系统 prefers-color-scheme
   function getPreferredTheme(): Theme {
-    const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
-    if (stored === 'light' || stored === 'dark') return stored;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light';
+    return localStorage.getItem(STORAGE_KEY) === 'light' ? 'light' : 'dark';
   }
 
   function applyTheme(theme: Theme) {
@@ -104,15 +101,6 @@
 
   // 立即同步，避免刷新闪烁（与 <head> 内联脚本逻辑一致）
   applyTheme(getPreferredTheme());
-
-  // 监听系统切换（仅在用户未显式设置时响应）
-  window
-    .matchMedia('(prefers-color-scheme: dark)')
-    .addEventListener('change', (e) => {
-      if (!localStorage.getItem(STORAGE_KEY)) {
-        applyTheme(e.matches ? 'dark' : 'light');
-      }
-    });
 
   // 绑定按钮
   document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((btn) => {

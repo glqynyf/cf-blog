@@ -42,47 +42,17 @@
   --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 浅色主题（A 股交易时段配色） */
+/* ==========================================================================
+   主题配色
+   默认深色：不跟随系统 prefers-color-scheme。
+   用户若点击右上角切换按钮，data-theme 会被写成 "light"，
+   此时下面的浅色变量生效；不写 data-theme（首次访问 / 未选择）时用深色。
+   ========================================================================== */
+
+/* 深色主题（默认基准） */
 :root,
-:root[data-theme="light"] {
-  color-scheme: light;
-
-  --bg-page: #fbfbfa;
-  --bg-surface: #ffffff;
-  --bg-elevated: #ffffff;
-  --bg-subtle: #f5f5f4;
-  --bg-code: #f8f8f7;
-
-  --text-primary: #1a1a1a;
-  --text-secondary: #525252;
-  --text-muted: #737373;
-  --text-inverse: #ffffff;
-
-  --border-default: #e7e5e4;
-  --border-strong: #d6d3d1;
-
-  --accent: #0f766e;          /* 深青绿，作为品牌主色 */
-  --accent-hover: #0d9488;
-  --accent-subtle: #ccfbf1;
-
-  /* A 股惯例：红涨绿跌 */
-  --up: #dc2626;              /* 红 = 上涨 */
-  --up-bg: #fef2f2;
-  --up-border: #fecaca;
-  --down: #16a34a;            /* 绿 = 下跌 */
-  --down-bg: #f0fdf4;
-  --down-border: #bbf7d0;
-  --flat: #737373;
-
-  --link: #0f766e;
-  --link-hover: #115e59;
-
-  --selection-bg: #fef08a;
-  --selection-fg: #422006;
-}
-
-/* 深色主题 */
-  :root[data-theme="dark"] {
+:root:not([data-theme]),
+:root[data-theme="dark"] {
   color-scheme: dark;
 
   --bg-page: #0a0a0a;
@@ -121,37 +91,47 @@
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-/* 尊重系统偏好，仅在用户未显式设置时生效 */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    color-scheme: dark;
-    --bg-page: #0a0a0a;
-    --bg-surface: #171717;
-    --bg-elevated: #1f1f1f;
-    --bg-subtle: #262626;
-    --bg-code: #1a1a1a;
-    --text-primary: #fafafa;
-    --text-secondary: #a3a3a3;
-    --text-muted: #737373;
-    --text-inverse: #0a0a0a;
-    --border-default: #2a2a2a;
-    --border-strong: #404040;
-    --accent: #2dd4bf;
-    --accent-hover: #5eead4;
-    --accent-subtle: #134e4a;
-    --up: #ef4444;
-    --up-bg: #2a0e0e;
-    --up-border: #7f1d1d;
-    --down: #4ade80;
-    --down-bg: #0a1f12;
-    --down-border: #14532d;
-    --flat: #a3a3a3;
-    --link: #5eead4;
-    --link-hover: #99f6e4;
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
-  }
+/* 浅色主题：仅在用户显式切换到亮色时生效 */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg-page: #fbfbfa;
+  --bg-surface: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-subtle: #f5f5f4;
+  --bg-code: #f8f8f7;
+
+  --text-primary: #1a1a1a;
+  --text-secondary: #525252;
+  --text-muted: #737373;
+  --text-inverse: #ffffff;
+
+  --border-default: #e7e5e4;
+  --border-strong: #d6d3d1;
+
+  --accent: #0f766e;          /* 深青绿，作为品牌主色 */
+  --accent-hover: #0d9488;
+  --accent-subtle: #ccfbf1;
+
+  /* A 股惯例：红涨绿跌 */
+  --up: #dc2626;              /* 红 = 上涨 */
+  --up-bg: #fef2f2;
+  --up-border: #fecaca;
+  --down: #16a34a;            /* 绿 = 下跌 */
+  --down-bg: #f0fdf4;
+  --down-border: #bbf7d0;
+  --flat: #737373;
+
+  --link: #0f766e;
+  --link-hover: #115e59;
+
+  --selection-bg: #fef08a;
+  --selection-fg: #422006;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
+
 
 /* ==========================================================================
    Shiki 代码块（双主题）
