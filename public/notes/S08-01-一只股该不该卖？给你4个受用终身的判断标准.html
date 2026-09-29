@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一只股该不该卖？给你4个受用终身的判断标准｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --surface: #1a2332;
+    --surface-2: #232f3f;
+    --border: #2a3744;
+    --text: #e6edf3;
+    --text-dim: #9aa7b4;
+    --text-mute: #6b7785;
+    --accent: #f0883e;
+    --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff;
+    --green: #56d364;
+    --red: #ff6b6b;
+    --purple: #bc8cff;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+
+  .stage-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+    font-size: 13px; color: var(--text-dim); flex-wrap: wrap;
+  }
+  .stage-bar .stage-pill {
+    display: inline-block; padding: 4px 12px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 700; letter-spacing: 1px; font-size: 12px;
+  }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+    font-size: 13px; color: var(--text-mute); flex-wrap: wrap;
+  }
+  .meta-bar .tag {
+    padding: 4px 10px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 600; letter-spacing: 0.5px;
+  }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+
+  .summary-card {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px; padding: 24px 28px; margin-bottom: 48px;
+    box-shadow: var(--shadow);
+  }
+  .summary-card h3 {
+    font-size: 14px; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px;
+  }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+
+  .toc {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px 24px; margin-bottom: 48px;
+  }
+  .toc h4 {
+    font-size: 13px; color: var(--text-mute); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a {
+    color: var(--text-dim); text-decoration: none; font-size: 14.5px;
+    display: flex; align-items: baseline; transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before {
+    content: counter(toc-counter, decimal-leading-zero);
+    color: var(--accent); font-weight: 700; margin-right: 12px;
+    font-variant-numeric: tabular-nums; min-width: 28px;
+  }
+
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title {
+    font-size: 26px; font-weight: 700; margin-bottom: 24px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--accent);
+    display: inline-block; letter-spacing: -0.3px;
+  }
+  h3.sub-title {
+    font-size: 19px; font-weight: 600; margin: 28px 0 14px;
+    color: var(--text); display: flex; align-items: center;
+  }
+  h3.sub-title::before {
+    content: ""; width: 4px; height: 18px;
+    background: var(--accent); border-radius: 2px; margin-right: 12px;
+  }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+
+  blockquote {
+    margin: 20px 0; padding: 16px 22px;
+    background: var(--surface); border-left: 4px solid var(--blue);
+    border-radius: 6px; color: var(--text-dim);
+    font-style: normal; font-size: 15.5px;
+  }
+  blockquote strong { color: var(--blue); }
+
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+
+  /* 四大标准卡片 */
+  .standard-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 30px;
+    margin: 24px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .standard-card::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--blue));
+  }
+  .standard-card .badge {
+    display: inline-block;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 12px;
+    background: var(--accent);
+    color: #0f1419;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+  }
+  .standard-card h3 {
+    font-size: 22px;
+    color: var(--accent);
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  .standard-card .subtitle {
+    font-size: 14.5px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+
+  .key-points {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+  }
+  .key-points h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li {
+    padding: 8px 0 8px 30px; position: relative;
+    color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border);
+  }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before {
+    content: "✓"; position: absolute; left: 0; top: 8px;
+    color: var(--green); font-weight: 800; font-size: 18px;
+  }
+
+  .warning-card {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08));
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    border-left: 4px solid var(--red);
+    border-radius: 8px; padding: 18px 22px; margin: 20px 0;
+  }
+  .warning-card .label {
+    color: var(--red); font-weight: 700; font-size: 13px;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+
+  .quote-banner {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--accent); border-radius: 10px;
+    padding: 28px 32px; margin: 32px 0;
+    text-align: center; font-size: 19px;
+    font-weight: 600; color: var(--accent);
+    line-height: 1.6; box-shadow: var(--shadow);
+  }
+  .quote-banner::before {
+    content: """; display: block; font-size: 48px;
+    line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5;
+  }
+
+  /* 隔夜重置测试高亮 */
+  .reset-test {
+    background: linear-gradient(135deg, rgba(240, 136, 62, 0.1), rgba(88, 166, 255, 0.1));
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    padding: 32px 36px;
+    margin: 36px 0;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(240, 136, 62, 0.15);
+  }
+  .reset-test h3 {
+    font-size: 24px;
+    color: var(--accent);
+    margin-bottom: 16px;
+    font-weight: 800;
+  }
+  .reset-test p {
+    font-size: 16.5px;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .reset-test .formula {
+    background: var(--bg);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: var(--accent);
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  /* 行为金融学背景 */
+  .background-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--purple);
+    border-radius: 8px;
+    padding: 22px 26px;
+    margin: 20px 0;
+  }
+  .background-box h4 {
+    font-size: 14px;
+    color: var(--purple);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  .background-box p { color: var(--text); margin-bottom: 8px; font-size: 15px; }
+  .background-box p:last-child { margin-bottom: 0; }
+
+  footer.note-footer {
+    margin-top: 72px; padding-top: 28px;
+    border-top: 1px solid var(--border);
+    color: var(--text-mute); font-size: 13.5px; text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+    .standard-card { padding: 22px 20px; }
+    .reset-test { padding: 24px 20px; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 8</span>
+  <span class="stage-name">止盈止损与卖出体系</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 15 分钟阅读</span>
+  <span class="dot"></span>
+  <span>基于视频《一只股该不该卖？给你4个受用终身的判断标准》</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">一只股该不该卖？给你4个受用终身的判断标准</h1>
+  <p class="note-subtitle">买入需要激情，卖出需要勇气。先看清 4 个可执行的卖出标准，再送你一个能 10 秒决断的「隔夜重置测试」。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>散户最大的认知误区，是<span class="hl">把「卖出」当成「认输」</span>。其实真正的卖出只有四种情况：① <strong>买入逻辑物理死亡</strong>；② <strong>估值极端过载</strong>；③ <strong>机会成本倒挂</strong>；④ <strong>波动率过载、影响睡眠</strong>。最后送你一个与巴菲特「持有 = 买入」理念一脉相承的<strong>「隔夜重置测试」</strong>——10 秒钟拷问每一笔持仓。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-mind">为什么卖股票总是痛苦？行为金融学的解释</a></li>
+    <li><a href="#sec-s1">标准一 · 买入逻辑是否遭遇「物理毁灭」</a></li>
+    <li><a href="#sec-s2">标准二 · 估值极端过载，重力开始生效</a></li>
+    <li><a href="#sec-s3">标准三 · 机会成本的冰冷计算</a></li>
+    <li><a href="#sec-s4">标准四 · 睡眠指数与仓位风险敞口</a></li>
+    <li><a href="#sec-reset">终极工具 · 10 秒决断的「隔夜重置测试」</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-mind">
+  <h2 class="section-title">为什么卖股票总是痛苦？行为金融学的解释</h2>
+  <p>你有没有算过，自己因为不会卖股票到底亏掉了多少个首付？赚了 30 个点舍不得卖，最后坐过山车倒亏 10 个点；或者被套了半年好不容易熬到保本，刚一卖它转头就给你拉出翻倍行情。</p>
+  <p>为什么我们买股票的时候信心满满，卖股票的时候却像割肉一样痛苦？为什么我们总是拿不住赚钱的股票，却把亏钱的股票当成传家宝死死不放？</p>
+  <p><strong>这真不是你的智商有问题，更不是你运气不好</strong>，而是我们大脑的生理结构在悄悄作祟。</p>
+
+  <div class="background-box">
+    <h4>📚 行为金融学的两个关键研究</h4>
+    <p><strong>① 处置效应（Disposition Effect）</strong>：加州大学伯克利分校哈斯商学院的 Terrance Odean 教授在 1998 年发表的论文 <em>"Are Investors Reluctant to Realize Their Losses?"</em>（《投资者是否不愿意变现亏损》），调取并分析了美国一家大型折扣券商 1987-1993 年间 1 万个正式散户账户的交易记录。结果发现，散户<strong>卖出盈利股票的比例是 14.8%，而卖出亏损股票的比例只有 9.8%</strong>——散户卖出盈利股票的可能性，是卖出亏损股票的 1.5 倍。</p>
+    <p><strong>② 前景理论（Prospect Theory）</strong>：Daniel Kahneman 和 Amos Tversky（1979）证实，人类天生存在严重的<strong>损失厌恶</strong>——后续研究测算，人对损失的敏感度大约是同等收益的 <strong>2 倍</strong>，失去 100 块带来的痛苦，大约需要得到 200 块的快乐才能勉强弥补。</p>
+  </div>
+
+  <p>这种心理机制在远古时代可以保护我们生存，但在金融市场里却是<strong>最致命的慢性毒药</strong>。它会让你把家里最能赚钱的「汗血宝马」给卖了，却把那些每天都在生病的「病马」留在马圈里，还不断给它们喂昂贵的草料。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 想要打破魔咒的第一步</div>
+    <p>在认知里<strong>彻底抹去「持仓成本价」这个概念</strong>。市场是一个完全没有感情的冰冷机器——它根本不在乎你是在什么价格买入的，也不关心你现在是亏了 50% 还是赚了 100%。一笔资产在当下的价值，只取决于它未来的现金流折现。如果未来已经一片暗淡，哪怕被套了 90%，留在里面也只是继续消耗你的时间成本和机会成本。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-s1">
+  <h2 class="section-title">标准一 · 买入逻辑是否遭遇「物理毁灭」</h2>
+
+  <div class="standard-card">
+    <span class="badge">卖出标准 1 / 4</span>
+    <h3>买入逻辑是否遭遇「物理毁灭」</h3>
+    <p class="subtitle">这是最核心、最具有决定性的标准。当支撑你买入的那根核心支柱已经崩塌时，无论盈亏都应第一时间清仓。</p>
+
+    <p>彼得·林奇（Peter Lynch）在《One Up on Wall Street》（《彼得林奇的成功投资》）中给过一个非常著名的实操建议——<span class="hl-blue">「两分钟独白」</span>：在你准备掏钱买入任何一只股票之前，必须能用最通俗易懂的语言做一段不超过两分钟的陈述，讲清楚你到底为什么买它。</p>
+
+    <p>建议更进一步：<strong>把这段独白白纸黑字写进你的投资日记</strong>。比如你买入某家快递巨头，是因为你看到它的核心转运中心已经完成了智能化升级，未来三年单票成本有望降低 20%，在价格战中能死死咬住竞争对手，市场份额会持续扩大。</p>
+
+    <p>这个写在纸上的陈述，就是你的<strong>买入逻辑主线</strong>。每过一个季度，拿着公司的最新财报、行业研报和业务公告去给它做「体检」。</p>
+
+    <h3 class="sub-title">当逻辑遭遇物理死亡</h3>
+    <p>商业世界的残酷往往超出想象。如果在体检中，你发现当年支撑你买入的核心支柱已经彻底断裂——这就是「逻辑物理死亡」。</p>
+
+    <blockquote>
+      <strong>案例</strong>：你发现由于行业新进玩家采取了极其激进不计成本的打法，这家快递巨头不仅单票价格暴跌，连原有的智能化升级也没能阻挡利润率的崩塌，市场份额正在被蚕食——<span class="hl-red">这个时候不管你的账面是亏损 30% 还是套了 50%，都应该在第一时间毫不留情地按下卖出键</span>。因为当初那个能帮你赚钱的公司在商业模式上已经不复存在了，你现在手里拿的只是一具「套着旧名字的商业干尸」。
+    </blockquote>
+
+    <h3 class="sub-title">最危险的侥幸心理</h3>
+    <p>很多散户在这个时候最容易犯的错误是<strong>自我催眠</strong>——「虽然快递业务不行了，但他们现在布局跨境电商了」「听说他们要跟 AI 大模型合作了」。请记住：<span class="hl-red">用一个全新的未经证实的逻辑去强行挽留一个已经破产的旧逻辑，这不叫投资，这叫为自己的决策失误买单</span>。</p>
+
+    <div class="warning-card">
+      <div class="label">📷 柯达（Kodak）的教训</div>
+      <p>当年数码相机技术刚露头时，传统胶卷巨头的管理层其实早就预见到了这一天，但庞大的旧利益体系让他们无法转身。柯达的衰落不是因为他们不够努力，而是<strong>用化学方法记录影像的底层逻辑，被「用半导体和数字信号记录影像」的技术浪潮降维打击</strong>。如果你在数码相机普及初期还抱着「人人都要洗照片」的旧逻辑不放，迎来的很可能就是资产的灰飞烟灭。</p>
+    </div>
+
+    <h3 class="sub-title">要像冰冷的法官一样审判自己</h3>
+    <blockquote>
+      每隔一段时间，翻开投资日记，问自己一个问题：<br>
+      <strong>「如果今天我是第一次看到这家公司在目前的行业竞争格局和财务状况下，我还会愿意用现在的价格买入它吗？」</strong><br>
+      如果答案是否定的，如果当初那些让你心动的闪光点已经黯然失色——<span class="hl">不要犹豫，更不要等什么反弹回本</span>。在逻辑毁灭的废墟上，最明智的选择永远是带上残存的本金果断撤离。
+    </blockquote>
+  </div>
+</section>
+
+<section class="section" id="sec-s2">
+  <h2 class="section-title">标准二 · 估值极端过载，重力开始生效</h2>
+
+  <div class="standard-card">
+    <span class="badge">卖出标准 2 / 4</span>
+    <h3>估值极端过载，重力开始生效</h3>
+    <p class="subtitle">当股价被情绪和资金体材拉到极端高位时，就像被拉得过长的橡皮筋，要么断裂，要么以极快速度反弹回原长。</p>
+
+    <p>在物理世界里有一种不可抗拒的力量——万有引力，只要你把球抛向空中，它最终一定会落回地面。金融市场里也有一个类似的引力定律：<span class="hl">均值回归</span>。</p>
+    <p>股票的价格短期内可能因为情绪、资金、题材炒作被拉升到令人瞠目结舌的高度，就像一根被无限拉长的橡皮筋。但决定这根橡皮筋长度的锚，就是<strong>估值</strong>。</p>
+
+    <h3 class="sub-title">量化工具一 · PEG（市盈率相对盈利增长比率）</h3>
+    <p>彼得·林奇最钟爱的指标：</p>
+    <blockquote>
+      <strong>PEG = 市盈率（PE）÷ 净利润增长率</strong><br>
+      • PEG = 1 → 估值合理，公道的交易<br>
+      • PEG ≥ 2 → 危险，市场已用最乐观预期在定价
+    </blockquote>
+    <p>举个例子：一只股票 PE 是 60 倍，但未来业绩增速放缓到 15%，PEG 高达 4。<span class="hl-red">这是一颗随时可能引爆的炸弹</span>——一旦行业风向变动或财报出现哪怕一丁点不及预期，市场就会立刻上演<strong>「戴维斯双杀」</strong>（估值倍数与业绩增速预期同时崩溃），股价像断了线的风筝自由落体。</p>
+
+    <h3 class="sub-title">量化工具二 · 历史估值分位数</h3>
+    <p>在主流行情软件调出股票过去 5-10 年的 PE 走势图，看当前 PE 处于历史什么位置：</p>
+    <ul>
+      <li><strong>≤ 50%</strong>：估值合理甚至偏低，可以继续持有；</li>
+      <li><strong>≥ 90%</strong>：除非商业模式发生石破天惊的底层重构，否则大概率处于<span class="hl-red">极端高热的估值过载状态</span>。</li>
+    </ul>
+
+    <h3 class="sub-title">不卖飞也不被埋：系统化减仓纪律</h3>
+    <p>市场在狂欢时往往是不讲理的，估值高的股票有时就是不跌反而继续涨。所以面对极端估值过载，<strong>不要一刀切全部清仓</strong>，而应启动系统化减仓：</p>
+    <div class="key-points">
+      <h4>系统化减仓的两步走</h4>
+      <ul>
+        <li>当估值分位数 <strong>突破 90%</strong> 的历史红线 → <strong>强制卖出 1/3 仓位</strong>落袋为安；</li>
+        <li>对剩余 2/3 仓位采用 <strong>移动止损法</strong>——只要股价从最高点回撤 <strong>超过 10%-15%</strong>，就无条件清仓剩余部分。</li>
+      </ul>
+    </div>
+    <p>通过这种方式，你既不会因为过早下车而懊悔，也用数学纪律锁住了一大笔胜利果实。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-s3">
+  <h2 class="section-title">标准三 · 机会成本的冰冷计算</h2>
+
+  <div class="standard-card">
+    <span class="badge">卖出标准 3 / 4</span>
+    <h3>机会成本的冰冷计算</h3>
+    <p class="subtitle">查理·芒格说过：一笔投资的真实成本，就是你为了它而放弃的「能买到的最好资产」。</p>
+
+    <p>很多散户之所以在一只死气沉沉的股票里苦熬两三年，仅仅是因为它没亏或跌不动了。但在专业投资者眼里，<span class="hl">资金是有时间价值和复利价值的</span>。如果你的资金被锁死在年化预期收益率只有 3% 的平庸股票里，即使它不跌，你也等于每天都在遭受隐性的损失——因为你放弃了去持有那些预期回报更高的优质资产的机会。</p>
+
+    <h3 class="sub-title">伯克希尔的实战教科书</h3>
+    <p>世界上最懂得权衡机会成本的人，莫过于巴菲特和他的接班人。看一组伯克希尔哈撒韦（Berkshire Hathaway）的真实动作：</p>
+
+    <div class="key-points">
+      <h4>伯克希尔 2026 Q1 的「恐怖」数字</h4>
+      <ul>
+        <li>现金及短期国债储备飙升到约 <strong>3,733 亿美元</strong>（<strong>2025 Q4 末</strong>），2026 Q1 进一步升至约 <strong>3,974 亿美元</strong>，巴菲特团队选择了持有巨额现金和短期国债，而不是满仓杀入股市；</li>
+        <li>新任 CEO 格雷格·阿贝尔（Greg Abel）重申巴菲特坚持了一辈子的原则——<span class="hl">「持有大量现金和美国国债，本身就是一项重要资产」</span>。</li>
+      </ul>
+    </div>
+
+    <p>为什么把如此庞大的资金变成现金和国债，去吃那点 3.8% 左右的利息，而不是大买特买？因为当整体市场处于历史高位、大多数公司的预期收益率已被高估值压缩到极低水平时，<strong>去买那些性价比极低的股票，其机会成本远比拿着现金静静等待下一个黄金坑要高得多</strong>。</p>
+
+    <h3 class="sub-title">对苹果的系统性调仓</h3>
+    <p>更具代表性的是对苹果的减持动作：</p>
+    <ul>
+      <li>从 2023 年 Q4 开始，伯克希尔极其冷静地把苹果持股数量从约 <strong>9.06 亿股</strong> 一路削减，到 2025 Q4 末约 <strong>2.28 亿股</strong>（持仓占比约 22.6%），砍掉了大约 <strong>四分之三</strong>；</li>
+      <li>持仓市值也从巅峰时期的 1700 多亿美元降到了 600 多亿美元；</li>
+      <li>即便如此，苹果至今依然是伯克希尔的第一大重仓股。</li>
+    </ul>
+
+    <p>巴菲特公开承认自己在苹果上确实卖早了（因为后来苹果依然刷新历史新高），但紧接着补了一句——<strong>「不过我买的也早，这笔投资税前赚了超过 1000 亿美金」</strong>。更重要的是：</p>
+    <blockquote>
+      把一家公司的仓位配置到占整个股票组合的 <strong>40% 以上</strong>，其潜在的尾部风险和机会成本是巨大的。通过系统性套现上千亿美金，并将其换成安全、高流动性、能随时发动致命一击的国债武器，伯克希尔不仅锁定了巨额利润，也让自己在面对未来宏观波动时拥有了绝对的<strong>生存主动权</strong>。
+    </blockquote>
+
+    <h3 class="sub-title">给散户的启示</h3>
+    <p>当你手里的某只股票让你陷入纠结时，<span class="hl">请逼自己算一笔账</span>：</p>
+    <blockquote>
+      我现在把钱放在这里，是因为我懒得动？还是因为在全市场成千上万只股票里，它依然是性价比最高的那一个？<br><br>
+      如果此时此刻有另一只被低估的优质公司能提供更高的安全边际和更确定的成长预期——<span class="hl-red">不要留恋，认真考虑换股</span>。在投资里没有「忠诚度」可言，只有<strong>资金使用效率的永恒比拼</strong>。
+    </blockquote>
+  </div>
+</section>
+
+<section class="section" id="sec-s4">
+  <h2 class="section-title">标准四 · 睡眠指数与仓位风险敞口</h2>
+
+  <div class="standard-card">
+    <span class="badge">卖出标准 4 / 4</span>
+    <h3>睡眠指数与仓位风险敞口</h3>
+    <p class="subtitle">华尔街流传着 JP 摩根的一句话：「卖，一直卖到你能睡着觉为止。」</p>
+
+    <p>许多散户在市场里最真实的状态是这样的：</p>
+    <ul>
+      <li>只要一开盘，每隔三五分钟就要打开手机刷一次行情；</li>
+      <li>心脏随着红绿跳动的数字忽上忽下；</li>
+      <li>晚上哪怕闭上眼睛，脑子里全是 K 线图；</li>
+      <li>半夜惊醒第一件事就是去搜最新的美股表现和宏观消息；</li>
+      <li>甚至因为焦虑对家人发脾气，无法专注工作。</li>
+    </ul>
+
+    <p>如果一笔投资<strong>已经严重干扰了你的正常生活、侵占了你的精力</strong>，那么不需要看任何复杂的财务指标——<span class="hl-red">这只股票在你的生命中就已经到了必须要被「强制减肢」的时刻</span>。这种状态可以叫做「波动率过载」。</p>
+
+    <h3 class="sub-title">波动率过载的罪魁祸首</h3>
+    <p>每个人的心理承受极限就像一个杯子。当某只股票的波动幅度超出你杯子的容量，你的理性就会瘫痪，决策就会完全变形。在这种极度焦虑的状态下，你大概率会：</p>
+    <ul>
+      <li>在暴跌的最低点因为崩溃而割肉；</li>
+      <li>在暴涨的起点因为极度害怕回撤而仓促下车。</li>
+    </ul>
+
+    <div class="warning-card">
+      <div class="label">⚠️ 持仓集中的隐性风险</div>
+      <p>对于抗风险能力有限的普通人来说，<strong>单一股票在你的持仓占比中一旦超过 20%，它的一举一动就会深度绑架你的情绪</strong>。</p>
+    </div>
+
+    <h3 class="sub-title">通过减仓买回你的睡眠</h3>
+    <p>一个极其简单的卖出标准：<strong>如果一只股票让你夜不能寐，你不需要把它完全清仓——你只需要连续卖出，直到某一个晚上你发现你不再因为它的涨跌而焦虑</strong>，甚至一整天都想不起去关注它。这就是你对这笔资产最真实的、<span class="hl">能保证理性决策的安全仓位</span>。</p>
+
+    <blockquote>
+      <strong>卖出的意义不只是保护本金，更是在保护你在投资中最珍贵、最不可再生的资源——你的心流和专注力。</strong>
+    </blockquote>
+  </div>
+</section>
+
+<section class="section" id="sec-reset">
+  <h2 class="section-title">终极工具 · 10 秒决断的「隔夜重置测试」</h2>
+
+  <div class="reset-test">
+    <h3>🌙 隔夜重置测试（Overnight Reset Test）</h3>
+    <p>请在脑海里做一个极度逼真的场景设想：</p>
+    <p>今天晚上你闭上眼睛睡觉。等到深夜，全球所有证券交易所发生了一个极其罕见的、无法修复的超级数据库灾难——当你第二天早上醒来，你名下的<strong>所有股票持仓已经在昨晚收盘那一瞬间被交易所系统自动强制按收盘价全部变现</strong>。</p>
+    <p>你的持仓列表空空如也，全部化为了躺在账户里的现金。</p>
+    <p>现在你站在一个绝对平等的全新起点上，<strong>没有任何持仓成本、没有任何盈亏的心理负担</strong>。</p>
+
+    <div class="formula">
+      持有 = 在当前价格每日重新买入
+    </div>
+
+    <p>拿着这笔热气腾腾的现金，你还会愿意按照昨晚的收盘价，<strong>把昨天那只让你纠结痛苦又爱又恨的股票原封不动全部买回来吗</strong>？</p>
+
+    <p>请对自己的内心保持<strong>绝对的诚实</strong>。</p>
+  </div>
+
+  <h3 class="sub-title">这个测试为什么有效？</h3>
+  <p>它在行为经济学上瞬间剥离了人性的两大黑洞：</p>
+  <ul>
+    <li><span class="hl-red">路径依赖</span>——我们潜意识认为「现在持有着」是一种默认状态，改变它需要巨大的心理决策成本；</li>
+    <li><span class="hl-red">损失厌恶</span>——一旦账户变成现金，你就被迫站在理智的「机会成本视角」重新打量这个世界。</li>
+  </ul>
+
+  <div class="quote-banner">
+    在股票市场里，<strong>「持有」在决策逻辑上 =「在当前价格买入」</strong>。<br>
+    你持有着它，就等同于你每天清晨在开盘的那一秒，都以当天的开盘价重新全额买入了一次。<br><br>
+    如果你的理性不支持你在当下价格重新买入，<br>
+    那么在逻辑上你就没有任何理由继续持有它——<span class="hl-red">哪怕一分一秒</span>。
+  </div>
+
+  <p>用这个「隔夜重置测试」去过滤你的每一个持仓，你会惊奇地发现，那些所谓的纠结、悔恨、犹豫不决，都会在瞬间烟消云散。你会以一种近乎神明般的冷静看清每一笔资产的真正去留。</p>
+
+  <h3 class="sub-title">写在最后</h3>
+  <p>投资在很多人眼里是一场寻找「圣杯」的游戏，但更准确地说，<strong>投资是一场直面人性的自我修行</strong>。买入往往只需要一时的激情和希望，而卖出却需要极度的诚实、非凡的勇气，和对自我认知的彻底解剖。</p>
+
+  <div class="quote-banner">
+    <strong>学会卖出，是每一个普通散户向成熟投资者蜕变时必须历经的成人礼。</strong>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记</p>
+</footer>
+
+</body>
