@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>从磨底、主升浪到高位出货：看懂股票完整周期与散户实战心法｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b;
+    --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .case-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--purple); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .case-card h4 { color: var(--purple); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  th { background: var(--surface-2); padding: 12px 16px; text-align: left; font-weight: 700; color: var(--accent); font-size: 14px; }
+  td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text); font-size: 14.5px; }
+  tr:last-child td { border-bottom: none; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } table { font-size: 12px; } th, td { padding: 8px 10px; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 13</span>
+  <span class="stage-name">宏观、市场周期与极端行情</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 13 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 13 · 第 8 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">从磨底、主升浪到高位出货：看懂股票完整周期与散户实战心法</h1>
+  <p class="note-subtitle">股票一轮完整行情分为磨底、主升浪、高位出货三个周期。本文结合资金行为、量能、K 线、均线、MACD、筹码分布，还原主力每一阶段的心理逻辑。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>股票市场的本质就是<span class="hl">筹码在不同群体之间转移的博弈过程</span>。大资金既不可能一天内买完所有筹码，也不可能一天内把手里的货全部卖光，所以任何股票走出波澜壮阔的行情都要经过 <span class="hl">三个阶段</span>：底部收集筹码（磨底）→ 拉升脱离成本（主升浪）→ 高位派发兑现（出货）。三个阶段分别对应<span class="hl-red">绝望、犹豫、狂热</span>三种极端情绪。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-stage1">阶段一 · 底部磨底期：耐心是核心关键词</a></li>
+    <li><a href="#sec-stage1-tech">磨底期的 4 个技术特征</a></li>
+    <li><a href="#sec-stage2">阶段二 · 主升浪：散户最纠结的阶段</a></li>
+    <li><a href="#sec-stage2-strategy">主升浪的应对策略与心态</a></li>
+    <li><a href="#sec-stage3">阶段三 · 高位出货：最疯狂的绞肉机</a></li>
+    <li><a href="#sec-heart">散户三大心理误区</a></li>
+    <li><a href="#sec-rules">贯穿三阶段的散户心法</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-stage1">
+  <h2 class="section-title">阶段一 · 底部磨底期：耐心是核心关键词</h2>
+
+  <p>说到磨底期，很多散户第一反应就是痛苦。为什么？因为这个阶段往往发生在经历了长期下跌之后：</p>
+
+  <ul>
+    <li>公司经常有利空消息传出</li>
+    <li>行业景气度似乎跌到了冰点</li>
+    <li>整个市场情绪极其低迷</li>
+    <li><span class="hl-red">打开股票账户看一眼都需要巨大的勇气</span></li>
+  </ul>
+
+  <h3 class="sub-title">大资金在磨底期的行为逻辑</h3>
+  <p>这类资金往往<span class="hl">不慌反而非常从容</span>，动作却异常冷静。因为他们很清楚：要想在底部买到足够便宜的筹码，就必须<span class="hl">等待场内那些顽固的散户逐渐离场</span>。</p>
+
+  <p>这个阶段最核心的关键词只有两个字：<span class="hl-red">耐心</span>。</p>
+
+  <p>他们不会大张旗鼓地去拉涨停板——因为一旦股价拉高，散户就不愿意割肉了，而且还会吸引场外的跟风资金进来抢筹。所以这个阶段的盘面特征往往是<span class="hl">钝刀子割肉和反复横盘震荡</span>：</p>
+  <ul>
+    <li>盘面会在一个很窄的区间里，今天买一点明天砸一点</li>
+    <li>甚至在关键支撑位出现一根破位的大阴线，让散户以为股价还要深不见底</li>
+  </ul>
+
+  <h3 class="sub-title">散户在磨底期的真实心理</h3>
+  <p>普通散户的心理活动是这样的：</p>
+  <ol>
+    <li><span class="hl">套牢不服输</span>：刚被套时还心存幻想</li>
+    <li><span class="hl">焦虑失眠</span>：股价死气沉沉，每天看账户都是煎熬</li>
+    <li><span class="hl">麻木绝望</span>：大盘涨它不涨，大盘跌它跟着跌，<strong>产生强烈的厌恶感</strong></li>
+  </ol>
+
+  <p>"这支股票就是垃圾，我这辈子再也不碰它了，只要回本一点我就走，甚至哪怕少亏一点我也割了。"——<strong>就在散户终于狠心按下卖出键的那一刻，低位筹码也就悄无声息地完成了转移</strong>。</p>
+</section>
+
+<section class="section" id="sec-stage1-tech">
+  <h2 class="section-title">磨底期的 4 个技术特征</h2>
+
+  <p>从盘面技术指标上如何识别股票正在经历底部磨底？这里有 4 个非常关键的信号：</p>
+
+  <h3 class="sub-title">特征一 · 成交量极度萎缩</h3>
+  <p>磨底阶段因为大部分散户已经被套牢死扛不再交易，而低位又长期缺乏做多情绪，整个股票的日换手率会降到非常低的水平——<span class="hl">有的甚至连续几个月换手率都低于 1%</span>。</p>
+
+  <p>成交量柱状图上呈现出<span class="hl">极其低迷的缩量状态</span>。老股民常说的"<strong>地量见地价</strong>"指的就是这种成交量极度萎缩、抛压已经接近枯竭的信号。</p>
+
+  <h3 class="sub-title">特征二 · K 线形态的收敛与假摔</h3>
+  <p>在底部区域 K 线通常会走出<span class="hl">双底、头肩底或者一个长时间的窄幅箱体</span>。盘面上经常出现带有长下影线的小阴小阳线——说明盘中虽然有恐慌盘砸盘，但每次砸下去都有资金在承接。</p>
+
+  <p>另外盘面常常会在箱体周期的尾声<span class="hl">向下砸穿箱体底部，制造一次假破位</span>。在专业交易理论中这被称为<strong>弹簧效应</strong>或<strong>终极震仓</strong>——这根破位阴线把最后一部分技术派散户吓跑之后，股价往往会在两三天内迅速被拉回箱体内，<span class="hl">这就是磨底即将结束的强烈信号</span>。</p>
+
+  <h3 class="sub-title">特征三 · 均线系统的高度黏合与走平</h3>
+  <p>在下跌通道时，5 日线、10 日线、20 日线、60 日线都是空头排列向下发散的。但经过了数月甚至大半年的磨底震荡，短期均线和中长期均线开始逐渐<span class="hl">由陡峭变平缓</span>，最后紧紧缠绕在一起。</p>
+
+  <p>这说明<span class="hl">所有参与者的平均持仓成本已经高度趋近</span>，前期的获利盘和止损盘基本被清洗干净，波动率被压缩到了极致，<span class="hl-red">变盘随时可能发生</span>。</p>
+
+  <h3 class="sub-title">特征四 · MACD 指标底部背离</h3>
+  <p>如果你打开日线级别的 MACD 指标，你会发现：</p>
+  <ul>
+    <li>股价在这个阶段可能还在反复创新低或在低位走平</li>
+    <li>但 MACD 的快慢线以及绿柱面积<span class="hl">却在一次次探底中逐渐抬高</span></li>
+    <li>形成非常标准的<span class="hl">日线底背离</span></li>
+  </ul>
+
+  <p>底背离代表下跌动能已经开始衰竭，<span class="hl-red">很可能已经有资金在低位悄悄进场</span>。</p>
+</section>
+
+<section class="section" id="sec-stage2">
+  <h2 class="section-title">阶段二 · 主升浪：散户最纠结的阶段</h2>
+
+  <p>当磨底期筹码收集完毕，主升浪就启动了。这是利润最丰厚但也是散户最纠结的阶段：</p>
+
+  <ul>
+    <li>涨了 20% 你会想"是不是该止盈？"</li>
+    <li>涨了 50% 你会想"是不是追高？"</li>
+    <li>涨了 100% 你会想"是不是泡沫了？"</li>
+    <li>涨了 200% 你会想"完蛋，踏空了！"</li>
+  </ul>
+
+  <p>结果往往是：</p>
+  <blockquote class="purple">
+    <strong>主升浪初期不敢买，中段追进去被洗，末段高位站岗。</strong>
+  </blockquote>
+</section>
+
+<section class="section" id="sec-stage2-strategy">
+  <h2 class="section-title">主升浪的应对策略与心态</h2>
+
+  <h3 class="sub-title">策略一 · 主升浪初期的识别信号</h3>
+  <ul>
+    <li><span class="hl">放量突破箱体上沿</span>：成交量至少是磨底期均量的 2 倍</li>
+    <li><span class="hl">均线多头排列</span>：5 日线、10 日线、20 日线依次上穿 60 日线</li>
+    <li><span class="hl">MACD 零轴上方金叉</span>：动能由弱转强</li>
+  </ul>
+
+  <h3 class="sub-title">策略二 · 主升浪中期的持仓纪律</h3>
+  <ul>
+    <li><span class="hl">不预测顶部</span>：主升浪没有标准顶部，跟着趋势走</li>
+    <li><span class="hl">移动止盈</span>：从最高点回撤超过 10% 就减半仓</li>
+    <li><span class="hl">永远不空仓</span>：主升浪里最危险的是"为了等回调而清仓"</li>
+  </ul>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 主升浪最大的敌人是自己</div>
+    <p>主升浪里 80% 的利润回吐，<span class="hl-red">不是因为行情见顶，而是因为你中途下车又追回来，反复被自己的情绪收割</span>。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-stage3">
+  <h2 class="section-title">阶段三 · 高位出货：最疯狂的绞肉机</h2>
+
+  <p>主升浪走到尾声，资金开始高位派发。这个阶段的盘面特征非常戏剧化：</p>
+
+  <ul>
+    <li><span class="hl">利好满天飞</span>：研报、媒体、专家一致看好</li>
+    <li><span class="hl">成交量持续放大</span>：但股价涨幅收窄甚至开始下跌</li>
+    <li><span class="hl">换手率极高</span>：筹码在散户之间快速换手</li>
+    <li><span class="hl">顶部形态显现</span>：双顶、头肩顶、圆弧顶等经典形态</li>
+  </ul>
+
+  <div class="case-card">
+    <h4>典型出货剧本</h4>
+    <p>资金为了把高位筹码派发给散户，常常打出这种套路：</p>
+    <ol>
+      <li>先放利好 → 散户追高买入</li>
+      <li>再回调洗盘 → 散户以为是抄底机会继续加仓</li>
+      <li>再创新高 → 散户情绪彻底高潮，全仓杀入</li>
+      <li>放量长阴 → <span class="hl-red">主力出货完毕，剩下一地散户互砍</span></li>
+    </ol>
+  </div>
+
+  <h3 class="sub-title">出货期的 4 个离场信号</h3>
+  <ol>
+    <li><span class="hl-red">成交量持续放大但股价不涨</span>（量价背离）</li>
+    <li><span class="hl-red">MACD 顶背离</span>：股价创新高但指标不创新高</li>
+    <li><span class="hl-red">底部筹码峰消失</span>：低位筹码转移到高位</li>
+    <li><span class="hl-red">舆论一致看好</span>：连菜市场大妈都在买的时候</li>
+  </ol>
+</section>
+
+<section class="section" id="sec-heart">
+  <h2 class="section-title">散户三大心理误区</h2>
+
+  <h3 class="sub-title">误区一 · 磨底期割肉，主升浪追高</h3>
+  <p>主力在磨底期慢慢吸筹时，你因为绝望割肉离场；主力拉升时，你又因为 FOMO 高位追进。<span class="hl-red">完美的"低卖高买"</span>。</p>
+
+  <h3 class="sub-title">误区二 · 把正常回调当作崩盘</h3>
+  <p>主升浪中任何一次正常回调，都会被你解读为"行情结束"。结果就是<span class="hl">被洗出去后看着股价继续创新高，拍大腿</span>。</p>
+
+  <h3 class="sub-title">误区三 · 在高位相信"这次不一样"</h3>
+  <p>出货期你总会找到各种理由说服自己继续持有——"基本面好""政策支持""万亿赛道"。但<span class="hl">周期就是周期，不会因为你的信仰而改变</span>。</p>
+
+  <table>
+    <thead>
+      <tr><th>周期阶段</th><th>散户典型行为</th><th>正确做法</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>磨底期</td><td>绝望割肉</td><td><span class="hl-green">识别底部信号，分批布局</span></td></tr>
+      <tr><td>主升浪初期</td><td>犹豫不敢买</td><td><span class="hl-green">放量突破时小仓位试错</span></td></tr>
+      <tr><td>主升浪中期</td><td>频繁操作</td><td><span class="hl-green">坚定持有 + 移动止盈</span></td></tr>
+      <tr><td>主升浪末期</td><td>全仓追高</td><td><span class="hl-red">减仓或清仓</span></td></tr>
+      <tr><td>出货期</td><td>死扛回本</td><td><span class="hl-red">果断止损</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="section" id="sec-rules">
+  <h2 class="section-title">贯穿三阶段的散户心法</h2>
+
+  <h3 class="sub-title">心法一 · 在绝望中播种</h3>
+  <p>磨底期是<span class="hl">播种的黄金期</span>。地量见地价、MACD 底背离、均线黏合——这些都是主力悄悄吸筹的信号。<strong>这个阶段不要被情绪绑架</strong>。</p>
+
+  <h3 class="sub-title">心法二 · 在犹豫中坚守</h3>
+  <p>主升浪是<span class="hl">收获的黄金期</span>。你的工作不是每天看 K 线，而是<span class="hl-red">管住自己不被洗出去</span>。</p>
+
+  <h3 class="sub-title">心法三 · 在狂热中离场</h3>
+  <p>出货期是<span class="hl">最危险的时期</span>。当所有人都在晒收益、研报都在喊"长期看好"、技术指标全部钝化时，<strong>就是该离场的时候</strong>。</p>
+
+  <div class="quote-banner">
+    散户不是败给市场，而是败给<br>
+    <span class="hl">磨底期的绝望、主升浪的犹豫、出货期的狂热</span>。<br>
+    三个阶段三种情绪，你必须用相反的情绪去应对。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>股票完整周期三阶段：<strong>磨底 / 主升浪 / 高位出货</strong></li>
+      <li>磨底期 4 个技术特征：<strong>缩量 / K 线收敛假摔 / 均线黏合 / MACD 底背离</strong></li>
+      <li>主升浪持仓纪律：<strong>不预测顶部 / 移动止盈 / 不为等回调而清仓</strong></li>
+      <li>出货期 4 个离场信号：<strong>量价背离 / MACD 顶背离 / 底部筹码消失 / 舆论一致看好</strong></li>
+      <li>散户心法：<span class="hl">绝望中播种 / 犹豫中坚守 / 狂热中离场</span></li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 13 · 宏观、市场周期与极端行情</p>
+</footer>
+
+</body>
