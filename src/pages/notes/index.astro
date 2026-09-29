@@ -1,0 +1,226 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
+
+/**
+ * 笔记索引页：在 Astro build 时扫描 public/notes/ 下的所有 HTML 文件，
+ * 按章节前缀（S00-S13）分组生成列表。笔记正文是独立 HTML（深色主题），
+ * 不经过 Astro 处理；这里只负责目录和导航。
+ */
+
+const NOTES_DIR = join(process.cwd(), 'public', 'notes');
+
+// 章节标题映射（按文件名 SXX 前缀匹配）
+const STAGE_TITLES: Record<string, string> = {
+  S00: '认知重塑 · 破除散户思维',
+  S01: '心态纪律 · 交易心理与情绪管理',
+  S02: 'K线基础 · 单根与组合形态',
+  S03: '量价关系 · 量是因价是果',
+  S04: '均线趋势 · 趋势线与周期选择',
+  S05: '技术指标 · MA / KDJ / MACD / RSI / BOLL',
+  S06: '形态学 · 双重顶底与底部反转',
+  S07: '左侧右侧 · 进出场时机与分时盘口',
+  S08: '止盈止损 · 卖出判断标准',
+  S09: '仓位管理 · 532 法则与凯利公式',
+  S10: '选股方法 · 自上而下与自下而上',
+  S11: '分红回购 · 除权除息与税务',
+  S12: '筹码主力 · 资金面与涨跌停规则',
+  S13: '跨市场配置 · A 股 / 美股 / 黄金 / 债券',
+};
+
+const files = readdirSync(NOTES_DIR)
+  .filter((f) => f.endsWith('.html'))
+  .sort();
+
+// 从文件名解析 slug 和标题
+// 例：S00-01-为什么散户总在市场里亏钱.html
+//   → slug = "S00-01-为什么散户总在市场里亏钱"
+//   → title = "为什么散户总在市场里亏钱"
+//   → num = "01"
+//   → stage = "S00"
+const notes = files.map((filename) => {
+  const stem = filename.replace(/\.html$/, '');
+  const stage = stem.slice(0, 3);
+  const num = stem.slice(4, 6);
+  const title = stem.replace(/^S\d{2}-\d{2}-/, '');
+  return { stage, num, slug: stem, title };
+});
+
+// 按章节分组
+const groups = new Map<string, typeof notes>();
+for (const note of notes) {
+  if (!groups.has(note.stage)) groups.set(note.stage, []);
+  groups.get(note.stage)!.push(note);
+}
+
+const stages = [...groups.keys()].sort();
+---
+
+<BaseLayout
+  title="所有笔记"
+  description="覆盖散户投资认知、技术分析、财报估值、仓位管理、跨市场资产配置等 14 个章节，共 115 篇投资笔记。"
+>
+  <section class="container container--narrow">
+    <header class="page-header">
+      <p class="page-header__eyebrow">NOTES · 投资笔记合集</p>
+      <h1>所有笔记</h1>
+      <p class="page-header__lead">
+        共 <strong>{notes.length}</strong> 篇笔记，按章节（S00-S13）分组排列。
+        每篇均为独立深色主题 HTML 页面，包含完整的目录、案例与图表。
+      </p>
+    </header>
+
+    {stages.map((stage) => (
+      <section class="stage-group">
+        <h2 class="stage-group__title">
+          <span class="stage-group__id">{stage}</span>
+          <span class="stage-group__name">{STAGE_TITLES[stage] ?? stage}</span>
+          <span class="stage-group__count">{groups.get(stage)!.length} 篇</span>
+        </h2>
+        <ol class="note-list">
+          {groups.get(stage)!.map((note) => (
+            <li>
+              <a class="note-list__link" href={`/notes/${note.slug}`}>
+                <span class="note-list__num">{note.num}</span>
+                <span class="note-list__title">{note.title}</span>
+                <span class="note-list__arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))}
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    margin-bottom: var(--space-12);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--border-default);
+  }
+
+  .page-header__eyebrow {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .page-header h1 {
+    margin: 0 0 var(--space-3);
+    font-size: 2.25rem;
+    letter-spacing: -0.02em;
+  }
+
+  .page-header__lead {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .stage-group {
+    margin-bottom: var(--space-10);
+  }
+
+  .stage-group__title {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    margin: 0 0 var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 2px solid var(--accent);
+    font-size: 1.25rem;
+  }
+
+  .stage-group__id {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--accent-subtle);
+    padding: 2px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .stage-group__name {
+    flex: 1;
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .stage-group__count {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .note-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .note-list li {
+    margin: 0;
+    border-bottom: 1px dashed var(--border-default);
+  }
+
+  .note-list li:last-child {
+    border-bottom: none;
+  }
+
+  .note-list__link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) 0;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .note-list__link:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .note-list__num {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 28px;
+    flex-shrink: 0;
+  }
+
+  .note-list__title {
+    flex: 1;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  .note-list__arrow {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    opacity: 0;
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .note-list__link:hover .note-list__arrow {
+    opacity: 1;
+    transform: translateX(4px);
+    color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .page-header h1 { font-size: 1.875rem; }
+    .stage-group__title { font-size: 1.125rem; flex-wrap: wrap; }
+  }
+</style>
