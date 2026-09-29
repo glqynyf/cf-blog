@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>散户开户数与市场情绪：恐慌与狂热周期中的逆向交易指标｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b;
+    --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .case-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--purple); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .case-card h4 { color: var(--purple); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  th { background: var(--surface-2); padding: 12px 16px; text-align: left; font-weight: 700; color: var(--accent); font-size: 14px; }
+  td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text); font-size: 14.5px; }
+  tr:last-child td { border-bottom: none; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } table { font-size: 12px; } th, td { padding: 8px 10px; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 13</span>
+  <span class="stage-name">宏观、市场周期与极端行情</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 12 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 13 · 第 4 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">散户开户数与市场情绪：恐慌与狂热周期中的逆向交易指标</h1>
+  <p class="note-subtitle">一个在任何券商软件里都完全公开、人人可见的指标，却在过去 30 年里以接近 100% 的胜率预测了 A 股的阶段性大顶与历史级大底。它就是散户开户数。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>在短中期的极端行情里，价格从来不取决于资产本身值多少钱，<span class="hl">只取决于市场上最后一个潜在买家什么时候掏空自己的口袋</span>——这就是金融学里著名的<span class="hl">边际买家理论</span>。而<span class="hl-red">散户开户数就是整个资本市场里最具确定性的潜在买家库存量表</span>。当这个库存见顶甚至耗尽时，不管宏观政策再怎么刺激，资金面的重力法则都会瞬间降临。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-theory">边际买家理论：价格由最后一个买家决定</a></li>
+    <li><a href="#sec-2007">历史切片一 · 2007 大牛市：单周开户数突破天量</a></li>
+    <li><a href="#sec-2015">历史切片二 · 2015 杠杆牛：周开户数近 440 万户</a></li>
+    <li><a href="#sec-global">全球验证 · 美股 Robinhood 与加密货币</a></li>
+    <li><a href="#sec-mechanism">机制拆解：羊群效应 + FOMO + 财富错觉</a></li>
+    <li><a href="#sec-impl">实战用法：3 条逆向交易纪律</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-theory">
+  <h2 class="section-title">边际买家理论：价格由最后一个买家决定</h2>
+
+  <p>很多人以为股票市场的牛熊由基本面、宏观经济周期或上市公司盈利决定。但如果你在交易一线待得足够久，你会发现一个令人脊背发凉的真相：</p>
+
+  <blockquote class="purple">
+    <strong>在短中期的极端行情里，价格从来不取决于资产本身值多少钱，它只取决于市场上最后一个潜在买家什么时候掏空自己的口袋。</strong>
+  </blockquote>
+
+  <p>这就是金融学里著名的<span class="hl">边际买家理论</span>。当所有人都看好、都买完了，市场上<span class="hl-red">能够买入的增量资金池就宣告枯竭</span>——买盘没了，价格自然只能向下修正。</p>
+
+  <p>而<span class="hl">散户开户数就是潜在买家的库存量表</span>。中国证券登记结算公司<span class="hl-red">2017 年起已停发周报，仅按月发布"新增投资者数量"</span>，A 股账户数则按月发布——这是判断市场情绪最直接、最真实的指标。<span class="hl-red">注意</span>：<strong>新增 A 股账户数</strong> ≠ <strong>新增投资者数</strong>：一个投资者可开多个 A 股账户（沪 A、深 A、北 A）；前者 ≥ 后者。</p>
+</section>
+
+<section class="section" id="sec-2007">
+  <h2 class="section-title">历史切片一 · 2007 大牛市：单周开户数突破天量</h2>
+
+  <div class="case-card">
+    <h4>2007 年大牛市</h4>
+    <p>上证指数向六千点发起冲刺。根据中登公司权威数据：</p>
+    <ul>
+      <li><span class="hl">2007 年 8-10 月，每天新增开户数连续突破十几万甚至三十万户</span></li>
+      <li>2007 年 8 月沪深两市投资者新增开户 <strong>880 万户</strong>，单月历史最高；2007 全年新开 A 股账户 <strong>3759.48 万户</strong></li>
+      <li>坊间出现退休老人把养老金全部换成股票凭证、连菜市场小贩都在交流买哪只基金的荒诞场景</li>
+      <li>所有人坚信一句话：<span class="hl-red">"一万点不是梦"</span></li>
+    </ul>
+    <p>然而就在中登公司公布单周开户数创下历史天量的几乎同一周，<span class="hl">上证指数在 2007 年 10 月 16 日定格在了 6124.04 点</span>。</p>
+    <p>紧接而来的是长达一年的流动性屠杀，指数从 6124 一路狂泻到 <strong>1664 点</strong>。那批在开户曲线最陡峭阶段冲进来的几千万散户，用自己的储蓄为上一轮牛市划上了休止符。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-2015">
+  <h2 class="section-title">历史切片二 · 2015 杠杆牛：周开户数近 440 万户</h2>
+
+  <div class="case-card">
+    <h4>2015 年杠杆牛</h4>
+    <p>这是一轮被杠杆彻底推向狂热的行情。2015 年 5 月，沪指冲向 5178 点的前夕：</p>
+    <ul>
+      <li>中登公司周报显示<span class="hl">单周新增 A 股账户数连续数周维持在 200 万户以上</span></li>
+      <li>5 月最后一周一度逼近 <span class="hl-red">440 万户</span>（<span class="hl-red">A 股账户数口径，不是"投资者数"；同期"新增投资者数"约 164 万户</span>）</li>
+      <li>各大券商的开户系统频频瘫痪，视频审核队伍排到了几千人之后</li>
+      <li>当时所有人都在高喊"改革牛""万点论"</li>
+    </ul>
+    <p>事实是：<strong>增量资金的流入速度在开户数爆发式增长的那个瞬间就已经追不上老资金出逃套现的体量了</strong>。当最后一名听说暴富神话的新手投资者完成实名认证、将第一笔资金打入证券账户的瞬间，市场上能够买入的增量资金池宣告枯竭。</p>
+    <p>2015 年 6 月 12 日大盘见顶 <strong>5178 点</strong>，随之而来的是去杠杆引发的剧烈流动性踩踏。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-global">
+  <h2 class="section-title">全球验证 · 美股 Robinhood 与加密货币</h2>
+
+  <div class="case-card">
+    <h4>美股 2020-2021 散户大时代</h4>
+    <p>2020-2021 年美股经历极度疯狂的散户抱团时代。以零佣金模式著称的券商 Robinhood 迎来爆炸式增长：</p>
+    <ul>
+      <li>仅 2020 年第一季度就新增了超过 <strong>300 万个自助账户</strong></li>
+      <li>2021 年初散户大战华尔街空头的狂潮中，月度活跃用户突破 <strong>2000 万</strong></li>
+      <li>当 GameStop 和 AMC 被散户推向不可思议的天文数字时，美股期权市场的散户看涨期权交易量<span class="hl">历史上第一次压倒了机构的专业交易量</span></li>
+    </ul>
+    <p>然而狂欢的高潮就是终局的前奏——随着散户开户增速的断崖式下滑，<span class="hl-red">这些散户抱团股在随后几个月内暴跌超过 80%</span>。</p>
+  </div>
+
+  <div class="case-card">
+    <h4>加密货币市场的完美验证</h4>
+    <p>2021 年 4 月与 11 月比特币两次摸高至 60,000 多美元的历史峰值。如果你去复盘当时的辅助数据：</p>
+    <ul>
+      <li>全网最大的合规加密交易平台在各大应用市场下载量恰好<span class="hl-red">在币价见顶的同一周登顶全美第一</span></li>
+      <li>全网新增非零地址数达到了牛市以来最陡峭状态</li>
+      <li>关于"如何开户购买虚拟资产"的搜索趋势暴增十倍</li>
+    </ul>
+    <p>这背后的博弈本质与几十年前传统金融市场里的散户入场狂潮<span class="hl">没有任何不同</span>。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-mechanism">
+  <h2 class="section-title">机制拆解：羊群效应 + FOMO + 财富错觉</h2>
+
+  <p>为什么散户开户数会成为如此残酷的反向指标？背后有三重行为金融学机制：</p>
+
+  <h3 class="sub-title">机制一 · 羊群效应</h3>
+  <p>人类天生具有<span class="hl">从众本能</span>。看到身边朋友、同事、亲戚都在股市赚钱，"我是不是错过了"的焦虑感会驱使尚未入场的人匆忙开户。这是<span class="hl-red">最危险的潜在买家入场</span>——他们的买入往往就是行情的顶点。</p>
+
+  <h3 class="sub-title">机制二 · FOMO（错失恐惧症）</h3>
+  <p>看到朋友圈晒收益、社交网络充斥着"今天又赚了一个月工资"的帖子，<span class="hl">FOMO 情绪</span>驱使大量新手在指数已大幅上涨后冲进市场，<strong>买入成本往往是历史高位</strong>。</p>
+
+  <h3 class="sub-title">机制三 · 财富错觉与"这次不一样"</h3>
+  <p>每一轮牛市，散户都坚信"这次不一样"——2007 年是"股权分置改革红利"，2015 年是"改革牛 + 万众创新"，2024 年是"史诗级政策刺激"。<span class="hl-red">人性从未变过，但每次都以为自己不一样</span>。</p>
+</section>
+
+<section class="section" id="sec-impl">
+  <h2 class="section-title">实战用法：3 条逆向交易纪律</h2>
+
+  <h3 class="sub-title">纪律一 · 开户数爆表时减仓</h3>
+  <p>当中登公司单周新增开户数创出阶段性新高时，<span class="hl">要考虑减仓而非加仓</span>。历史数据反复验证：开户数爆表 = 潜在买家耗尽 = 顶部信号。</p>
+
+  <h3 class="sub-title">纪律二 · 开户数冰点时分批布局</h3>
+  <p>当开户数据降到冰点、营业部门可罗雀、保安都在打瞌睡时，<span class="hl">真正的暴力反弹往往就在不远处</span>。这时候反而应该分批布局。</p>
+
+  <h3 class="sub-title">纪律三 · 不被群体情绪感染</h3>
+  <p>当菜市场大妈、退休老人、大学生都在给你推荐股票时，<span class="hl-red">立刻警惕</span>。散户抱团的极致就是反转点。</p>
+
+  <table>
+    <thead>
+      <tr><th>散户开户数</th><th>市场情绪</th><th>逆向操作</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>单周突破历史新高</td><td><span class="hl-red">极度狂热</span></td><td>考虑减仓</td></tr>
+      <tr><td>连续创新低</td><td><span class="hl-green">极度恐慌</span></td><td>考虑分批布局</td></tr>
+      <tr><td>平稳在均值附近</td><td>中性</td><td>维持原有仓位</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 这是个逆向指标</div>
+    <p>散户开户数的用法<span class="hl-red">永远要反过来看</span>——开户数爆表是减仓信号，开户数冰点是分批建仓信号。<strong>顺着多数人的情绪做，就是给主力送钱</strong>。</p>
+  </div>
+
+  <div class="quote-banner">
+    当券商开户系统被挤爆、营业部门可罗雀变成排长龙时，<br>
+    <span class="hl">不是财富盛宴的开始，而是收割机的闸门</span>。<br>
+    当保安都开始打瞌睡时，真正的机会才刚推开一条缝。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>边际买家理论：<strong>价格由最后一个潜在买家决定</strong></li>
+      <li><span class="hl">散户开户数 = 潜在买家库存量表</span>，30 年接近 100% 准确率</li>
+      <li>2007 年 8 月单月<span class="hl-red">投资者</span>新增开户 <strong>880 万户</strong>（历史最高）→ 6124 点见顶；2015 年 5 月单周 <span class="hl-red">A 股账户</span>近 <strong>440 万户</strong> → 5178 点见顶（两个口径不同）</li>
+      <li>全球验证：美股 Robinhood 活跃用户 <strong>2000 万</strong> → GME 等抱团股 80% 暴跌；BTC 60,000 美元见顶时交易所下载量第一</li>
+      <li>三重机制：<strong>羊群效应 + FOMO + 财富错觉</strong>，每次都以为"这次不一样"</li>
+      <li>逆向用法：<span class="hl">开户爆表减仓、开户冰点布局</span></li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 13 · 宏观、市场周期与极端行情</p>
+</footer>
+
+</body>
