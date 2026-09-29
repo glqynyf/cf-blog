@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5:3:2 法则与凯利公式：用数学模型在牛市赚干抹净、熊市毫发无损｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4;
+    --text-mute: #6b7785; --accent: #f0883e;
+    --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff;
+    --yellow: #e3b341; --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    line-height: 1.8; -webkit-font-smoothing: antialiased;
+  }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+    font-size: 13px; color: var(--text-dim); flex-wrap: wrap;
+  }
+  .stage-bar .stage-pill {
+    display: inline-block; padding: 4px 12px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 700; letter-spacing: 1px; font-size: 12px;
+  }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+    font-size: 13px; color: var(--text-mute); flex-wrap: wrap;
+  }
+  .meta-bar .tag {
+    padding: 4px 10px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 600; letter-spacing: 0.5px;
+  }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border); border-left: 4px solid var(--accent);
+    border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow);
+  }
+  .summary-card h3 {
+    font-size: 14px; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px;
+  }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px 24px; margin-bottom: 48px;
+  }
+  .toc h4 {
+    font-size: 13px; color: var(--text-mute); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a {
+    color: var(--text-dim); text-decoration: none; font-size: 14.5px;
+    display: flex; align-items: baseline; transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before {
+    content: counter(toc-counter, decimal-leading-zero);
+    color: var(--accent); font-weight: 700; margin-right: 12px;
+    font-variant-numeric: tabular-nums; min-width: 28px;
+  }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title {
+    font-size: 26px; font-weight: 700; margin-bottom: 24px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--accent);
+    display: inline-block; letter-spacing: -0.3px;
+  }
+  h3.sub-title {
+    font-size: 19px; font-weight: 600; margin: 28px 0 14px;
+    color: var(--text); display: flex; align-items: center;
+  }
+  h3.sub-title::before {
+    content: ""; width: 4px; height: 18px;
+    background: var(--accent); border-radius: 2px; margin-right: 12px;
+  }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote {
+    margin: 20px 0; padding: 16px 22px;
+    background: var(--surface); border-left: 4px solid var(--blue);
+    border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px;
+  }
+  blockquote strong { color: var(--blue); }
+  blockquote.red { border-left-color: var(--red); }
+  blockquote.red strong { color: var(--red); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .formula-box {
+    background: var(--surface); border: 1px solid var(--accent);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+    text-align: center;
+  }
+  .formula-box .formula {
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: var(--accent); font-size: 19px; font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; }
+  .key-points {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+  }
+  .key-points h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li {
+    padding: 8px 0 8px 30px; position: relative;
+    color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border);
+  }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before {
+    content: "✓"; position: absolute; left: 0; top: 8px;
+    color: var(--green); font-weight: 800; font-size: 18px;
+  }
+  .warning-card {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08));
+    border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red);
+    border-radius: 8px; padding: 18px 22px; margin: 20px 0;
+  }
+  .warning-card .label {
+    color: var(--red); font-weight: 700; font-size: 13px;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--accent); border-radius: 10px;
+    padding: 28px 32px; margin: 32px 0;
+    text-align: center; font-size: 19px;
+    font-weight: 600; color: var(--accent);
+    line-height: 1.6; box-shadow: var(--shadow);
+  }
+  .quote-banner::before {
+    content: """; display: block; font-size: 48px;
+    line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5;
+  }
+  .recover-table {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+  }
+  .recover-table h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .recover-table table { width: 100%; border-collapse: collapse; }
+  .recover-table th, .recover-table td {
+    padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);
+    color: var(--text); font-size: 14.5px;
+  }
+  .recover-table th { color: var(--text-dim); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .recover-table .lose { color: var(--red); font-weight: 700; }
+  .recover-table .gain { color: var(--green); font-weight: 700; }
+  footer.note-footer {
+    margin-top: 72px; padding-top: 28px;
+    border-top: 1px solid var(--border);
+    color: var(--text-mute); font-size: 13.5px; text-align: center;
+  }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 9</span>
+  <span class="stage-name">仓位管理与资金管理</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 12 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 9 · 第 2 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">5:3:2 法则与凯利公式：用数学模型在牛市赚干抹净、熊市毫发无损</h1>
+  <p class="note-subtitle">为什么你在牛市赚的钱会在熊市亏光？答案藏在<span class="hl">波动性损耗</span>和<span class="hl">凯利公式</span>这两个数学定理里。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>散户最致命的不是选股失败，而是<span class="hl">仓位管理永远满仓</span>。两个数学工具能救你：① 理解"<strong>波动性损耗</strong>"——为什么 100% 涨幅 + 50% 跌幅 = 0% 收益；② 用"<strong>凯利公式</strong>"算出每笔交易应该下注的最优比例，避免满仓 + 加杠杆的"梭哈式"破产。<span class="hl">5:3:2 仓位结构 + 半凯利下注 = 跨越牛熊的硬核武器</span>。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-volatility">波动性损耗：100% 涨幅 + 50% 跌幅 = 0% 收益</a></li>
+    <li><a href="#sec-kelly">凯利公式的来历：从信息论到 21 点赌桌</a></li>
+    <li><a href="#sec-formula">凯利公式：F = (bp − q) / b</a></li>
+    <li><a href="#sec-532">5:3:2 仓位法则在 A 股的落地</a></li>
+    <li><a href="#sec-truth">三个最反直觉的数学真相</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-volatility">
+  <h2 class="section-title">波动性损耗：100% 涨幅 + 50% 跌幅 = 0% 收益</h2>
+  <p>假设你有 10 万本金：</p>
+  <ul>
+    <li>第一年大牛市，<span class="hl-green">资金翻倍到 20 万</span>（+100%）</li>
+    <li>第二年熊市，<span class="hl-red">资产缩水 50% 到 10 万</span>（−50%）</li>
+  </ul>
+  <p>直觉上，<span class="hl">+100% − 50% = +50%</span>。但实际上两年的总收益率是 <strong>0%</strong>——两年时间坐了一轮过山车，最后两手空空。</p>
+
+  <blockquote class="red">
+    <strong>这是算术平均和几何平均的巨大鸿沟</strong>。如果一个资产的波动性极大，<span class="hl-red">每一次暴跌都在成倍地放大你下一次翻盘所需的难度</span>。这就是为什么那些在牛市赚得最凶、喜欢满仓甚至加杠杆的人，往往在熊市里损失最惨烈。
+  </blockquote>
+
+  <h3 class="sub-title">亏损幅度 vs 回本所需涨幅</h3>
+  <div class="recover-table">
+    <h4>亏损后回本难度表</h4>
+    <table>
+      <thead>
+        <tr><th>亏损幅度</th><th>回本所需涨幅</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="lose">−10%</td><td class="gain">+11.1%</td></tr>
+        <tr><td class="lose">−20%</td><td class="gain">+25.0%</td></tr>
+        <tr><td class="lose">−30%</td><td class="gain">+42.9%</td></tr>
+        <tr><td class="lose">−50%</td><td class="gain">+100%</td></tr>
+        <tr><td class="lose">−70%</td><td class="gain">+233%</td></tr>
+        <tr><td class="lose">−80%</td><td class="gain">+400%</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top: 12px; color: var(--text-dim); font-size: 13.5px;">在现实金融市场中，找到<strong>翻倍标的</strong>极其艰难；而消灭你一半的本金，往往只需要几次踩雷或一个突如其来的熊市硬碟。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-kelly">
+  <h2 class="section-title">凯利公式的来历：从信息论到 21 点赌桌</h2>
+  <p>为了应对"波动性损耗"的亏损死循环，我们引入投资界和博弈论中最伟大的发现之一——<strong>凯利公式（Kelly Criterion）</strong>。</p>
+
+  <h3 class="sub-title">发明人：约翰·凯利（John Kelly）</h3>
+  <ul>
+    <li><strong>1956 年</strong>，贝尔实验室物理学家约翰·凯利发表论文</li>
+    <li>他研究的是信息在有噪声的通信信道中传输时，<strong>接收方应如何根据信息的可靠程度来决定下注比例</strong></li>
+    <li>把香农（信息论之父）的信息论第一次用严格的数学语言翻译成了一套<strong>下注策略</strong></li>
+    <li>香农后来把这篇论文介绍给了 MIT 的年轻数学家<span class="hl">爱德华·索普（Edward Thorp）</span></li>
+  </ul>
+
+  <blockquote>
+    <strong>注意</strong>：视频中提到的"Edward Thorp"，视频口播为"艾德華索普"。这是真实人物，<strong>爱德华·索普</strong>是 1960 年代 21 点算牌策略的发明者，被誉为"<strong>量化对冲基金之父</strong>"，著有《击败庄家》（<em>Beat the Dealer</em>，1962）和《战胜市场》（<em>A Man for All Markets</em>）。
+  </blockquote>
+
+  <p>索普用凯利公式横扫拉斯维加斯 21 点赌桌，后来创立了<strong>普林斯顿/新世纪合伙基金</strong>（Princeton/Newport Partners），被广泛视为<strong>世界上最早的量化对冲基金之一</strong>。</p>
+</section>
+
+<section class="section" id="sec-formula">
+  <h2 class="section-title">凯利公式：F = (bp − q) / b</h2>
+
+  <div class="formula-box">
+    <div class="formula">F = (bp − q) / b</div>
+    <div class="desc">F = 最优下注比例；b = 盈亏比；p = 胜率；q = 1 − p</div>
+  </div>
+
+  <p>公式的数学含义：</p>
+  <ul>
+    <li><strong>F</strong>：本次交易应该投入的资金比例</li>
+    <li><strong>b</strong>：盈亏比 = 赚时赚多少 / 亏时亏多少</li>
+    <li><strong>p</strong>：胜率（赢面）</li>
+    <li><strong>q</strong>：输的概率 = 1 − p</li>
+  </ul>
+
+  <h3 class="sub-title">一个极端的反直觉案例</h3>
+  <p>假设一枚特制硬币，<strong>正面朝上概率 60%、背面 40%</strong>。如果抛出正面 1:1 给你（压 1 万赢 1 万），抛出背面输光（压 1 万全亏）。胜率 = 60%，盈亏比 = 1:1。</p>
+
+  <blockquote class="red">
+    <strong>满仓下注的后果</strong>：虽然一次正面能把 10 万变 20 万，再抛一次变 40 万，但只要你连续玩下去，<span class="hl">在统计学上你迟早会遇到一次反面</span>。而每次都 100% 满仓，只要遇到一次反面，<strong>资产瞬间归零</strong>，你就被踢出游戏，再也没有翻盘机会。
+  </blockquote>
+
+  <p>这是"<strong>哪怕胜率 99% 的游戏，只要你无限次满仓下注，破产概率就无限逼近 100%</strong>"的数学真相。</p>
+
+  <h3 class="sub-title">凯利公式的解法</h3>
+  <p>把胜率 60%、盈亏比 1:1 代入凯利公式：</p>
+  <div class="formula-box">
+    <div class="formula">F = (1 × 0.6 − 0.4) / 1 = 0.2</div>
+    <div class="desc">即：每笔交易应该只投入 20% 的资金</div>
+  </div>
+
+  <p>凯利公式用最纯粹的数学逻辑告诉我们一个<strong>极为冷酷的真理</strong>：</p>
+  <blockquote class="red">
+    <strong>在任何博弈游戏中，哪怕你拥有看起来占绝对优势的赢面</strong>，只要你<strong>没有按公式算出的比例去管理仓位</strong>，盲目选择满仓或超过最优下注，你的<strong>长期结局在数学期望上就是走向归零</strong>。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-532">
+  <h2 class="section-title">5:3:2 仓位法则在 A 股的落地</h2>
+  <p>视频给出一个可直接操作的仓位结构——<span class="hl">5:3:2 法则</span>：</p>
+
+  <ul>
+    <li><span class="hl-blue">50%</span> — <strong>底仓</strong>：长期持有的核心仓位（业绩稳健、低估的白马）</li>
+    <li><span class="hl">30%</span> — <strong>波段仓</strong>：做中短线波段，根据技术信号操作</li>
+    <li><span class="hl-green">20%</span> — <strong>现金</strong>：极端机会出现时的"弹药库"</li>
+  </ul>
+
+  <h3 class="sub-title">为什么是 5:3:2 而不是 1:1:1 或 8:1:1？</h3>
+  <p>凯利公式在实战中的"<strong>半凯利</strong>"原则（即只下注公式算出的一半）告诉我们：</p>
+  <ul>
+    <li>凯利公式给出的是<strong>理论最优</strong>，但你无法精确估计 p 和 b</li>
+    <li>现实中的胜率和盈亏比都有<strong>不确定性</strong>，所以应当<strong>保守</strong></li>
+    <li>5:3:2 的设计正好让"现金部分"在两次完整亏损后还能让你有子弹</li>
+  </ul>
+
+  <div class="quote-banner">
+    <span class="hl">真正的高手不是每天都赚钱</span><br>
+    而是在<strong>关键机会出现时有子弹可用</strong><br>
+    5:3:2 让你永远有 20% 的现金等待那个<strong>十年一遇的大底</strong>
+  </div>
+</section>
+
+<section class="section" id="sec-truth">
+  <h2 class="section-title">三个最反直觉的数学真相</h2>
+
+  <h3 class="sub-title">真相一 · 满仓梭哈在数学上等价于自杀</h3>
+  <p>哪怕胜率高达 99%，只要无限次满仓下注，<strong>破产概率就无限逼近 100%</strong>。这就是为什么一些曾经创造过财富神话的短线交易者，最终会因为一次坚信不移的梭哈而彻底爆仓。</p>
+
+  <h3 class="sub-title">真相二 · 胜率高不等于"应该加大仓位"</h3>
+  <p>很多散户的本能是"我胜率高就多下点"。但凯利公式告诉你，<strong>胜率只是公式的三个变量之一</strong>。盈亏比 b 同样关键。<span class="hl-red">原笔记结论"胜率 80% + 盈亏比 0.5 → 凯利告诉你不要下注"是反的</span>——代入 <code>f* = (b·p − q)/b</code>，p=0.8, b=0.5, q=0.2 → <code>f* = (0.5×0.8−0.2)/0.5 = 0.4 = 40%</code>，凯利告诉你<span class="hl">下注 40%</span>。要得到"不要下注"的反例，需要更恶化的赔率（如 p=0.8, b=0.2 → f*=−20%）。</p>
+
+  <h3 class="sub-title">真相三 · 数学期望为正 ≠ 短期必胜</h3>
+  <p>凯利公式的"<strong>长期最优</strong>"前提是"无数次博弈"。但在<strong>短期</strong>，你可能连续输 10 次。这不是公式错了，而是<strong>你必须活到长期才能享受到正期望</strong>。这就是为什么"<strong>半凯利</strong>"或"<strong>1/4 凯利</strong>"是更现实的选择——降低短期爆仓概率。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 散户最常见的认知误区</div>
+    <p>把凯利公式当作"<strong>告诉我每次买多少只股票</strong>"的工具是错的。凯利公式管的是<strong>单次下注的资金比例</strong>，而 A 股散户的实际操作是"<strong>满仓一只股票</strong>"——这两者<strong>风险结构完全不同</strong>。正确的做法是：先决定这只股票占总资金的多少，再决定这只股票的止损位。</p>
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>波动性损耗：<strong>+100% − 50% = 0%</strong>，不是 +50%</li>
+      <li>亏 50% 要<strong>翻倍</strong>才能回本，亏 70% 要<strong>+233%</strong></li>
+      <li>凯利公式：F = (bp − q) / b，由贝尔实验室约翰·凯利 1956 年提出</li>
+      <li><strong>满仓梭哈在数学上等价于自杀</strong>——哪怕 99% 胜率也会无限次下注后破产</li>
+      <li>5:3:2 仓位结构（底仓 / 波段 / 现金）是 A 股落地的实战框架</li>
+      <li>现实中应该用"<strong>半凯利</strong>"，降低短期爆仓风险</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 9 · 仓位管理</p>
+</footer>
+
+</body>
