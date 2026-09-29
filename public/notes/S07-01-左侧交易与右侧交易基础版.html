@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>左侧交易与右侧交易：承受浮亏煎熬还是承担追高回撤的风险偏好抉择｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --surface: #1a2332;
+    --surface-2: #232f3f;
+    --border: #2a3744;
+    --text: #e6edf3;
+    --text-dim: #9aa7b4;
+    --text-mute: #6b7785;
+    --accent: #f0883e;
+    --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff;
+    --green: #56d364;
+    --red: #ff6b6b;
+    --purple: #bc8cff;
+    --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .formula-box { background: var(--surface); border: 1px solid var(--accent); border-radius: 8px; padding: 22px 26px; margin: 24px 0; text-align: center; }
+  .formula-box .formula { font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; color: var(--accent); font-size: 19px; font-weight: 700; margin-bottom: 12px; }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  .compare-grid .col { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px; }
+  .compare-grid .col h4 { color: var(--accent); font-size: 16px; margin-bottom: 12px; font-weight: 700; }
+  .compare-grid .col.left h4 { color: var(--blue); }
+  .compare-grid .col.right h4 { color: var(--green); }
+  .compare-grid ul { margin: 0; padding-left: 18px; }
+  .compare-grid ul li { font-size: 14px; color: var(--text-dim); margin-bottom: 6px; }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  table th { background: var(--surface-2); color: var(--accent); padding: 12px 16px; text-align: left; font-weight: 700; font-size: 14px; border-bottom: 1px solid var(--border); }
+  table td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text); font-size: 14.5px; }
+  table tr:last-child td { border-bottom: none; }
+  table tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+    .compare-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 7</span>
+  <span class="stage-name">买入策略：左侧交易 vs 右侧交易</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 12 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 7 · 第 1 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">左侧交易与右侧交易：承受浮亏煎熬，还是承担追高回撤的风险偏好抉择</h1>
+  <p class="note-subtitle">亏钱根源根本不是选股，而是把买入姿势和心理承受力搞反了。这是一篇把"低买高卖"这句口号彻底拆穿，再用数学和行为金融学帮你看清两种交易流派隐藏代价的入门笔记。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>"低买高卖"听起来是颠扑不破的真理，<strong>实战中却极度反直觉</strong>。左侧交易（逆势抄底）成本低但胜率低、心理压力大；右侧交易（顺势追涨）胜率高但成本高、回撤剧烈。<span class="hl">决定你账户生死的，不是你选了哪一种流派，而是你愿不愿意为它支付背后的隐性代价。</span>选错了流派与你的性格、资金、时间错配，才是 90% 交易者真正亏钱的根源。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-myth">"低买高卖"为什么是句危险的咒语</a></li>
+    <li><a href="#sec-left">左侧交易：买在无人问津的冰点</a></li>
+    <li><a href="#sec-right">右侧交易：吃下爆发力最强的主升浪</a></li>
+    <li><a href="#sec-buffett">巴菲特 2008 年抄底的真相：他凭什么能扛住？</a></li>
+    <li><a href="#sec-math">下跌 50% 与上涨 100% 的非对称数学</a></li>
+    <li><a href="#sec-choose">人格 + 周期 + 资金，决定你应该选哪一侧</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-myth">
+  <h2 class="section-title">"低买高卖"为什么是句危险的咒语</h2>
+  <p>在金融交易的世界里流传最广、也最具迷惑性的一句话，就是"低买高卖"。这句话听起来是颠扑不破的真理，但它在实战中却极度反直觉，甚至完全违背人类趋利避害的胜利本能。</p>
+  <p>想象一下两种场景：</p>
+  <ul>
+    <li><span class="hl">场景一</span>：资产价格一路下跌，宏观数据恶化，主流财经媒体充斥着悲观预测。资产估值确实被压缩到了低位——但此时每一根下跌的 K 线都在向大脑发出危险警报，绝大多数人都<span class="hl-red">根本不敢伸手</span>。</li>
+    <li><span class="hl">场景二</span>：标的资产创下历史新高，行业前景一片光明，各大券商一致调高目标价。趋势确实确立了——但价格已经脱离低估区域，又陷入<span class="hl-red">恐高与怕踏空</span>的剧烈撕裂。</li>
+  </ul>
+  <p>这两种相反方向的"心理窒息感"，构成了左右侧交易的分水岭。所谓左侧交易，是在价格走势形成 V 型反转底部之前，<strong>逆着当前运动方向建仓</strong>。左侧买入者永远是在价格持续下行、空头依然主导时，基于估值模型、内在价值或周期偏离度提前买入。</p>
+  <p>右侧交易则完全放弃对绝对拐点的预测——在价格完成筑底、<strong>放量突破关键阻力位</strong>、上升趋势明确确立后，在微型底部的右侧顺势跟进。</p>
+
+  <div class="quote-banner">
+    表面上看，左侧追求的是<span class="hl">极致安全边际</span>，右侧追求的是<span class="hl">极致资金效率</span>。<br>
+    真正决定账户生死的，是你愿不愿意为你的流派，支付它背后严苛的隐性代价。
+  </div>
+</section>
+
+<section class="section" id="sec-left">
+  <h2 class="section-title">左侧交易：买在无人问津的冰点</h2>
+  <p>崇尚左侧交易的人通常具备极强的逆向思维，往往将价值投资点击中的格言挂在嘴边。但必须先把那些被神话遮蔽的残酷数学事实摆在台面上。</p>
+
+  <h3 class="sub-title">左侧交易的"诱人外壳"</h3>
+  <p>假设你关注的某项资产从 100 元跌到 50 元，跌幅达 50%，市净率已经回落到历史 20% 以下——左侧交易者进场，认为"安全垫"已经足够厚了。</p>
+  <p>但问题是：<strong>50 元是底部吗？没人知道。</strong>在流动性踩踏或信用收缩的极端周期里，价格完全可能从 50 元继续跌到 25 元。许多投资者会潜意识地认为"这只是又跌了 25 元"——但你的真实账户经历的是在 50 元基础上再次遭遇 <span class="hl-red">50% 的腰斩</span>。</p>
+
+  <h3 class="sub-title">左侧交易的"隐性账单"</h3>
+  <blockquote class="purple">
+    <strong>三笔被严重低估的代价</strong><br>
+    • <span class="hl-blue">心理代价</span>：连续数月浮亏会让神经系统持续分泌皮质醇，身体会本能地将其识别为"生存危机"。长周期的不确定性会从生理层面瓦解一个人的理性认知。<br>
+    • <span class="hl-blue">时间代价</span>：资金被长期冻结在最不确定的标的上，错过其它所有优质资产的轮动机会。<br>
+    • <span class="hl-blue">价值陷阱代价</span>：许多大跌根本不是情绪恐慌带来的错杀，而是基本面与盈利能力的崩塌——越跌越买，本质上是向失去造血能力的黑洞不断注入流动性。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-right">
+  <h2 class="section-title">右侧交易：吃下爆发力最强的主升浪</h2>
+  <p>右侧交易者放弃猜测绝对拐点，只在趋势明朗后跟进。他们承认短期买不到最低点，但换来了"方向已确认"的安全感。</p>
+
+  <h3 class="sub-title">右侧交易的"魔鬼细节"</h3>
+  <p>右侧交易看似舒服，其实隐含着三个魔鬼细节：</p>
+  <ul>
+    <li><span class="hl">追高被套的剧烈回撤</span>：当你确认突破追入时，如果遇到假突破（主力拉升后立刻反手砸盘），账户会瞬间浮亏 10% 以上，且这种回撤往往出现在你"已经按规则止损却发现它又拉回去"的反复心理折磨中。</li>
+    <li><span class="hl">成本劣势</span>：右侧买入意味着吃不到趋势初期的最大涨幅，等你确认入场时，往往已经是鱼身中段。</li>
+    <li><span class="hl">趋势确认的滞后性</span>：所谓"放量突破"很多时候是主力故意做给你看的诱多形态，真假突破的鉴别本身就是另一个大坑。</li>
+  </ul>
+
+  <h3 class="sub-title">左侧 vs 右侧：核心权衡一览</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>维度</th>
+        <th>左侧交易（逆势抄底）</th>
+        <th>右侧交易（顺势追涨）</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>买入位置</strong></td>
+        <td>趋势底部反转之前</td>
+        <td>趋势确认突破之后</td>
+      </tr>
+      <tr>
+        <td><strong>买入动机</strong></td>
+        <td>估值便宜 + 逆向思维</td>
+        <td>趋势确立 + 资金效率</td>
+      </tr>
+      <tr>
+        <td><strong>单笔胜率</strong></td>
+        <td>较低（接飞刀概率大）</td>
+        <td>较高（顺势有惯性）</td>
+      </tr>
+      <tr>
+        <td><strong>潜在盈亏比</strong></td>
+        <td>极高（一旦反转涨幅惊人）</td>
+        <td>中等（鱼身中段介入）</td>
+      </tr>
+      <tr>
+        <td><strong>心理压力</strong></td>
+        <td><span class="hl-red">极大</span>（长期浮亏煎熬）</td>
+        <td>较大（短期回撤剧痛）</td>
+      </tr>
+      <tr>
+        <td><strong>资金占用时长</strong></td>
+        <td>长（等待均值回归）</td>
+        <td>短（趋势结束即撤）</td>
+      </tr>
+      <tr>
+        <td><strong>适用性格</strong></td>
+        <td>极度耐心、能扛浮亏</td>
+        <td>果断执行、不怕追高</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="section" id="sec-buffett">
+  <h2 class="section-title">巴菲特 2008 年抄底的真相：他凭什么能扛住？</h2>
+  <p>讲左侧交易如果不讲巴菲特 2008 年的故事，就等于没讲。但真正值得讲的，不是他"勇敢抄底"，而是<span class="hl">他凭什么能扛住</span>。</p>
+
+  <h3 class="sub-title">"我在买入美国"——一篇载入史册的评论</h3>
+  <p>2008 年 9 月雷曼兄弟倒闭，引发全球流动性海啸。10 月 16 日，沃伦·巴菲特在《纽约时报》发表了一篇评论文章，标题就叫 <strong>《我在买入美国》</strong>，公开宣布自己正在用个人账户全额买入美国股票。</p>
+  <p>事实走向是怎样的？标普 500 指数在他公开发文的当天收盘在 946 点附近，随后不仅没有止跌，反而在全球恐慌盘的抛售下继续狂泻，直到 2009 年 3 月 6 日盘中跌至 <span class="hl-red">666.79 点</span>的极低位置。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 一个被忽略的细节</div>
+    <p>在巴菲特高调宣布买入之后的整整五个月里，<strong>大盘从他的发声位置又下跌了近 30%</strong>。各大主流财经媒体公开质疑伯克希尔哈撒韦的现金流是否见底，甚至有机构下调了其评级。</p>
+  </div>
+
+  <h3 class="sub-title">巴菲特扛住的"三件武器"</h3>
+  <p>巴菲特最终能走出那场风暴，是因为伯克希尔哈撒韦拥有普通人完全不具备的三件武器：</p>
+  <ul>
+    <li><span class="hl">近乎零成本的保险浮存金</span>——长期负债，没有强制平仓线</li>
+    <li><span class="hl">没有短期禁止赎回的压力</span>——资金性质决定了他可以"等得起"</li>
+    <li><span class="hl">负债端的久期极长</span>——允许他平静地等待估值均值回归</li>
+  </ul>
+  <p>当你的账户在左侧买入后出现连续数月的回撤，神经系统会自动分泌大量皮质醇，身体会本能地将其识别为生存危机。绝大多数在左侧失败的交易者，<span class="hl-red">不是输在对企业价值的计算上，而是输在无法抗衡漫长的心理煎熬</span>，最终在估值最便宜、市场情绪最绝望的极限位置割肉离场。</p>
+</section>
+
+<section class="section" id="sec-math">
+  <h2 class="section-title">下跌 50% 与上涨 100% 的非对称数学</h2>
+  <p>这是每一个左侧交易者必须刻进骨子里的数学事实：<span class="hl-red">亏损和盈利的修复难度完全不对称</span>。下跌幅度越大，回本需要的涨幅会成倍增加。</p>
+
+  <div class="formula-box">
+    <div class="formula">亏损 10% → 需上涨 11.1% 回本</div>
+    <div class="formula">亏损 30% → 需上涨 42.9% 回本</div>
+    <div class="formula">亏损 50% → 需上涨 100% 回本（翻倍）</div>
+    <div class="formula">亏损 70% → 需上涨 233% 回本</div>
+  </div>
+
+  <p>反过来，盈利的回撤也是不对称的：盈利 50% 的浮盈，只要价格回落 33% 就会全部归零。这意味着你辛苦抓到的 50% 涨幅，可能一夜就被普通的回调抹平。</p>
+  <blockquote>
+    <strong>反直觉但至关重要的结论：</strong>长期资产增值过程中，<span class="hl">规避深度回撤，远比抓住单次高额收益更关键</span>。复利增长的核心，不在于单次盈利有多丰厚，而在于资产净值曲线不会出现大幅深度回落。
+  </blockquote>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 左侧交易者最容易输的方式</div>
+    <p>不是抄底早，而是<span class="hl-red">在估值最便宜的底部</span>，因为承受不住精神压力而选择割肉离场。<strong>你不是在抄底时被套的，你是在浮亏中扛不住最终割肉时真的亏掉的。</strong></p>
+  </div>
+</section>
+
+<section class="section" id="sec-choose">
+  <h2 class="section-title">人格 + 周期 + 资金，决定你应该选哪一侧</h2>
+  <p>最后必须明确一点：<span class="hl">左侧和右侧没有优劣之分，它们只是两套不同的力学系统</span>。真正决定你能不能赚钱的，是流派与你的匹配程度。</p>
+
+  <div class="compare-grid">
+    <div class="col left">
+      <h4>适合左侧交易的人</h4>
+      <ul>
+        <li>极度耐心，能承受连续数月浮亏</li>
+        <li>资金是闲钱，没有短期赎回压力</li>
+        <li>对企业基本面有深度研究能力</li>
+        <li>性格逆向，不被市场情绪左右</li>
+        <li>能接受"看对但等很久"的过程</li>
+      </ul>
+    </div>
+    <div class="col right">
+      <h4>适合右侧交易的人</h4>
+      <ul>
+        <li>果断执行，看准就追不犹豫</li>
+        <li>资金有明确的使用期限</li>
+        <li>对盘面情绪和量价信号敏感</li>
+        <li>性格顺势，懂得跟随主力</li>
+        <li>能接受"买不到最低点"的缺憾</li>
+      </ul>
+    </div>
+  </div>
+
+  <p>普通个人投资者真正容易踩的坑，是<strong>用左侧的姿势去做右侧的资金</strong>，或者反过来。比如明明只有 3 个月就要用的钱，却去做左侧抄底——结果资金到期被迫止损在最低点；又比如明明性格极度敏感、看一次浮亏就睡不着觉，却偏要去抄底等待均值回归。</p>
+
+  <div class="quote-banner">
+    交易流派没有对错，<br>
+    <span class="hl">错配才是亏损的根源。</span><br>
+    在你选择左侧还是右侧之前，先回答自己：<br>
+    我的性格、资金、周期，到底能承受哪一种隐性代价？
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>"低买高卖"是反直觉的咒语，左侧买入需要扛浮亏，右侧买入需要扛回撤</li>
+      <li>左侧交易胜率低、潜在盈亏比极高、心理压力极大；右侧交易胜率较高、潜在盈亏比中等</li>
+      <li>巴菲特 2008 年抄底后还跌了 30%，靠的是零成本浮存金 + 长期负债 + 久期匹配</li>
+      <li>亏损 50% 需要上涨 100% 才能回本，下跌与上涨的不对称是复利最大的敌人</li>
+      <li><strong>流派没有优劣，错配才是亏损根源</strong>——性格、资金、周期必须与所选流派匹配</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 7 · 买入策略</p>
+</footer>
+
+</body>
