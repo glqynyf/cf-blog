@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>主力借"红三兵"完成派发：筹码转移与散户接盘的全过程｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14.5px; }
+  th { background: var(--surface); color: var(--accent); text-align: left; padding: 12px 14px; border-bottom: 2px solid var(--accent); font-weight: 700; }
+  td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+  tr:hover td { background: var(--surface); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .misuse-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin: 24px 0; display: grid; grid-template-columns: 1fr auto 1fr; gap: 18px; align-items: stretch; }
+  .misuse-card .col { padding: 18px 20px; border-radius: 8px; }
+  .misuse-card .wrong { background: rgba(255, 107, 107, 0.08); border: 1px solid rgba(255, 107, 107, 0.3); }
+  .misuse-card .wrong h4 { color: var(--red); }
+  .misuse-card .right { background: rgba(86, 211, 100, 0.08); border: 1px solid rgba(86, 211, 100, 0.3); }
+  .misuse-card .right h4 { color: var(--green); }
+  .misuse-card .vs { align-self: center; font-size: 24px; font-weight: 800; color: var(--text-mute); }
+  .misuse-card h4 { font-size: 15px; margin-bottom: 10px; }
+  .misuse-card ul { margin: 0; padding-left: 18px; }
+  .misuse-card ul li { font-size: 14px; color: var(--text-dim); }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+    .misuse-card { grid-template-columns: 1fr; }
+    .misuse-card .vs { text-align: center; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 6</span>
+  <span class="stage-name">形态学与缺口理论</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 11 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 6 · 第 8 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">主力借"红三兵"完成派发：筹码转移与散户接盘的全过程</h1>
+  <p class="note-subtitle">连续三天收出阳线，经典的红三兵形态现身，你以为这是大涨的前兆，准备满仓跟进？如果这三根阳线出现的同时成交量却一天比一天萎缩，你很可能正站在主力精心布置的陷阱边缘。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>主力出货最怕<span class="hl-red">打草惊蛇</span>。如果直接挂几万手卖单猛砸，瞬间就会出现放巨量的长阴线，技术派散户会立刻吓的夺路而逃，<span class="hl">买盘会瞬间冻结，到时候主力的筹码卖给谁</span>？<strong>所以高明的出货往往不是在大阴线里完成的，而是在一片歌舞升平的阳线里完成的</strong>——主力利用散户对"红三兵"的信仰，制造出一种价格稳步推高、市场一片安好的错觉。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-trapbook">教科书里的红三兵：散户的美好幻想</a></li>
+    <li><a href="#sec-effort">量价关系原理：成交量是质量</a></li>
+    <li><a href="#sec-threeday">三天的博弈过程：从挑逗到派发</a></li>
+    <li><a href="#sec-compare">真红三兵 vs 假红三兵的 5 个维度</a></li>
+    <li><a href="#sec-psychology">派发背后的心理博弈：确认偏误与错失恐惧</a></li>
+    <li><a href="#sec-rules">识别无量诱多的实战铁律</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-trapbook">
+  <h2 class="section-title">教科书里的红三兵：散户的美好幻想</h2>
+  <p>我们刚接触技术分析的时候，几乎所有的教科书、各种投资软件的指标说明里，都会把红三兵当作一个很强的<span class="hl">看涨信号</span>。教科书上是这么写的：</p>
+  <blockquote>
+    <strong>在一段下跌趋势的末期，或者在一个盘整平台的底部，连续收出三根阳线，且每一根阳线的收盘价都高于前一天的收盘价。</strong>这代表多头力量正在稳步积聚，趋势可能迎来反转。
+  </blockquote>
+  <p>逻辑听起来很顺，对吧？三连阳意味着连续三天都是买方占了上风，多头一波接一波把股价推高。这难道不是资金入场的证明吗？</p>
+  <p>于是，很多散户在盘面上看到第二根、第三根阳线收出来的时候，那种<span class="hl-red">深怕错过大行情的情绪就会被瞬间点燃</span>。在行为金融学里，这背后是两种典型的行为偏差在起作用：</p>
+  <ul>
+    <li><span class="hl">确认偏误</span>：你越是盯着那三根红色的 K 线，就越容易觉得大行情要来了</li>
+    <li><span class="hl">错失恐惧（FOMO）</span>：怕错过大行情的情绪被瞬间点燃，于是毫不犹豫地按下买入键</li>
+  </ul>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 但今天要提醒你</div>
+    <p>别急著相信教科书给你的这层温情面具。资本市场不是一个按图索骥就能稳赚的温室，而更像一个零和博弈的残酷战场。<span class="hl-red">如果一套公开出版了几十年的 K 线组合图谱真的能让你轻松买在起点赚得盆满钵满，那我们不妨反过来想——市场上绝大多数长期亏损的投资者，筹码究竟是怎么输掉的？</span></p>
+  </div>
+
+  <p>市场里流传着一句老话叫"七亏二平一赚"：七成人亏钱、两成人打平、只有一成人赚钱。而根据近两年一些券商和机构对交易账户的抽样统计，<span class="hl-red">亏损账户的比例甚至更高</span>。</p>
+</section>
+
+<section class="section" id="sec-effort">
+  <h2 class="section-title">量价关系原理：成交量是质量</h2>
+  <p>答案其实很朴素——主力资金最爱用的诱多工具，恰恰就是散户最熟悉的那些教科书形态。而要看穿红三兵到底是真突破还是假诱多，<span class="hl">诀窍往往不在 K 线的颜色上，而在 K 线下方那个常被忽略的指标——成交量</span>。</p>
+
+  <h3 class="sub-title">物理学类比：动量 = 质量 × 速度</h3>
+  <blockquote class="purple">
+    <strong>在物理学里，质量乘以速度等于动量。</strong>而在资本市场的微观结构里，我们不妨把<span class="hl">成交量理解成资金的质量</span>，把<span class="hl">价格的涨跌理解成速度</span>。<span class="hl-red">没有资金质量支撑的价格上涨，就像一架没有燃料却在强行抬高机头的飞机，很难持续</span>。
+  </blockquote>
+
+  <p>成交量代表什么？成交量是买卖双方在特定价格区间内用<span class="hl">真金白银完成换手交割的结果</span>。请大家记住一点：</p>
+  <ul>
+    <li><span class="hl">价格可以被短线拉扯</span>，K 线的颜色可以被做出来</li>
+    <li>但真实的换手是要付出成本的——每一笔成交都要扣手续费和印花税</li>
+    <li>想要长期系统性地伪造成交量只能靠对倒，这种自买自卖是<span class="hl-red">证券法明令禁止的市场操纵行为</span>，成本高风险大</li>
+    <li><span class="hl-green">所以成交量是盘面上比较难被长期掩盖的痕迹</span></li>
+  </ul>
+
+  <h3 class="sub-title">无量红三兵的真相</h3>
+  <p>当你在盘面上看到股价连续三天上涨、收出了标准的红三兵，但下方的成交量柱却<span class="hl-red">一天比一天萎缩</span>，出现明显的量价背离时，在威科夫和 VIC 量价分析体系里这类<span class="hl">价格在涨但成交量跟不上</span>的情况通常被解读为<span class="hl-red">需求不足</span>（no demand），也就是买方力量正在枯竭。</p>
+
+  <p>很多散户遇到这种情况会给自己找一个听起来很聪明的理由——他们会想，<span class="hl-red">"缩量上涨好啊，缩量说明主力控盘度高，筹码都锁在主力手里，外面没有抛盘，所以主力只需要很少的资金就能把股价拉上去"</span>。如果你也有过这种想法，请先打一个问号——这恰恰是不少散户被套的原因之一。</p>
+</section>
+
+<section class="section" id="sec-threeday">
+  <h2 class="section-title">三天的博弈过程：从挑逗到派发</h2>
+  <p>为了让你更清楚地看到这背后的资金博弈，接下来让我们把镜头拉近，按时间线还原主力究竟是如何在这连续三天里一步步把绳索套上跟风盘脖子的。</p>
+
+  <h3 class="sub-title">第一天：挑逗</h3>
+  <p>第一天开盘之前，盘面的背景往往是股价刚经历一波阴跌或者在一个窄幅区间里沉寂了很久，<span class="hl">交投清淡、散户昏昏欲睡</span>，甚至对这只股票感到绝望。而这恰恰是主力开始布局诱多的好时机。</p>
+  <p>第一天的核心任务是：</p>
+  <ul>
+    <li>主力<span class="hl">用小资金主动买入</span>，把盘面拉红</li>
+    <li>成交量比前几天略有放大，但<span class="hl">绝对不算巨量</span></li>
+    <li>通过这一天的阳线<span class="hl">重新激活市场关注度</span></li>
+    <li>让那些原本昏昏欲睡的散户开始注意到这只股票</li>
+  </ul>
+
+  <h3 class="sub-title">第二天：扩大战果</h3>
+  <p>第二天的主力行为更为复杂：</p>
+  <ul>
+    <li>开盘后<span class="hl">继续拉高</span>，制造连续上涨的"火热氛围"</li>
+    <li>但<span class="hl">成交量实际上并未跟随放大</span>——这是识别诱多的核心信号</li>
+    <li>主力开始在上方<span class="hl">挂出卖单</span>，但不是主动砸盘，而是被动等待</li>
+    <li>当看到红三兵的散户忍不住冲进来时，他们的买单正好<span class="hl">吃掉主力挂在上面的卖单</span></li>
+  </ul>
+
+  <blockquote>
+    <strong>成交量为什么在萎缩？</strong>因为主力在这个位置几乎没有投入新的资金去主动买入，盘面上的成交大多是散户看见红三兵之后自己掏钱去吃掉挂在上面的卖单产生的。<span class="hl-red">市场真实的主动买盘正在一天天减少，而散户的跟风资金在被快速消耗</span>。
+  </blockquote>
+
+  <h3 class="sub-title">第三天：派发完毕</h3>
+  <p>第三天往往是出货最为关键的一天：</p>
+  <ul>
+    <li>主力<span class="hl">利用最后一批散户的追高冲动</span>完成派发</li>
+    <li>全天成交量看似放大，实际上是<span class="hl">散户在高位接盘</span></li>
+    <li>K 线收出第三根阳线，但实体往往<span class="hl">已经很小</span>，留下长上影线</li>
+    <li>一旦第三天收盘，主力的筹码已经基本转移到散户手中</li>
+    <li>随后几天内往往会出现一根<span class="hl-red">放量大阴线</span>，套牢所有接盘者</li>
+  </ul>
+</section>
+
+<section class="section" id="sec-compare">
+  <h2 class="section-title">真红三兵 vs 假红三兵的 5 个维度</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>对比维度</th>
+        <th>真红三兵（看涨）</th>
+        <th>假红三兵（诱多派发）</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>成交量</strong></td>
+        <td>逐日温和放大</td>
+        <td><span class="hl-red">逐日萎缩或持平</span></td>
+      </tr>
+      <tr>
+        <td><strong>位置</strong></td>
+        <td>出现在长期筑底完成后</td>
+        <td><span class="hl-red">出现在长期下跌反弹或高位震荡</span></td>
+      </tr>
+      <tr>
+        <td><strong>实体大小</strong></td>
+        <td>三根阳线实体递增</td>
+        <td>实体越来越小，第三根常带长上影</td>
+      </tr>
+      <tr>
+        <td><strong>后续走势</strong></td>
+        <td>突破后持续放量上涨</td>
+        <td><span class="hl-red">很快出现放量长阴线</span></td>
+      </tr>
+      <tr>
+        <td><strong>主力意图</strong></td>
+        <td>突破关键阻力位</td>
+        <td>高位派发筹码</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="quote-banner">
+    <span class="hl">红三兵的实战识别核心只有一条：</span><br>
+    <span class="hl-green">三天阳线 + 逐日温和放量 = 真启动</span><br>
+    <span class="hl-red">三天阳线 + 缩量或持平 = 主力诱多</span><br>
+    <span class="hl">价格可以被做出来，但成交量很难被长期掩盖</span>。
+  </div>
+</section>
+
+<section class="section" id="sec-psychology">
+  <h2 class="section-title">派发背后的心理博弈：确认偏误与错失恐惧</h2>
+  <p>主力要出货要把手里的大量筹码派发出去，最怕的是什么？最怕的就是打草惊蛇。如果主力像散户想象的那样直接挂出几万手的卖单猛砸，瞬间就会出现一根放巨量的长阴线，技术派散户会立刻吓得夺路而逃，买盘瞬间冻结——<span class="hl-red">到时候主力的筹码卖给谁？</span></p>
+
+  <h3 class="sub-title">诱多派发的三层心理操控</h3>
+  <ol>
+    <li><strong>利用对红三兵的信仰</strong>：主力必须利用散户对红三兵的信仰，制造出一种<span class="hl">价格稳步推高、市场一片安好</span>的错觉</li>
+    <li><strong>隐蔽挂出卖单</strong>：不主动砸盘，而是<span class="hl">把卖单隐蔽地挂在上方</span>静静等待那些看着教科书形态追进来的跟风盘主动来接</li>
+    <li><strong>诱导放大自我</strong>：当盘面气氛被点燃后，散户的追高不仅不会让主力慌乱，反而让主力<span class="hl">轻松在更高的位置完成派发</span></li>
+  </ol>
+
+  <blockquote class="purple">
+    <strong>为什么很多散户在第三个阳线时不仅不会卖，反而会加仓？</strong>因为他们已经被这三天的"完美形态"彻底说服了。确认偏误让他们只看到支持自己看涨观点的证据（FOMO 的本能让他们害怕错过这趟"财富列车"），于是把所有风险信号都过滤掉了。<span class="hl">他们不知道的是，自己正是这场派发大戏里最后一批被收割的接盘侠</span>。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-rules">
+  <h2 class="section-title">识别无量诱多的实战铁律</h2>
+
+  <div class="misuse-card">
+    <div class="col wrong">
+      <h4>❌ 散户的常见死法</h4>
+      <ul>
+        <li>看到三连阳就立刻满仓跟进，不看成交量</li>
+        <li>误以为"缩量上涨 = 主力控盘度高"</li>
+        <li>在长期下跌后的反弹阶段追涨无量阳线</li>
+        <li>高位震荡时把无量红三兵当成新一轮启动</li>
+      </ul>
+    </div>
+    <div class="vs">VS</div>
+    <div class="col right">
+      <h4>✓ 识别无量诱多的实战铁律</h4>
+      <ul>
+        <li><strong>看成交量趋势</strong>：三天阳线必须伴<strong>逐日温和放量</strong></li>
+        <li><strong>看位置</strong>：底部充分筑底后的红三兵才可信</li>
+        <li><strong>看后续</strong>：真突破会持续放量，假突破很快出现长阴</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="sub-title">铁律一：底部位置</h3>
+  <p>主力锁仓确实会导致缩量，但<span class="hl">缩量拉升通常有一个前提</span>：股价已经经历了较长的建仓期、洗盘期并且突破了核心筹码密集区。<span class="hl-red">如果股价是在长期下跌后的反弹阶段或高位震荡平台边缘出现无量三连阳，就要多留个心眼了</span>。</p>
+
+  <h3 class="sub-title">铁律二：成交量递增</h3>
+  <p>真红三兵要求<span class="hl">成交量逐日温和放大</span>，每一根阳线的成交量都要比前一根明显放大；无量红三兵即使形态再完美，都应该<span class="hl-red">坚决回避</span>。</p>
+
+  <h3 class="sub-title">铁律三：第三天实体与上影线</h3>
+  <p>第三根阳线的实体大小是判断的关键信号：</p>
+  <ul>
+    <li>如果第三根阳线<span class="hl">实体饱满且没有长上影线</span>，可能是真突破的开始</li>
+    <li>如果第三根阳线<span class="hl-red">实体很小并留下长上影线</span>，或者出现十字星形态，多半是诱多陷阱</li>
+  </ul>
+
+  <h3 class="sub-title">铁律四：第四天的命运</h3>
+  <p>真红三兵后第 4–5 天会继续放量上涨；假红三兵后第 4–5 天往往会出现<span class="hl-red">放量长阴线</span>，把所有接盘者套牢在高位。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 最危险的位置</div>
+    <p>无量三连阳最危险的位置是<span class="hl">长期下跌后的反弹阶段</span>和<span class="hl">高位震荡平台的边缘</span>。前者常常是主力借势拉高出货，后者常常是主力在高位派发的最后阶段。<span class="hl-red">这两种位置出现缩量红三兵，几乎都是诱多陷阱</span>。</p>
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>主力出货最怕<span class="hl">打草惊蛇</span>，高明的出货往往在歌舞升平的阳线里完成</li>
+      <li>价格可以被短线拉扯，<span class="hl-green">但成交量很难被长期掩盖</span></li>
+      <li>无量红三兵 = <span class="hl-red">诱多派发</span>，主力利用散户对红三兵的信仰派发筹码</li>
+      <li>三天的博弈过程：<span class="hl">挑逗 → 扩大战果 → 派发完毕</span></li>
+      <li>真红三兵的硬性条件：<strong>三天阳线 + 逐日温和放量 + 底部筑底完成</strong></li>
+      <li>识别诱多的核心：<span class="hl">量在价先</span>，需求不足（no demand）= 买方力量枯竭</li>
+      <li>散户最危险的两类位置：<span class="hl-red">长期下跌反弹阶段</span>、<span class="hl-red">高位震荡平台边缘</span></li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 6 · 形态学与缺口理论</p>
+</footer>
+
+</body>
