@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>筹码分布图全套精讲：通过筹码峰定位主力持仓成本｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b;
+    --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    line-height: 1.8; -webkit-font-smoothing: antialiased;
+  }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14.5px; }
+  th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { background: var(--surface); color: var(--accent); font-weight: 700; }
+  td { color: var(--text-dim); }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 24px 0; }
+  .compare-grid .col { padding: 18px 20px; border-radius: 8px; }
+  .compare-grid .col h4 { font-size: 15px; margin-bottom: 10px; }
+  .compare-grid .col ul { margin: 0; padding-left: 18px; }
+  .compare-grid .col ul li { font-size: 14px; color: var(--text-dim); }
+  .compare-grid .win { background: rgba(86, 211, 100, 0.08); border: 1px solid rgba(86, 211, 100, 0.3); }
+  .compare-grid .win h4 { color: var(--green); }
+  .compare-grid .trap { background: rgba(255, 107, 107, 0.08); border: 1px solid rgba(255, 107, 107, 0.3); }
+  .compare-grid .trap h4 { color: var(--red); }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+    .compare-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 12</span>
+  <span class="stage-name">市场生态与主力资金</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 17 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 12 · 第 1 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">筹码分布图全套精讲：通过筹码峰定位主力持仓成本</h1>
+  <p class="note-subtitle">K线只是表面，筹码分布图才是藏在盘面背后的"主力足迹"。看懂它，你能推算主力建仓成本、判断拉升决心、识别出货陷阱。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>筹码分布图把<span class="hl">所有持股者的买入价</span>按价格从低到高横着摆出来——柱子越长代表这个价位堆积的筹码越多。<span class="hl">筹码峰</span>是最重要的信号：<span class="hl">股价在峰下，峰是压力；股价站上峰，峰就是支撑</span>。筹码会随成交量<span class="hl">搬家</span>——<span class="hl-red">搬家越彻底，浮筹清洗越干净，未来上涨抛压越小</span>。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-base">基础认知：筹码分布图是什么</a></li>
+    <li><a href="#sec-peak">筹码峰：支撑与压力的统一</a></li>
+    <li><a href="#sec-move">筹码搬家：从换手率看主力意图</a></li>
+    <li><a href="#sec-life">4 个生命周期阶段的筹码特征</a></li>
+    <li><a href="#sec-trap">5 个典型陷阱与避坑心法</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-base">
+  <h2 class="section-title">基础认知：筹码分布图是什么</h2>
+
+  <h3 class="sub-title">小区房子的比方</h3>
+  <p>一只股票就像一个小区的房子——总共就这么多套，对应股票的<span class="hl">总流通股</span>。买房的人很多，每个人当初买房的价格不一样：有人 5000 一平、有人 1 万、有人 1.5 万高位接盘。</p>
+
+  <p>想知道小区里大部分人花多少钱买的房？挨家挨户统计：5000 块价位多少户、1 万价位多少户——把这些数据画成一根根横向柱子，<span class="hl">哪个价位买的人多柱子就长</span>。这一堆横着的柱子叠在一起，就是<span class="hl-blue">筹码分布图</span>。</p>
+
+  <p>它干的事就一件——<span class="hl">把一支股票所有的持股成本按价格从低到高一层一层摆出来</span>，让你一眼看清大家伙的钱压在哪个价位上。</p>
+
+  <div class="quote-banner">
+    K线趋势线是<span class="hl-red">你自己画的</span>——主观的；<br>
+    筹码峰是<span class="hl">市场上千万笔真金白银堆出来的</span>——客观的。<br>
+    这是筹码分布图<span class="hl">最值钱的地方</span>。
+  </div>
+</section>
+
+<section class="section" id="sec-peak">
+  <h2 class="section-title">筹码峰：支撑与压力的统一</h2>
+
+  <h3 class="sub-title">什么是筹码峰？</h3>
+  <p>把所有柱子连起来看，你会发现有的地方鼓出来一大坨、有的地方扁下去——那个鼓出来特别厚的一坨就叫<span class="hl">筹码峰</span>。它代表在这个价格区间有大量的人成交、大量的人持股，堆的不是别的，是<span class="hl">海量的真金白银</span>，是市场的故事。</p>
+
+  <h3 class="sub-title">峰下变支撑（套牢盘的心理）</h3>
+  <p>假设小区绝大多数人都是 1 万一平买的房，形成了一个巨大的筹码峰：</p>
+  <blockquote>
+    <strong>房价跌到 9000 了</strong>，跌破大家成本。这时满小区的人心里都在想：<span class="hl">我 1 万买的现在才 9000，我亏了，我不卖，等它涨回来</span>。大家都<span class="hl-red">不卖</span>，<span class="hl">抛压就小</span>，股价往下就有巨大的拖底力量——<span class="hl">所以这个筹码峰就成了非常强的支撑位</span>。
+  </blockquote>
+
+  <h3 class="sub-title">峰上变压力（解套盘的心理）</h3>
+  <p>反过来，房价从 8000 慢慢涨回 1 万：</p>
+  <blockquote>
+    <strong>当当初 1 万买被套了很久的人</strong>会想：总算解套了，不亏了，赶紧卖了保本吧，我可不想再做一次过山车。一堆人在这个价位<span class="hl-red">争着卖</span>，<span class="hl">抛压就巨大</span>，股价往上就特别难突破——<span class="hl-red">筹码峰又成了非常强的压力位</span>。
+  </blockquote>
+
+  <div class="quote-banner">
+    同样一个筹码峰，<br>
+    股价在它<span class="hl-red">下面</span>，它就是<span class="hl-red">压力</span>；<br>
+    股价<span class="hl">站上去</span>了，它就变成<span class="hl">支撑</span>。<br>
+    <span class="hl">看它和股价的相对位置</span>，是判读筹码峰的关键。
+  </div>
+</section>
+
+<section class="section" id="sec-move">
+  <h2 class="section-title">筹码搬家：从换手率看主力意图</h2>
+
+  <h3 class="sub-title">筹码图是活的</h3>
+  <p>很多人误以为筹码分布图是死的、固定不变的。<span class="hl">恰恰相反，它是活的，每天都在变化</span>。它靠什么变？靠成交，也就是<span class="hl">换手</span>。一支股票每天都有人买有人卖，本质上就是筹码在换手——<span class="hl">筹码从原持有人手里转移到了新买入者手里</span>。</p>
+
+  <h3 class="sub-title">筹码搬家的规律</h3>
+  <p>当股价在一个价位停留、来回震荡、成交越来越活跃的时候，<span class="hl">筹码就会慢慢从原来的价位搬家搬到新的价位上</span>。举个具体例子：</p>
+  <ul>
+    <li>原来筹码都堆在 10 元形成一个大峰</li>
+    <li>后来涨到了 20 元，在 20 元横盘震荡了很久</li>
+    <li>原来 10 元那个大峰会<span class="hl">一点一点变矮变瘦</span>，甚至消失</li>
+    <li>20 元这个新位置会慢慢长出一个新的<span class="hl">越来越厚的峰</span></li>
+  </ul>
+
+  <p>这意味着原来 10 元拿着的人陆陆续续卖了，把货交给了在 20 元接盘的人。怎么判断搬家速度？盯一个指标就行：<span class="hl">日换手率</span>。</p>
+
+  <div class="compare-grid">
+    <div class="col win">
+      <h4>换手充分（健康）</h4>
+      <ul>
+        <li>日换手率<span class="hl">3%-10%</span></li>
+        <li>底部筹码峰明显<span class="hl">变矮变薄</span></li>
+        <li>新位置筹码峰<span class="hl">逐渐长出</span></li>
+        <li>浮筹被<span class="hl-green">彻底清洗</span></li>
+        <li>未来上涨<span class="hl">抛压小</span>，走势健康</li>
+      </ul>
+    </div>
+    <div class="col trap">
+      <h4>换手不足（危险）</h4>
+      <ul>
+        <li>股价涨了<span class="hl">但底部筹码峰纹丝不动</span></li>
+        <li>高位<span class="hl-red">形成新峰</span>但底部<span class="hl-red">老峰还在</span></li>
+        <li>说明主力<span class="hl-red">高位接的是散户的筹码</span></li>
+        <li>底部<span class="hl-red">套牢盘没动</span></li>
+        <li>一旦上涨，<span class="hl-red">抛压汹涌</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="sec-life">
+  <h2 class="section-title">4 个生命周期阶段的筹码特征</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>阶段</th>
+        <th>筹码特征</th>
+        <th>主力意图</th>
+        <th>操作策略</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>底部建仓期</strong></td>
+        <td>低位<span class="hl">筹码峰密集</span>，逐渐<span class="hl">变长变厚</span></td>
+        <td>主力<span class="hl">悄悄吸筹</span></td>
+        <td>观察为主，等突破</td>
+      </tr>
+      <tr>
+        <td><strong>拉升初期</strong></td>
+        <td>底部峰<span class="hl">锁仓不动</span>，上方几乎无峰</td>
+        <td>主力<span class="hl">高度控盘</span>，浮筹清洗干净</td>
+        <td><span class="hl-green">最佳介入期</span></td>
+      </tr>
+      <tr>
+        <td><strong>高位出货期</strong></td>
+        <td>高位<span class="hl-red">出现新峰</span>，底部老峰<span class="hl-red">开始变薄</span></td>
+        <td>主力<span class="hl-red">悄悄派发</span>给接盘散户</td>
+        <td><span class="hl-red">坚决离场</span></td>
+      </tr>
+      <tr>
+        <td><strong>下跌/筑底期</strong></td>
+        <td>高位峰<span class="hl">慢慢消失</span>，低位<span class="hl">重新堆积</span></td>
+        <td>主力<span class="hl">出货完毕</span>或<span class="hl">重新吸筹</span></td>
+        <td>观望，等待新一轮建仓信号</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="section" id="sec-trap">
+  <h2 class="section-title">5 个典型陷阱与避坑心法</h2>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 陷阱一：底部筹码峰完全不动</div>
+    <p>看似是"主力锁仓"，但如果<span class="hl">成交量巨大</span>但底部峰纹丝不动，可能是<span class="hl-red">主力把筹码全部倒给散户</span>，自己已经清仓离场。这种"假锁仓"是<span class="hl-red">最危险的诱多陷阱</span>。</p>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 陷阱二：高位密集峰（接盘区）</div>
+    <p>高位形成新密集峰，意味着<span class="hl-red">主力正在出货给散户</span>。新峰形成的过程就是主力<span class="hl">派发</span>的过程。一旦成交量萎缩、新峰开始<span class="hl-red">变薄</span>，立即离场。</p>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 陷阱三：双峰夹击（最危险形态）</div>
+    <p>上方高位有新峰（套牢区）、下方低位有老峰（密集成交区）——<span class="hl-red">上下都是压力</span>，股价<span class="hl">夹在中间震荡</span>，向下突破的概率大于向上。</p>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 陷阱四：单峰密集的"虚假支撑"</div>
+    <p>看似有强支撑，但<span class="hl-red">成交量没配合</span>、<span class="hl-red">换手率极低</span>——这种单峰一旦被砸穿，<span class="hl">下方没有承接</span>，股价会<span class="hl-red">直接瀑布式下跌</span>。</p>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 陷阱五：满盘通红 / 满盘蓝色</div>
+    <p>所有柱子都是红色（浮盈盘）= 没人愿意卖，看似强势，实则<span class="hl-red">一旦下跌没人接盘</span>。所有柱子都是蓝色（套牢盘）= 一片绝望，但<span class="hl-blue">也可能是底部信号</span>——配合成交量观察。</p>
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>筹码分布图 = <span class="hl">所有持股者按买入价堆积</span>的横向柱子图，<span class="hl">客观反映成本结构</span></li>
+      <li><span class="hl">筹码峰</span>是密集成交价位的堆积，<span class="hl">峰下是支撑、峰上是压力</span></li>
+      <li>筹码会随<span class="hl">换手率搬家</span>，搬家越彻底浮筹清洗越干净，未来上涨抛压越小</li>
+      <li><span class="hl-green">拉升初期</span>是最佳介入期：底部峰锁仓不动 + 上方几乎无峰</li>
+      <li><span class="hl-red">高位出货期</span>坚决离场：高位出现新峰 + 底部老峰开始变薄</li>
+      <li>警惕<span class="hl-red">底部峰纹丝不动</span>（主力清仓）、<span class="hl-red">双峰夹击</span>（上下都有压力）、<span class="hl-red">满盘通红</span>（没人接盘）三大陷阱</li>
+      <li>筹码分布图要看<span class="hl">位置 + 成交量 + 换手率</span>的三重验证，不要孤立使用</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 12 · 市场生态与主力资金</p>
+</footer>
+
+</body>
+
