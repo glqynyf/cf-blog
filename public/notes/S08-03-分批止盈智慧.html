@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>分批止盈的智慧：卖飞了难受？分批卖能治好你的心态崩坏｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .formula-box { background: var(--surface); border: 1px solid var(--accent); border-radius: 8px; padding: 22px 26px; margin: 24px 0; text-align: center; }
+  .formula-box .formula { font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; color: var(--accent); font-size: 19px; font-weight: 700; margin-bottom: 12px; }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  table th { background: var(--surface-2); color: var(--accent); padding: 12px 16px; text-align: left; font-weight: 700; font-size: 14px; border-bottom: 1px solid var(--border); }
+  table td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text); font-size: 14.5px; }
+  table tr:last-child td { border-bottom: none; }
+  table tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 8</span>
+  <span class="stage-name">止盈止损与卖出体系</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 14 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 8 · 第 3 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">分批止盈的智慧：卖飞了难受？分批卖能治好你的心态崩坏</h1>
+  <p class="note-subtitle">为什么你赚到了钱感觉却像被抢走了一百万？为什么踏空焦虑会逼着你在最高点报复性追高？本文用卡尼曼前景理论与三套实战分批模型，彻底治愈你"一赚就跑、一亏死扛"的交易内耗。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>"一赚就跑、一亏死扛"不是技术问题，是<span class="hl">人类基因自带的处置效应 + 前景理论</span>在作祟——亏 1000 块的痛苦需要赚 2000 块才能弥补，且人们对收益天然风险厌恶、对亏损天然风险偏好。<span class="hl">分批止盈的关键不是多赚几个点，而是通过仓位拆分让你无论行情涨跌都能获得正向情绪反馈</span>，把折磨人的"懊悔 Bug"彻底关掉。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-pain">卖飞的痛：为什么比亏钱还难受</a></li>
+    <li><a href="#sec-research">学术验证：奥迪恩 1 万账户的硬核研究</a></li>
+    <li><a href="#sec-prospect">前景理论：S 型曲线揭示的真相</a></li>
+    <li><a href="#sec-power">分批止盈的"双向心理盾感力"</a></li>
+    <li><a href="#sec-model1">模型一：阻力位等分减仓法</a></li>
+    <li><a href="#sec-model2">模型二：趋势追踪均线止盈法</a></li>
+    <li><a href="#sec-model3">模型三：零成本持仓法（House Money Effect）</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-pain">
+  <h2 class="section-title">卖飞的痛：为什么比亏钱还难受</h2>
+  <p>每一个在市场里摸爬滚打过的朋友，一定都经历过这种近乎生理性的折磨：你拿了一支股票，它在底部磨了你三个月甚至半年，每天不是横盘就是微跌。好不容易有一天它突然拉起了一根红色的放量长阳，你看着账户里终于浮现出来的微薄盈利，心跳开始加速，手心开始冒汗。</p>
+  <p>你对自己说，不行落袋为安，万一明天跌回去，我不就白等了这么久？于是你颤抖着点下卖出，满心欢喜以为自己战胜了市场。结果，<span class="hl-red">就在你卖出后的第二天，它再次高开高走，紧接着是第三天、第四天甚至连续拉出几个涨停</span>。</p>
+
+  <p>这时候你看着那头也不回的 K 线，开始陷入极其痛苦的心理状态——你要是我没卖，我现在能赚多少钱；要是我当时坚持一下，账户资金就能翻倍。这种痛苦甚至远远超过被套牢亏损时的感受。</p>
+
+  <blockquote class="purple">
+    <strong>恶性循环的标准剧本：</strong><br>
+    卖飞 → 自责 → 报复性追高 → 被套在山顶 → 套牢 → 死扛 → 下一次卖飞
+  </blockquote>
+
+  <p>这一切的根源在行为金融学里有一个非常著名的学术定义——<strong>处置效应（Disposition Effect）</strong>。</p>
+</section>
+
+<section class="section" id="sec-research">
+  <h2 class="section-title">学术验证：奥迪恩 1 万账户的硬核研究</h2>
+  <p>处置效应最早由行为金融学家赫什·舍夫林和梅尔·斯塔特曼在 1985 年提出：投资者存在<span class="hl">急于卖出赚钱资产以兑现盈利，同时长期死守亏损资产以逃避现实</span>的普遍倾向。</p>
+  <p>美国金融学者<strong>特伦斯·奥迪恩</strong>在 1998 年发表了一项堪称里程碑的硬核研究——他拿到了美国一家大型折扣经纪公司从 1987 年到 1993 年间整整一万个真实投资账户的全部交易记录，进行了严密的数据回测。</p>
+
+  <div class="formula-box">
+    <div class="formula">盈利股被卖出的概率 ≈ 亏损股的 1.5 倍</div>
+    <div class="desc">奥迪恩 1 万账户数据实证：投资者更急于"落袋为安"</div>
+  </div>
+
+  <p>更讽刺的是，Odean (1998) 在 <i>Journal of Finance</i> 的实证研究表明：投资者偏好变现赢家而非亏损者，<span class="hl-red">而原文摘要明确指出"Nor is it justified by subsequent portfolio performance"</span>——被卖出的赢家<span class="hl-red">并未</span>在随后跑赢留下的输家，<span class="hl">死守亏损股并非"理性套利"，只是处置效应驱动的"不甘心认输"</span>。</p>
+  <p>也就是说，大家恰恰是卖错了，也留错了——<strong>亲手卖掉了强势标的、亲手呵护着弱势标的，在自己的账户里执行了一套逆向淘汰机制</strong>。</p>
+</section>
+
+<section class="section" id="sec-prospect">
+  <h2 class="section-title">前景理论：S 型曲线揭示的真相</h2>
+  <p>要理解这一切背后的心理力量，必须请出 2002 年诺贝尔经济学奖得主 <strong>丹尼尔·卡尼曼</strong>和他的搭档特沃斯基，以及他们提出的<strong>前景理论（Prospect Theory）</strong>。</p>
+
+  <h3 class="sub-title">卡尼曼的核心发现</h3>
+  <p>人类对痛苦和快乐的感知并不是线性的、也不是对称的：</p>
+  <ul>
+    <li><span class="hl-red">损失厌恶</span>：亏 1000 块钱带来的痛苦，需要赚大约 <span class="hl">2000 块钱</span>的快乐才能勉强弥补</li>
+    <li>面对收益时：S 型曲线向下弯曲 → <span class="hl-green">风险厌恶</span>，更愿意锁定确定收益</li>
+    <li>面对亏损时：S 型曲线向上弯曲 → <span class="hl-red">风险偏好</span>，反而愿意赌一把"翻本"</li>
+  </ul>
+
+  <blockquote>
+    <strong>卡尼曼的经典测试：</strong><br>
+    <strong>面对收益时</strong>（A 必拿 500 元 vs B 50% 概率拿 1000 元）→ 绝大多数人选 A，宁可不要额外风险也要锁定确定收益。<br>
+    <strong>面对亏损时</strong>（A 必亏 500 元 vs B 50% 概率亏 1000 元）→ 绝大多数人选 B，宁可赌一把也不愿直面确定的痛苦。
+  </blockquote>
+
+  <p>这就是为什么在你账户一出现微薄浮盈时，大脑就会拉响警报疯狂暗示你"快卖吧"，而在面对浮亏时你却能奇迹般地扛下去——<span class="hl">这就是你"一赚就跑、一亏死扛"的科学根源</span>。</p>
+</section>
+
+<section class="section" id="sec-power">
+  <h2 class="section-title">分批止盈的"双向心理盾感力"</h2>
+  <p>分批止盈的核心价值不在于多赚几个点，而在于它给交易者带来的<span class="hl">心理盾感力</span>——<strong>无论行情涨跌，你都能获得正向情绪反馈</strong>。</p>
+
+  <h3 class="sub-title">一个简单的演示</h3>
+  <p>假设你持有的一支股票已经盈利 30%，市场开始放量震荡。按照以前的"一刀切"思维，你一定在极度煎熬中：全卖怕洗盘被甩飞，不卖怕见顶回落把利润吐回。</p>
+  <p>现在你启动<span class="hl">分批止盈程序</span>——先在今天闭着眼睛卖掉手里的 <strong>1/3 仓位</strong>。这一刻，你的内心会在瞬间获得前所未有的平静。</p>
+
+  <div class="compare-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0;">
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px;">
+      <h4 style="color: var(--green); font-size: 16px; margin-bottom: 12px; font-weight: 700;">剧情 A：卖完后真的见顶了</h4>
+      <p style="font-size: 14px; color: var(--text-dim); margin-bottom: 0;">你会无比庆幸——幸好我提前在高位附近锁定了一部分利润。现在手里有现金，可以耐心等它跌透再底部接回来。<span class="hl">懊悔情绪消失了，取而代之的是掌控局面的成就感</span>。</p>
+    </div>
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px;">
+      <h4 style="color: var(--green); font-size: 16px; margin-bottom: 12px; font-weight: 700;">剧情 B：卖完后继续大涨</h4>
+      <p style="font-size: 14px; color: var(--text-dim); margin-bottom: 0;">你看着账户里剩下 2/3 的仓位发自内心感到高兴——多亏我还留着大部分底仓，主升浪没有完全踏空。<span class="hl">没有痛苦自责，只有继续赚钱的踏实感</span>。</p>
+    </div>
+  </div>
+
+  <div class="quote-banner">
+    通过一个简单的<span class="hl">把仓位拆分成几份</span>的动作，<br>
+    你直接把那个折磨无数投资者的<span class="hl-red">"懊悔 Bug"</span>彻底关掉了。<br>
+    你的情绪曲线开始变得平缓，<br>
+    你的理智重新夺回了控制权。
+  </div>
+</section>
+
+<section class="section" id="sec-model1">
+  <h2 class="section-title">模型一：阻力位等分减仓法</h2>
+  <p>这套模型适合<span class="hl">震荡式箱体运行的股票</span>或者注重防守的左侧交易者。</p>
+
+  <h3 class="sub-title">操作步骤</h3>
+  <ol>
+    <li>打开个股 K 线图，<strong>寻找三个关键阻力位</strong>：历史高点、长期箱体上沿、筹码分布图上密集峰区</li>
+    <li>将手中筹码<strong>均匀切成三等分</strong></li>
+    <li><strong>价格触到第一个阻力位</strong>（最容易突破的位置）→ 闭着眼睛卖出 1/3</li>
+    <li><strong>价格触到第二个阻力位</strong> → 卖出第二个 1/3</li>
+    <li>剩下的 1/3 = 你的"梦想基金"，带着毫无包袱的心态去博超级主升浪</li>
+  </ol>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 为什么最后 1/3 要死拿</div>
+    <p>因为前面 2/3 已经落袋为安，即便最后 1/3 冲击第三个阻力位失败出现回撤甚至跌破你的买入成本价，<span class="hl">这一单交易整体下来依然是盈利的</span>。这种毫无包袱的心态反而能让你拿得住筹码，从而有概率吃到那波超出多数人想象的超级主升浪。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-model2">
+  <h2 class="section-title">模型二：趋势追踪均线止盈法</h2>
+  <p>这套模型是<span class="hl">所有趋势交易者和中线投资者的治保</span>，特别适合在大牛市中吃满一整轮主升浪。</p>
+
+  <h3 class="sub-title">核心逻辑</h3>
+  <p>在疯狂的单边牛市中，<span class="hl-red">任何预测价格的企图都是徒劳的</span>。我们只相信一条规则：<strong>只要趋势没有宣告终结，就绝不轻易下车</strong>。</p>
+
+  <h3 class="sub-title">均线双保险</h3>
+  <ul>
+    <li><strong>20 日均线</strong> = 短期趋势线</li>
+    <li><strong>60 日均线</strong> = 中期趋势（生命线）</li>
+  </ul>
+
+  <div class="formula-box">
+    <div class="formula">价格收盘跌破 20 日均线 → 卖出 50%</div>
+    <div class="formula">价格收盘跌破 60 日均线 → 卖出剩余全部</div>
+    <div class="desc">利用均线双保险，既能规避主力恶意洗盘，又能在趋势崩塌时果断离场</div>
+  </div>
+
+  <p>牛市中的强势股经常做出<strong>假摔</strong>动作——故意跌破 20 日均线洗盘，然后迅速拉回。留下 50% 仓位作为防线：如果是假洗盘，剩下的仓位依然可以享受涨幅；如果趋势真坏了跌破 60 日线，则果断清仓撤退。</p>
+
+  <div class="quote-banner">
+    利用这套均线双保险，<br>
+    你既能<span class="hl-green">尽量规避主力资金在途中的恶意洗盘</span>，<br>
+    又能在趋势真正崩塌的一瞬间<span class="hl-red">相对从容且果断</span>地<br>
+    带着绝大部分战利品撤离现场。
+  </div>
+</section>
+
+<section class="section" id="sec-model3">
+  <h2 class="section-title">模型三：零成本持仓法（House Money Effect）</h2>
+  <p>这套方法在行为金融学里有一个著名的对应理论——<strong>赌资效应（House Money Effect）</strong>。2017 年诺贝尔经济学奖得主 <strong>理查德·塞勒</strong>早在 1990 年就发现：当人们通过某种渠道（比如赌场里赢了钱、买彩票中了奖）获得一笔"意外之财"后，对待这笔钱的态度会变得极其慷慨和冒险——<span class="hl">因为大脑深处认为这笔钱不属于血汗钱而是赢来的"庄家的钱"</span>。</p>
+
+  <h3 class="sub-title">操作步骤</h3>
+  <p>当你在 D 位买入一支股票，经过一段时间上涨，<span class="hl">当股价实现翻倍（涨幅 100%）时，立即执行卖出 50%</span>。</p>
+
+  <div class="formula-box">
+    <div class="formula">初始投入 10 万 × 翻倍 = 20 万市值</div>
+    <div class="formula">卖出 50% → 拿回 10 万现金（= 原始本金）</div>
+    <div class="formula">剩余 50% = 市场白送的"零成本筹码"</div>
+  </div>
+
+  <h3 class="sub-title">心理状态的根本转变</h3>
+  <p>这时候你的心理状态会发生翻天覆地的变化——你将彻底放松下来：</p>
+  <ul>
+    <li>如果明天跌停，<span class="hl-green">不会焦虑</span>，因为你没有亏掉自己的一分本金</li>
+    <li>如果遇到特大利空直接腰斩，依然能<span class="hl-green">相对从容</span>，甚至还能开个玩笑</li>
+    <li>你拥有全市场最奢侈的资源——<span class="hl">足够的时间和足够的耐心</span></li>
+    <li>那些被本金压力折磨得每天心筋肉跳的散户会在各种利空和震荡中被洗得干干净净，而你却能用这种<span class="hl">近乎零心理成本的姿态</span>从容跟主力博弈到底</li>
+  </ul>
+
+  <blockquote class="purple">
+    <strong>为什么很多投资大佬账户里总能出现涨了 10 倍、20 倍的超级牛股？</strong>其底层秘密不是因为他们能掐算，而是因为他们<span class="hl">很早就把心理上的持仓成本拉到了极低</span>，从而获得了<span class="hl-red">别人无法承受的"无限耐心"</span>。
+  </blockquote>
+
+  <div class="quote-banner">
+    交易的根本不是去赌博、去猜明天涨跌。<br>
+    交易的本质是<span class="hl">在保护好本金和心态的前提下</span>，<br>
+    用一套<span class="hl">具有正向数学期望的系统</span>，<br>
+    去不断地重复下注。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>"卖飞"的痛比亏钱更深——这是<span class="hl">处置效应 + 损失厌恶</span>的人类本能 Bug</li>
+      <li>奥迪恩研究证实：盈利股被卖出概率是亏损股的 1.5 倍，<span class="hl">散户亲手执行逆向淘汰</span></li>
+      <li>前景理论：S 型曲线揭示收益时风险厌恶、亏损时风险偏好</li>
+      <li>分批止盈的核心价值是<span class="hl">双向心理保护</span>——涨跌都能获得正向情绪</li>
+      <li>模型一：阻力位等分减仓（适合箱体震荡 / 左侧交易）</li>
+      <li>模型二：均线双保险（适合趋势交易 / 中线持仓）</li>
+      <li>模型三：<span class="hl">零成本持仓法</span>（翻倍后减半，提取本金后用零成本筹码博大波段）</li>
+      <li>三套模型都指向同一件事：<strong>用仓位拆分换心理稳定</strong></li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 8 · 止盈止损与卖出体系</p>
+</footer>
+
+</body>
