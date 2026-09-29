@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>会止盈更要会止损，吃透投资里的离场学问｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .formula-box { background: var(--surface); border: 1px solid var(--accent); border-radius: 8px; padding: 22px 26px; margin: 24px 0; text-align: center; }
+  .formula-box .formula { font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; color: var(--accent); font-size: 19px; font-weight: 700; margin-bottom: 12px; }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  .compare-grid .col { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px; }
+  .compare-grid .col h4 { color: var(--accent); font-size: 16px; margin-bottom: 12px; font-weight: 700; }
+  .compare-grid .col.left h4 { color: var(--blue); }
+  .compare-grid .col.right h4 { color: var(--green); }
+  .compare-grid ul { margin: 0; padding-left: 18px; }
+  .compare-grid ul li { font-size: 14px; color: var(--text-dim); margin-bottom: 6px; }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  table th { background: var(--surface-2); color: var(--accent); padding: 12px 16px; text-align: left; font-weight: 700; font-size: 14px; border-bottom: 1px solid var(--border); }
+  table td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text); font-size: 14.5px; }
+  table tr:last-child td { border-bottom: none; }
+  table tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } .compare-grid { grid-template-columns: 1fr; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 8</span>
+  <span class="stage-name">止盈止损与卖出体系</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 15 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 8 · 第 2 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">会止盈更要会止损，吃透投资里的离场学问</h1>
+  <p class="note-subtitle">为什么你总赚几个点就慌忙离场，亏几十个点却死扛不止损？本质不是看不懂 K 线，是投资思维存在盲区。这是一篇从行为金融学到数学、再到实战体系，帮你彻底搞懂"卖出"这件事的笔记。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>卖出从来不是独立操作，而是<span class="hl">整套投资体系中不可分割的一环</span>。赚几个点慌忙离场、亏几十个点死扛不止——这是<strong>处置效应</strong>在作祟。复利增长的核心不是单次盈利有多丰厚，而是<span class="hl">资产净值曲线不会出现大幅深度回落</span>。<strong>成熟的离场决策不是持有过程中临时做出的，而是买入之前就已经提前规划完整的。</strong></p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-mindset">行为金融学：处置效应与两种固有思维</a></li>
+    <li><a href="#sec-math">数学账：盈亏修复的不对称性</a></li>
+    <li><a href="#sec-anchor">投资逻辑锚点：卖出的 4 条判断标准</a></li>
+    <li><a href="#sec-method">3 个实战工具：动态均线 / 量价背离 / 减仓 vs 清仓</a></li>
+    <li><a href="#sec-position">仓位前置：先核算风险，再确定买入仓位</a></li>
+    <li><a href="#sec-checklist">离场自查清单与复盘习惯</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-mindset">
+  <h2 class="section-title">行为金融学：处置效应与两种固有思维</h2>
+  <p>为什么卖出这件事对普通投资者来说天然难以执行？人类的思维模式是长期演化形成的，<span class="hl">自带两种固有思维倾向</span>：</p>
+  <ul>
+    <li><span class="hl-red">偏爱确定的收益</span>（落袋为安）</li>
+    <li><span class="hl-red">本能回避已经落地的亏损</span>（不愿割肉）</li>
+  </ul>
+  <p>这两种思维放在原始生存场景里是自保优势，但放到投资账户中却形成了<span class="hl">严重干扰判断的思维困局</span>。</p>
+
+  <h3 class="sub-title">处置效应：经过数据验证的统计规律</h3>
+  <blockquote class="purple">
+    <strong>处置效应（Disposition Effect）</strong><br>
+    人们倾向于<span class="hl-red">过早了结盈利持仓</span>，却<span class="hl-red">长期持有亏损标的</span>不愿离场。卖出一笔亏损持仓相当于直面自己当初判断失误的事实，会打击自我认同感，于是大脑会启动自我安慰："只要没有实际卖出，亏损就没有真正落地。"
+  </blockquote>
+
+  <p>结果就是小幅亏损不断放大，而短线持仓被动地变成长期持有，被动地等待回本。<span class="hl">学会合理离场的第一步根本不是研究图表技术，而是清醒认知自身本能思维会持续干扰投资决策。</span>破局的关键只有一句话——用提前制定的交易规则对冲情绪化判断。</p>
+</section>
+
+<section class="section" id="sec-math">
+  <h2 class="section-title">数学账：盈亏修复的不对称性</h2>
+  <p>抛开所有主观情绪，来算几笔客观的收益账——这些计算逻辑会从根本上重塑你对止盈止损的认知。</p>
+
+  <h3 class="sub-title">机会成本</h3>
+  <p>假设标的需要一整年才能回到成本线，而这一年市场里其他优质资产持续上行。死守这支表现疲软的标的，看似没有止损离场，实则白白错失了一整年的投资机会。<span class="hl">资金是具备时间价值的</span>，长期停留在没有增值空间的标的上，本身就是持续的收益损耗。</p>
+
+  <h3 class="sub-title">盈亏修复的不对称</h3>
+  <div class="formula-box">
+    <div class="formula">亏损 10% → 需上涨 11.1% 回本</div>
+    <div class="formula">亏损 30% → 需上涨 42.9% 回本</div>
+    <div class="formula">亏损 50% → 需上涨 100% 回本（翻倍）</div>
+    <div class="formula">亏损 70% → 需上涨 233% 回本</div>
+  </div>
+
+  <p>反过来，盈利的回撤也是不对称的：<span class="hl">盈利 50% 的浮盈，只要价格回落 33% 就会全部归零</span>。这就是为什么"规避深度回撤，远比抓住单次高额收益更关键"。</p>
+
+  <blockquote class="purple">
+    <strong>反直觉但至关重要的结论：</strong>复利增长的核心不在于单次盈利有多丰厚，而在于<span class="hl">资产净值曲线不会出现大幅深度回落</span>。重新看待离场操作，它的本质是资产曲线的<span class="hl-blue">风险刹车装置</span>——车辆想要长久平稳行驶，不光依靠动力，更离不开稳定可靠的刹车。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-anchor">
+  <h2 class="section-title">投资逻辑锚点：卖出的 4 条判断标准</h2>
+  <p>建立完整投资体系的投资者，<strong>离场从来不会追求卖在行情最高点</strong>。万亿资金博弈的市场中，精准卖在价格顶点是无法复制的，更多时候是依靠偶然运气。</p>
+
+  <p>普通投资者真正值得追求的是：<span class="hl">在上涨趋势确认走弱后，结合以下 4 条投资逻辑锚点做出判断</span>。</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>锚点</th>
+        <th>判断标准</th>
+        <th>处理方式</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>核心逻辑是否翻转</strong></td>
+        <td>支撑持仓的核心条件是否发生根本改变，还是只是短期震荡</td>
+        <td>逻辑没变 = 无意义噪音；逻辑翻转 = 立即应对</td>
+      </tr>
+      <tr>
+        <td><strong>估值是否严重高估</strong></td>
+        <td>当前价格是否已透支未来多年业绩增长，估值是否处于历史高位区间</td>
+        <td>高估区间要警惕，故事再动听也要让位于估值</td>
+      </tr>
+      <tr>
+        <td><strong>市场流动性环境</strong></td>
+        <td>整体资金是宽松还是收紧，板块池子里还有没有水</td>
+        <td>市场流动性如同池水，个股如同水面浮舟；池子收紧，再优质的标的也难持续</td>
+      </tr>
+      <tr>
+        <td><strong>重置思维检验</strong></td>
+        <td>假设现在持有的是等额现金，以当前价格是否愿意重新布局？</td>
+        <td>剥离持仓成本束缚，客观判断当下是否具备布局价值</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 重置思维的杀伤力</div>
+    <p>第四条标准之所以很实用，就是因为它能<span class="hl-red">剥离最干扰判断的持仓成本执念</span>。大部分投资者无法果断离场，都是被持仓成本束缚，脑海里只纠结账面盈亏。但市场价格不会参考你的持仓成本，只根据当下价值和未来预期定价。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-method">
+  <h2 class="section-title">3 个实战工具：动态均线 / 量价背离 / 减仓 vs 清仓</h2>
+
+  <h3 class="sub-title">工具一：动态参照均线</h3>
+  <p>核心思路是<span class="hl">不主观预判行情顶点</span>，通过设置跟随价格变动的客观标准来过滤无效震荡。</p>
+  <ul>
+    <li><strong>短线布局</strong>（兑现周期短）：用灵敏度更高的 5 日、10 日均线，<span class="hl-blue">容忍度低</span></li>
+    <li><strong>中长期布局</strong>（持有数月）：用 20 日、30 日、60 日均线，<span class="hl-blue">容忍度高</span></li>
+    <li><strong>规则</strong>：价格持续运行在均线上方就持有；放量跌破均线且 2-3 个交易日无法重新站上 → 离场</li>
+  </ul>
+  <blockquote>
+    <strong>为什么不是 10 日线而是 60 日线？</strong>均线参数的选择本质是<span class="hl">匹配自身持仓周期</span>。波动幅度大的标的需要放宽离场缓冲区间，避免被短期震荡洗出；波动平缓的标的可以收紧风控标准。<strong>不存在一套通用的离场标准，只有适配自身持仓周期、适配标的波动特性的操作方案。</strong>
+  </blockquote>
+
+  <h3 class="sub-title">工具二：量价背离预警</h3>
+  <p>成交量可以看做市场情绪的参考指标。价格走势容易人为干扰，但大额成交背后的资金分歧很难掩盖。</p>
+  <div class="warning-card">
+    <div class="label">⚠️ 高位放量滞涨的盘面特征</div>
+    <p>标的已经经历一轮持续上涨 → 单日成交量突然大幅放大达平日数倍 → 价格却无法继续上涨，收出长上影 K 线。<br><br>
+    <strong>背后资金逻辑：</strong>高位大量跟风资金进场的同时，前期获利资金正在借机分批兑现持仓。<span class="hl-red">这就是高位筹码大规模交换的预警信号。</span></p>
+  </div>
+  <p>但注意：放量滞涨<strong>只是预警信号，不是百分百确认见顶</strong>。也可能是上涨途中正常的资金换手。正确思路是<span class="hl">将其视作风险预警，适当降低仓位</span>而不是全部清仓。</p>
+
+  <h3 class="sub-title">工具三：减仓 vs 清仓</h3>
+  <div class="compare-grid">
+    <div class="col left">
+      <h4>减仓（应对不确定性）</h4>
+      <ul>
+        <li>行情走势存在不确定性时选用</li>
+        <li>核心投资逻辑仍明确但短期方向不明</li>
+        <li>通过降低持仓比重换取继续观察的空间</li>
+        <li>保留部分仓位不错过后续上涨，同时降低持仓体量</li>
+        <li>本质：在看不清楚时<span class="hl-blue">降低风险敞口</span></li>
+      </ul>
+    </div>
+    <div class="col right">
+      <h4>清仓（应对逻辑失效）</h4>
+      <ul>
+        <li>核心投资逻辑被事实证明不成立时使用</li>
+        <li>买入逻辑已经彻底崩塌（如门店客流彻底消失）</li>
+        <li>不存在继续观望的空间</li>
+        <li>继续持有只会扩大损失</li>
+        <li>本质：<span class="hl-red">果断承认错误</span>截断扩大亏损</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="sec-position">
+  <h2 class="section-title">仓位前置：先核算风险，再确定买入仓位</h2>
+  <p>很多人离场操作很、难以执行，<span class="hl-red">根源往往在建仓阶段</span>——仓位比例过重，小幅波动就产生巨大心理压力。</p>
+
+  <h3 class="sub-title">单笔交易最大亏损 = 仓位 × 止损回撤幅度</h3>
+  <div class="formula-box">
+    <div class="formula">建仓仓位 = 单笔可承受最大亏损额 ÷ 预设止损回撤幅度</div>
+    <div class="desc">反向运用：先确定风险，再反推仓位</div>
+  </div>
+
+  <p>普通投资者的正向思考是"看好某支标的 → 直接重仓买入 → 后续下跌再临时考虑止损"——<strong>把账户亏损规模完全交给市场和情绪</strong>。</p>
+  <p>成熟投资者的反向运用是<span class="hl">先核算风险再确定仓位</span>：单笔交易最多允许账户总资产亏损 1% 或 2%（绝不突破），再结合标的波动特性设置合理止损区间，最后用单笔最大可承受亏损除以止损幅度，<strong>反向算出本次建仓仓位比例</strong>。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 核心差别</div>
+    <p>前者<span class="hl-green">把风险作为前置规划条件</span>，后者<span class="hl-red">把风险当成交易后的结果</span>。这就是完整投资体系的全部秘密——<strong>从思维困局、均线标准、量价信号、盈亏测算一路梳理，最终所有逻辑都落脚到仓位规划上。</strong></p>
+  </div>
+
+  <blockquote class="purple">
+    <strong>最优的离场决策不是持有过程中临时做出的，而是买入之前就已经提前规划完整的。</strong>成熟投资者点击买入前，心中会提前规划好三件事：
+    <ol style="margin-top: 10px;">
+      <li>买入的核心逻辑是什么？</li>
+      <li>逻辑失效后，依托什么信号、在什么区间进行离场止损？</li>
+      <li>结合止损标准，确定本次建仓的合理仓位？</li>
+    </ol>
+  </blockquote>
+
+  <div class="quote-banner">
+    买入和离场从来不是两件独立的事情，<br>
+    而是<span class="hl">同一套交易计划的正反两面</span>。<br>
+    不会卖出的本质问题，<br>
+    大多是买入环节没有做好提前规划。
+  </div>
+</section>
+
+<section class="section" id="sec-checklist">
+  <h2 class="section-title">离场自查清单与复盘习惯</h2>
+
+  <h3 class="sub-title">4 条离场自查清单</h3>
+  <ol>
+    <li><strong>核心逻辑是否根本翻转</strong>：是短期震荡还是核心条件彻底改变？逻辑没变就属于无意义噪音，可以继续持有</li>
+    <li><strong>估值是否严重高估</strong>：当下价格是否已透支未来多年业绩？处于历史高位区间要减仓</li>
+    <li><strong>市场流动性环境是否改变</strong>：整体资金是宽松还是收紧？池子里的水决定船能浮多高</li>
+    <li><strong>重置思维检验</strong>：假设现在持有的是等额现金，以当前价格还愿不愿意重新布局？</li>
+  </ol>
+
+  <h3 class="sub-title">如何把思路转化为稳定习惯</h3>
+  <p>核心方法只有两个字——<span class="hl">复盘</span>。</p>
+  <ul>
+    <li>把过往所有留有遗憾的持仓记录逐一复盘</li>
+    <li>客观梳理当时的问题：是跌破参照均线后刻意忽视风险？还是核心逻辑改变后自我麻痹？</li>
+    <li>坚持复盘二三十笔历史交易就能发现，亏损操作的诱因高度统一——<span class="hl-red">大多是情绪化判断干扰理性操作</span></li>
+    <li>把复盘总结出的教训整理成<span class="hl">标准化执行规则</span>，后续每次面对类似情境就按规则机械执行</li>
+  </ul>
+
+  <div class="quote-banner">
+    重新看待离场操作，<br>
+    它不只是为了多赚取几个点收益，<br>
+    更是<span class="hl">资产曲线的风险刹车装置</span>。<br>
+    懂得合理止盈止损，<br>
+    才能<span class="hl">长期稳定留在市场</span>。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li><strong>处置效应</strong>是人类本能：赚几个点慌忙离场，亏几十个点死扛不止——是基因自带的 bug</li>
+      <li>亏损 50% 需上涨 100% 才能回本，<span class="hl">规避深度回撤远重要于追求单次高收益</span></li>
+      <li>卖出从来不是独立操作，而是<span class="hl">投资体系中不可分割的一环</span></li>
+      <li>4 条投资逻辑锚点：核心逻辑翻转 / 估值严重高估 / 市场流动性收紧 / 重置思维检验</li>
+      <li>3 个实战工具：动态参照均线、量价背离预警、减仓 vs 清仓的区分</li>
+      <li><strong>仓位前置公式</strong>：建仓仓位 = 单笔可承受最大亏损 ÷ 止损回撤幅度</li>
+      <li>买入和离场是<span class="hl">同一套交易计划的正反两面</span>，不会卖出的根源在买入</li>
+      <li>把复盘教训整理成<span class="hl">标准化执行规则</span>，用规则代替情绪</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 8 · 止盈止损与卖出体系</p>
+</footer>
+
+</body>
