@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>定增、发债、配股，散户能看懂几个资本套路？｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240,136,62,0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); line-height: 1.8;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px;
+    padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent);
+    font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text);
+    display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent);
+    border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface);
+    border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14.5px; }
+  thead th { background: var(--surface-2); color: var(--accent); font-weight: 700;
+    text-align: left; padding: 12px 14px; border-bottom: 2px solid var(--accent); letter-spacing: 0.5px; }
+  tbody td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+  tbody tr:hover { background: var(--surface); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text);
+    font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px;
+    color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255,107,107,0.08), rgba(240,136,62,0.08));
+    border: 1px solid rgba(255,107,107,0.3); border-left: 4px solid var(--red); border-radius: 8px;
+    padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0;
+    text-align: center; font-size: 19px; font-weight: 600; color: var(--accent);
+    line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5;
+    color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border);
+    color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 11</span>
+  <span class="stage-name">财务报表与公司金融行为</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 14 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 11 · 第 4 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">定增、发债、配股，散户能看懂几个资本套路？</h1>
+  <p class="note-subtitle">公司年年亏，大股东却越赚越多？2022 年 A 股定增募资约 7,229 亿，全年再融资规模约 1.1 万亿——这些"高大上的金融术语"，正在悄悄改写你的账户市值。本篇撕开六大资本运作的真实底层逻辑。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>上市公司<span class="hl">获取资金的工具箱远比 IPO 庞大得多</span>。<strong>定增</strong>是 VIP 八折通道、<strong>可转债</strong>是下有保底的金融魔法、<strong>配股</strong>是强行向老股东摊派、<strong>股权质押</strong>是悬在头顶的暗雷、<strong>GDR</strong>是跨市场套利通道、<strong>减持借款</strong>是高位套现的终极财技。<strong>看不懂这些，散户就只能永远当买单者。</strong></p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-scale">融资规模：2022 年定增 7,229 亿 vs IPO 5,800 亿</a></li>
+    <li><a href="#sec-1">套路一：定增——VIP 八折通道</a></li>
+    <li><a href="#sec-2">套路二：可转债——下修 + 强赎</a></li>
+    <li><a href="#sec-3">套路三：配股——强行除权摊派</a></li>
+    <li><a href="#sec-4">套路四：股权质押——平仓暗雷</a></li>
+    <li><a href="#sec-5">套路五：GDR——跨市场套利</a></li>
+    <li><a href="#sec-6">套路六：减持借款——高位套现财技</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-scale">
+  <h2 class="section-title">融资规模：2022 年定增 7,229 亿 vs IPO 5,800 亿</h2>
+  <p>很多人以为公司获取巨额资金的终点是 IPO，<span class="hl-red">大错特错</span>。</p>
+
+  <table>
+    <thead>
+      <tr><th>年份</th><th>IPO 募资</th><th>定增累计（10 年）</th><th>再融资</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2022 单年</td><td><span class="hl">约 5800 亿</span></td><td>—</td><td><span class="hl-blue">约 1.1 万亿</span>（含定增+配股+可转债+可交债）</td></tr>
+      <tr><td>过去十年</td><td>—</td><td><span class="hl-red">约 5-6 万亿</span></td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <p>再融资约是 IPO 的 <strong>2 倍</strong>，2022 年定增规模（7,229 亿）约为 IPO 募资（5,800 亿）的 <strong>1.2 倍</strong>。这个万亿级的资金池里，连着的就是屏幕前你我的股票账户——<strong>每一次资本运作，都在悄悄改写你的持仓市值</strong>。</p>
+</section>
+
+<section class="section" id="sec-1">
+  <h2 class="section-title">套路一：定增——VIP 八折通道</h2>
+  <p>公司缺钱，开一个 VIP 包厢，指向有钱的机构大佬发行新股。<strong>2022 年某新能源巨头的定增就一次性拿走 450 亿</strong>。</p>
+
+  <h3 class="sub-title">机构凭什么愿意掏几十亿？</h3>
+  <blockquote class="purple">
+    <strong>答案：折扣。</strong>最低可打八折。你在软件上花 10 元排队买，人家在包厢里 8 元就拿到了筹码。
+  </blockquote>
+
+  <p>而定增股票通常有 <strong>6 个月锁定期</strong>——但<span class="hl-red">控股股东/实控人及其控制主体、战略投资者锁定期为 18 个月</span>（注册制前的 36 个月锁定期已废止）。机构拿到筹码后有强动力拉抬股价，才能在解禁时套利。这就形成了著名的"<strong>定增博弈路径</strong>"：</p>
+
+  <table>
+    <thead>
+      <tr><th>阶段</th><th>市场表现</th><th>资金动机</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>定增定价期</td><td><span class="hl-red">股价震荡筑底</span></td><td>定价基准日前 20 日均价打折 → 股价越低，机构拿货成本越低</td></tr>
+      <tr><td>定增落地期</td><td><span class="hl-green">密集利好 + 拉升</span></td><td>资金交割完毕，开始为解禁后的派发拉出空间</td></tr>
+      <tr><td>解禁前 1-2 月</td><td>横盘震荡 / 加速冲刺</td><td>机构预备出货的高位博弈区</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 散户最该警惕的节点</div>
+    <p><strong>解禁日前后</strong>是机构集中派发的窗口。公告定增后股价长期趴在底部，不是公司出问题，而是资金在<strong>博弈更优的定价基准</strong>。看懂这个逻辑，看到好公司发定增股价大跌反而别慌——这可能是定价博弈。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-2">
+  <h2 class="section-title">套路二：可转债——下修 + 强赎</h2>
+  <p>可转债的本质：<strong>公司先给你打张欠条，付<span class="hl-red">微薄</span>利息，并约定一个转股价</strong>。未来股价涨了，你能按约定价换成股票高价卖；股价跌了，到期公司还本带利还你。</p>
+
+  <blockquote>
+    <strong>听起来是不是下有保底的防御型工具？</strong>公司为什么愿意发？因为利息极低，<strong>几乎免费用钱</strong>。
+  </blockquote>
+
+  <p>公司真正诉求是<strong>促成债转股</strong>——把债务合法地变成股权。怎么促使你换股？两大杀手锏：</p>
+
+  <h3 class="sub-title">杀手锏①：强赎（强制赎回）</h3>
+  <p>如果股价连续大涨，<strong>超过转股价的 130%</strong>，公司有权用极低价格强行买回债券。你不想吃亏只能赶紧换成股票卖掉——所以公司有<strong>极强动力释放利好配合拉升</strong>。</p>
+
+  <h3 class="sub-title">杀手锏②：下修转股价</h3>
+  <p>大盘不好，股价大跌怎么办？公司可召开股东大会，<strong>下修转股价</strong>（比如 10 元降到 5 元），强赎触发就变得容易了。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 重点关注对象</div>
+    <p>那些<strong>即将到期 + 公司面临巨大还款压力</strong>的可转债。为了促成转股避免还钱，公司有强烈的<strong>自救动力</strong>，这是典型的<strong>困境反转观察指标</strong>。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-3">
+  <h2 class="section-title">套路三：配股——强行除权摊派</h2>
+  <p>如果说定增是找大佬要钱，那<strong>配股就是强行向所有老股东摊派</strong>。潜台词很犀利：</p>
+
+  <blockquote class="purple">
+    <strong>"我缺钱了，你必须再掏钱买新股。你不买？你的资产明天就会被动缩水。"</strong>
+  </blockquote>
+
+  <p>为什么？举一个简单的账：</p>
+  <ul>
+    <li>你持有 1 万元的股票（10 元股价 × 1000 股），公司 10 配 3，按比例 8 折发行</li>
+    <li><span class="hl-green">选择①：乖乖掏 2,400 元认购</span>（300 股 × 8 元 = 2,400 元） → 除权后你一分钱没赚，反而<strong>被迫多掏现金</strong></li>
+    <li><span class="hl-red">选择②：你不认购</span> → 除权日股价强制下调，你的总资产瞬间<strong>凭空蒸百分之十几</strong></li>
+  </ul>
+
+  <p>这就是配股的账面博弈——<span class="hl">用除权机制逼着你继续砸钱</span>。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 散户铁律</div>
+    <p>遇到<strong>配股预案</strong>，如果你不想继续掏钱加仓，<strong>一定要提前规避</strong>。不要等到除权日的最后一刻再决定，那时候你已经失去选择权。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-4">
+  <h2 class="section-title">套路四：股权质押——平仓暗雷</h2>
+  <p>大股东缺钱想套现又不想失去控制权，就会把股票<strong>质押</strong>给券商借出现金。正常比例没问题，但有些激进老板会质押 <span class="hl-red">90% 甚至 100%</span>。</p>
+
+  <p>券商借钱有<strong>平仓线</strong>。股市大跌、股票贬值，老板拿不出钱补仓，券商为了自保就会在市场上<strong>强制平仓</strong>，海量卖盘涌出，导致股价连续跌停。</p>
+
+  <h3 class="sub-title">避雷口诀</h3>
+  <blockquote>
+    <strong>买股票前查一下大股东质押比例，超过 80% 的需高度警惕其流动性风险。</strong>
+  </blockquote>
+
+  <p>几个常见的高危信号：</p>
+  <ul>
+    <li>大股东<strong>质押率 > 80%</strong> + 公司股价距平仓线 < 20%</li>
+    <li>质押用途是"<strong>偿还个人债务</strong>"而非经营</li>
+    <li>多家券商同时质押、频繁补充质押</li>
+  </ul>
+</section>
+
+<section class="section" id="sec-5">
+  <h2 class="section-title">套路五：GDR——跨市场套利</h2>
+  <p>上市公司跑到欧洲发行代表 A 股的凭证，即 <strong>全球存托凭证（GDR）</strong>。核心原因是<strong>跨国估值差</strong>：</p>
+
+  <ul>
+    <li>国外发行的 GDR 往往有<strong>较大折扣</strong></li>
+    <li><strong>120 天锁定期</strong>后能转换成 A 股在国内抛售</li>
+    <li>相当于<strong>以外资名义低价拿筹码</strong>，120 天后涌入 A 股兑现</li>
+  </ul>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 关键观察指标</div>
+    <p>看到 GDR 题材的公司<strong>别盲目炒作出海概念</strong>，盯紧两件事：<strong>① 折价率（折扣越大抛压越重） ② 解禁期</strong>，防止被跨国抛压潮误伤。注意：<strong>现在监管已大幅收紧</strong>，相关规则须留意最新公告。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-6">
+  <h2 class="section-title">套路六：减持借款——高位套现财技</h2>
+  <p>股价炒到历史最高点，大股东宣布"<strong>清仓式减持</strong>"，套现几十亿。市场上恐慌情绪蔓延时，老板发公告：</p>
+
+  <blockquote class="purple">
+    <strong>"大家别慌，我套现的钱全部无息借给公司用。"</strong>
+  </blockquote>
+
+  <p>散户感动得冲进去接盘。真相是什么？这是<strong>极其高明</strong>的预期管理和风险转移财技：</p>
+
+  <ul>
+    <li>老板在<strong>高位把泡沫变现</strong>，实现了风险转嫁</li>
+    <li>无息借款虽然在账上，但<strong>借款是随时可以抽走的</strong></li>
+    <li>散户接盘后，股价开始回归正常估值，<span class="hl-red">下跌损失由全体股东共担</span></li>
+    <li>而老板套现的几十亿早已落袋为安</li>
+  </ul>
+
+  <div class="quote-banner">
+    公司亏钱、大股东赚钱，<br>
+    <span class="hl">根本不是经营奇迹，而是资本工具箱的胜利</span>。<br>
+    看不懂这些套路，散户永远是被动买单者。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>公司融资规模远超 IPO：<strong>十年定增累计约 5-6 万亿、2022 年再融资约 1.1 万亿</strong></li>
+      <li><span class="hl">定增</span> = VIP 八折通道，关注定价博弈期与解禁前的派发窗口</li>
+      <li><span class="hl">可转债</span> = 下有保底的金融魔法，关注<strong>到期还款压力</strong>下的下修博弈</li>
+      <li><span class="hl-red">配股</span> = 强行除权摊派，不想掏钱就<strong>必须提前规避</strong></li>
+      <li><span class="hl-red">股权质押</span> > 80% 是高危信号，关注平仓线与流动性风险</li>
+      <li><span class="hl">GDR</span> 跨市场套利，关注<strong>折价率</strong>和<strong>解禁期</strong></li>
+      <li><span class="hl-red">减持 + 无息借款</span> = 高位套现的预期管理财技，散户接盘损失公司共担</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 11 · 财务报表与公司金融行为</p>
+</footer>
+
+</body>
