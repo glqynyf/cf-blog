@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>交易成长的 4 个阶段：对照一下，你现在卡在哪一步？｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4;
+    --text-mute: #6b7785; --accent: #f0883e;
+    --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff;
+    --yellow: #e3b341; --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 34px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  .hl-purple { color: var(--purple); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.red { border-left-color: var(--red); }
+  blockquote.red strong { color: var(--red); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .stage-journey { display: flex; justify-content: space-between; align-items: center; margin: 24px 0; gap: 8px; flex-wrap: wrap; }
+  .stage-journey .step { flex: 1; min-width: 130px; padding: 14px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; text-align: center; position: relative; }
+  .stage-journey .step .num { font-size: 11px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .stage-journey .step .name { font-size: 14px; font-weight: 700; color: var(--accent); }
+  .stage-journey .arrow { color: var(--text-mute); font-size: 20px; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  .compare-cell { padding: 18px 22px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); }
+  .compare-cell.bad { border-left: 4px solid var(--red); }
+  .compare-cell.good { border-left: 4px solid var(--green); }
+  .compare-cell h5 { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+  .compare-cell.bad h5 { color: var(--red); }
+  .compare-cell.good h5 { color: var(--green); }
+  .compare-cell p { font-size: 14.5px; color: var(--text-dim); margin-bottom: 0; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } .compare-grid, .stage-journey { grid-template-columns: 1fr; flex-direction: column; } .stage-journey .arrow { display: none; } }
+</style>
+</head>
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 0</span>
+  <span class="stage-name">认知重塑（破除散户思维，先破后立）</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 11 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 0 · 第 8 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">交易成长的 4 个阶段：对照一下，你现在卡在哪一步？</h1>
+  <p class="note-subtitle">一个能靠交易稳定赚钱的人，电脑屏幕往往比刚亏钱那会儿还要<strong>空</strong>，指标更少了，动作更慢了，甚至<strong>无聊到一整天不下一单</strong>。从狂躁焦虑到简单平静的蜕变，就是交易者的成长路径。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>交易者必经的 <strong>4 个阶段</strong>：<span class="hl">盲目自信（愚昧之巅）→ 指标崇拜（绝望之谷）→ 系统重构（开悟之坡）→ 稳定运行（高手）</span>。市场上"七亏二平一赚"，多数人卡在第二、三阶段反复内耗。<span class="hl-red">你现在可能觉得"退步"和"平静"了，其实那是正在跨进下一阶段的"生长痛"</span>。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-overview">四阶段全景：从愚昧之巅到高手的寂静</a></li>
+    <li><a href="#sec-1">阶段一 · 盲目自信——达克效应下的愚昧之巅</a></li>
+    <li><a href="#sec-2">阶段二 · 指标崇拜——绝望之谷，越学越不会</a></li>
+    <li><a href="#sec-3">阶段三 · 系统重构——散户与专业之间最深的鸿沟</a></li>
+    <li><a href="#sec-4">阶段四 · 稳定运行——屏幕变干净、指标变少、出手变少</a></li>
+    <li><a href="#sec-self-check">三个自检标准：你真的走到第四阶段了吗？</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-overview">
+  <h2 class="section-title">四阶段全景：从愚昧之巅到高手的寂静</h2>
+
+  <div class="stage-journey">
+    <div class="step">
+      <div class="num">阶段 1</div>
+      <div class="name">盲目自信</div>
+    </div>
+    <span class="arrow">→</span>
+    <div class="step">
+      <div class="num">阶段 2</div>
+      <div class="name">指标崇拜</div>
+    </div>
+    <span class="arrow">→</span>
+    <div class="step">
+      <div class="num">阶段 3</div>
+      <div class="name">系统重构</div>
+    </div>
+    <span class="arrow">→</span>
+    <div class="step">
+      <div class="num">阶段 4</div>
+      <div class="name">稳定运行</div>
+    </div>
+  </div>
+
+  <p>市场里一直流传一句老话：<span class="hl">"七亏二平一赚"</span>——长期下来大概七成散户是亏的，两成勉强打平，真正能稳定赚钱的就那么一成。<span class="hl-red">你很可能不是真的不行，而是处在这条必由之路的前半段</span>。</p>
+
+  <div class="quote-banner">
+    一个成熟交易员现在的屏幕和他几年前亏得一塌糊涂时比，<br>
+    <span class="hl">会发现一个诡异的现象：</span><br>
+    <span class="hl">屏幕变干净了，指标变少了，交易动作也变到了极度的枯燥。</span>
+  </div>
+</section>
+
+<section class="section" id="sec-1">
+  <h2 class="section-title">阶段一 · 盲目自信——达克效应下的愚昧之巅</h2>
+  <p>回想一下你当初是怎么进这个市场的：</p>
+  <ul>
+    <li>听同事朋友说最近行情太火、买什么涨什么</li>
+    <li>碰上一轮大牛市，铺天盖地都在报道暴涨</li>
+    <li>怀着"试试看"的心态往账户里冲了几千或几万</li>
+  </ul>
+
+  <h3 class="sub-title">新手最致命的剧本</h3>
+  <p>你什么指标都看不懂——K 线红绿都得查。可能纯凭直觉、听大 V 一句话、甚至看公司名字顺眼就买了。结果第二天涨 3%、第三天又涨 5%。<span class="hl">赚钱这么容易？上班一个月才几千，动动手指几分钟就一千块入账。</span></p>
+
+  <blockquote class="red">
+    <strong>达克效应（Dunning-Kruger Effect）</strong>：心理学上著名的认知偏差——<strong>人在对一个领域完全无知的时候，自信心反而会膨胀到这辈子的最高点</strong>。这个点有个特别形象的名字叫<em>愚昧之巅</em>。
+  </blockquote>
+
+  <p>你开始觉得自己是天生的投资天才，觉得巴菲特也不过如此。甚至拿出计算器算账：<span class="hl">一天赚 2%，一个月就是 40%，一年滚下来不就财务自由了？</span></p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 第一阶段最可怕的地方</div>
+    <p>在膨胀心态下你做了新手最致命的决定——<strong>加仓</strong>。你把买车的钱甚至结婚的钱源源不断冲进账户，因为在你潜意识里这地方压根不是什么博弈场，而是一台随取随用的自动提款机。<br><br>
+    <span class="hl">但你忽略了一个最底层的逻辑：在这个阶段你赚的每一分钱不是因技术好，仅仅是运气好</span>——你刚好赶上了一段上涨趋势。大风口上连树叶都能飞得老高。<br><br>
+    <strong>这种靠运气赚的钱其实是市场发给你的体验券，不但长久不了，反而会成为你日后巨额亏损的祸根。</strong>
+  </div>
+</section>
+
+<section class="section" id="sec-2">
+  <h2 class="section-title">阶段二 · 指标崇拜——绝望之谷</h2>
+  <p>随行情转折不可避免地迎来第一次大亏，你自然跨进第二阶段。市场的反应往往不是害怕而是<span class="hl-red">不服气</span>——你觉得这只是正常回调，甚至继续加仓摊平。然后眼睁睁看着浮盈全部蒸发，从亏 5% 到 20% 再到 40%。</p>
+  <p>终于在某个情绪崩溃的深夜盯着一片惨绿，一咬牙割肉。结果特别神奇——<span class="hl">前脚刚割，后脚第二天就拉个大阳线甚至连续涨停</span>。</p>
+
+  <blockquote>
+    <strong>这种被市场反复摩擦的痛苦</strong>，把你之前那点自信彻底击碎。你意识到市场不是提款机，这里是个杀人不眨眼的战场。但你不服——你觉得别人能赚钱肯定是有技术，自己亏只是因为不懂。<br><br>
+    于是你开始<strong>疯狂学习</strong>，买了一本又一本厚厚的专业书，关注几十个财经大 V，每晚不睡觉看盘后分析。你开始接触各种数、K 线组合、成交量、MACD、KDJ、布林线，缠论——你把屏幕排得满满当当、五颜六色，把主图、副图塞得连 K 线都快看不清。
+  </blockquote>
+
+  <h3 class="sub-title">越学越不会的悖论</h3>
+  <div class="compare-grid">
+    <div class="compare-cell bad">
+      <h5>第一次 · 只用 MACD</h5>
+      <p>MACD 零轴下方走出标准金叉——教科书白纸黑字写着强烈买入信号。你兴奋买进去，结果不但没涨反而直接破位。</p>
+    </div>
+    <div class="compare-cell bad">
+      <h5>第二次 · 多看 KDJ</h5>
+      <p>下次吸取教训，MACD + KDJ <span class="hl">均线</span>全版一起看。结果告诉你风险、KDJ 告诉你超买，你反而不知所措。</p>
+    </div>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 指标越多，越不敢下单</div>
+    <p>慢慢你开始怀疑指标是不是骗人的，每天活在焦虑里。一开盘盯着红红绿绿心跳加速，一收盘看着亏损捶胸顿足。你在无穷无尽的<span class="hl">盯盘</span>里频繁买进卖出，<span class="hl">本金一分没赚回来，反倒给券商贡献了一大笔手续费</span>。你的账户就像在慢性失血，每一笔交易都透着深深的无力感。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-3">
+  <h2 class="section-title">阶段三 · 系统重构——散户与专业之间最深的鸿沟</h2>
+  <p>如果你能在慢性失血里活下来，没被市场消灭掉，那么某一天你可能经历一次灵魂深处的觉醒——这种觉醒往往伴随一次痛彻心扉的教训，逼着你把身上所有花里胡哨的外衣一层层扒掉，直面交易最真实的底层逻辑。</p>
+
+  <blockquote class="red">
+    <strong>第三阶段是散户和专业之间最宽、最深的一道鸿沟</strong>，也是整个成长过程里最痛苦、折磨时间最长、但又最关键的一道坎。<br><br>
+    为什么？因为<strong>前两个阶段你的痛苦来自不知道，到第三阶段你的痛苦来自知道却做不到</strong>。
+  </blockquote>
+
+  <h3 class="sub-title">三件根本性的认知刷新</h3>
+  <ul>
+    <li><span class="hl">市场是不可预测的</span>：所有技术指标本质上都是对历史价格的数学统计，是<strong>后视镜不是水晶球</strong></li>
+    <li><span class="hl">交易不是关于对错的游戏</span>：而是关于<span class="hl-blue">盈亏比和胜率</span>的数学游戏</li>
+    <li><span class="hl">真正的对手是镜子里自己</span>：必须战胜数百万年进化下的<span class="hl-red">恐惧和贪婪本能</span></li>
+  </ul>
+
+  <h3 class="sub-title">构建你的交易系统</h3>
+  <p>你开始动手构建自己的交易系统。说白了，就是一套<strong>明确的不依赖主观情绪的规则</strong>：</p>
+  <ul>
+    <li>什么情况下买入？上多重的仓位？</li>
+    <li>买错了在哪里坚决止损？</li>
+    <li>买对了在哪里分批止盈？</li>
+    <li>遇上突发风险怎么应对？</li>
+  </ul>
+
+  <p>但到这里还没完。卡尼曼与特沃斯基的<span class="hl">前景理论</span>揭示了更深的一层：<span class="hl-red">即使你有交易系统，依然被基因本能反复击穿</span>。</p>
+
+  <blockquote>
+    <strong>损失厌恶基因</strong>——亏损的痛感大概是同金额盈利快乐的 2-2.5 倍。远古时代保护祖先不被野兽吃掉的避险基因，到了现代资本市场反而成了让散户亏钱的一剂毒药。<br><br>
+    大脑里管理性、管长远规划的部分叫<span class="hl-blue">前额叶皮层</span>，管情绪、本能的是更原始的<span class="hl-red">边缘系统</span>。当账户剧烈波动，你极度恐惧或贪婪那一瞬间，原始的情绪脑反应速度<span class="hl-red">远远快过</span>理性脑。等理性脑反应过来想起昨晚的计划时，你的手可能早就把错误的单子下出去了。<br><br>
+    所以<span class="hl">你别老骂自己没定力，这真不完全是你的错</span>——这是几百万年进化刻在每个人身上的默认设置。
+  </blockquote>
+
+  <h3 class="sub-title">重新定义亏损：经营成本，而不是人生失败</h3>
+  <blockquote>
+    普通人眼里<span class="hl-red">亏损代表失败、愚蠢、惩罚</span>，可在成熟交易员眼里亏损只是这门生意里<span class="hl-blue">不可避免的营业成本</span>。<br><br>
+    你想想，你开一家奶茶店，每月要交房租、付水电、发工资——你会因为交了房租就觉得自己做生意失败了吗？当然不会。<br><br>
+    <strong>每一次严格执行的止损，就是为了逮住下一次大行情提前付出去的房租。</strong>当你真能把亏损看成经营成本，而不是对个人能力的否定时，你按下止损的手，就再也不哆嗦了。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-4">
+  <h2 class="section-title">阶段四 · 稳定运行——屏幕变干净、指标变少、出手变少</h2>
+  <p>当你终于翻过人性这道卡，能毫无心理障碍地执行规则、能平静接受亏损、还能对利润保持耐心，你已经战胜了市场上绝大多数人，开始踏进第四个阶段。</p>
+
+  <h3 class="sub-title">第四阶段在旁人看来往往特别无趣、甚至有点冷血</h3>
+  <ul>
+    <li>不再关注五花八门的小道消息</li>
+    <li>不再费劲猜明天大盘涨跌</li>
+    <li>更不会因为大 V 一句话头脑一热就冲</li>
+    <li>屏幕上可能只留 1-2 个最简单的指标，甚至只看最干净的<strong>裸 K + 成交量</strong></li>
+  </ul>
+
+  <p>他们每天干的活枯燥得像流水线上的工人：一开盘静静等，<span class="hl">没走出系统定义的信号可以一整天甚至连续几个星期空仓</span>，连手指头都懒得动。</p>
+
+  <div class="compare-grid">
+    <div class="compare-cell bad">
+      <h5>普通人眼里的空仓</h5>
+      <p>空仓是煎熬、是浪费时间。手里有现金就难受，必须满仓操作。</p>
+    </div>
+    <div class="compare-cell good">
+      <h5>高手眼里的空仓</h5>
+      <p>空仓才是<span class="hl">最高级的防守</span>，是在保护自己的子弹。一旦市场走出符合系统的信号，就会像恶狼捕食一样<span class="hl-blue">冷静、迅速、精准</span>地买入，立马上止损位。</p>
+    </div>
+  </div>
+
+  <blockquote>
+    如果市场证明错了，股价碰到<span class="hl">止损系统自动成交</span>，他频频进进接受这笔"房租"，没一丝情绪波动——因为他心里有底，在自己这套系统里只要长期坚持，胜率乘以盈利幅度一定大于亏损幅度。<br><br>
+    如果市场证明对了，股价一路往上穿，他也不急着证明眼前利润，而是按<span class="hl">移动止损原则一点点把防守位往上提</span>，让利润在风里尽情奔跑。
+  </blockquote>
+
+  <div class="quote-banner">
+    你会明白，<span class="hl">这世上根本没有完美的交易，</span><br>
+    <span class="hl">只有被完美执行的纪律。</span><br><br>
+    交易到这一步变成一件极其枯燥的事：<br>
+    发现信号、输入指令、设好防守、静静等待、执行出场。<br>
+    没有心跳加速的刺激、<br>
+    没有赚大钱的狂喜、也没有亏钱的沮丧，<br>
+    <span class="hl">它不再是热血沸腾的冒险，</span><br>
+    而是<span class="hl">一场严格的机械的概率游戏</span>。
+  </div>
+
+  <p>你已经不在乎一两笔的输赢，只在乎这套系统在这一个月、一个季度、一整年里有没有始终如一地被执行。你的眼光被拉得特别长——<span class="hl">你明白只要不犯原则性错误、不发生暴仓，时间就是你最好的朋友</span>。</p>
+</section>
+
+<section class="section" id="sec-self-check">
+  <h2 class="section-title">三个自检标准：你真的走到第四阶段了吗？</h2>
+  <p>也许你想问："我怎么知道自己是真的进了第四阶段，还是又在自我感觉良好？"</p>
+
+  <h3 class="sub-title">自检 1 · 空仓期的心跳</h3>
+  <p><strong>你能不能连续好几个星期空仓，心里一点都不痒、不慌？</strong></p>
+  <p>如果你账户里有钱就难受、只要有现金就必须"做点什么"——你大概率还停留在阶段二。</p>
+
+  <h3 class="sub-title">自检 2 · 止损触发那一秒</h3>
+  <p><strong>一笔交易触发止损，真金白银亏出去那一刻，你的心跳和呼吸跟平常没啥两样吗？</strong></p>
+  <p>如果你还是手抖、不敢点确认、想再等等反弹——你的"知道却做不到"还在阶段三里挣扎。</p>
+
+  <h3 class="sub-title">自检 3 · 浮盈时的本能</h3>
+  <p><strong>一笔单子赚了钱，你脑子里想的是赶紧落袋为安，还是"规则没让我走我就接着拿"？</strong></p>
+  <p>如果还没赚到回本你就急着兑现，浮盈稍大就开始找借口卖——你还在被 20 万年的基因本能反复收割。</p>
+
+  <div class="quote-banner">
+    当这三件你都能坦然做到，<br>
+    那多半是真走到了第四阶段。<br>
+    你会开始花更多时间去<span class="hl">好好生活、陪陪家人、锻炼身体</span>。<br>
+    当账户上那串数字在你眼里只是一组平静起伏的曲线时，<br>
+    <span class="hl">你就真正完成了从狂躁到寂静的蜕变。</span>
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>4 阶段：<strong>盲目自信 → 指标崇拜 → 系统重构 → 稳定运行</strong></li>
+      <li>阶段一：<strong>达克效应</strong>——无知时最自信，靠运气赚的终究靠实力还回</li>
+      <li>阶段二：<strong>越学越不会</strong>——把屏幕塞满指标，本质是用战术勤奋掩盖战略懒惰</li>
+      <li>阶段三：<strong>知道却做不到</strong>——市场不可预测，交易是关于盈亏比和胜率的数学游戏</li>
+      <li>亏损需要重新定义：<strong>经营成本</strong>，不是对个人能力的否定</li>
+      <li>阶段四：屏幕干净、指标少、动作慢、<strong>空仓是最高级防守</strong></li>
+      <li>三个自检：<strong>空仓不慌 + 止损不抖 + 浮盈不急着卖</strong></li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 0 · 认知重塑</p>
+</footer>
+
+</body>
+</html>
