@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>股票仓位管理的铁律：放弃靠运气赚钱，建立属于自己的赢利规则｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4;
+    --text-mute: #6b7785; --accent: #f0883e;
+    --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff;
+    --yellow: #e3b341; --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    line-height: 1.8; -webkit-font-smoothing: antialiased;
+  }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+    font-size: 13px; color: var(--text-dim); flex-wrap: wrap;
+  }
+  .stage-bar .stage-pill {
+    display: inline-block; padding: 4px 12px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 700; letter-spacing: 1px; font-size: 12px;
+  }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+    font-size: 13px; color: var(--text-mute); flex-wrap: wrap;
+  }
+  .meta-bar .tag {
+    padding: 4px 10px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 600; letter-spacing: 0.5px;
+  }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border); border-left: 4px solid var(--accent);
+    border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow);
+  }
+  .summary-card h3 {
+    font-size: 14px; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px;
+  }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px 24px; margin-bottom: 48px;
+  }
+  .toc h4 {
+    font-size: 13px; color: var(--text-mute); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a {
+    color: var(--text-dim); text-decoration: none; font-size: 14.5px;
+    display: flex; align-items: baseline; transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before {
+    content: counter(toc-counter, decimal-leading-zero);
+    color: var(--accent); font-weight: 700; margin-right: 12px;
+    font-variant-numeric: tabular-nums; min-width: 28px;
+  }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title {
+    font-size: 26px; font-weight: 700; margin-bottom: 24px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--accent);
+    display: inline-block; letter-spacing: -0.3px;
+  }
+  h3.sub-title {
+    font-size: 19px; font-weight: 600; margin: 28px 0 14px;
+    color: var(--text); display: flex; align-items: center;
+  }
+  h3.sub-title::before {
+    content: ""; width: 4px; height: 18px;
+    background: var(--accent); border-radius: 2px; margin-right: 12px;
+  }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote {
+    margin: 20px 0; padding: 16px 22px;
+    background: var(--surface); border-left: 4px solid var(--blue);
+    border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px;
+  }
+  blockquote strong { color: var(--blue); }
+  blockquote.red { border-left-color: var(--red); }
+  blockquote.red strong { color: var(--red); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .formula-box {
+    background: var(--surface); border: 1px solid var(--accent);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+    text-align: center;
+  }
+  .formula-box .formula {
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: var(--accent); font-size: 19px; font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; }
+  .key-points {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+  }
+  .key-points h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li {
+    padding: 8px 0 8px 30px; position: relative;
+    color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border);
+  }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before {
+    content: "✓"; position: absolute; left: 0; top: 8px;
+    color: var(--green); font-weight: 800; font-size: 18px;
+  }
+  .warning-card {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08));
+    border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red);
+    border-radius: 8px; padding: 18px 22px; margin: 20px 0;
+  }
+  .warning-card .label {
+    color: var(--red); font-weight: 700; font-size: 13px;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--accent); border-radius: 10px;
+    padding: 28px 32px; margin: 32px 0;
+    text-align: center; font-size: 19px;
+    font-weight: 600; color: var(--accent);
+    line-height: 1.6; box-shadow: var(--shadow);
+  }
+  .quote-banner::before {
+    content: """; display: block; font-size: 48px;
+    line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5;
+  }
+  .recover-table {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+  }
+  .recover-table h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .recover-table table { width: 100%; border-collapse: collapse; }
+  .recover-table th, .recover-table td {
+    padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);
+    color: var(--text); font-size: 14.5px;
+  }
+  .recover-table th { color: var(--text-dim); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .recover-table .lose { color: var(--red); font-weight: 700; }
+  .recover-table .gain { color: var(--green); font-weight: 700; }
+  footer.note-footer {
+    margin-top: 72px; padding-top: 28px;
+    border-top: 1px solid var(--border);
+    color: var(--text-mute); font-size: 13.5px; text-align: center;
+  }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 9</span>
+  <span class="stage-name">仓位管理与资金管理</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 14 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 9 · 第 3 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">股票仓位管理的铁律：放弃靠运气赚钱，建立属于自己的赢利规则</h1>
+  <p class="note-subtitle">胜率 70% 的短线高手 vs 胜率 35% 的趋势交易者——一年之后，<span class="hl">谁的账户还活着</span>？答案可能让你夜不能寐。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>决定你长期资产曲线向上还是向下的，从来不是你单次操作猜对涨跌的概率，而是<span class="hl">你在每一次下注时究竟给本金分配了多大的风险敞口</span>。70% 胜率的短线高手只要在仓位管理上动一次矫情的念头，采用不科学的加仓和扛单方式，遭遇几次极端行情冲击就可能走向毁灭；而 35% 胜率的趋势交易者只要严格克制一套<span class="hl">非对称的仓位管理模型</span>，反而能稳健穿越牛熊。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-trap">散户必死的恶性循环：试探 20% → 满仓 80%</a></li>
+    <li><a href="#sec-asymmetry">亏损与回本的非对称陷阱</a></li>
+    <li><a href="#sec-70-vs-35">为什么 70% 胜率会输给 35% 胜率</a></li>
+    <li><a href="#sec-iron-law">仓位管理的铁律：四条不可逾越的红线</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-trap">
+  <h2 class="section-title">散户必死的恶性循环：试探 20% → 满仓 80%</h2>
+  <p>你一定经历过这样的场景。花几天时间精心挑选了一只底部启动形态的股票，逻辑看起来无懈可击，于是谨慎地拿出 <strong>20% 仓位</strong>买试探。买入后股价果然连涨三天，你心里乐开花。</p>
+
+  <p>可就在这时，魔鬼开始低语——</p>
+  <blockquote class="red">
+    <strong>"区区 20% 的仓位太可惜了，如果当初满仓梭哈，这几天的收益早就把过去几个月的亏损全填平了。"</strong>贪欲战胜了理智。股价高位震荡时，你不仅没按交易计划落袋为安，反而把账户里剩下的 80% 全部砸了进去，<span class="hl">一步到位完成满仓</span>。
+  </blockquote>
+
+  <p>就在你满仓的那一刻，盘面博弈逻辑悄然逆转：主力资金开始出货，一根放量大阴线砸穿支撑。账户浮亏 5%。<span class="hl-red">同样是 5% 的下跌</span>，在两种仓位下意义天差地别：</p>
+
+  <div class="recover-table">
+    <h4>20% 仓位 vs 满仓面对同样 5% 下跌</h4>
+    <table>
+      <thead>
+        <tr><th>对比项</th><th>试探 20% 仓位</th><th>追高 100% 满仓</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>浮亏对总资金影响</td><td class="lose">−1%</td><td class="lose">−5%</td></tr>
+        <tr><td>心态反应</td><td>可以从容止盈/止损</td><td>心率飙升、手心冒汗</td></tr>
+        <tr><td>5% 跌幅后的本金</td><td class="gain">9.9 万</td><td class="lose">9.5 万</td></tr>
+        <tr><td>后续能否交易</td><td class="gain">仍可调仓</td><td class="lose">心理瘫痪，被动死扛</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>接下来的两周股价继续阴跌，累计跌幅 20%，账户真实缩水整整 1/5。你干脆放弃操作，把一笔短线交易硬生生做成了被动的长期被动持仓。最后当市场迎来最后一轮恐慌性暴跌、股价跌去 40% 时，巨大的心理压力击溃了你的防线——<span class="hl-red">你在市场最底部带血筹码区割肉离场</span>。</p>
+
+  <blockquote class="red">
+    <strong>请暂停三秒认真体会</strong>。在这个令人心痛的过程里，你亏钱的根源真的是因为股票选错了吗？事实就摆在这里：哪怕这只股票最终确实翻倍了，<span class="hl">你依然在半路上被精准消灭了</span>。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-asymmetry">
+  <h2 class="section-title">亏损与回本的非对称陷阱</h2>
+  <p>真正的元凶是绝大多数散户终其一生都看不清的一个<span class="hl">数学陷阱</span>。本金亏损和把它赚回来所需的涨幅，从来都不是对称的：</p>
+
+  <div class="recover-table">
+    <h4>亏损幅度 vs 回本所需涨幅</h4>
+    <table>
+      <thead>
+        <tr><th>亏损幅度</th><th>回本所需涨幅</th><th>等量换算</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="lose">−10%</td><td class="gain">+11.1%</td><td>多涨 1.1 个百分点</td></tr>
+        <tr><td class="lose">−20%</td><td class="gain">+25.0%</td><td>多涨 5 个百分点</td></tr>
+        <tr><td class="lose">−30%</td><td class="gain">+42.9%</td><td>多涨近 13 个百分点</td></tr>
+        <tr><td class="lose">−50%</td><td class="gain">+100%</td><td>必须翻倍</td></tr>
+        <tr><td class="lose">−70%</td><td class="gain">+233%</td><td>需要 2 倍以上行情</td></tr>
+        <tr><td class="lose">−90%</td><td class="gain">+900%</td><td>需要 10 倍股</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula">回本所需涨幅 = 1 / (1 − 亏损比例) − 1</div>
+    <div class="desc">几何回报要求亏损越深、回本越陡</div>
+  </div>
+
+  <p>亏损每往下走一步，回本难度不是在加，而是在<span class="hl-red">成倍地翻</span>。这就是满仓 + 死扛的散户永远逃不出"小赚大亏、深度套牢"的物理法则。</p>
+</section>
+
+<section class="section" id="sec-70-vs-35">
+  <h2 class="section-title">为什么 70% 胜率会输给 35% 胜率</h2>
+  <p>视频给出了<span class="hl">两个截然不同的交易者画像</span>，让我们看看一年之后到底谁活了下来。</p>
+
+  <h3 class="sub-title">70% 胜率的短线高手</h3>
+  <ul>
+    <li>10 次操作对 7 次，错 3 次，看似所向披靡</li>
+    <li>但每次错了都死扛，止损基本摆设</li>
+    <li>对了小赚 5%，错了死扛亏损 30%、50% 甚至更深</li>
+    <li>只要碰到一次极端行情冲击，<span class="hl-red">账户就会迅速走向腰斩甚至清零</span></li>
+  </ul>
+
+  <h3 class="sub-title">35% 胜率的趋势交易者</h3>
+  <ul>
+    <li>10 次操作只对 3.5 次，错了 6.5 次</li>
+    <li>但每次错了<span class="hl">主动止损认错</span>，亏损被锁死在 3%—5%</li>
+    <li>对的时候吃满一段大趋势，盈利 20%、50% 甚至翻倍</li>
+    <li><span class="hl-green">长期净期望为正</span>，穿越牛熊稳健生存</li>
+  </ul>
+
+  <div class="formula-box">
+    <div class="formula">期望收益 = 胜率 × 平均盈利 − (1 − 胜率) × 平均亏损</div>
+    <div class="desc">短线高手：<span class="hl-red">0.7 × 5% − 0.3 × 40% = −8.5%</span>（原笔记写 −7.5% 是算术错误）；趋势玩家：0.35 × 40% − 0.65 × 5% = +10.75%</div>
+  </div>
+
+  <blockquote class="red">
+    <strong>胜率高不等于最终赚钱</strong>。决定账户生死的是<span class="hl">盈亏比 × 胜率</span>的乘积。35% 胜率 + 8 倍盈亏比，足以碾压 70% 胜率 + 0.125 倍盈亏比。<span class="hl">错的时候亏得少，对的时候赚得多</span>，这就是仓位管理的数学骨架。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-iron-law">
+  <h2 class="section-title">仓位管理的铁律：四条不可逾越的红线</h2>
+  <p>如果把仓位管理浓缩成<span class="hl">四个字的底层铁律</span>，那就是——<strong>分批进出</strong>。</p>
+
+  <h3 class="sub-title">铁律一 · 单只个股仓位封顶</h3>
+  <p>无论你多看好一只股票，单只个股的仓位上限必须事先约定。常见做法：</p>
+  <ul>
+    <li>激进型：单只 20%—30%</li>
+    <li>稳健型：单只 10%—15%</li>
+    <li>保守型：单只 5%—10%</li>
+  </ul>
+
+  <h3 class="sub-title">铁律二 · 同一价格不重复加仓</h3>
+  <p>买入价附近最多建一次仓，加仓必须等价格走出<span class="hl">明确的浮盈安全垫</span>。这是把"倒金字塔陷阱"扼杀在萌芽的核心纪律。</p>
+
+  <h3 class="sub-title">铁律三 · 总仓位跟随确定性调节</h3>
+  <p>市场不确定时低仓位（30%—40%），趋势确认时中等仓位（50%—70%），极端狂热时反而要主动降仓位。仓位不是线性跟着情绪走的。</p>
+
+  <h3 class="sub-title">铁律四 · 永远保留"活命钱"</h3>
+  <p>无论多看好，账户里至少保留 <strong>20%—30% 的现金</strong>。这些现金的真正价值不是收益，而是在极端机会出现时<span class="hl">你有子弹</span>。</p>
+
+  <div class="quote-banner">
+    <span class="hl">真正决定你长期资产曲线方向的</span><br>
+    从来不是单次操作的<span class="hl">对错</span>，而是<span class="hl">对错时的敞口大小</span><br>
+    <strong>对的时候赚得多，错的时候亏得少</strong><br>
+    这才是仓位管理的核心命门
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 散户最常踩的认知陷阱</div>
+    <p>把"胜率高"等同于"会赚钱"是散户最大的认知陷阱。<span class="hl">胜率只是公式的三个变量之一</span>，盈亏比同样关键。如果你胜率 80% 但盈亏比只有 0.5（赚 5% 亏 10%），期望 = <code>0.8×5% − 0.2×10% = +2%</code> 实际为<span class="hl-red">正</span>，凯利建议 <code>f* = (0.5×0.8−0.2)/0.5 = 40%</code> 仓位——也就是说"<span class="hl-red">凯利告诉你下注 40%</span>"，<span class="hl">不是"不要下注"</span>。<span class="hl-red">原笔记此处结论与算术反向</span>。要构成亏损反例需再恶化赔率，如"胜率 80% + 盈亏比 1:5 → 0.8 − 1.0 = −0.2"。</p>
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li><strong>试探 20% → 满仓 80%</strong> 是散户最经典的死循环剧本</li>
+      <li>同样的 5% 下跌：20% 仓位只亏总资金 1%，满仓亏总资金 5%</li>
+      <li>亏损不对称：跌 50% 要翻倍；跌 70% 要 +233%；跌 90% 要 +900%</li>
+      <li>胜率 ≠ 长期生存，<strong>盈亏比 × 胜率</strong>才是账户生死的核心公式</li>
+      <li>仓位管理四字铁律：<span class="hl">分批进出</span>——分批是手段，进出按纪律</li>
+      <li>单只个股仓位封顶 + 同一价格不重复加仓 + 留 20%—30% 活命钱</li>
+      <li>70% 胜率 + 不止损 = 慢性自杀；35% 胜率 + 严格止损 = 长期赢家</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 9 · 仓位管理</p>
+</footer>
+
+</body>
