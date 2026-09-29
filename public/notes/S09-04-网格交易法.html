@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>网格交易法：震荡市的神器，但单边下跌市会让你满手烂牌｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4;
+    --text-mute: #6b7785; --accent: #f0883e;
+    --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff;
+    --yellow: #e3b341; --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    line-height: 1.8; -webkit-font-smoothing: antialiased;
+  }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+    font-size: 13px; color: var(--text-dim); flex-wrap: wrap;
+  }
+  .stage-bar .stage-pill {
+    display: inline-block; padding: 4px 12px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 700; letter-spacing: 1px; font-size: 12px;
+  }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+    font-size: 13px; color: var(--text-mute); flex-wrap: wrap;
+  }
+  .meta-bar .tag {
+    padding: 4px 10px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 600; letter-spacing: 0.5px;
+  }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border); border-left: 4px solid var(--accent);
+    border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow);
+  }
+  .summary-card h3 {
+    font-size: 14px; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px;
+  }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px 24px; margin-bottom: 48px;
+  }
+  .toc h4 {
+    font-size: 13px; color: var(--text-mute); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a {
+    color: var(--text-dim); text-decoration: none; font-size: 14.5px;
+    display: flex; align-items: baseline; transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before {
+    content: counter(toc-counter, decimal-leading-zero);
+    color: var(--accent); font-weight: 700; margin-right: 12px;
+    font-variant-numeric: tabular-nums; min-width: 28px;
+  }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title {
+    font-size: 26px; font-weight: 700; margin-bottom: 24px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--accent);
+    display: inline-block; letter-spacing: -0.3px;
+  }
+  h3.sub-title {
+    font-size: 19px; font-weight: 600; margin: 28px 0 14px;
+    color: var(--text); display: flex; align-items: center;
+  }
+  h3.sub-title::before {
+    content: ""; width: 4px; height: 18px;
+    background: var(--accent); border-radius: 2px; margin-right: 12px;
+  }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote {
+    margin: 20px 0; padding: 16px 22px;
+    background: var(--surface); border-left: 4px solid var(--blue);
+    border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px;
+  }
+  blockquote strong { color: var(--blue); }
+  blockquote.red { border-left-color: var(--red); }
+  blockquote.red strong { color: var(--red); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .formula-box {
+    background: var(--surface); border: 1px solid var(--accent);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+    text-align: center;
+  }
+  .formula-box .formula {
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: var(--accent); font-size: 19px; font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; }
+  .key-points {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+  }
+  .key-points h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li {
+    padding: 8px 0 8px 30px; position: relative;
+    color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border);
+  }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before {
+    content: "✓"; position: absolute; left: 0; top: 8px;
+    color: var(--green); font-weight: 800; font-size: 18px;
+  }
+  .warning-card {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08));
+    border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red);
+    border-radius: 8px; padding: 18px 22px; margin: 20px 0;
+  }
+  .warning-card .label {
+    color: var(--red); font-weight: 700; font-size: 13px;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--accent); border-radius: 10px;
+    padding: 28px 32px; margin: 32px 0;
+    text-align: center; font-size: 19px;
+    font-weight: 600; color: var(--accent);
+    line-height: 1.6; box-shadow: var(--shadow);
+  }
+  .quote-banner::before {
+    content: """; display: block; font-size: 48px;
+    line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5;
+  }
+  .recover-table {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+  }
+  .recover-table h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .recover-table table { width: 100%; border-collapse: collapse; }
+  .recover-table th, .recover-table td {
+    padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);
+    color: var(--text); font-size: 14.5px;
+  }
+  .recover-table th { color: var(--text-dim); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .recover-table .lose { color: var(--red); font-weight: 700; }
+  .recover-table .gain { color: var(--green); font-weight: 700; }
+  footer.note-footer {
+    margin-top: 72px; padding-top: 28px;
+    border-top: 1px solid var(--border);
+    color: var(--text-mute); font-size: 13.5px; text-align: center;
+  }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 9</span>
+  <span class="stage-name">仓位管理与资金管理</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 13 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 9 · 第 4 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">网格交易法：震荡市的神器，但单边下跌市会让你满手烂牌</h1>
+  <p class="note-subtitle">一个无预警的<span class="hl">单边暴跌</span>，能在短短几天里把你的本金吃得干干净净，把你死死钉在亏损的脚手架上，让手里只剩一堆卖不掉、回不来的<span class="hl">烂牌</span>。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>网格交易的思想源头是<span class="hl">香农的恶魔</span>——把资金一半股票一半现金，价格偏离 50:50 就再平衡。但这个模型的甜蜜陷阱在于它有一个<span class="hl">极其奢侈的前提</span>：价格终将回归。一旦市场进入单边下跌，这个前提瞬间破灭，数学美感就变成财务灾难。<strong>网格只适合震荡市，单边下跌一定要带止损</strong>。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-shannon">香农的恶魔：网格交易的数学源头</a></li>
+    <li><a href="#sec-truth">连发明者自己都不用这个模型的真相</a></li>
+    <li><a href="#sec-shake">震荡市神器：把无序波动变成现金流</a></li>
+    <li><a href="#sec-crash">单边下跌的数学噩梦：网格变绞肉机</a></li>
+    <li><a href="#sec-fixes">真正能保命的改良策略</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-shannon">
+  <h2 class="section-title">香农的恶魔：网格交易的数学源头</h2>
+  <p>网格交易最著名的思想源头可以追溯到<span class="hl">信息论之父克劳德·香农</span>。上世纪六十年代，香农在 MIT 的讲座上展示过一个著名的数学模型，后来被人们称为<span class="hl">"香农的恶魔"</span>：</p>
+
+  <blockquote>
+    <strong>任何时候都把资金分成两半</strong>：一半持有现金，另一半买入股票。如果股票价格上涨导致股票市值超过了总资金的 50%，就卖掉一部分股票换成现金，让股票和现金的比例重新回到 50:50。反过来，如果股票价格下跌导致股票市值低于 50%，就用手里的现金去补仓，把比例再拉回 50:50。
+  </blockquote>
+
+  <p>在数学推演里，<span class="hl">只要价格还在波动，这种机械的再平衡就能不断从波动中摩擦出利润</span>。哪怕股价兜兜转转最后回到原点，你的账户依然是赚钱的。这就是网格交易的哲学根基：<span class="hl">不预测市场的方向，只利用市场的波动</span>。</p>
+
+  <div class="formula-box">
+    <div class="formula">目标配比 = 股票 50% : 现金 50%</div>
+    <div class="desc">触发再平衡条件：股票市值偏离总资金的 ±50%</div>
+  </div>
+</section>
+
+<section class="section" id="sec-truth">
+  <h2 class="section-title">连发明者自己都不用这个模型的真相</h2>
+  <p>这里有一个绝大多数人都不知道的<span class="hl">历史真相</span>：<strong>香农本人从来没有拿真金白银去实盘运行过这个模型</strong>。</p>
+
+  <p>因为按照当时的交易成本，如此频繁的再平衡，会把那点波动利润吃得一干二净。</p>
+
+  <blockquote>
+    <strong>香农真实的投资业绩</strong>：据《财富公式》一书记载，从上世纪五十年代末到 1986 年，他的<span class="hl">年化复利收益率高达 28% 左右</span>。但这个成绩靠的不是黑板上的再平衡模型，而是对特利丹、摩托罗拉、惠普这几家公司的<span class="hl">集中长线持股</span>。
+  </blockquote>
+
+  <blockquote class="red">
+    <strong>连模型的发明者自己，都清楚地知道</strong>理想模型和残酷现实之间隔着一条鸿沟。而这条鸿沟恰恰就是网格交易最大的盲区。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-shake">
+  <h2 class="section-title">震荡市神器：把无序波动变成现金流</h2>
+  <p>现代的网格交易把香农的粗放模型精致化了：它在特定的价格区间里画出一条条等距离的横线，就像一张鱼网。价格每跌破一格，系统就自动买入一笔；价格每涨过一格，系统就自动卖出一笔。</p>
+
+  <p>在<span class="hl">震荡市</span>里，这套策略简直就是神。想象一下，当大盘或者某个 ETF 在 3.8 元到 4.2 元之间来回拉扯，上上下下折腾了三个月，最后价格又回到了起点。如果你是普通的价值投资者或趋势交易者，这三个月你基本是义务劳动。但网格交易可能已经执行了几百次低买高卖，每一次触碰格子的微小价差都在为你的账户贡献真金白银的现金流。</p>
+
+  <h3 class="sub-title">震荡市 vs 趋势市的对比</h3>
+  <div class="recover-table">
+    <h4>网格策略在不同行情下的表现</h4>
+    <table>
+      <thead>
+        <tr><th>市场状态</th><th>网格表现</th><th>传统持仓</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>震荡市（横盘）</td><td class="gain">频繁低买高卖，累计可观盈利</td><td>义务劳动，零收益</td></tr>
+        <tr><td>单边上涨</td><td class="lose">早涨一格卖一格，筹码被卖光，踏空</td><td class="gain">满仓吃到趋势</td></tr>
+        <tr><td>单边下跌</td><td class="lose">越跌越买，<span class="hl">满手烂牌</span></td><td class="lose">取决于是否止损</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section" id="sec-crash">
+  <h2 class="section-title">单边下跌的数学噩梦：网格变绞肉机</h2>
+  <p>网格交易最大的甜蜜陷阱在于：<span class="hl">它之所以能盈利，建立在"价格终将回归"这个极其奢侈的前提之上</span>。一旦市场进入单边单向的极端行情，数学美感就会在一瞬间变成最恐怖的灾难。</p>
+
+  <h3 class="sub-title">单边上涨的尴尬：踏空的痛苦</h3>
+  <p>在单边上涨行情里，网格交易虽然不至于让你亏损，但会让你体验到什么叫<span class="hl">踏空的痛苦</span>。因为网格是涨一格卖一格，随着价格一路上扬，你手里的优质筹码会被系统无情地一点点卖光。最后价格翻倍了，你的网格早就空仓了，你只吃到了最底下的一小段利润。</p>
+
+  <h3 class="sub-title">单边下跌的恐怖：100 万资金数学演算</h3>
+  <p>假设你手里有 <strong>100 万资金</strong>，看中了某个宽基 ETF，当前净值 5.0 元。你先用 <strong>1/8 资金（12.5 万）</strong>在 5.0 元建立底仓。然后设置网格区间下限 3.2 元、间距为开单价 5%（即每 0.25 元一格）。</p>
+
+  <p>无情熊势开始：</p>
+
+  <div class="recover-table">
+    <h4>单边下跌中的网格补仓</h4>
+    <table>
+      <thead>
+        <tr><th>价格</th><th>动作</th><th>累计投入</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>5.00 元</td><td>底仓 12.5 万</td><td>12.5 万</td></tr>
+        <tr><td>4.75 元</td><td>第一网买入</td><td>25.0 万</td></tr>
+        <tr><td>4.50 元</td><td>第二网买入</td><td>37.5 万</td></tr>
+        <tr><td>4.25 元</td><td>第三网买入</td><td>50.0 万</td></tr>
+        <tr><td>4.00 元</td><td>第四网买入</td><td>62.5 万</td></tr>
+        <tr><td>3.75 元</td><td>第五网买入</td><td>75.0 万</td></tr>
+        <tr><td>3.50 元</td><td>第六网买入</td><td>87.5 万</td></tr>
+        <tr><td>3.25 元</td><td>第七网买入</td><td>100.0 万</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote class="red">
+    <strong>结果是什么？</strong>当价格跌到 3.25 元时，你的<span class="hl">100 万本金全部套牢在 -35% 的位置</span>，手里只剩一堆卖不出去的低价筹码。一旦跌破 3.20 元的区间下限，网格策略自动停止。你被死死钉在脚手架上，连割肉都得再等反弹。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-fixes">
+  <h2 class="section-title">真正能保命的改良策略</h2>
+  <p>网格交易不是不能用，而是要带<span class="hl">三道安全阀</span>：</p>
+
+  <h3 class="sub-title">安全阀一 · 总仓位上限</h3>
+  <p>网格策略的<span class="hl">整体资金投入必须小于总资金的 50%</span>。永远留下一半以上的"活命钱"。</p>
+
+  <h3 class="sub-title">安全阀二 · 区间下限止损</h3>
+  <p>必须设定一个<span class="hl">硬性止损位</span>（如区间下限 -5%）。一旦跌破，<span class="hl">无条件清仓离场</span>，不再相信"价格会回来"。</p>
+
+  <h3 class="sub-title">安全阀三 · 标的必须长期向上</h3>
+  <p>网格只适合<span class="hl">长期向上的宽基 ETF 或行业指数</span>。单只退市股、垃圾股绝不能跑网格——价格可能永远不回来。</p>
+
+  <div class="quote-banner">
+    <span class="hl">网格策略不是躺赚的印钞机</span><br>
+    而是带<span class="hl">三道安全阀</span>的精密工具<br>
+    <strong>震荡市吃利润，单边市先保命</strong><br>
+    真正的<span class="hl">高手永远把资金安全放在第一位</span>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 网格交易最大的认知误区</div>
+    <p>以为网格交易是"震荡市神器"就永远用它。<span class="hl">没有安全阀的网格等同于满仓单吊</span>——区别只在于"满仓单吊"是一次性亏到位，而网格是<span class="hl">慢慢被绞杀到无路可退</span>。<strong>千万别忘了，连香农自己都不用这个模型</strong>，他用的是集中长线持股。</p>
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>网格交易的思想源头是<span class="hl">香农的恶魔</span>：50:50 现金股票再平衡</li>
+      <li>香农本人的真实战绩：年化 28%，靠的是<span class="hl">集中长线持股</span>，不是网格</li>
+      <li>震荡市神器：价格兜兜转转回原点也能赚到钱</li>
+      <li>单边上涨：<strong>踏空</strong>，筹码被卖光</li>
+      <li>单边下跌：<span class="hl">100 万本金被绞杀到 -35% 满手烂牌</span></li>
+      <li>网格只适合<span class="hl">长期向上的宽基 ETF</span>，绝不能用于单只个股</li>
+      <li>三道安全阀：总仓位 ≤50% + 硬性止损 + 标的长期向上</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 9 · 仓位管理</p>
+</footer>
+
+</body>
