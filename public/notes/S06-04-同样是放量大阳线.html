@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>同样是放量大阳线，在底部、半山腰和高位的含义完全不同｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14.5px; }
+  th { background: var(--surface); color: var(--accent); text-align: left; padding: 12px 14px; border-bottom: 2px solid var(--accent); font-weight: 700; }
+  td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+  tr:hover td { background: var(--surface); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .misuse-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin: 24px 0; display: grid; grid-template-columns: 1fr auto 1fr; gap: 18px; align-items: stretch; }
+  .misuse-card .col { padding: 18px 20px; border-radius: 8px; }
+  .misuse-card .wrong { background: rgba(255, 107, 107, 0.08); border: 1px solid rgba(255, 107, 107, 0.3); }
+  .misuse-card .wrong h4 { color: var(--red); }
+  .misuse-card .right { background: rgba(86, 211, 100, 0.08); border: 1px solid rgba(86, 211, 100, 0.3); }
+  .misuse-card .right h4 { color: var(--green); }
+  .misuse-card .vs { align-self: center; font-size: 24px; font-weight: 800; color: var(--text-mute); }
+  .misuse-card h4 { font-size: 15px; margin-bottom: 10px; }
+  .misuse-card ul { margin: 0; padding-left: 18px; }
+  .misuse-card ul li { font-size: 14px; color: var(--text-dim); }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+    .misuse-card { grid-template-columns: 1fr; }
+    .misuse-card .vs { text-align: center; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 6</span>
+  <span class="stage-name">形态学与缺口理论</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 12 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 6 · 第 4 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">同样是放量大阳线，在底部、半山腰和高位的含义完全不同</h1>
+  <p class="note-subtitle">为什么有人追放量阳线吃到大肉，有人却接在了派发的顶峰？本期从交易所撮合机制与订单流的角度，拆开底部、半山腰、高位大阳线背后三套完全不同的博弈模型。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>放量大阳线<span class="hl">不天然代表行情要起飞</span>，它仅证明<span class="hl">买方在某个时间段以极度激进的方式消耗了上方所有的存量对手盘</span>。真正决定这根阳线含义的，是<span class="hl">它所处价格周期的位置</span>——底部 = 战略建仓、半山腰 = 主动换手、高位 = 掩护派发。<strong>不区分位置地见阳追阳，是绝大多数散户长期亏损的根源</strong>。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-microstructure">大阳线的微观本质：撮合与主动性</a></li>
+    <li><a href="#sec-bottom">位置一：底部放量大阳线 = 战略建仓</a></li>
+    <li><a href="#sec-mid">位置二：半山腰放量大阳线 = 主动换手</a></li>
+    <li><a href="#sec-top">位置三：高位放量大阳线 = 掩护派发</a></li>
+    <li><a href="#sec-compare">三位置的实战对比</a></li>
+    <li><a href="#sec-rules">识别大阳线真假的 3 条实战铁律</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-microstructure">
+  <h2 class="section-title">大阳线的微观本质：撮合与主动性</h2>
+  <p>绝大多数普通投资者，对于成交量和价格之间的关系从一开始就搞错了方向。很多人只要看到成交量柱子翻倍放大、K 线拉出一根大红柱，脑子里的第一反应就是今天有海量资金在疯狂买入。</p>
+  <blockquote class="purple">
+    <strong>但你必须冷静地反问自己一个最基础的问题</strong>：既然有人在买，那么今天到底是谁在卖？<span class="hl">在撮合系统里，买卖双方的成交在数量上永远是绝对相等的。</span>每一手买单的成交必然对应着另一端一手卖单的让度。
+  </blockquote>
+
+  <h3 class="sub-title">那为什么价格会被推升成一根实体巨大的大阳线？</h3>
+  <p>答案根本不在于买入数量有多大，而在于<span class="hl">订单的主动性属性</span>。如果全市场的人都在挂单等待，买方在买盘排队，卖方在卖盘排队，那么无论当天的撮合成交量有多么庞大，价格的波动都会被死死限制在极小的区间内。</p>
+  <p>放量大阳线的出现只证明了一件事：</p>
+  <ul>
+    <li>在今天这几个小时的交易时间里，买方阵营<span class="hl">彻底放弃了被动挂单等待的耐心</span></li>
+    <li>他们开始大规模使用<span class="hl">主动性买单</span>，甚至直接跨越多个价位</li>
+    <li>以极其急迫的姿态向盘口上方所有的被动卖单展开了<span class="hl">扫荡式进攻</span></li>
+    <li>这种主动性的向上扫盘在极短时间内吃光了原有的卖单厚度，造成局部的卖单真空，迫使撮合引擎不得不把价格推向更高的价位去寻找新的卖盘</li>
+  </ul>
+
+  <div class="quote-banner">
+    放量大阳线不天然代表行情要起飞，<br>
+    它仅证明了<span class="hl">买方的进场情绪呈现出压倒性的急迫状态</span>。<br>
+    而这种急迫情绪背后的动机千差万别——
+    可能是<span class="hl-green">底部战略布局</span>，可能是<span class="hl">上升途中主动换手</span>，<br>
+    更可能是<span class="hl-red">高位制造狂热掩护派发</span>。
+  </div>
+</section>
+
+<section class="section" id="sec-bottom">
+  <h2 class="section-title">位置一：底部放量大阳线 = 战略建仓</h2>
+  <p>在真正的市场底部，生态环境往往是极其冷清甚至令人绝望的。这种冷清不仅体现在全市场的日成交额已经连续数周甚至数月维持在地量水平，更体现在所有场内参与者的持仓心态上。</p>
+
+  <h3 class="sub-title">底部的典型特征</h3>
+  <ul>
+    <li>绝大多数普通投资者的账户都处于<span class="hl-red">大幅浮亏</span>状态</li>
+    <li>该割肉的在之前的阴跌恐慌中早就割掉了</li>
+    <li>剩下的持仓者则是彻底对盘面失去兴趣、选择关闭软件不再看盘的<span class="hl">深度套牢盘</span></li>
+    <li>场外观望资金因为缺乏明确的赚钱效应也普遍保持谨慎</li>
+    <li>整个盘口的订单簿呈现极度稀薄状态，<span class="hl">几十手的买单就能拉高几个点</span>，几百手的卖单就能砸出一个深坑</li>
+  </ul>
+
+  <h3 class="sub-title">底部大阳线的本质</h3>
+  <p>就在这种万籁俱寂、流动性几乎降到冰点的绝望时刻，盘面上突然毫无预兆地出现了一根拔地而起的放量大阳线。成交量不仅比前几天放大了三倍甚至五倍以上，而且这根阳线几乎是以近乎光头光脚的坚决姿态收盘。</p>
+  <blockquote>
+    <strong>设想一个典型情形</strong>：一只品种在经历长达半年的缩量阴跌后，日成交量萎缩到极低水平，每天换手率不足千分之三。突然有一天，它放量到平日的五倍以上，单日大涨接近 8%，收盘几乎没有上影线。<span class="hl">随后三个交易日，缩量回调，最低点仅比大阳线的开盘价略低</span>。到了第七个交易日，它再度放量突破，正式开启一轮持续数月的上涨行情。
+  </blockquote>
+  <p>这种走势结构在市场底部反复上演。背后是<span class="hl">规模资金在底部为解决流动性匮乏而发起的战略性布局</span>——他们必须用主动扫货的方式强行把价格打出空间，才能完成吸筹目标。</p>
+</section>
+
+<section class="section" id="sec-mid">
+  <h2 class="section-title">位置二：半山腰放量大阳线 = 主动换手</h2>
+  <p>在上升途中，股价已经脱离底部区域进入<span class="hl">半山腰</span>位置。这里既不是极度低估的便宜货，也不是人人疯狂的泡沫区，是典型的"中间地带"。</p>
+
+  <h3 class="sub-title">半山腰的典型特征</h3>
+  <ul>
+    <li>前期低位买入的<span class="hl">散户开始解套或微利</span>，心理极不稳定</li>
+    <li>部分短线资金获利了结意愿强烈</li>
+    <li>场外观望资金依然谨慎，不敢重仓追入</li>
+    <li>主力若想继续拉升，必须<span class="hl">清理浮动筹码、降低持仓成本</span></li>
+  </ul>
+
+  <h3 class="sub-title">半山腰大阳线的本质</h3>
+  <p>这时候出现的放量大阳线，其本质是<span class="hl">上升途中为了清洗浮躁筹码而进行的主动换手</span>。主力可能用一部分资金主动买入，但同时<span class="hl">大量早期解套筹码被换到新进场的散户手中</span>。</p>
+  <blockquote>
+    <strong>关键识别点</strong>：半山腰大阳线之后往往<span class="hl">不会出现持续加速上涨</span>，反而经常出现 2–3 天的缩量回踩。<span class="hl-red">如果你在放量当天追入，很可能被随后的小幅洗盘震荡出局，然后眼睁睁看着它再创新高</span>。
+  </blockquote>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 半山腰最容易吃两种亏</div>
+    <p><strong>第一</strong>：在放量阳线当天追进，结果被随后 2–3 天的"健康回踩"洗出。<strong>第二</strong>：在回踩时恐慌割肉，错过随后真正的主升浪。<span class="hl">正确的做法是耐心等回踩企稳，且回踩时成交量必须明显萎缩</span>。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-top">
+  <h2 class="section-title">位置三：高位放量大阳线 = 掩护派发</h2>
+  <p>这是最危险的位置，也是最容易让散户破产的位置。当股价已经被拉到高位，<span class="hl">所有人都觉得贵的时候</span>，主力面临的最大问题不是判断方向，而是<span class="hl">找不到足够的对手盘来接盘</span>。</p>
+
+  <h3 class="sub-title">主力的派发困境</h3>
+  <p>如果你直接在市场上挂单卖出 50 个亿的卖单，会像一栋轰然塌陷的大楼迅速吃光买方市场上的买单，很可能直接把股价砸到跌停板——结果就是你可能只卖出了很少一部分筹码，价格就已经被你自己砸穿了。</p>
+
+  <h3 class="sub-title">诱多派发的标准剧本</h3>
+  <ol>
+    <li>主力<span class="hl">长时间锁仓与控盘</span>，让浮动筹码收集得差不多，市场卖压降低</li>
+    <li>配合密集的利好消息：财经媒体铺天盖地渲染行业前景，社交平台晒单炫富</li>
+    <li>在关键阻力位<span class="hl">放量突破</span>，甚至直接推破过去几个月乃至几年的关键阻力位</li>
+    <li>在技术分析者眼里，<span class="hl-red">历史阻力位被放量突破 = 上方无套牢盘</span>。FOMO（害怕错过）的情绪瞬间被点燃</li>
+    <li>主力借助算法把手里的巨额筹码拆成无数笔小单，<span class="hl">悄无声息地派发给每一个涌进来的散户</span></li>
+    <li>盘面上看起来依然极其热闹，成交量急剧放大，价格似乎还在高位剧烈震荡</li>
+    <li>直到主力筹码派发完毕或市场再无足够买单时，<span class="hl">失去护盘的市场就像断线的风筝，断崖式下跌</span></li>
+  </ol>
+
+  <blockquote class="purple">
+    <strong>二次诱多与锚定效应</strong>：当主力在第一波突破中派发了相当一部分筹码后，会动用一小部分资金再次把价格拉回刚才的高点甚至微弱创出新高。原本还在犹豫的散户会立刻打消顾虑，心想"你看，刚才的回踩就是洗盘，它又涨起来了"。这种<span class="hl">把高点当成安全垫的心理锚定效应</span>，让散户不仅不会卖，反而会在小幅回调时选择逢低加仓——而他们正在主力的剧本里一步步走向高位接盘的深淵。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-compare">
+  <h2 class="section-title">三位置的实战对比</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>对比维度</th>
+        <th>底部位置</th>
+        <th>半山腰位置</th>
+        <th>高位位置</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>市场情绪</strong></td>
+        <td>绝望、冷清、无人问津</td>
+        <td>分歧、犹豫、半信半疑</td>
+        <td>狂热、自满、FOMO 蔓延</td>
+      </tr>
+      <tr>
+        <td><strong>前期量能</strong></td>
+        <td>连续地量、换手率极低</td>
+        <td>温和活跃、量价齐升</td>
+        <td>持续放量、换手率高</td>
+      </tr>
+      <tr>
+        <td><strong>阳线本质</strong></td>
+        <td><span class="hl-green">战略性建仓</span></td>
+        <td><span class="hl">主动换手清洗</span></td>
+        <td><span class="hl-red">掩护派发诱多</span></td>
+      </tr>
+      <tr>
+        <td><strong>突破位置</strong></td>
+        <td>前期关键阻力位</td>
+        <td>前期整理平台上沿</td>
+        <td>历史阻力位 / 新高</td>
+      </tr>
+      <tr>
+        <td><strong>阳线后走势</strong></td>
+        <td>缩量回踩后开启主升</td>
+        <td>缩量回踩后继续推升</td>
+        <td>高位震荡后断崖下跌</td>
+      </tr>
+      <tr>
+        <td><strong>散户应对</strong></td>
+        <td><span class="hl-green">小仓试探 + 右侧确认加仓</span></td>
+        <td><span class="hl">等回踩企稳 + 跟随趋势</span></td>
+        <td><span class="hl-red">坚决不追 + 减仓兑现</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="section" id="sec-rules">
+  <h2 class="section-title">识别大阳线真假的 3 条实战铁律</h2>
+
+  <div class="misuse-card">
+    <div class="col wrong">
+      <h4>❌ 散户的常见死法</h4>
+      <ul>
+        <li>看见大红 K 就急忙买入，分不清是启动信号还是派发陷阱</li>
+        <li>认为"放量大涨 = 主力进场"，忽略了对手盘是谁</li>
+        <li>高位追涨被套后认为是"洗盘"，结果越套越深</li>
+        <li>底部放量阳线因为害怕"又跌回去"而不敢买，错过主升</li>
+      </ul>
+    </div>
+    <div class="vs">VS</div>
+    <div class="col right">
+      <h4>✓ 3 条实战铁律</h4>
+      <ul>
+        <li><strong>先看位置</strong>：位置决定性质，永远把阳线放回价格周期中解读</li>
+        <li><strong>再看回踩</strong>：真正的启动阳线后续必有健康缩量回踩</li>
+        <li><strong>警惕 FOMO</strong>：所有人都在讨论的资产，往往是危险的信号</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="sub-title">铁律一：先看位置</h3>
+  <p>位置决定性质。同样是放量大阳线，出现在长期下跌后的地量区域 = 可能是底部启动；出现在连续拉升后的高位 = 极可能是诱多派发。<span class="hl">永远把阳线放回价格所处的真实周期位置去解读</span>。</p>
+
+  <h3 class="sub-title">铁律二：再看回踩</h3>
+  <p>真正的启动阳线后续必有健康缩量回踩，且回踩时<span class="hl">成交量必须明显萎缩</span>、不破阳线实体的下沿。如果回踩放量跌破阳线下沿，多半是诱多陷阱。</p>
+
+  <h3 class="sub-title">铁律三：警惕 FOMO</h3>
+  <p>当你发现身边连完全不懂财经的朋友都在讨论某只资产，当利好消息多到让你觉得不买就是傻子的时候，<span class="hl-red">这往往是需要高度警惕的危险信号</span>。真正的机会往往孕育在无人问津的冰点与分歧中，而致命的陷阱常常隐藏在人生巅峰的繁华里。</p>
+
+  <div class="quote-banner">
+    一根放量大阳线，本质上只记录了一件事：<br>
+    <span class="hl">买方在用极度激进的方式消耗掉上方所有的存量对手盘</span>。<br>
+    至于消耗的是<span class="hl">恐慌离场的散户</span>还是<span class="hl-red">急于退出的机构</span>，<br>
+    答案就藏在这根阳线所处的<span class="hl">真实价格周期位置</span>里。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>放量大阳线<span class="hl">不天然代表行情要起飞</span>，它仅证明买方急迫情绪</li>
+      <li>底部大阳线 = <span class="hl-green">战略性建仓</span>，半山腰 = <span class="hl">主动换手</span>，高位 = <span class="hl-red">掩护派发</span></li>
+      <li>判定位置的两个核心信号：前期是否地量、市场情绪是否狂热</li>
+      <li>诱多派发的标准剧本：锁仓 → 利好配合 → 突破关键阻力 → FOMO 接盘</li>
+      <li>二次诱多利用锚定效应，把第一次高点当作"安全垫"</li>
+      <li>识别大阳线真假的铁律：<strong>先看位置、再看回踩、警惕 FOMO</strong></li>
+      <li>不区分位置地见阳追阳，是<span class="hl-red">绝大多数散户长期亏损的根源</span></li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 6 · 形态学与缺口理论</p>
+</footer>
+
+</body>
