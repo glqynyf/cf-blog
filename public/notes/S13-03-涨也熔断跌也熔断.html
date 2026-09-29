@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>涨也熔断，跌也熔断：从极端市场中能学到什么？｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b;
+    --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .case-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--purple); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .case-card h4 { color: var(--purple); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  th { background: var(--surface-2); padding: 12px 16px; text-align: left; font-weight: 700; color: var(--accent); font-size: 14px; }
+  td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text); font-size: 14.5px; }
+  tr:last-child td { border-bottom: none; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } table { font-size: 12px; } th, td { padding: 8px 10px; } }
+</style>
+</head>
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 13</span>
+  <span class="stage-name">宏观、市场周期与极端行情</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 12 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 13 · 第 3 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">涨也熔断，跌也熔断：从极端市场中能学到什么？</h1>
+  <p class="note-subtitle">你敢想象早上账户像印钞机一样狂涨，下午却像断了线的电梯一样自由落体吗？<span class="hl-red">2026 年 2 月与 5 月</span>韩国股市真实上演了这场魔幻剧情（并非 2025 年——2025 年 KOSPI 约 3000–3500 点，8000 点级别是 2026 年才发生）。一篇看懂全球熔断历史与极端行情的教训。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>熔断机制的设计初衷是<span class="hl">当市场极度恐慌时强行按下暂停键</span>，让失去理智的人们喝口水冷静一下。但<span class="hl-red">高杠杆是普通投资者最难驾驭的工具</span>。当熔断发生时，你卖不出去、补不了保证金，等熔断结束的瞬间，迎来的就是券商机器自动触发的强制平仓——这是<span class="hl">把"暂停"变成"加速"的双刃剑</span>。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-origin">熔断机制的诞生：1987 黑色星期一</a></li>
+    <li><a href="#sec-us">美股熔断的 3 档结构与历史触发记录</a></li>
+    <li><a href="#sec-cn">A 股熔断 2016：4 天 4 次触发后被叫停</a></li>
+    <li><a href="#sec-kr">2026 韩国股市的"涨也熔断、跌也熔断"</a></li>
+    <li><a href="#sec-lesson">从极端市场中学到的 5 条铁律</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-origin">
+  <h2 class="section-title">熔断机制的诞生：1987 黑色星期一</h2>
+
+  <p>熔断机制（<span class="hl">Circuit Breaker</span>）的发明要追溯到金融史上最著名的震荡之一——1987 年的"黑色星期一"。</p>
+
+  <p>1987 年 10 月 19 日，经历了长达 5 年大牛市的美股开盘后因宏观利空开始下跌。当时华尔街刚刚兴起的<span class="hl">程序化交易</span>——电脑被设定好"只要股票跌到某个价格就自动卖出止损"。结果形成了一个<span class="hl-red">完美的向下螺旋</span>：</p>
+
+  <ol>
+    <li>第一批电脑的自动卖出指令被触发</li>
+    <li>抛售导致股价下跌</li>
+    <li>股价下跌触发下一批电脑的卖出</li>
+    <li>循环加速</li>
+  </ol>
+
+  <div class="case-card">
+    <h4>1987.10.19 黑色星期一</h4>
+    <p><span class="hl-red">道琼斯工业平均指数单日狂泻 508 点</span>，跌幅高达惊人的 <strong>22.6%</strong>——相当于一天之内美国股市市值蒸发约 <strong>5000 亿美元</strong>，约占当时美国全年 GDP 的 10%。无数百万富翁在几个小时内财富缩水严重。</p>
+  </div>
+
+  <p>痛定思痛，美国证券交易委员会（SEC）调查后认为，如果当时能有一个机制在市场极度恐慌时<span class="hl">强行按一下暂停键</span>，让那些疯狂抛售的电脑停下来，让失去理智的人们冷静一下，后果也许不会这么严重。</p>
+
+  <p>1988 年 10 月 SEC 正式批准熔断机制，<span class="hl">1989 年开始实施</span>。它的初衷非常美好——就像家里的保险丝，电流太大快起火时"啪"地断开，<strong>牺牲几分钟的交易时间保全整个金融系统的安全</strong>。</p>
+</section>
+
+<section class="section" id="sec-us">
+  <h2 class="section-title">美股熔断的 3 档结构与历史触发记录</h2>
+
+  <h3 class="sub-title">当前美股熔断的三档结构</h3>
+  <p>（2013 年从原道琼斯基准改为标普 500 基准）</p>
+
+  <table>
+    <thead>
+      <tr><th>档位</th><th>标普 500 跌幅</th><th>触发后措施</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>一级熔断</td><td>下跌 7%</td><td><span class="hl">暂停交易 15 分钟</span></td></tr>
+      <tr><td>二级熔断</td><td>下跌 13%</td><td>再暂停 15 分钟</td></tr>
+      <tr><td>三级熔断</td><td>下跌 20%</td><td><span class="hl-red">当天直接休市</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-title">熔断实施后 30 多年的历史触发</h3>
+  <p>熔断机制诞生后在长达 30 多年的时间里，美股仅在 <strong>1997 年 10 月 27 日</strong> 触发过一次——当天因亚洲金融危机蔓延道指暴跌 7.18%，触发当时的熔断规则。以至于很多年轻交易员根本不知道熔断长什么样。</p>
+
+  <p>直到 <span class="hl-red">2020 年的春天</span>，屏幕前的朋友如果你在 2020 年已经开始关注股市，请回忆那段让人心跳加速的日子——</p>
+
+  <div class="case-card">
+    <h4>2020.3 美股 4 次熔断</h4>
+    <p>2020 年 3 月，全球突发公共卫生事件。9 天内美股连续 4 次触发熔断：</p>
+    <ul>
+      <li>3 月 9 日：<span class="hl-red">-7%</span>，标普 500 跌停，史上第二次熔断</li>
+      <li>3 月 12 日：-10%，开盘仅 5 分钟触发</li>
+      <li>3 月 16 日：开盘即熔断</li>
+      <li>3 月 18 日：盘中再触 -7%</li>
+    </ul>
+    <p>一个月内熔断 4 次，<strong>频率超过了此前 30 年总和的 4 倍</strong>。巴菲特 89 岁才见过一次熔断，10 天内见了 4 次。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-cn">
+  <h2 class="section-title">A 股熔断 2016：4 天 4 次触发后被叫停</h2>
+
+  <div class="case-card">
+    <h4>A 股熔断 4 天实验</h4>
+    <p>2016 年 1 月 4 日，A 股正式实施熔断机制。上午正常交易约 2 小时，<strong>13:07</strong> 触发 5% 一级熔断，暂停 15 分钟；<strong>13:22 复牌后继续跳水，13:28 再次触发 7% 二级熔断，按规则停止交易至当日收盘</strong>（7% 二级熔断不是"再暂停 15 分钟"）。全天实际交易约 <span class="hl-red">2 小时 19 分钟</span>，并非"全天交易仅 15 分钟"。1 月 7 日 <strong>09:45 触发 5% 一级熔断、10:13 触发 7% 二级熔断</strong>。四个熔断日（1-4、1-7）合计触发 <span class="hl">4 次熔断</span>，与标题"4 天 4 次"一致。</p>
+    <p><span class="hl-red">仅仅 4 个交易日，熔断 4 次</span>。熔断不仅没有稳定市场，反而<span class="hl">制造了"磁吸效应"</span>——投资者看到指数逼近熔断线，反而<span class="hl">加速抛售以避免第二天更大的损失</strong>，导致熔断在预期内提前发生。</p>
+    <p>最终<span class="hl-red">熔断机制仅实施 4 天就被紧急暂停</span>，成为 A 股最短命的政策实验之一。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-kr">
+  <h2 class="section-title">2026 韩国股市的"涨也熔断、跌也熔断"</h2>
+
+  <p>2026 年 2 月与 5 月，韩国股市真实上演了这场魔幻剧情。两个标志性事件：</p>
+  <ul>
+    <li><strong>2026-02-19</strong>：KOSPI 首次突破 5600 点，KOSDAQ 触发<span class="hl">买入 Sidecar</span>（暂停程序化买盘 5 分钟）</li>
+    <li><strong>2026-05-15</strong>：KOSPI 首次突破 8000 点后闪崩，触发<span class="hl">卖出 Sidecar</span>（暂停程序化卖盘 5 分钟）</li>
+  </ul>
+
+  <p>2026 年 5 月中旬，AI 与 HBM 利好彻底爆发，韩国股市迎来前所未有的狂欢。两大护国神山三星电子、SK 海力士接到海外巨头超级大单，散户彻底沸腾。</p>
+
+  <h3 class="sub-title">两套机制的差异（先弄清楚）</h3>
+  <p>韩国熔断体系有两个独立机制，<span class="hl-red">笔记之前把两者混在一起叙述，现修正如下</span>：</p>
+  <ul>
+    <li><span class="hl">Sidecar（사이드카）</span>：KOSPI200 期货较参考价涨跌 ≥5% 且持续 1 分钟 → <b>仅暂停程序化买/卖单 5 分钟</b>（不影响人工单）</li>
+    <li><span class="hl">Circuit Breaker（熔断）</span>：8% / 15% / 20% 三级阈值 → <b>停牌 20 分钟</b></li>
+  </ul>
+
+  <h3 class="sub-title">2026-02-19 · KOSDAQ 触发买入 Sidecar</h3>
+  <p>KOSPI 首次突破 5600 点。KOSDAQ 开盘后持续上攻，<span class="hl">触发买入 Sidecar</span>——只<span class="hl-red">暂停程序化买单 5 分钟</span>，人工单照常交易，市场并未"全市场熔断"。</p>
+
+  <h3 class="sub-title">2026-05-15 · KOSPI 破 8000 后闪崩</h3>
+  <p>KOSPI 首次突破 8000 点后急速回落，<span class="hl">触发卖出 Sidecar</span>——同样只是<span class="hl-red">暂停程序化卖单 5 分钟</span>。社交网络上确实充满晒收益的帖子，但并非全市场"熔断"。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 关于视频口播中的具体日期</div>
+    <p>视频口播所引用的"5 月 18 日向上熔断 / 6 月 3 日向下熔断 / 6 月 5 日连环踩踏"等具体日期、点位，<span class="hl-red">无法在公开报道中精确对应</span>。可查到的真实事件为 2026-02-19 与 2026-05-15 两次 Sidecar 触发；如果读者希望看到"KOSPI 8%/15%/20% 三级全市场熔断"，需要查证 KRX 2026 年 5-6 月的具体公告。</p>
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 熔断时的散户绝境</div>
+    <p>这被按下的几十分钟里，韩国无数加了杠杆的散户感受到的是<span class="hl-red">真正的窒息</span>：</p>
+    <ul>
+      <li>想卖出止损 → <strong>系统锁死卖不出去</strong></li>
+      <li>想追加保证金 → <strong>网线拔了钱冲不进去</strong></li>
+      <li>等熔断时间一过 → <span class="hl">券商机器自动触发强制平仓</span></li>
+    </ul>
+    <p>这就是<span class="hl-red">"熔断变加速"</span>的双刃剑——本想暂停冷却，反而让散户在恐慌中被自动收割。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-lesson">
+  <h2 class="section-title">从极端市场中学到的 5 条铁律</h2>
+
+  <h3 class="sub-title">铁律一 · 永远不要在极端行情中使用高杠杆</h3>
+  <p>杠杆在牛市是放大器，<span class="hl-red">在熊市和熔断时是绞肉机</span>。当市场熔断时，你的止损单根本卖不出去，强平自动触发往往就在一瞬间。</p>
+
+  <h3 class="sub-title">铁律二 · 警惕"磁吸效应"</h3>
+  <p>熔断机制存在一个被反复验证的现象：<strong>指数越逼近熔断线，越容易触发熔断</strong>。因为投资者为了避免更大损失，反而加速抛售，导致熔断提前发生。</p>
+
+  <h3 class="sub-title">铁律三 · 流动性是命</h3>
+  <p>极端行情最致命的不是跌幅本身，而是<span class="hl">流动性的瞬间枯竭</span>。无论你多看好一只股票，<strong>一旦失去流动性，再好的票也是废纸</strong>。平时就要分散持仓，避免在极端行情中被单一品种卡住。</p>
+
+  <h3 class="sub-title">铁律四 · 群体狂热是反向信号</h3>
+  <p>韩国案例中，<span class="hl">当连菜市场大妈都在推荐股票、社交网络全是晒收益的帖子时，往往就是顶部</span>。狂热的极致就是拐点。</p>
+
+  <h3 class="sub-title">铁律五 · 熔断是保护机制，不是印钞机</h3>
+  <p>熔断机制本身是"金融系统的保险丝"，但<span class="hl-red">散户无法仅靠熔断保护自己</span>。只有仓位管理、止损纪律、杠杆控制才能让你穿越极端行情。</p>
+
+  <div class="quote-banner">
+    熔断是金融系统的<span class="hl">保险丝</span>，<br>
+    但散户需要的是<span class="hl">仓位管理 + 杠杆控制 + 群体情绪的反向判断</span>。<br>
+    没有这些，熔断只会让你死得更彻底。
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>熔断机制诞生于 <strong>1987 黑色星期一</strong>（道指单日 -22.6%），1988 年正式批准</li>
+      <li>美股熔断三档结构：<strong>-7% / -13% / -20%</strong>，2013 年改为标普 500 基准</li>
+      <li>2020 年 3 月美股 <span class="hl-red">9 天内 4 次熔断</span>，频率超过此前 30 年总和</li>
+      <li>A 股熔断仅实施 <span class="hl-red">4 天</span>就因"磁吸效应"被紧急暂停</li>
+      <li>2025 年韩国股市<span class="hl">涨也熔断、跌也熔断</span>，杠杆散户在熔断期间被强制平仓</li>
+      <li>极端行情铁律：<strong>不碰杠杆 / 警惕磁吸 / 守住流动性 / 群体狂热即顶</strong></li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 13 · 宏观、市场周期与极端行情</p>
+</footer>
+
+</body>
+</html>
