@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>股市中 1 万做到 100 万有多难？普通人必须跨过的 7 道投资关｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4;
+    --text-mute: #6b7785; --accent: #f0883e;
+    --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff;
+    --yellow: #e3b341; --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 34px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  .hl-purple { color: var(--purple); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.red { border-left-color: var(--red); }
+  blockquote.red strong { color: var(--red); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  .number-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 20px 0; }
+  .number-cell { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 18px 22px; text-align: center; }
+  .number-cell .num { font-size: 30px; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 8px; }
+  .number-cell .label { font-size: 12.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  table th, table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14.5px; color: var(--text); }
+  table th { background: var(--surface-2); color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 12.5px; }
+  table tr:last-child td { border-bottom: none; }
+  table td:first-child { font-weight: 600; color: var(--accent); }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } .number-grid { grid-template-columns: 1fr; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 0</span>
+  <span class="stage-name">认知重塑（破除散户思维，先破后立）</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 13 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 0 · 第 5 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">股市中 1 万做到 100 万有多难？普通人必须跨过的 7 道投资关</h1>
+  <p class="note-subtitle">从 1 万到 100 万，年化"只要"<span class="hl-red"> 20%</span>，巴菲特也要花 <strong>25 年</strong>（<code>1.20<sup>25</sup> ≈ 95.4 倍</code>，与 100 倍非常接近）。你与 100 倍收益之间的真正距离，<span class="hl">不是仓位和勇气，而是这 7 道关卡</span>。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>1 万做到 100 万是 <strong>100 倍</strong>。把它放到时间轴上：<span class="hl">10 年需要年化 58%</span>，20 年需要 26%，30 年也需要 16%——而这个数字本身就是巴菲特级。真正难的是横在你和 100 倍之间的 <strong>7 道关</strong>：认知、幸存者偏差、人性、风险、成本、能力圈、时间。<span class="hl-red">绝大多数人一辈子都没真正跨过其中 3 道</span>。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-math">第一关 · 认知关：100 倍的数学真相</a></li>
+    <li><a href="#sec-survivor">第二关 · 幸存者偏差关：朋友圈晒出的成功背后</a></li>
+    <li><a href="#sec-human">第三关 · 人性关：赚了想跑、亏了想扛</a></li>
+    <li><a href="#sec-risk">第四关 · 风险关：亏损的非对称性</a></li>
+    <li><a href="#sec-cost">第五关 · 成本关：你看不见的资金裂缝</a></li>
+    <li><a href="#sec-circle">第六关 · 能力圈关：你到底知不知道买的是什么</a></li>
+    <li><a href="#sec-time">第七关 · 时间关：慢慢变富的反人性</a></li>
+    <li><a href="#sec-summary">七关总览：你能过几关？</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-math">
+  <h2 class="section-title">第一关 · 认知关：100 倍的数学真相</h2>
+  <p>很多人对 100 倍是没有概念的。他们脑子想的是：今天买、明天涨停、后天再涨停，涨几次不就翻倍了？拼起来好像不难。但放到时间轴上，你就笑不出来了。</p>
+
+  <table>
+    <thead><tr><th>目标期限</th><th>所需年化收益率</th><th>现实参照</th></tr></thead>
+    <tbody>
+      <tr><td>10 年做到</td><td>58% / 年</td><td>几乎不可能</td></tr>
+      <tr><td>20 年做到</td><td>26% / 年</td><td>顶尖专业选手水平</td></tr>
+      <tr><td>30 年做到</td><td>16% / 年</td><td>≈ 巴菲特级别</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-title">七二法则：方便你估算的小工具</h3>
+  <blockquote>
+    <strong>72 ÷ 年化收益率 = 本金翻倍所需年数</strong><br><br>
+    年化 10% → 约 7.2 年翻倍；100 万相对 1 万约翻了近 7 倍——按 10% 年化推算，你需要 <span class="hl-red">约 50 年才能从 1 万到 100 万</span>。想要 25 年做到，等于要求稳定年化 <strong>约 20%</strong>（100 的 25 次方根 ≈ 20%）。
+  </blockquote>
+
+  <p>这一关卡住的人恰恰不是能力不够的人，而是<span class="hl-red">预期错了的人</span>。预期错了动作就全变形——会去追最热的题材、最高的杠杆、最看不懂的东西。最后不是在做 100 倍，而是在赌一把梭哈。</p>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 第一关的核心</div>
+    <p>接受<span class="hl">财富的增长是一场需要用"年"作单位的慢跑</span>，而不是一局几天见分晓的百米冲刺。想明白这一点，你才有资格谈后面的关。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-survivor">
+  <h2 class="section-title">第二关 · 幸存者偏差关</h2>
+  <p>这一关特别隐蔽，因为它骗的不是你的钱，是你的<span class="hl">判断力</span>。</p>
+  <p>你身边总能听到"某人靠一支股票赚了多少"，手机里刷到的都是几年几万变几百万的暴富故事。<span class="hl">听多了心里就会出现一个声音："别人能做到凭什么我不行？"</span></p>
+
+  <blockquote class="red">
+    <strong>问题就出在这里</strong>：你看到的永远是那些<strong>成功了</strong>然后愿意开口讲的人。<br>
+    同样满仓、同样重仓、结果亏得血本无归的人，他们不说话。<span class="hl-red">亏钱的人是不会到处宣传自己亏了多少的</span>，他们默默把账户注销、默默回去上班。
+  </blockquote>
+
+  <p>这就像你只看到朋友圈里晒中奖的人，却永远看不到那千千万万个买了彩票什么都没中、连朋友圈都懒得发的人。<span class="hl">中奖的人被你反复看到，你就产生了"中奖很容易"的错觉</span>。</p>
+
+  <h3 class="sub-title">真正的事实是什么？</h3>
+  <p>那个赚 100 倍的人可能真的存在，但你没看到的是——他背后可能踩中了千载难逢的行业风口，可能扛过了中途 70% 的回撤都没走，也可能就是单纯运气好。<span class="hl">你把一个包含了运气、时机、天赋和极端坚持的复合结果当成可以复制的模板</span>，然后拿真金白银去照抄，这一抄就把人抄进去了。</p>
+
+  <div class="quote-banner">
+    跨过这一关靠的是一种<span class="hl">冷静</span>。<br>
+    当你听到任何暴富故事时，习惯性地问一句：<br>
+    <span class="hl">"那些用同样方法失败的人现在在哪儿？"</span><br>
+    把这句话装进脑子里，你就能挡掉市场上一大半忽悠你的东西。
+  </div>
+</section>
+
+<section class="section" id="sec-human">
+  <h2 class="section-title">第三关 · 人性关</h2>
+  <p>诚实问你一个问题：你有没有拿着股票涨了一点点就赶紧卖了、生怕它跌回去；可它一跌，你反而死死拿着安慰自己"没事只是暂时的"？</p>
+
+  <h3 class="sub-title">痛感的不对称</h3>
+  <blockquote>
+    <strong>亏 100 块的痛苦大约是赚 100 块快乐的两倍多</strong>——这就是心理学最经典的发现。亏损的痛感远比赚钱的爽要强烈得多，<span class="hl">这直接决定了普通人在市场里的动作节奏</span>。
+  </blockquote>
+
+  <h3 class="sub-title">两个笨办法</h3>
+  <p>跨过人性关没有别的捷径，只有两个笨办法：</p>
+  <ol>
+    <li><span class="hl">提前定好规则</span>：什么时候买、什么时候卖、最多亏多少就走，白纸黑字写下来，到点就按规则来，别让当下情绪替你做决定</li>
+    <li><span class="hl">把仓位放到你晚上能睡着觉的水平</span>：你之所以拿不住、恐慌，很多时候是因为仓位重到情绪无法承受</li>
+  </ol>
+
+  <p>前一关你靠学习、靠算账就能想明白；<span class="hl-red">但人性这一关，光想明白没用</span>，你得在真金白银的煎熬里一遍遍和本能对抗。</p>
+</section>
+
+<section class="section" id="sec-risk">
+  <h2 class="section-title">第四关 · 风险关：亏损的非对称性</h2>
+  <p>为什么在市场里活下来比赚快钱重要一百倍？来看一组数字：</p>
+
+  <table>
+    <thead><tr><th>亏损幅度</th><th>回本所需涨幅</th></tr></thead>
+    <tbody>
+      <tr><td>-10%</td><td>+11%</td></tr>
+      <tr><td>-20%</td><td>+25%</td></tr>
+      <tr><td>-30%</td><td>+43%</td></tr>
+      <tr><td>-50%</td><td>+100%（翻倍）</td></tr>
+      <tr><td>-70%</td><td>+233%</td></tr>
+      <tr><td>-90%</td><td>+900%（十倍）</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 亏与赚不是一回事</div>
+    <p>你往下掉的时候是<strong>坐电梯</strong>，想爬回来的时候是<strong>爬楼梯</strong>，而且亏得越多楼梯越陡。真正的高手，成天想的不是"这把能赚多少"，而是"这把最多能亏多少"。<span class="hl">只要没被打到出局，你就还有下一次机会；可一旦被一次大亏踢出游戏，再有本事也很难从深坑里爬出来。</span></p>
+  </div>
+
+  <blockquote>
+    永远不要让<strong>任何一次单独的失败</strong>大到足以把你踢出这场游戏。<br>散一点、别满仓一个标的、别上你还不了的杠杆，<span class="hl">给自己永远留一条能活下去、能再来的退路</span>。<br>慢一点没关系，<span class="hl-red">别停，更别死</span>。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-cost">
+  <h2 class="section-title">第五关 · 成本关：你看不见的资金裂缝</h2>
+  <p>你可能觉得"我买卖股票手续费就那么一点点，能有多大影响"。换个说法你就懂了——</p>
+  <p>假设你是特别勤快的人，一天到晚盯盘，今天买明天卖，一年下来交易几百次。<span class="hl">每一次买卖都要付出成本</span>：佣金也好、印花税也好，单看一次确实不多（零点几个百分点），但<strong>你架不住次数多</strong>。</p>
+
+  <blockquote>
+    这些成本像一个水龙头上你看不见的小裂缝，<span class="hl-red">你的收益顺着这道缝一天一天漏出去</span>。这里有个反直觉的真相——<strong>在市场里，勤快往往不是优点，反而是缺点</strong>。
+  </blockquote>
+
+  <p>大量观察都指向同一个方向：交易越频繁的账户长期下来收益往往越差。因为<span class="hl">每多一次操作，不光多交一次成本，还多给自己一次被情绪带跑做出错误决定的机会</span>。</p>
+
+  <blockquote>
+    把它想象成一锅正在煮的汤。你要是相信火候，就让它安安静静炖。可有些人忍不住，每隔五分钟就揭一次锅盖、东两下再撒点别的进去——<span class="hl">你越折腾，锅里的汤越煮不好</span>。<br><br>
+    <strong>少即是多。</strong>投资这件事上这句话是真理。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-circle">
+  <h2 class="section-title">第六关 · 能力圈关</h2>
+  <p>这一关决定了你的每一次出手是有底气还是在瞎猜。说人话就是——<span class="hl">你到底知不知道自己买的是什么？</span></p>
+
+  <h3 class="sub-title">三句话自我检测</h3>
+  <ul>
+    <li>这家公司是靠什么赚钱的？</li>
+    <li>它赚的是谁的钱？</li>
+    <li>它凭什么以后还能继续赚？</li>
+  </ul>
+
+  <p>大多数人答不上来。普通人买东西的理由无非几种：听人说的、看最近涨得猛的、群里在聊的、某个消息刺激的。<span class="hl-red">他买的不是这个东西本身，他买的是一个自己都没搞懂的符号</span>、一串代码、别人画的饼。</p>
+
+  <blockquote>
+    真正能长期赚钱的人有个共同点：<span class="hl">他们只在自己看得懂的范围内做事</span>。圈里的东西，你越熟悉，跌了你也不慌，因为你知道它的价值还在；圈外的东西，不管涨得多凶、故事讲得多动听，<span class="hl">你都不碰</span>。
+  </blockquote>
+
+  <p>能力圈这一关考验的是<span class="hl-red">一种诚实</span>——对自己诚实。承认自己不懂不丢人，真正丢人的是明明不懂却装懂，还把身家性命压上去。</p>
+</section>
+
+<section class="section" id="sec-time">
+  <h2 class="section-title">第七关 · 时间关</h2>
+  <p>前面六关你全过了，还差最魔人的一关：<span class="hl">时间关</span>。</p>
+
+  <div class="quote-banner">
+    复利这个东西，<br>
+    他最好的朋友是<span class="hl">时间</span>，<br>
+    他最大的敌人是你的<span class="hl-red">不耐烦</span>。
+  </div>
+
+  <p>复利有多神奇——他前期慢得让你怀疑人生。你辛辛苦苦滚了好几年，账户看起来也没多大变化。你会觉得这也太慢了，值得吗？<span class="hl-red">这个阶段劝退了 99% 的人</span>。</p>
+  <p>但只要熬过那个漫长的、平淡的、看不到希望的前半段，后半段增长会突然变得非常抖峭——像滚雪球一样越滚越大、越滚越快。</p>
+
+  <h3 class="sub-title">大部分人永远等不到雪球变大</h3>
+  <p>他们在雪球还很小、还在缓慢滚动的时候就已经失去耐心，一脚把它踢散了。换了一个又一个所谓"更快的方法"，追了一个又一个更热的风口，结果哪个都没坚持下来，到头来两手空空。</p>
+
+  <blockquote>
+    你有没有过这种经历：办了健身卡去了三次就再也没去；下定决心减肥坚持一周就放弃；想学门手艺买了一堆课看了两节就吃灰。<br><br>
+    人天生就是<strong>急性子</strong>，天生就喜欢立刻见效的东西。而投资偏偏是必须先熬过漫长的沉默期才能等到回报的东西。<br><br>
+    所以<span class="hl">时间关跨的不是别的，跨的是你这人的定力</span>——能不能在长达数年甚至十几年的时间里，不被外面那些一夜暴富的噪音干扰，守着一个正确的方向慢慢走。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-summary">
+  <h2 class="section-title">七关总览：你能过几关？</h2>
+
+  <table>
+    <thead><tr><th>关卡</th><th>核心命题</th><th>考验的能力</th></tr></thead>
+    <tbody>
+      <tr><td>第一关 · 认知关</td><td>接受财富是 25 年的慢跑（年化 20%）</td><td>数学 / 预期校准</td></tr>
+      <tr><td>第二关 · 幸存者偏差</td><td>不轻信暴富故事</td><td>冷静 / 独立判断</td></tr>
+      <tr><td>第三关 · 人性关</td><td>赚不疯、亏不扛</td><td>情绪管理</td></tr>
+      <tr><td>第四关 · 风险关</td><td>永远不被一次性踢出游戏</td><td>仓位 / 风险管理</td></tr>
+      <tr><td>第五关 · 成本关</td><td>管住手，少出手</td><td>纪律 / 减法思维</td></tr>
+      <tr><td>第六关 · 能力圈</td><td>只做自己懂的事</td><td>诚实 / 边界感</td></tr>
+      <tr><td>第七关 · 时间关</td><td>熬到复利兑现</td><td>定力 / 长期主义</td></tr>
+    </tbody>
+  </table>
+
+  <p>数一数这 7 关，你<strong>现在能过几关？</strong></p>
+
+  <div class="quote-banner">
+    对于绝大多数普通人来说，<br>
+    把 1 万稳稳做到 100 万确实是<span class="hl">小概率事件</span>。<br><br>
+    但你只要认真跨过其中<span class="hl">哪怕两三关</span>，<br>
+    你就已经超越了市场上 <span class="hl">80%、90% 的人</span>。<br><br>
+    你可能做不到 100 倍，<br>
+    但你完全有可能<span class="hl">让自己不再当那个总被割的韭菜</span>，<br>
+    让账户踏踏实实慢慢增值。
+  </div>
+
+  <blockquote class="red">
+    <strong>巴菲特说</strong>：<em>"普通人最难接受的一件事，就是慢慢变富。"</em><br><br>
+    所有人都急于一夜暴富，却忽略了<span class="hl">复利才是财富增长真正的底层力量</span>。<br>
+    耐得住市场漫长周期、守好仓位与本金，<span class="hl-red">时间自会兑现复利的威力</span>。
+  </blockquote>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>10 年翻 100 倍需要年化 <strong>58%</strong>；20 年需要 26%；30 年需要 16%（巴菲特级）</li>
+      <li>幸存者偏差：你看到的"成功者"是<strong>被筛选过</strong>的样本，多数失败者沉默</li>
+      <li>人性关的痛感不对称：亏 100 的痛苦 ≈ 赚 100 快乐的 <strong>2 倍多</strong></li>
+      <li>风险关铁律：亏 50% 要涨 100% 才能回本；亏 90% 要涨 900%</li>
+      <li>成本关：每一次操作都有"液态成本"——勤快往往是缺点</li>
+      <li>能力圈关：<strong>承认自己不懂比装懂重要一万倍</strong></li>
+      <li>时间关：<strong>耐心是普通人最难修炼也是最重要的品质</strong></li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 0 · 认知重塑</p>
+</footer>
+
+</body>
+
