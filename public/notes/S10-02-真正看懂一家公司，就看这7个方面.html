@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>真正看懂一家公司，就看这7个方面：散户的认知必修课｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f; --border: #2a3744;
+    --text: #e6edf3; --text-dim: #9aa7b4; --text-mute: #6b7785;
+    --accent: #f0883e; --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff; --yellow: #e3b341;
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+  .stage-bar .stage-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 700; letter-spacing: 1px; font-size: 12px; }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; font-size: 13px; color: var(--text-mute); flex-wrap: wrap; }
+  .meta-bar .tag { padding: 4px 10px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow); }
+  .summary-card h3 { font-size: 14px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h4 { font-size: 13px; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 14.5px; display: flex; align-items: baseline; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before { content: counter(toc-counter, decimal-leading-zero); color: var(--accent); font-weight: 700; margin-right: 12px; font-variant-numeric: tabular-nums; min-width: 28px; }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title { font-size: 26px; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); display: inline-block; letter-spacing: -0.3px; }
+  h3.sub-title { font-size: 19px; font-weight: 600; margin: 28px 0 14px; color: var(--text); display: flex; align-items: center; }
+  h3.sub-title::before { content: ""; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; margin-right: 12px; }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote { margin: 20px 0; padding: 16px 22px; background: var(--surface); border-left: 4px solid var(--blue); border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px; }
+  blockquote strong { color: var(--blue); }
+  blockquote.purple { border-left-color: var(--purple); }
+  blockquote.purple strong { color: var(--purple); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14.5px; background: var(--surface); border-radius: 8px; overflow: hidden; }
+  th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { background: var(--surface-2); color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; }
+  td { color: var(--text); }
+  tr:last-child td { border-bottom: none; }
+  .key-points { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 26px; margin: 24px 0; }
+  .key-points h4 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700; }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li { padding: 8px 0 8px 30px; position: relative; color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border); }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 800; font-size: 18px; }
+  .warning-card { background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08)); border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red); border-radius: 8px; padding: 18px 22px; margin: 20px 0; }
+  .warning-card .label { color: var(--red); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 32px; margin: 32px 0; text-align: center; font-size: 19px; font-weight: 600; color: var(--accent); line-height: 1.6; box-shadow: var(--shadow); }
+  .quote-banner::before { content: """; display: block; font-size: 48px; line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5; }
+  footer.note-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 13.5px; text-align: center; }
+  @media (max-width: 640px) { body { padding: 28px 18px 64px; } h1.note-title { font-size: 26px; } h2.section-title { font-size: 22px; } table { font-size: 13px; } th, td { padding: 10px 12px; } }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 10</span>
+  <span class="stage-name">选股框架与基本面分析</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 14 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 10 · 第 2 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">真正看懂一家公司，就看这 7 个方面：散户的认知必修课</h1>
+  <p class="note-subtitle">持股拿不稳的根源不是股价波动，而是你根本说不清这家公司靠什么赚钱。一套完整 7 维企业分析框架：从赛道到管理层，一次性把"看公司"这件事讲透。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>看公司不是看财报数字，而是看<span class="hl">数字背后那家活生生的生意</span>。用一句话能说清"这家公司靠什么赚钱"是最低门槛；用 7 个维度（<span class="hl">赛道 / 商业模式 / 护城河 / 财务质量 / 估值 / 管理层 / 周期位置</span>）去拆解一家公司，才是真正把"持仓底气"建立起来。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-1">维度一 · 赛道：先抬头看天，再低头看路</a></li>
+    <li><a href="#sec-2">维度二 · 商业模式：怎么把钱装进自己兜里</a></li>
+    <li><a href="#sec-3">维度三 · 护城河：最核心的"防御工事"</a></li>
+    <li><a href="#sec-4">维度四 · 财务质量：四个必须盯死的指标</a></li>
+    <li><a href="#sec-5">维度五 · 估值：用"贵不贵"决定下注节奏</a></li>
+    <li><a href="#sec-6">维度六 · 管理层：人是最大的变量</a></li>
+    <li><a href="#sec-7">维度七 · 周期位置：在对的时间点上车</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-1">
+  <h2 class="section-title">维度一 · 赛道：先抬头看天，再低头看路</h2>
+
+  <p>很多人一上来就死死盯着一家公司看，其实<span class="hl-red">顺序就错了</span>。你应该先抬头看天（赛道），再低头看路（公司）。一家公司哪怕再优秀，可如果身处的行业正在不断萎缩，也很难有大的作为。</p>
+
+  <p>看赛道要问自己三个深度问题：</p>
+  <ul>
+    <li><strong>天花板在哪？</strong>五年后十年后，市场总规模是翻倍变大，还是萎缩变小？</li>
+    <li><strong>商业逻辑变了没？</strong>会不会哪天就被一项跨界的新技术彻底颠覆？数码相机普及时，胶卷行业做得再好也没用。</li>
+    <li><strong>处于生命周期的什么阶段？</strong>是野蛮生长期、还是已经进入向龙头集中的成熟期？</li>
+  </ul>
+
+  <blockquote class="purple">
+    <strong>一句话记住：</strong>一家公司的表现 = 自身努力 × 行业周期。<br>
+    在周期顶点，所有公司报表都美得冒泡；恰恰是那个时候你要多留心眼——这种好日子是不是透支了未来？而在周期谷底业绩难看时，往往才是高手开始默默布局优质企业的时候。
+  </blockquote>
+
+  <p><span class="hl">选对了赛道，你其实已经赢了一半。</span></p>
+</section>
+
+<section class="section" id="sec-2">
+  <h2 class="section-title">维度二 · 商业模式：怎么把钱装进自己兜里</h2>
+
+  <p>说白了就是看这家公司到底是怎么把钱从别人兜里合理合法地装进自己兜里的。最直观的判断工具是<strong>毛利率</strong>。</p>
+
+  <table>
+    <thead>
+      <tr><th>生意类型</th><th>代表行业</th><th>毛利率</th><th>赚钱姿势</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>跪着赚钱</td><td>传统代工制造</td><td>3% – 8%</td><td>100 块营收扣完料、工、折旧只剩几块</td></tr>
+      <tr><td>坐着赚钱</td><td>品牌消费品 / 软件 SaaS</td><td>40% – 60%</td><td>有品牌溢价或网络效应</td></tr>
+      <tr><td>躺着赚钱</td><td>顶级白酒 / 云服务 / 平台</td><td>80% – 90%</td><td>卖一块钱的东西成本才一毛钱</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 毛利率高 ≠ 一定能赚大钱</div>
+    <p>如果一家公司毛利率有 90%，可为了把东西卖出去，光是广告费、流量、渠道提成就花掉了总营收的 80%，那它其实是在给媒体和广告商打工。你必须接着看<strong>费用率</strong>。</p>
+  </div>
+
+  <p>还有一个关键概念叫<strong>经营杠杆</strong>：固定成本高的公司，一旦销量跨过盈亏平衡点，后面每多卖一件产品，增加的几乎全是纯利润。这类公司的盈利增长空间会非常可观。我们真正要找的，是<strong>毛利高、费用率又低、经营杠杆健康</strong>的生意。</p>
+</section>
+
+<section class="section" id="sec-3">
+  <h2 class="section-title">维度三 · 护城河：最核心的"防御工事"</h2>
+
+  <p>假如明天隔壁冒出一个财大气粗的竞争者，这家公司扛得住吗？很多散户以为技术领先就是护城河，<span class="hl-red">其实恰恰相反——单纯的技术领先往往是最不稳固的护城河</span>。技术会迭代，你今年领先明年可能就被超越，必须不停往里砸钱搞研发，像在跑步机上跑步，一停下来就被甩开。</p>
+
+  <p>真正的护城河通常藏在看不见、摸不着、甚至带点霸道的地方，主要是<strong>四大类</strong>：</p>
+  <ul>
+    <li><strong>无形资产：</strong>品牌、专利、特许经营（如奢侈品、可口可乐、辉瑞专利药）</li>
+    <li><strong>转换成本：</strong>客户换掉你很难（如同花顺、Windows、企业级 SaaS）</li>
+    <li><strong>网络效应：</strong>用户越多越有价值（如同微信、淘宝、滴滴）</li>
+    <li><strong>成本优势：</strong>规模 / 地理 / 资源带来的结构性低价（如海螺水泥的矿山自给）</li>
+  </ul>
+
+  <blockquote class="purple">
+    <strong>黄金检验标准：</strong>如果一家公司明天把产品价格上调 10%，客户会不会因此大批流向竞争对手？会，说明没有定价权；不会，才是真正的护城河。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-4">
+  <h2 class="section-title">维度四 · 财务质量：四个必须盯死的指标</h2>
+
+  <p>看财务不是看"赚了多少利润"，而是看利润背后是不是真有现金流支撑、有没有隐藏的风险点。四个最关键的指标：</p>
+
+  <table>
+    <thead>
+      <tr><th>指标</th><th>健康阈值</th><th>警戒信号</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>经营现金流 / 净利润</td><td>0.8 – 1.2</td><td>长期 &lt; 0.5 = 利润全是"账面繁荣"</td></tr>
+      <tr><td>应收账款增速 vs 营收增速</td><td>应收 ≤ 营收增速</td><td>应收持续大幅超过营收 = 在放白条</td></tr>
+      <tr><td>存货增速 vs 营收增速</td><td>存货 ≤ 营收增速</td><td>存货大幅超过营收 = 货卖不动</td></tr>
+      <tr><td>扣非净利润 vs 净利润</td><td>差距小</td><td>差距大 = 主业失血，靠卖资产充数</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 应收账款账龄分析的真相</div>
+    <p>打开财报附注，找到应收账款的<strong>账龄分析表</strong>。如果三年以上的应收账款占比一年一年悄悄上升，那这批钱大概率已经要不回来了。它最终会以巨额计提坏账的方式出现，把你今天看到的高利润一口吞掉。</p>
+  </div>
+</section>
+
+<section class="section" id="sec-5">
+  <h2 class="section-title">维度五 · 估值：用"贵不贵"决定下注节奏</h2>
+
+  <p>好公司也要讲买入价格。再好的公司，如果你以泡沫价格买入，长期收益率也会被透支。常用估值工具：</p>
+
+  <table>
+    <thead>
+      <tr><th>估值指标</th><th>适合的行业</th><th>核心陷阱</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>市盈率（PE）</td><td>稳定盈利的消费、医药</td><td>周期股低 PE 往往是顶部信号</td></tr>
+      <tr><td>市净率（PB）</td><td>银行、保险、券商、重资产</td><td>轻资产公司看 PB 没意义</td></tr>
+      <tr><td>PEG</td><td>高成长科技 / 医药</td><td>增速预测本身可能落空</td></tr>
+      <tr><td>DCF / 自由现金流折现</td><td>所有行业（理论）</td><td>对永续增长率极度敏感</td></tr>
+    </tbody>
+  </table>
+
+  <p>估值没有标准答案，关键是<strong>同行业横向比 + 自身历史纵向比</strong>，并结合当时的<strong>利率环境</strong>。利率越低，能接受的合理估值越高；利率越高，估值的天花板越低。</p>
+</section>
+
+<section class="section" id="sec-6">
+  <h2 class="section-title">维度六 · 管理层：人是最大的变量</h2>
+
+  <p>同样一门生意，不同的管理层做，回报天差地别。看管理层要回答三个问题：</p>
+  <ul>
+    <li><strong>诚信如何？</strong>有没有财务造假、信披违规、忽悠式并购的历史？是否在大股东减持 / 高位套现？</li>
+    <li><strong>专业能力如何？</strong>管理层背景是行业老兵，还是纯粹搞资本运作的资本玩家？</li>
+    <li><strong>是否与中小股东利益一致？</strong>有没有股权激励 / 大比例自掏腰包认购？看实控人是否真金白银跟着公司一起扛。</li>
+  </ul>
+
+  <blockquote>
+    <strong>一个简单观察：</strong>凡是大股东一路减持、却反复在投资者沟通会上讲"长期价值"的公司，几乎都是来割韭菜的。<span class="hl-red">人不对，公司再好也别碰。</span>
+  </blockquote>
+</section>
+
+<section class="section" id="sec-7">
+  <h2 class="section-title">维度七 · 周期位置：在对的时间点上车</h2>
+
+  <p>任何生意都受周期影响。看公司必须把它放在<strong>行业周期 + 宏观周期 + 公司自身经营周期</strong>的三重叠加中去判断。</p>
+
+  <ul>
+    <li><strong>行业周期：</strong>在行业渗透率从 5% 升到 30% 的早中期，是最甜蜜的成长期</li>
+    <li><strong>宏观周期：</strong>在央行降息 + 流动性宽松的窗口期，估值天花板会被抬高</li>
+    <li><strong>公司周期：</strong>在主业突破、新产品放量的拐点，往往是利润弹性最大的时刻</li>
+  </ul>
+
+  <div class="quote-banner">
+    把一家公司"看透" = 7 个维度的交叉验证<br>
+    <span class="hl">只看一个维度（只看赛道或只看财务）都是片面的。<br>真正的高手是"赛道 + 商业模式 + 护城河 + 财务 + 估值 + 管理层 + 周期位置"七维打分。</span>
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li><strong>维度一 · 赛道：</strong>先看天花板、商业逻辑是否被颠覆、当前所处生命周期</li>
+      <li><strong>维度二 · 商业模式：</strong>毛利率 + 费用率 + 经营杠杆，三个数一起看</li>
+      <li><strong>维度三 · 护城河：</strong>无形资产 / 转换成本 / 网络效应 / 成本优势四类</li>
+      <li><strong>维度四 · 财务质量：</strong>经营现金流 / 净利润、应收账款、存货、扣非利润四指标</li>
+      <li><strong>维度五 · 估值：</strong>同行业横比 + 自身历史纵比 + 结合利率环境</li>
+      <li><strong>维度六 · 管理层：</strong>诚信 + 专业 + 与股东利益是否一致</li>
+      <li><strong>维度七 · 周期位置：</strong>行业 + 宏观 + 公司三重周期叠加判断入场时机</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 10 · 选股框架与基本面分析</p>
+</footer>
+
+</body>
