@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>均值回归策略的研究：适用场景、统计假设与风险边界｜投资认知笔记</title>
+<style>
+  :root {
+    --bg: #0f1419; --surface: #1a2332; --surface-2: #232f3f;
+    --border: #2a3744; --text: #e6edf3; --text-dim: #9aa7b4;
+    --text-mute: #6b7785; --accent: #f0883e;
+    --accent-soft: rgba(240, 136, 62, 0.12);
+    --blue: #58a6ff; --green: #56d364; --red: #ff6b6b; --purple: #bc8cff;
+    --yellow: #e3b341; --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    line-height: 1.8; -webkit-font-smoothing: antialiased;
+  }
+  body { max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .stage-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+    font-size: 13px; color: var(--text-dim); flex-wrap: wrap;
+  }
+  .stage-bar .stage-pill {
+    display: inline-block; padding: 4px 12px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 700; letter-spacing: 1px; font-size: 12px;
+  }
+  .stage-bar .stage-name { font-weight: 600; color: var(--text); }
+  .meta-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+    font-size: 13px; color: var(--text-mute); flex-wrap: wrap;
+  }
+  .meta-bar .tag {
+    padding: 4px 10px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    font-weight: 600; letter-spacing: 0.5px;
+  }
+  .meta-bar .dot { width: 4px; height: 4px; background: var(--text-mute); border-radius: 50%; }
+  header.note-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  h1.note-title { font-size: 36px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+  .note-subtitle { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .summary-card {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border); border-left: 4px solid var(--accent);
+    border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; box-shadow: var(--shadow);
+  }
+  .summary-card h3 {
+    font-size: 14px; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px;
+  }
+  .summary-card p { color: var(--text); font-size: 15.5px; }
+  .toc {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px 24px; margin-bottom: 48px;
+  }
+  .toc h4 {
+    font-size: 13px; color: var(--text-mute); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .toc ol { list-style: none; counter-reset: toc-counter; }
+  .toc li { counter-increment: toc-counter; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+  .toc li:last-child { border-bottom: none; }
+  .toc a {
+    color: var(--text-dim); text-decoration: none; font-size: 14.5px;
+    display: flex; align-items: baseline; transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--accent); }
+  .toc a::before {
+    content: counter(toc-counter, decimal-leading-zero);
+    color: var(--accent); font-weight: 700; margin-right: 12px;
+    font-variant-numeric: tabular-nums; min-width: 28px;
+  }
+  section.section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2.section-title {
+    font-size: 26px; font-weight: 700; margin-bottom: 24px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--accent);
+    display: inline-block; letter-spacing: -0.3px;
+  }
+  h3.sub-title {
+    font-size: 19px; font-weight: 600; margin: 28px 0 14px;
+    color: var(--text); display: flex; align-items: center;
+  }
+  h3.sub-title::before {
+    content: ""; width: 4px; height: 18px;
+    background: var(--accent); border-radius: 2px; margin-right: 12px;
+  }
+  p { margin-bottom: 16px; color: var(--text); font-size: 16px; }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl-blue { color: var(--blue); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 600; }
+  .hl-red { color: var(--red); font-weight: 600; }
+  blockquote {
+    margin: 20px 0; padding: 16px 22px;
+    background: var(--surface); border-left: 4px solid var(--blue);
+    border-radius: 6px; color: var(--text-dim); font-style: normal; font-size: 15.5px;
+  }
+  blockquote strong { color: var(--blue); }
+  blockquote.red { border-left-color: var(--red); }
+  blockquote.red strong { color: var(--red); }
+  ul, ol { margin: 14px 0 22px 24px; }
+  ul li, ol li { margin-bottom: 10px; color: var(--text); font-size: 15.5px; }
+  ul li::marker { color: var(--accent); }
+  .formula-box {
+    background: var(--surface); border: 1px solid var(--accent);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+    text-align: center;
+  }
+  .formula-box .formula {
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: var(--accent); font-size: 19px; font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .formula-box .desc { color: var(--text-dim); font-size: 14px; }
+  .key-points {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+  }
+  .key-points h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .key-points ul { list-style: none; margin: 0; }
+  .key-points ul li {
+    padding: 8px 0 8px 30px; position: relative;
+    color: var(--text); font-size: 15px; border-bottom: 1px dashed var(--border);
+  }
+  .key-points ul li:last-child { border-bottom: none; }
+  .key-points ul li::before {
+    content: "✓"; position: absolute; left: 0; top: 8px;
+    color: var(--green); font-weight: 800; font-size: 18px;
+  }
+  .warning-card {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(240, 136, 62, 0.08));
+    border: 1px solid rgba(255, 107, 107, 0.3); border-left: 4px solid var(--red);
+    border-radius: 8px; padding: 18px 22px; margin: 20px 0;
+  }
+  .warning-card .label {
+    color: var(--red); font-weight: 700; font-size: 13px;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .warning-card p { margin-bottom: 0; color: var(--text); font-size: 15px; }
+  .quote-banner {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--accent); border-radius: 10px;
+    padding: 28px 32px; margin: 32px 0;
+    text-align: center; font-size: 19px;
+    font-weight: 600; color: var(--accent);
+    line-height: 1.6; box-shadow: var(--shadow);
+  }
+  .quote-banner::before {
+    content: """; display: block; font-size: 48px;
+    line-height: 0.5; color: var(--accent); margin-bottom: 12px; opacity: 0.5;
+  }
+  .recover-table {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 26px; margin: 24px 0;
+  }
+  .recover-table h4 {
+    font-size: 14px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;
+  }
+  .recover-table table { width: 100%; border-collapse: collapse; }
+  .recover-table th, .recover-table td {
+    padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);
+    color: var(--text); font-size: 14.5px;
+  }
+  .recover-table th { color: var(--text-dim); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .recover-table .lose { color: var(--red); font-weight: 700; }
+  .recover-table .gain { color: var(--green); font-weight: 700; }
+  footer.note-footer {
+    margin-top: 72px; padding-top: 28px;
+    border-top: 1px solid var(--border);
+    color: var(--text-mute); font-size: 13.5px; text-align: center;
+  }
+  @media (max-width: 640px) {
+    body { padding: 28px 18px 64px; }
+    h1.note-title { font-size: 26px; }
+    h2.section-title { font-size: 22px; }
+  }
+</style>
+
+<body>
+
+<div class="stage-bar">
+  <span class="stage-pill">STAGE 9</span>
+  <span class="stage-name">仓位管理与资金管理</span>
+</div>
+
+<div class="meta-bar">
+  <span class="tag">投资笔记</span>
+  <span class="dot"></span>
+  <span>约 14 分钟阅读</span>
+  <span class="dot"></span>
+  <span>阶段 9 · 第 11 篇</span>
+</div>
+
+<header class="note-header">
+  <h1 class="note-title">均值回归策略的研究：适用场景、统计假设与风险边界</h1>
+  <p class="note-subtitle">华尔街顶尖量化基金和天天亏钱的散户用的竟然是<span class="hl">同一种交易逻辑</span>——<span class="hl">均值回归</span>。最核心的区别是，前者靠它年复一年锁定超额收益，后者用它把辛苦积攒的积蓄亏得精光。</p>
+</header>
+
+<div class="summary-card">
+  <h3>一句话核心</h3>
+  <p>均值回归是金融市场上最迷人也最血腥的策略之一。它的数学底气是<span class="hl">奥恩斯坦-乌伦贝克（OU）过程</span>，机构靠 <span class="hl">Z 值设置进出仓位</span>、<span class="hl">时空双重止损</span>、<span class="hl">凯利公式仓位管理</span>三大纪律把策略锁在可控边界内。<strong>而散户在没有满足统计假设的情况下做均值回归，等于在断掉的弹簧里等反弹</strong>——这恰恰是 90% 散户抄底失败的根源。</p>
+</div>
+
+<nav class="toc">
+  <h4>本文目录</h4>
+  <ol>
+    <li><a href="#sec-metaphor">均值回归的物理比喻：弹簧、引力与"狗与主人"</a></li>
+    <li><a href="#sec-history">DeBondt & Thaler 1985：输家组合的超额收益</a></li>
+    <li><a href="#sec-ou">OU 过程与半衰期：机构的数学底气</a></li>
+    <li><a href="#sec-assumption">四个统计假设：假设破灭 = 资金毁灭</a></li>
+    <li><a href="#sec-execution">Z 值、时空双重止损、凯利公式</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="sec-metaphor">
+  <h2 class="section-title">均值回归的物理比喻：弹簧、引力与"狗与主人"</h2>
+  <p>把"均值回归"这个被无数人误解的概念还原到它的本质：</p>
+
+  <ul>
+    <li><span class="hl">物理学</span>里它像著名的胡克定律：你把一根弹簧往外拉得越远，内部产生的弹性回复力就越大，一旦松手弹簧就会猛弹回原点。但<span class="hl-red">有个致命前提：弹簧不能被拉断</span>。</li>
+    <li><span class="hl">天文学</span>里它像万有引力：无论抛出去的物体飞得有多高，终究会被地心引力拉回地面。</li>
+    <li><span class="hl">金融市场上</span>：无论某种资产的价格因为情绪狂热暴涨到天上去，还是因为极度恐慌暴跌到地狱里，<span class="hl">只要时间足够长，价格这条狂奔的狗最终都会回到价值这个主人身边</span>。</li>
+  </ul>
+
+  <blockquote class="red">
+    <strong>但这里埋下了致命的伏笔</strong>：弹簧不能被拉断。<span class="hl">一旦拉断，就永远回不去了</span>。这一点决定了均值回归策略既可能是盈利利器，也可能是资金毁灭者——取决于背后的标的物是否还"活"着。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-history">
+  <h2 class="section-title">DeBondt & Thaler 1985：输家组合的超额收益</h2>
+  <p>这不仅是哲学，还有极其严谨的数学支撑。早在 1985 年，行为金融学的核心奠基人之一、后来的诺贝尔经济学奖得主<span class="hl">理查德·塞勒</span>和学者德邦特共同发表了震撼金融界的大作——<span class="hl">《股票市场过度反应》</span>。</p>
+
+  <p>他们统计了纽约证券交易所长达几十年的海量交易数据：</p>
+  <ul>
+    <li>把过去 3—5 年表现最差的 30 只垃圾股组成<span class="hl">"输家组合"</span></li>
+    <li>把同期涨幅最高最风光的 30 只明星股组成<span class="hl">"赢家组合"</span></li>
+    <li>抛开所有消息面继续追踪两个组合未来 3—5 年的表现</li>
+  </ul>
+
+  <h3 class="sub-title">结果让全华尔街大吃一惊</h3>
+  <div class="recover-table">
+    <h4>DeBondt & Thaler 1985 研究结论</h4>
+    <table>
+      <thead>
+        <tr><th>组合类型</th><th>未来 3—5 年表现</th><th>超额收益</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>输家组合（最差 30 只）</td><td class="gain">跑赢大盘近 30%</td><td class="gain">+30%</td></tr>
+        <tr><td>赢家组合（最强 30 只）</td><td class="lose">大幅跑输大盘</td><td class="lose">负超额收益</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote>
+    <strong>背后的心理学逻辑</strong>非常简单：人类的大脑在面对信息时存在严重的<span class="hl">过度反应偏差</span>。当一家公司利好不断，大家就会现行外推认为它未来十年都会高速增长，于是疯狂把价格推到虚高的天花板；而当利空袭来，大家又会觉得这家公司马上要倒闭，不计成本地踩踏抛售，把优质资产踩成了地板价。<span class="hl">这种由人类本性决定的情绪摆动造成了价格对价值的剧烈偏离，而偏离就孕育着巨大的获利空间</span>。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-ou">
+  <h2 class="section-title">OU 过程与半衰期：机构的数学底气</h2>
+  <p>在华尔街顶尖量化机构的代码库里，研究员们通常会用<span class="hl">奥恩斯坦-乌伦贝克过程（OU 过程）</span>来描述均值回归现象。用大白话翻译：</p>
+
+  <ul>
+    <li>价格的变动由两部分决定：①<span class="hl">市场随机乱跳的噪声</span>；②<span class="hl">一股拉扯价格回归的回复力</span></li>
+    <li>回复力的大小取决于两个变量：<span class="hl">价格偏离均值的绝对距离</span>（越远回复力越强）和<span class="hl">均值回归系数</span>（弹性橡皮筋的硬度）</li>
+  </ul>
+
+  <h3 class="sub-title">关键指标：均值回归半衰期</h3>
+  <p>半衰期就是<span class="hl">价格从当前偏离的极值位置，重新衰减回归到偏离一半距离所需要的时间</span>：</p>
+
+  <div class="formula-box">
+    <div class="formula">半衰期 = 0.693 ÷ 均值回归系数 κ</div>
+    <div class="desc">半衰期越短，均值回归越快，策略越有效</div>
+  </div>
+
+  <div class="recover-table">
+    <h4>不同资产的均值回归半衰期（典型值）</h4>
+    <table>
+      <thead>
+        <tr><th>资产类型</th><th>典型半衰期</th><th>策略有效性</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>高频统计套利（配对交易）</td><td class="gain">数秒—数分钟</td><td class="gain">极强</td></tr>
+        <tr><td>宽基 ETF 日内波动</td><td class="gain">数天—数周</td><td class="gain">强</td></tr>
+        <tr><td>个股均值回归</td><td>数月</td><td>中等</td></tr>
+        <tr><td>行业 / 风格因子</td><td>数季—1 年</td><td>中等</td></tr>
+        <tr><td>宏观经济周期</td><td class="lose">5—10 年</td><td class="lose">资金成本会拖死</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section" id="sec-assumption">
+  <h2 class="section-title">四个统计假设：假设破灭 = 资金毁灭</h2>
+  <p>绝大多数普通股民在抄顶摸顶时输得一塌糊涂，原因就是他们只看到了均值回归的表面现象，却根本不知道均值回归在统计学上有四个<span class="hl">绝对不能被打破的严格假设</span>。一旦四个假设有一个失效，均值回归就会从盈利利器变身资金毁灭者。</p>
+
+  <h3 class="sub-title">假设一 · 时间序列的平稳性</h3>
+  <p>专业量化拿到一段价格数据第一件事不是看 K 线图，而是进行严肃的<span class="hl">ADF 单位根检验</span>，判断价格序列到底是一阶单整的<span class="hl-red">非平稳</span>序列还是零阶平稳序列。</p>
+
+  <blockquote class="red">
+    <strong>如果一个企业经营恶化、行业被颠覆或者发生严重的财务造假</strong>，它的内在价值中心本身就在不可逆转地向下坠落——那么它的<span class="hl">均值其实在天天向下</span>。比如曾经的柯达、诺基亚或者很多走向退市的垃圾股，你以为它的价格跌到了历史低位是偏离了均值要弹回来，但实际上它的均值自身崩塌了——这就是我们前面说的"被彻底拉断的弹簧"。<span class="hl">在非平稳序列里做均值回归，就相当于在下坠的电梯里跳高</span>。
+  </blockquote>
+
+  <h3 class="sub-title">假设二 · 偏离分布的正态性</h3>
+  <p>均值回归策略常用<span class="hl">Z 值</span>来量化偏离：</p>
+
+  <div class="formula-box">
+    <div class="formula">Z = (当前价格 − 长期均值) ÷ 标准差</div>
+    <div class="desc">Z = −2 表示当前价格低于均值 2 个标准差，是经典的"超跌"信号</div>
+  </div>
+
+  <p>但 Z 值的有效性建立在价格偏离服从<span class="hl">正态分布</span>的假设之上。一旦遇到黑天鹅事件，价格分布出现<span class="hl">肥尾（fat tail）</span>，Z 值的判定就会完全失效。</p>
+
+  <h3 class="sub-title">假设三 · 市场流动性充足</h3>
+  <p>均值回归的盈利需要你能在偏离时买入、回归时卖出。<span class="hl">流动性枯竭时这个策略根本无法执行</span>——2020 年负油价事件、停牌的退市股、踩雷的 P2P 都是反例。</p>
+
+  <h3 class="sub-title">假设四 · 交易成本可控</h3>
+  <p>频繁进出需要交易手续费和冲击成本。如果偏离幅度小于交易成本，均值回归在数学上就<span class="hl">无效</span>。机构靠算法和高频优势压低成本，散户很难做到。</p>
+
+  <blockquote class="red">
+    <strong>这四个假设任何一个失效</strong>，均值回归就会从盈利利器变成资金毁灭者。散户做均值回归最大的悲剧在于，<span class="hl">他们买入的往往都是均值正在下坠的资产</span>——一只面临退市的垃圾股，一次杀逻辑的业绩崩塌。
+  </blockquote>
+</section>
+
+<section class="section" id="sec-execution">
+  <h2 class="section-title">Z 值、时空双重止损、凯利公式</h2>
+  <p>机构均值回归的完整框架由三道纪律组成：</p>
+
+  <h3 class="sub-title">第一步 · Z 值设置进出仓位</h3>
+  <ul>
+    <li>Z &lt; −2：超跌，开始建仓</li>
+    <li>Z 在 −1 到 −2：观察仓</li>
+    <li>Z 在 −0.5 到 +0.5：均值附近，不操作</li>
+    <li>Z &gt; +2：严重高估，反向做空或离场</li>
+  </ul>
+
+  <h3 class="sub-title">第二步 · 时空双重止损</h3>
+  <div class="recover-table">
+    <h4>时空双重止损</h4>
+    <table>
+      <thead>
+        <tr><th>止损维度</th><th>具体规则</th><th>触发后动作</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>时间止损</td><td>N 个交易日内未回归</td><td class="lose">无条件平仓</td></tr>
+        <tr><td>空间止损</td><td>价格继续下跌 X%</td><td class="lose">无条件平仓</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>任何一条触发都必须无条件执行，<span class="hl">绝不能让一笔均值回归交易变成长期套牢</span>。</p>
+
+  <h3 class="sub-title">第三步 · 凯利公式仓位管理</h3>
+  <p>凯利公式给出每笔交易的最优下注比例。在均值回归策略里，凯利公式管的是<span class="hl">单次抄底应该投入多少资金</span>。实践中多数机构采用<span class="hl">半凯利或 1/3 凯利</span>来降低短期回撤。</p>
+
+  <div class="quote-banner">
+    <span class="hl">均值回归是穿越牛熊的稳健策略</span><br>
+    但它有四个<span class="hl">绝对不能被打破的统计假设</span><br>
+    <strong>Z 值 + 时空双重止损 + 凯利公式仓位管理</strong><br>
+    才是机构把均值回归锁在<span class="hl">可控边界内</span>的三道纪律
+  </div>
+
+  <div class="warning-card">
+    <div class="label">⚠️ 散户做均值回归的最大误区</div>
+    <p>把"价格跌了很多"等同于"应该抄底"。<span class="hl">均值回归的前提是均值本身是稳定的</span>，而下坠的电梯、崩塌的逻辑、退市的命运都在把均值向下拖。<strong>在没有验证平稳性之前就抄底，等于在断掉的弹簧里等反弹</strong>——这恰恰是 90% 散户抄底失败的根源。</p>
+  </div>
+
+  <div class="key-points">
+    <h4>本节要点</h4>
+    <ul>
+      <li>均值回归的物理比喻：<span class="hl">弹簧（不能拉断）、万有引力</span></li>
+      <li>DeBondt & Thaler 1985：输家组合未来 3—5 年<span class="hl">跑赢大盘 30%</span></li>
+      <li>OU 过程：均值回归系数 κ 决定回复力大小</li>
+      <li>半衰期 = 0.693 ÷ κ，<span class="hl">半衰期越短策略越有效</span></li>
+      <li>四个统计假设：平稳性、正态分布、流动性、交易成本可控</li>
+      <li>Z 值 &lt; −2 是超跌信号，&gt; +2 是高估信号</li>
+      <li>三道纪律：<span class="hl">Z 值仓位 + 时空双重止损 + 半凯利公式</span></li>
+      <li>均值下坠时抄底 = <span class="hl-red">在下坠的电梯里跳高</span></li>
+    </ul>
+  </div>
+</section>
+
+<footer class="note-footer">
+  <p>整理于 2026 年 9 月 · 投资认知笔记 · 阶段 9 · 仓位管理</p>
+</footer>
+
+</body>
