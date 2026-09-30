@@ -218,7 +218,8 @@ git fetch origin && git reset --hard origin/main
   退出码 0 = 通过。词法校验按 CSS Syntax L3 规范处理注释、字符串、以及「字符串内遇换行 → bad-string 在换行处恢复」——**换行位置决定了整条规则压在一行时会不会连带吞掉闭合括号**，所以 `grep` 计数完全判断不出影响面（115 篇都含 `content: """`，但只有 78 篇真的坏）。
 - **站点没有 404 页**。任何未知路径都会被 SPA fallback 返回**首页 HTML + HTTP 200**。诊断时不能靠状态码判断文件是否存在，要看内容特征；删除文件后边缘缓存还可能继续返回旧页面最长 7 天。
 - **内容层与外壳页样式互不影响**。改 `global.css` 不会改变任何一篇笔记的外观，反之亦然。
-- **`build` 会跑类型检查**。`astro.config.mjs` 与端点里若用了 TypeScript 类型注解，无 node 环境下无法静态校验语法；`sitemap.xml.ts` 因此刻意采用纯 JS + JSDoc 写法。
+- **`build` 会跑类型检查**。`build` = `astro check && astro build`，strict 模式带 `noImplicitAny`，**类型错误会直接中断构建**，而本机没有 node 跑不了 build 验证、构建日志又只在 Cloudflare 后台面板里拿不到，所以任何新增的 `.ts` **函数参数必须写显式类型注解**——只写 JSDoc `@param {string}` 不会被采纳（`sitemap.xml.ts` 的 `staticUrls(dirName)` 就因此挂掉过一次，排查花了三轮二分）。
+  排查手段：用 `git log` 逐次比对该提交在 GitHub 上的 Cloudflare check-run（`conclusion: failure/success`）做二分，一轮约 2 分钟。
 - **`scripts/` 里的 Python 脚本在本机 Python 3.9 上跑**。别用 `str | None` 这类 3.10+ 的注解语法，会在导入时直接 `TypeError`。
 
 ## 🔧 常用配置位置

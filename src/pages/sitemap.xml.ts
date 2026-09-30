@@ -9,9 +9,12 @@
 //      静态 HTML 一篇都进不去，得额外用 customPages 手工补。
 //
 // 改为自己生成后：单一规范入口、无分片、路径符合惯例，
-// 且能直接把 public/notes/ 下的静态笔记一并纳入。
+// 且能直接把 public/ 下的静态笔记与规划文档一并纳入。
 //
-// 纯 JS + JSDoc 写法（不写 TS 类型注解），便于在无 node 的环境里静态校验语法。
+// ⚠️ build 脚本是 `astro check && astro build`，strict 模式带 noImplicitAny。
+// 这个文件虽是 .ts，但**函数参数必须写显式 TS 类型注解**——只靠 JSDoc 的
+// `@param {string}` 不被采纳，会报 “Parameter 'dirName' implicitly has an
+// 'any' type” 直接中断构建。本机没有 node，跑不了 build 验证，只能靠约定。
 
 import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -20,17 +23,18 @@ const SITE = 'https://stock-blog.duckuno.com';
 
 export const prerender = true;
 
-function noteUrls() {
-  const dir = join(process.cwd(), 'public', 'notes');
+/** 枚举 public/ 下某个目录里的静态 HTML，返回排序后的站点绝对 URL */
+function staticUrls(dirName: string): string[] {
+  const dir = join(process.cwd(), 'public', dirName);
   if (!existsSync(dir)) {
-    console.warn('[sitemap] 未找到 public/notes：%s', dir);
+    console.warn('[sitemap] 未找到 public/%s：%s', dirName, dir);
     return [];
   }
   return readdirSync(dir)
     .filter((f) => f.endsWith('.html'))
     // slug 必须 encodeURIComponent：文件名含「10%」「30%」这类 ASCII 百分号，
     // 未编码会构成非法 URL，Cloudflare 直接返回 400。
-    .map((f) => `${SITE}/notes/${encodeURIComponent(f.slice(0, -'.html'.length))}`)
+    .map((f) => `${SITE}/${dirName}/${encodeURIComponent(f.slice(0, -'.html'.length))}`)
     .sort();
 }
 
@@ -40,7 +44,9 @@ export const GET = () => {
     `${SITE}/`,
     `${SITE}/about/`,
     `${SITE}/notes/`,
-    ...noteUrls(),
+    `${SITE}/planning/`,
+    ...staticUrls('notes'),
+    ...staticUrls('planning'),
   ];
 
   const body =
