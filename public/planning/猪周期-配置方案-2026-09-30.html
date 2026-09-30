@@ -60,10 +60,180 @@
   .checklist{list-style:none}
   .checklist li{padding:6px 0;font-size:13px;color:#c9d1d9}
   .checklist li::before{content:"☐ ";color:#8b949e;margin-right:6px}
+  /* ---------- 返回入口（由 add-planning-toc.py 注入） ---------- */
+  .doc-nav { margin-bottom: 18px; }
+  .doc-nav__back:hover {
+    background: rgba(56,139,253,.12) !important;
+    border-color: #58a6ff !important;
+    color: #58a6ff !important;
+    text-decoration: none !important;
+  }
+
+  /* ---------- 本文目录（窄屏主力，宽屏与侧栏并存） ---------- */
+  .doc-toc {
+    position: relative; margin-bottom: 40px; padding: 18px 22px 16px;
+    background: radial-gradient(120% 130% at 0% 0%, rgba(56,139,253,.12), transparent 55%), #161b22;
+    border: 1px solid #30363d; border-radius: 10px;
+  }
+  .doc-toc::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px;
+    background: linear-gradient(90deg, #58a6ff, transparent 72%);
+  }
+  .doc-toc h4 {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+    font-size: 12px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: #58a6ff;
+  }
+  .doc-toc h4::before {
+    content: ''; width: 4px; height: 13px; flex-shrink: 0;
+    border-radius: 2px; background: #58a6ff;
+  }
+  .doc-toc__count {
+    margin-left: auto; padding: 2px 9px; border-radius: 999px;
+    background: rgba(56,139,253,.12); border: 1px solid rgba(56,139,253,.3);
+    color: #58a6ff; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: none;
+  }
+  .doc-toc ol {
+    position: relative; list-style: none; counter-reset: dtoc;
+    margin: 0; padding: 0;
+  }
+  .doc-toc ol::before {
+    content: ''; position: absolute; left: 25px; top: 18px; bottom: 18px; width: 1px;
+    background: linear-gradient(180deg, #30363d 0%, #30363d 70%, transparent 100%);
+  }
+  .doc-toc li { counter-increment: dtoc; position: relative; margin: 0; padding: 0; }
+  .doc-toc a {
+    display: flex; align-items: center; gap: 12px; padding: 6px 12px;
+    border-radius: 8px; color: #c9d1d9; font-size: 14px; line-height: 1.5;
+    text-decoration: none; transition: background .18s, color .18s, box-shadow .18s;
+  }
+  .doc-toc a::before {
+    content: counter(dtoc, decimal-leading-zero);
+    position: relative; z-index: 1; display: inline-flex;
+    align-items: center; justify-content: center; flex-shrink: 0;
+    width: 24px; height: 18px; border-radius: 5px;
+    background: #21262d; border: 1px solid #30363d;
+    color: #8b949e; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 10px; font-weight: 700;
+  }
+  .doc-toc a:hover { background: #21262d; color: #e6edf3; text-decoration: none; }
+  .doc-toc a:hover::before { border-color: #58a6ff; color: #58a6ff; }
+  .doc-toc a.is-active {
+    background: rgba(56,139,253,.12); box-shadow: inset 3px 0 0 #58a6ff; color: #e6edf3;
+  }
+  .doc-toc a.is-active::before {
+    background: #58a6ff; border-color: #58a6ff; color: #0d1117;
+  }
+
+  /* ---------- 左侧悬浮目录（视口足够宽才显示，否则会压住正文） ---------- */
+  .doc-sidenav { display: none; }
+  .doc-sidenav::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px;
+    border-radius: 8px 8px 0 0;
+    background: linear-gradient(90deg, #58a6ff, transparent 78%);
+  }
+  .doc-sidenav__title {
+    display: flex; align-items: center; gap: 6px;
+    margin: 0 0 10px; padding-bottom: 8px;
+    border-bottom: 1px solid #30363d;
+    font-size: 11px; font-weight: 700; color: #58a6ff;
+    letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .doc-sidenav__title::before {
+    content: ''; width: 3px; height: 11px; flex-shrink: 0;
+    border-radius: 2px; background: #58a6ff;
+  }
+  .doc-sidenav__count {
+    margin-left: auto; padding: 1px 7px; border-radius: 999px;
+    background: rgba(56,139,253,.12); border: 1px solid rgba(56,139,253,.3);
+    color: #58a6ff;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: none;
+  }
+  .doc-sidenav ol {
+    position: relative; list-style: none; margin: 0; padding: 0;
+    counter-reset: dsnav;
+  }
+  .doc-sidenav ol::before {
+    content: ''; position: absolute; left: 9px; top: 12px; bottom: 12px; width: 1px;
+    background: linear-gradient(180deg, #30363d 0%, #30363d 70%, transparent 100%);
+  }
+  .doc-sidenav li { margin: 0; }
+  .doc-sidenav ol a {
+    position: relative; display: flex; align-items: center; gap: 8px;
+    padding: 5px 6px; border-radius: 6px;
+    border-left: 2px solid transparent; color: #c9d1d9;
+    font-size: 12.5px; line-height: 1.5; text-decoration: none;
+    transition: background .18s, color .18s, border-color .18s;
+  }
+  .doc-sidenav ol a::before {
+    counter-increment: dsnav; content: counter(dsnav, decimal-leading-zero);
+    position: relative; z-index: 1;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0; width: 18px; height: 18px; border-radius: 5px;
+    background: #21262d; border: 1px solid #30363d;
+    color: #8b949e; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 9.5px; font-weight: 700;
+  }
+  .doc-sidenav ol a:hover {
+    background: #21262d; color: #e6edf3; text-decoration: none;
+  }
+  .doc-sidenav ol a.is-active {
+    background: rgba(56,139,253,.12); border-left-color: #58a6ff; color: #e6edf3;
+  }
+  .doc-sidenav ol a.is-active::before {
+    background: #58a6ff; border-color: #58a6ff; color: #0d1117;
+  }
+  .doc-sidenav__foot {
+    margin-top: 10px; padding-top: 10px; border-top: 1px solid #30363d;
+  }
+  .doc-sidenav__top {
+    display: block; text-align: center; padding: 5px 0; border-radius: 5px;
+    color: #8b949e; text-decoration: none; font-size: 11.5px;
+  }
+  .doc-sidenav__top:hover { background: #21262d; color: #58a6ff; text-decoration: none; }
+
+  /* 锚点跳转时给标题留出上方余量 */
+  h2[id] { scroll-margin-top: 24px; }
+
+  @media (max-width: 640px) {
+    .doc-toc { padding: 14px 14px 12px; }
+    .doc-toc a { font-size: 13.5px; padding: 5px 8px; gap: 8px; }
+    .doc-toc ol::before { left: 21px; }
+  }
+  /* 正文 1200px 居中，留出 200px 侧栏 + 24px 间隙需要视口 ≥1680px */
+  @media (min-width: 1680px) {
+    .doc-sidenav { display: block; }
+  }
 </style>
 </head>
 <body>
 
+<nav class="doc-sidenav" style="position:fixed;left:calc(50vw - 824px);top:96px;width:200px;z-index:20;max-height:calc(100vh - 140px);overflow-y:auto;background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px 12px;font-size:12.5px;line-height:1.6;box-shadow:0 8px 30px rgba(0,0,0,.4);" aria-label="本文目录">
+  <h4 class="doc-sidenav__title">本文目录<span class="doc-sidenav__count">13</span></h4>
+  <ol>
+      <li><a href="#sec-1">一、第1档执行清单（9-30 尾盘 · 可立即下单）</a></li>
+      <li><a href="#sec-2">二、4只标的完整配置（46,559元投入部分）</a></li>
+      <li><a href="#sec-3">三、PB 历史分位实算（1,392交易日样本）</a></li>
+      <li><a href="#sec-4">四、为什么海大替代ETF</a></li>
+      <li><a href="#sec-5">五、3批建仓节奏（53.44%现金不预设投完）</a></li>
+      <li><a href="#sec-6">六、加仓触发条件</a></li>
+      <li><a href="#sec-7">七、止损体系（3轨）</a></li>
+      <li><a href="#sec-8">八、止盈阶梯</a></li>
+      <li><a href="#sec-9">九、周期位置（2026-09-30 14:21）</a></li>
+      <li><a href="#sec-10">十、关键事件时点（Reminders.app已设）</a></li>
+      <li><a href="#sec-11">十一、本周立即行动</a></li>
+      <li><a href="#sec-12">十二、当前判断（2026-09-30 14:25）</a></li>
+      <li><a href="#sec-13">十三、已知局限（诚实披露）</a></li>
+  </ol>
+  <div class="doc-sidenav__foot">
+    <a class="doc-sidenav__top" href="#">↑ 回到顶部</a>
+  </div>
+</nav>
+<div class="doc-nav">
+  <a class="doc-nav__back" href="/planning/" style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:6px;background:#21262d;border:1px solid #30363d;color:#c9d1d9;text-decoration:none;font-size:13px;font-weight:600;line-height:1.4;transition:all .2s;">← 返回规划</a>
+</div>
 <h1>猪周期配置方案 <span class="stamp">10万 | 2026-09-30</span></h1>
 <div class="meta">
   数据基准日：2026-09-30 14:21 盘中实时 · 资金规模：<b>10万元</b> · 报告生成日：2026-09-30 14:25
@@ -102,7 +272,25 @@
 </div>
 
 <!-- ============ 一、第1档执行清单（可立即下单） ============ -->
-<h2>一、第1档执行清单（9-30 尾盘 · 可立即下单）</h2>
+<nav class="doc-toc" aria-label="本文目录">
+  <h4>本文目录<span class="doc-toc__count">13</span></h4>
+  <ol>
+    <li><a href="#sec-1">一、第1档执行清单（9-30 尾盘 · 可立即下单）</a></li>
+    <li><a href="#sec-2">二、4只标的完整配置（46,559元投入部分）</a></li>
+    <li><a href="#sec-3">三、PB 历史分位实算（1,392交易日样本）</a></li>
+    <li><a href="#sec-4">四、为什么海大替代ETF</a></li>
+    <li><a href="#sec-5">五、3批建仓节奏（53.44%现金不预设投完）</a></li>
+    <li><a href="#sec-6">六、加仓触发条件</a></li>
+    <li><a href="#sec-7">七、止损体系（3轨）</a></li>
+    <li><a href="#sec-8">八、止盈阶梯</a></li>
+    <li><a href="#sec-9">九、周期位置（2026-09-30 14:21）</a></li>
+    <li><a href="#sec-10">十、关键事件时点（Reminders.app已设）</a></li>
+    <li><a href="#sec-11">十一、本周立即行动</a></li>
+    <li><a href="#sec-12">十二、当前判断（2026-09-30 14:25）</a></li>
+    <li><a href="#sec-13">十三、已知局限（诚实披露）</a></li>
+  </ol>
+</nav>
+<h2 id="sec-1">一、第1档执行清单（9-30 尾盘 · 可立即下单）</h2>
 
 <table>
 <thead>
@@ -174,7 +362,7 @@
 </div>
 
 <!-- ============ 二、4只标的完整配置 ============ -->
-<h2>二、4只标的完整配置（46,559元投入部分）</h2>
+<h2 id="sec-2">二、4只标的完整配置（46,559元投入部分）</h2>
 
 <table>
 <thead>
@@ -237,7 +425,7 @@
 </table>
 
 <!-- ============ 三、PB分位实算定权依据 ============ -->
-<h2>三、PB 历史分位实算（1,392交易日样本）</h2>
+<h2 id="sec-3">三、PB 历史分位实算（1,392交易日样本）</h2>
 
 <table>
 <thead>
@@ -273,7 +461,7 @@
 </div>
 
 <!-- ============ 四、为什么海大替代ETF ============ -->
-<h2>四、为什么海大替代ETF</h2>
+<h2 id="sec-4">四、为什么海大替代ETF</h2>
 
 <div class="callout">
 <table>
@@ -294,7 +482,7 @@
 </div>
 
 <!-- ============ 五、3批建仓节奏 ============ -->
-<h2>五、3批建仓节奏（53.44%现金不预设投完）</h2>
+<h2 id="sec-5">五、3批建仓节奏（53.44%现金不预设投完）</h2>
 
 <table>
 <thead>
@@ -344,7 +532,7 @@
 </div>
 
 <!-- ============ 六、加仓触发条件 ============ -->
-<h2>六、加仓触发条件</h2>
+<h2 id="sec-6">六、加仓触发条件</h2>
 
 <div class="callout-good">
 <strong>价值触发（已达成，驱动第1档）</strong>：
@@ -364,7 +552,7 @@
 </div>
 
 <!-- ============ 七、止损体系（3轨） ============ -->
-<h2>七、止损体系（3轨）</h2>
+<h2 id="sec-7">七、止损体系（3轨）</h2>
 
 <div class="callout-warn">
 <strong>为什么不能用固定价格止损</strong>
@@ -399,7 +587,7 @@
 </table>
 
 <!-- ============ 八、止盈阶梯 ============ -->
-<h2>八、止盈阶梯</h2>
+<h2 id="sec-8">八、止盈阶梯</h2>
 
 <table>
 <thead>
@@ -418,7 +606,7 @@
 </div>
 
 <!-- ============ 九、周期位置 ============ -->
-<h2>九、周期位置（2026-09-30 14:21）</h2>
+<h2 id="sec-9">九、周期位置（2026-09-30 14:21）</h2>
 
 <div class="callout-good">
 <table style="margin-top:0">
@@ -447,7 +635,7 @@
 </div>
 
 <!-- ============ 十、关键事件时点 ============ -->
-<h2>十、关键事件时点（Reminders.app已设）</h2>
+<h2 id="sec-10">十、关键事件时点（Reminders.app已设）</h2>
 
 <div class="timeline">
 
@@ -513,7 +701,7 @@
 </div>
 
 <!-- ============ 十一、本周行动清单 ============ -->
-<h2>十一、本周立即行动</h2>
+<h2 id="sec-11">十一、本周立即行动</h2>
 
 <ul class="checklist">
 <li>准备100,000元可用资金（T+0）</li>
@@ -524,7 +712,7 @@
 </ul>
 
 <!-- ============ 十二、当前判断 ============ -->
-<h2>十二、当前判断（2026-09-30 14:25）</h2>
+<h2 id="sec-12">十二、当前判断（2026-09-30 14:25）</h2>
 
 <div class="callout-warn">
 <strong>当前核心数据状态</strong>：
@@ -541,7 +729,7 @@
 </div>
 
 <!-- ============ 十三、已知局限 ============ -->
-<h2>十三、已知局限（诚实披露）</h2>
+<h2 id="sec-13">十三、已知局限（诚实披露）</h2>
 
 <table>
 <thead><tr><th>局限</th><th>说明</th></tr></thead>
@@ -561,5 +749,45 @@
 <strong>数据基准日</strong>：2026-09-30 14:21盘中实时
 </footer>
 
+<script>
+
+(function () {
+  var groups = [document.querySelector('.doc-sidenav'), document.querySelector('.doc-toc')];
+  var targets = [];
+  var map = {};
+  groups.forEach(function (nav) {
+    if (!nav) return;
+    nav.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      var id = a.getAttribute('href').slice(1);
+      if (map[id]) return;
+      var el = document.getElementById(id);
+      if (el) { map[id] = a; targets.push(el); }
+    });
+  });
+  if (!targets.length) return;
+
+  function clear() {
+    Object.keys(map).forEach(function (id) { map[id].classList.remove('is-active'); });
+  }
+  function onScroll() {
+    var best = null, bestTop = -Infinity;
+    for (var i = 0; i < targets.length; i++) {
+      var t = targets[i].getBoundingClientRect().top;
+      if (t <= 140 && t > bestTop) { bestTop = t; best = targets[i]; }
+    }
+    if (!best && targets.length) best = targets[0];
+    if (!best) return;
+    var active = map[best.id];
+    if (!active) return;
+    clear();
+    active.classList.add('is-active');
+    // 同一个 id 在两个目录里各有一个链接，上面只记了第一个
+    var links = document.querySelectorAll('a[href="#' + best.id + '"]');
+    links.forEach(function (a) { a.classList.add('is-active'); });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
 </body>
 </html>
