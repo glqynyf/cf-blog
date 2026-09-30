@@ -17,7 +17,10 @@
                                     不经过 Astro 路由、不套用 BaseLayout
                                     自带深色主题 + 内联 <style> / <script>
                                     ────────────────────────────────
-外壳层：src/pages/*.astro        ← 仅 3 个页面：首页 / 笔记目录 / 关于
+规划层：public/planning/*.html  ← 持仓规划文档，同样是自包含独立 HTML
+                                    按「分组-标题-基准日」命名，归入 /planning/
+                                    ────────────────────────────────
+外壳层：src/pages/*.astro        ← 仅 4 个页面：首页 / 笔记目录 / 持仓规划 / 关于
                                     这些才走 Astro 构建、共享 Header/Footer
 ```
 
@@ -25,18 +28,19 @@
 
 笔记放在 `public/` 而不是 `src/content/`，是因为它们是成品 HTML——直接被原样拷贝进 `dist/`，不走内容集合、没有 frontmatter、没有 Markdown 编译。代价是内容层与外壳层是两套独立的样式体系：
 
-| | 外壳页（3 个 `.astro`） | 笔记（115 个 `.html`） |
-|---|---|---|
-| 布局 | `BaseLayout.astro`（Header / Footer / SEO） | 各自内联，无 Header/Footer |
-| 主题变量 | `src/styles/global.css` | 每篇自带一份 `:root` 变量 |
-| 目录 | 无 | `.note-sidenav`（≥1440px 悬浮）+ `.toc`（窄屏） |
-| 路由 | Astro 路由 | `public/` 直出 |
+| | 外壳页（4 个 `.astro`） | 笔记（115 个 `.html`） | 规划文档（`public/planning/`） |
+|---|---|---|---|
+| 布局 | `BaseLayout.astro`（Header / Footer / SEO） | 各自内联，无 Header/Footer | 各自内联，无 Header/Footer |
+| 主题变量 | `src/styles/global.css` | 每篇自带一份 `:root` 变量 | 每份自带一份 `:root` 变量 |
+| 目录 | 无 | `.note-sidenav`（≥1440px 悬浮）+ `.toc`（窄屏） | 无 |
+| 路由 | Astro 路由 | `public/` 直出 | `public/` 直出 |
 
-**改外壳页样式不会影响笔记，改笔记 HTML 也不会影响外壳页。** 两者要分别改。
+**改外壳页样式不会影响笔记与规划文档，改它们的 HTML 也不会影响外壳页。** 两者要分别改。
 
 ## ✨ 站点现状
 
 - 📚 **115 篇笔记 / 14 章节**——按 `S00`–`S13` 编号排列，文件名即标题
+- 📊 **持仓规划**——带基准日的实盘时点快照，按主题分组（见下文「持仓规划」）
 - 🗂️ **五个板块**——首页、目录页、关于页共用同一套分组
 - 📖 **单页双目录**——宽屏左侧悬浮目录 + 窄屏正文目录，滚动高亮当前章节
 - 🔍 **手写 sitemap**——`/sitemap.xml` 为唯一规范入口（见下文「为什么不用 @astrojs/sitemap」）
@@ -92,7 +96,37 @@ public/notes/S12-07-北向资金是什么.html
 | 基本面与选股 | S10–S11 | 19 |
 | 资金面与市场周期 | S12–S13 | 27 |
 
+## 📊 持仓规划
+
+笔记回答「怎么想」，持仓规划回答「**当下怎么做**」——具体标的、权重怎么分、几档买入、什么条件止损。
+
+与笔记**同构但独立**：同样是 `public/` 下的自包含 HTML，同样不经 Astro 处理、不含 frontmatter、不套 `BaseLayout`。差别在于它按**分组 + 基准日**而不是章节组织：
+
+```
+public/planning/猪周期-配置方案-2026-09-30.html
+               └──┬──┘ └────┬─────┘ └───┬──┘
+                 分组       标题        基准日
+```
+
+- **分组可省略**。省略时（如 `深套30%解套-2026-09-30.html`）整段算标题，归入「未分类」组。切分只按**第一个**连字符，所以标题内部可以继续带连字符
+- **基准日可省略**，省略时排在组内最前
+- 同一分组同一主题的不同基准日会**并存**，`/planning/` 按日期倒序排列，天然就是历史版本列表
+- 标题与日期都从文件名解析，`src/utils/planning.ts` 扫描目录生成索引页，**新增文档不需要改任何配置**
+- 文档内容是**时点快照**，行情变了数字就得重算——所以文件名带日期，不要原地覆盖
+
+新增一份：
+
+```bash
+cp 旧文档.html "public/planning/分组-标题-$(date +%F).html"
+python3 scripts/check-note-css.py public/planning   # 查内联 CSS 是否被静默吃掉
+```
+
+> ⚠️ 规划文档通常由外部工具生成。`check-note-css.py` 查的是**结构性失效**
+> （未闭合字符串吃掉括号、注释截断选择器），`left6px` 这类**缺冒号的语义笔误**
+> 它查不出来——但那也会让整段样式静默失效，只能靠肉眼（见「已知约束」）。
+
 ## 🛠️ 本地开发
+
 
 需要 Node.js 20+（根目录有 `.nvmrc`，推荐用 [fnm](https://github.com/Schniz/fnm) 或 [nvm](https://github.com/nvm-sh/nvm)）。
 
@@ -122,16 +156,19 @@ npm run preview    # 本地预览构建产物
 ├── src/
 │   ├── consts.ts             # 站点元数据（标题、描述、作者、GitHub 地址）
 │   ├── utils/notes.ts        # 笔记扫描 + 章节分组 + STAGE_TITLES
+│   ├── utils/planning.ts     # 持仓规划扫描（按分组归类、组内按基准日倒序）
 │   ├── components/           # Header（导航） / Footer
 │   ├── layouts/              # BaseLayout（外壳页统一布局 + SEO）
 │   ├── pages/
 │   │   ├── index.astro       # 首页
 │   │   ├── notes/index.astro # 笔记总目录（可按章节筛选）
+│   │   ├── planning/index.astro # 持仓规划索引（按分组归类）
 │   │   ├── about.astro       # 关于页
 │   │   └── sitemap.xml.ts    # 自定义 sitemap 端点
 │   └── styles/global.css     # 设计令牌 + 外壳页全局样式
 ├── public/
 │   ├── notes/                # 👈 115 篇笔记，自包含 HTML
+│   ├── planning/             # 👈 持仓规划文档（分组-标题-YYYY-MM-DD.html）
 │   ├── robots.txt            # 指向 /sitemap.xml
 │   ├── og-default.png
 │   └── favicon.svg
@@ -151,7 +188,7 @@ npm run preview    # 本地预览构建产物
 | `add-note-canonical.py` | 注入 `<link rel="canonical">` |
 | `fix-note-css-splice.py` | 修「注释插在选择器与 `{` 之间」导致的后代选择器失效 |
 | `fix-note-css-badstring.py` | 修 `content: """` 未闭合字符串吞掉 `}` 导致的整段 CSS 失效 |
-| `check-note-css.py` | **只读检查**：抓上面两类静默失效 + 关键规则缺失，改完 CSS 跑一次 |
+| `check-note-css.py` | **只读检查**：抓上面两类静默失效 + 关键规则缺失。默认扫 `public/notes/`，可传目录参数扫 `public/planning/` |
 | `generate-og-images.py` | 批量生成 OG 分享图 |
 | `post-images/` | 单篇文章配图生成 |
 | `push-via-api.py` | **`github.com` 主站不可达时的应急推送**，改走 `api.github.com` |
@@ -217,6 +254,17 @@ git fetch origin && git reset --hard origin/main
   ```
   退出码 0 = 通过。词法校验按 CSS Syntax L3 规范处理注释、字符串、以及「字符串内遇换行 → bad-string 在换行处恢复」——**换行位置决定了整条规则压在一行时会不会连带吞掉闭合括号**，所以 `grep` 计数完全判断不出影响面（115 篇都含 `content: """`，但只有 78 篇真的坏）。
 - **站点没有 404 页**。任何未知路径都会被 SPA fallback 返回**首页 HTML + HTTP 200**。诊断时不能靠状态码判断文件是否存在，要看内容特征；删除文件后边缘缓存还可能继续返回旧页面最长 7 天。
+- **`var(--x)` 没有 fallback 时，未定义的变量会让整条声明作废**，不是只让那一个值失效。`padding: var(--space-4) var(--space-5)` 里若 `--space-5` 没定义，整条 `padding` 在计算值阶段变成无效、直接回落到 `0`——而且**不报任何错**。本项目就踩过：`--space-5` 被 3 个页面用了却从未在 `global.css` 里定义，首页和目录页的 4 处 padding 一直是没生效的。新增令牌后应扫一遍全项目：
+  ```bash
+  python3 - <<'PY'
+  import re, pathlib
+  css = pathlib.Path('src/styles/global.css').read_text(encoding='utf-8')
+  defined = set(re.findall(r'^\s*(--[a-z0-9-]+)\s*:', css, re.M)) | {'--shiki-dark', '--shiki-dark-bg'}
+  for p in pathlib.Path('src').rglob('*.astro'):
+      miss = sorted(set(re.findall(r'var\((--[a-z0-9-]+)\)', p.read_text(encoding='utf-8'))) - defined)
+      if miss: print(p, miss)
+  PY
+  ```
 - **内容层与外壳页样式互不影响**。改 `global.css` 不会改变任何一篇笔记的外观，反之亦然。
 - **`build` 会跑类型检查**。`build` = `astro check && astro build`，strict 模式带 `noImplicitAny`，**类型错误会直接中断构建**，而本机没有 node 跑不了 build 验证、构建日志又只在 Cloudflare 后台面板里拿不到，所以任何新增的 `.ts` **函数参数必须写显式类型注解**——只写 JSDoc `@param {string}` 不会被采纳（`sitemap.xml.ts` 的 `staticUrls(dirName)` 就因此挂掉过一次，排查花了三轮二分）。
   排查手段：用 `git log` 逐次比对该提交在 GitHub 上的 Cloudflare check-run（`conclusion: failure/success`）做二分，一轮约 2 分钟。

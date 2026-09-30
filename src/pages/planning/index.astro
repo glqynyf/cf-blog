@@ -3,43 +3,47 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getPlans } from '../../utils/planning';
 
 /**
- * 持仓规划索引页：列出 public/planning/ 下的自包含规划文档。
+ * 持仓规划索引页：列出 public/planning/ 下的自包含规划文档，按分组归类。
  *
  * 与 /notes/ 一样，文档正文是不经 Astro 处理的独立 HTML（自带深色主题），
- * 这里只负责目录和导航；文件名即元数据，无需 frontmatter。
+ * 这里只负责目录和导航；文件名即元数据，无需 frontmatter：
+ *   猪周期-配置方案-2026-09-30.html  →  分组「猪周期」/ 标题「配置方案」/ 基准日 09-30
  *
- * 往 public/planning/ 丢一个「主题名-YYYY-MM-DD.html」即可自动收录，
- * 同一主题的不同基准日会并存，按日期倒序排列。
+ * 分组前缀可省略，省略时归入「未分类」；组内按基准日倒序。
  *
  * 模板只使用 {array.map(...)} 一种写法（与 notes/index.astro 保持一致）。
- * 条件渲染改用「数据里先算好 + CSS :empty / hidden 属性」，
- * 不在模板里写三元和短路表达式。
+ * 条件渲染改用「数据里先算好 + hidden 属性」，不在模板里写三元和短路表达式。
  */
-const plans = getPlans();
-const totalPlans = plans.length;
-const themes = new Set(plans.map((p) => p.title)).size;
-const latest = plans.length > 0 ? plans[0].date : '';
+const { groups, all } = getPlans();
+const totalPlans = all.length;
+const groupCount = groups.length;
+const latest = all.length > 0 ? all[0].date : '';
 
 // 统计胶囊先在 frontmatter 算好，模板只做一次 map
 const stats = [
   { value: String(totalPlans), label: '份文档' },
-  { value: String(themes), label: '个主题' },
+  { value: String(groupCount), label: '个分组' },
 ];
 if (latest) {
   stats.push({ value: latest, label: '最新基准日' });
 }
 
-// 列表数据也预先拼好，模板不再调用 encodeURIComponent
-const rows = plans.map((plan) => ({
-  date: plan.date,
-  title: plan.title,
-  href: '/planning/' + encodeURIComponent(plan.slug),
+// 列表数据预先拼好，模板不再调用 encodeURIComponent
+const groupsView = groups.map((group) => ({
+  name: group.name,
+  count: group.docs.length,
+  span: (group.docs[group.docs.length - 1].date || '—') + ' → ' + (group.docs[0].date || '—'),
+  docs: group.docs.map((doc) => ({
+    date: doc.date,
+    title: doc.title,
+    href: '/planning/' + encodeURIComponent(doc.slug),
+  })),
 }));
 ---
 
 <BaseLayout
   title="持仓规划"
-  description="实盘持仓的时点规划与跟踪：标的选择、权重分配、分批建仓节奏、止损止盈体系与持仓跟踪表。"
+  description="实盘持仓的时点规划与跟踪，按主题分组：标的选择、权重分配、分批建仓节奏、止损止盈体系与持仓跟踪表。"
 >
   <section class="container planning-page">
     <header class="page-header">
@@ -57,22 +61,33 @@ const rows = plans.map((plan) => ({
       </div>
     </header>
 
-    <ol class="plan-list" hidden={totalPlans === 0}>
-      {rows.map((row) => (
-        <li>
-          <a class="plan-list__link" href={row.href}>
-            <span class="plan-list__date">{row.date}</span>
-            <span class="plan-list__title">{row.title}</span>
-            <span class="plan-list__arrow" aria-hidden="true">→</span>
-          </a>
-        </li>
+    <div id="group-view" hidden={totalPlans === 0}>
+      {groupsView.map((group) => (
+        <section class="plan-group" data-group={group.name}>
+          <h2 class="plan-group__title">
+            <span class="plan-group__name">{group.name}</span>
+            <span class="plan-group__count">{group.count} 份</span>
+            <span class="plan-group__span">{group.span}</span>
+          </h2>
+          <ol class="plan-list">
+            {group.docs.map((doc) => (
+              <li>
+                <a class="plan-list__link" href={doc.href}>
+                  <span class="plan-list__date">{doc.date}</span>
+                  <span class="plan-list__title">{doc.title}</span>
+                  <span class="plan-list__arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
       ))}
-    </ol>
+    </div>
 
     <div class="planning-empty" data-empty hidden={totalPlans > 0}>
       <p class="planning-empty__title">暂无规划文档</p>
       <p class="planning-empty__hint">
-        把自包含的 HTML 放进 <code>public/planning/</code>，命名为 <code>主题名-YYYY-MM-DD.html</code> 即可自动收录。
+        把自包含的 HTML 放进 <code>public/planning/</code>，命名为 <code>分组-标题-YYYY-MM-DD.html</code> 即可自动收录。分组可省略，省略时归入「未分类」。
       </p>
     </div>
   </section>
@@ -149,17 +164,80 @@ const rows = plans.map((plan) => ({
     color: var(--accent);
   }
 
+  /* ---------- 分组 ---------- */
+  #group-view[hidden] {
+    display: none;
+  }
+
+  .plan-group {
+    position: relative;
+    margin-bottom: var(--space-5);
+    padding: var(--space-4) var(--space-5) var(--space-3);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .plan-group:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-md);
+  }
+
+  .plan-group::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    background: linear-gradient(180deg, var(--accent), rgba(45, 212, 191, 0.04));
+  }
+
+  .plan-group__title {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+    margin: 0 0 var(--space-3);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--border-default);
+  }
+
+  .plan-group__name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .plan-group__count {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--accent-subtle);
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-sm);
+    letter-spacing: 0.05em;
+  }
+
+  .plan-group__span {
+    flex: 1;
+    min-width: 0;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: right;
+  }
+
   /* ---------- 文档列表 ---------- */
   .plan-list {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    gap: var(--space-3);
-  }
-
-  .plan-list[hidden] {
-    display: none;
+    gap: var(--space-2);
   }
 
   .plan-list li {
@@ -172,36 +250,19 @@ const rows = plans.map((plan) => ({
     grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: var(--space-4);
-    padding: var(--space-4) var(--space-5);
-    background: var(--bg-surface);
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-page);
     border: 1px solid var(--border-default);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     color: var(--text-primary);
     text-decoration: none;
     transition: all var(--transition-fast);
-  }
-
-  .plan-list__link::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 12%;
-    bottom: 12%;
-    width: 2px;
-    border-radius: 0 2px 2px 0;
-    background: var(--accent);
-    opacity: 0;
-    transition: opacity var(--transition-fast);
   }
 
   .plan-list__link:hover {
     border-color: var(--accent);
     background: var(--bg-elevated);
     text-decoration: none;
-  }
-
-  .plan-list__link:hover::before {
-    opacity: 1;
   }
 
   /* 基准日为空时整块收起，不留空隙 */
@@ -219,7 +280,7 @@ const rows = plans.map((plan) => ({
   }
 
   .plan-list__title {
-    font-size: 1.0625rem;
+    font-size: 1rem;
     font-weight: 600;
     line-height: 1.4;
   }
@@ -282,10 +343,18 @@ const rows = plans.map((plan) => ({
       font-size: 1.75rem;
     }
 
+    .plan-group {
+      padding: var(--space-4) var(--space-4) var(--space-3);
+    }
+
+    .plan-group__span {
+      flex-basis: 100%;
+      text-align: left;
+    }
+
     .plan-list__link {
       grid-template-columns: 1fr auto;
       row-gap: var(--space-2);
-      padding: var(--space-4);
     }
 
     .plan-list__date {

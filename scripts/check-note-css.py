@@ -13,9 +13,12 @@
      根本不存在。语法合法，所以词法校验查不出来。
 
 用法：
-    python3 scripts/check-note-css.py            # 检查全部笔记
-    python3 scripts/check-note-css.py --verbose  # 列出每个问题文件
+    python3 scripts/check-note-css.py                        # 检查全部笔记（默认）
+    python3 scripts/check-note-css.py public/planning        # 检查规划文档
+    python3 scripts/check-note-css.py public/notes --verbose # 列出每个问题文件
 退出码 0 = 全部通过，1 = 有问题。
+注意：关键规则那组（.toc / .note-sidenav*）是**笔记专用**，只对 public/notes/ 生效；
+规划文档是另一种自包含页面，不含目录构件，不套用。
 '''
 
 import re
@@ -35,8 +38,8 @@ DANGLING = re.compile(
 
 BAD_STRING = re.compile(r'content:\s*"""')
 
-# 每篇必须存在的关键规则（缺失说明样式被整段吞掉）
-REQUIRED = (
+# 每篇**笔记**必须存在的关键规则（缺失说明样式被整段吞掉）
+NOTE_REQUIRED = (
     ".toc {",
     ".note-sidenav__title {",
     ".note-sidenav__count {",
@@ -91,10 +94,16 @@ def scan(css):
 
 
 def main():
+    # 用法：check-note-css.py [目录] [--verbose]
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
     verbose = "--verbose" in sys.argv
-    files = sorted(NOTES.glob("*.html"))
+    target = Path(args[0]) if args else NOTES
+    is_notes = target.resolve() == NOTES.resolve()
+    required = NOTE_REQUIRED if is_notes else ()
+
+    files = sorted(target.glob("*.html"))
     if not files:
-        print("找不到笔记目录:", NOTES)
+        print("找不到 HTML 目录:", target)
         return 1
 
     problems = []
@@ -126,13 +135,13 @@ def main():
         joined = "\n".join(blocks)
         if BAD_STRING.search(joined):
             problems.append((path.name, "残留 content:\"\"\" 未闭合字符串"))
-        missing = [r for r in REQUIRED if r not in joined]
+        missing = [r for r in required if r not in joined]
         if missing:
             problems.append((path.name, "缺关键规则：" + "、".join(missing)))
 
     total_blocks = sum(len(STYLE.findall(p.read_text(encoding="utf-8"))) for p in files)
-    print("检查 %d 篇笔记 / %d 个 <style> 块（%d 篇含多块）"
-          % (len(files), total_blocks, multi_style))
+    print("检查 %s：%d 个 HTML / %d 个 <style> 块（%d 个含多块）"
+          % (target, len(files), total_blocks, multi_style))
 
     if not problems:
         print("✅ 全部通过：无括号失衡、无选择器截断、无未闭合字符串、关键规则齐全")
