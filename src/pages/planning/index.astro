@@ -1,0 +1,295 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPlans } from '../../utils/planning';
+
+/**
+ * 持仓规划索引页：列出 public/planning/ 下的自包含规划文档。
+ *
+ * 与 /notes/ 一样，文档正文是不经 Astro 处理的独立 HTML（自带深色主题），
+ * 这里只负责目录和导航；文件名即元数据，无需 frontmatter。
+ *
+ * 往 public/planning/ 丢一个「主题名-YYYY-MM-DD.html」即可自动收录，
+ * 同一主题的不同基准日会并存，按日期倒序排列。
+ *
+ * 模板只使用 {array.map(...)} 一种写法（与 notes/index.astro 保持一致）。
+ * 条件渲染改用「数据里先算好 + CSS :empty / hidden 属性」，
+ * 不在模板里写三元和短路表达式。
+ */
+const plans = getPlans();
+const totalPlans = plans.length;
+const themes = new Set(plans.map((p) => p.title)).size;
+const latest = plans.length > 0 ? plans[0].date : '';
+
+// 统计胶囊先在 frontmatter 算好，模板只做一次 map
+const stats = [
+  { value: String(totalPlans), label: '份文档' },
+  { value: String(themes), label: '个主题' },
+];
+if (latest) {
+  stats.push({ value: latest, label: '最新基准日' });
+}
+
+// 列表数据也预先拼好，模板不再调用 encodeURIComponent
+const rows = plans.map((plan) => ({
+  date: plan.date,
+  title: plan.title,
+  href: '/planning/' + encodeURIComponent(plan.slug),
+}));
+---
+
+<BaseLayout
+  title="持仓规划"
+  description="实盘持仓的时点规划与跟踪：标的选择、权重分配、分批建仓节奏、止损止盈体系与持仓跟踪表。"
+>
+  <section class="container planning-page">
+    <header class="page-header">
+      <p class="page-header__eyebrow">PLANNING · 持仓规划</p>
+      <h1>持仓规划</h1>
+      <p class="page-header__lead">
+        笔记讲的是<strong>怎么想</strong>，这里放的是<strong>当下怎么做</strong>——具体标的、权重怎么分、几档买入、什么条件止损。都是带基准日的时点快照，数字会随行情变化，<strong>不构成投资建议</strong>。
+      </p>
+      <div class="page-header__stats">
+        {stats.map((stat) => (
+          <span class="stat-pill">
+            <b>{stat.value}</b> {stat.label}
+          </span>
+        ))}
+      </div>
+    </header>
+
+    <ol class="plan-list" hidden={totalPlans === 0}>
+      {rows.map((row) => (
+        <li>
+          <a class="plan-list__link" href={row.href}>
+            <span class="plan-list__date">{row.date}</span>
+            <span class="plan-list__title">{row.title}</span>
+            <span class="plan-list__arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+
+    <div class="planning-empty" data-empty hidden={totalPlans > 0}>
+      <p class="planning-empty__title">暂无规划文档</p>
+      <p class="planning-empty__hint">
+        把自包含的 HTML 放进 <code>public/planning/</code>，命名为 <code>主题名-YYYY-MM-DD.html</code> 即可自动收录。
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .planning-page {
+    padding: var(--space-12) 0 var(--space-16);
+  }
+
+  /* ---------- 页头 ---------- */
+  .page-header {
+    position: relative;
+    margin-bottom: var(--space-6);
+    padding: var(--space-6) var(--space-6) var(--space-5);
+    background:
+      radial-gradient(120% 140% at 0% 0%, rgba(45, 212, 191, 0.08), transparent 60%),
+      var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+  }
+
+  .page-header__eyebrow {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .page-header h1 {
+    margin: 0 0 var(--space-3);
+    font-size: 2.25rem;
+    letter-spacing: -0.02em;
+  }
+
+  .page-header__lead {
+    margin: 0;
+    max-width: 44em;
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+  }
+
+  .page-header__lead strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .page-header__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  .stat-pill {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    padding: 0.2rem 0.7rem;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-default);
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+
+  .stat-pill b {
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  /* ---------- 文档列表 ---------- */
+  .plan-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .plan-list[hidden] {
+    display: none;
+  }
+
+  .plan-list li {
+    margin: 0;
+  }
+
+  .plan-list__link {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+
+  .plan-list__link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12%;
+    bottom: 12%;
+    width: 2px;
+    border-radius: 0 2px 2px 0;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+  }
+
+  .plan-list__link:hover {
+    border-color: var(--accent);
+    background: var(--bg-elevated);
+    text-decoration: none;
+  }
+
+  .plan-list__link:hover::before {
+    opacity: 1;
+  }
+
+  /* 基准日为空时整块收起，不留空隙 */
+  .plan-list__date:empty {
+    display: none;
+  }
+
+  .plan-list__date {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  .plan-list__title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .plan-list__arrow {
+    color: var(--text-muted);
+    transition: transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .plan-list__link:hover .plan-list__arrow {
+    color: var(--accent);
+    transform: translateX(2px);
+  }
+
+  /* ---------- 空状态 ---------- */
+  .planning-empty {
+    padding: var(--space-8) var(--space-6);
+    background: var(--bg-surface);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-lg);
+    text-align: center;
+  }
+
+  .planning-empty[hidden] {
+    display: none;
+  }
+
+  .planning-empty__title {
+    margin: 0 0 var(--space-2);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .planning-empty__hint {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+  }
+
+  .planning-empty code {
+    padding: 0.1rem 0.4rem;
+    background: var(--bg-code);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+  }
+
+  @media (max-width: 640px) {
+    .planning-page {
+      padding: var(--space-6) 0 var(--space-12);
+    }
+
+    .page-header {
+      padding: var(--space-5) var(--space-4) var(--space-4);
+    }
+
+    .page-header h1 {
+      font-size: 1.75rem;
+    }
+
+    .plan-list__link {
+      grid-template-columns: 1fr auto;
+      row-gap: var(--space-2);
+      padding: var(--space-4);
+    }
+
+    .plan-list__date {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
