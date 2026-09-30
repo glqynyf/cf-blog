@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>猪周期配置方案 | 10万 | 2026-09-30</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Helvetica Neue",Arial,sans-serif;background:#0d1117;color:#e6edf3;line-height:1.7;padding:24px;max-width:1200px;margin:0 auto}
+  h1{font-size:24px;color:#fff;margin-bottom:8px;border-bottom:1px solid #30363d;padding-bottom:12px}
+  h2{font-size:18px;color:#fff;margin:32px 0 12px;border-left:3px solid #58a6ff;padding-left:12px}
+  h3{font-size:15px;color:#79c0ff;margin:16px 0 8px}
+  h4{font-size:14px;color:#e6edf3;margin:12px 0 6px}
+  .meta{color:#8b949e;font-size:13px;margin-bottom:16px}
+  .meta b{color:#fff}
+  .stamp{background:#238636;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;margin-left:8px}
+  .tldr{background:rgba(56,139,253,.08);border:1px solid rgba(56,139,253,.3);border-radius:8px;padding:16px;margin:16px 0}
+  .tldr p{margin:6px 0;color:#c9d1d9;font-size:14px}
+  .tldr strong{color:#79c0ff}
+  .kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:16px 0}
+  .kpi-card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px;text-align:center}
+  .kpi-card .label{color:#8b949e;font-size:11px;text-transform:uppercase;letter-spacing:1px}
+  .kpi-card .value{color:#fff;font-size:24px;font-weight:600;margin-top:4px;font-variant-numeric:tabular-nums}
+  .kpi-card .sub{color:#8b949e;font-size:11px;margin-top:4px}
+  .kpi-card .value.good{color:#3fb950}
+  .kpi-card .value.warn{color:#d29922}
+  table{width:100%;border-collapse:collapse;margin:12px 0;background:#161b22;font-size:13px}
+  th{background:#21262d;color:#fff;padding:10px 8px;text-align:left;border-bottom:1px solid #30363d;font-weight:600}
+  td{padding:9px 8px;border-bottom:1px solid #21262d;color:#c9d1d9}
+  td.num,td.r{text-align:right;font-variant-numeric:tabular-nums}
+  td.c{text-align:center}
+  td.lt{text-align:left}
+  tr.t{background:#21262d;font-weight:600}
+  tr.t td{color:#fff;border-top:1px solid #30363d}
+  tr:hover td{background:#1c2128}
+  .ok{color:#3fb950}
+  .warn{color:#d29922}
+  .bad{color:#f85149}
+  .neutral{color:#8b949e}
+  .callout{background:rgba(56,139,253,.06);border-left:3px solid #58a6ff;padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:13px;color:#c9d1d9}
+  .callout strong{color:#79c0ff}
+  .callout-warn{background:rgba(210,153,34,.06);border-left-color:#d29922}
+  .callout-warn strong{color:#d29922}
+  .callout-good{background:rgba(63,185,80,.06);border-left-color:#3fb950}
+  .callout-good strong{color:#3fb950}
+  ul,ol{margin-left:20px;margin-bottom:8px}
+  li{padding:4px 0;color:#c9d1d9}
+  code{background:#21262d;color:#79c0ff;padding:1px 6px;border-radius:3px;font-size:12px;font-family:"SF Mono",Menlo,monospace}
+  .timeline{position:relative;padding-left:24px}
+  .timeline::before{content:"";position:absolute;left:6px:top:8px;bottom:8px;width:2px;background:#30363d}
+  .event{position:relative;padding:8px 0 8px 16px;margin-bottom:8px;color:#c9d1d9;font-size:13px}
+  .event::before{content:"";position:absolute;left:-22px;top:14px;width:12px;height:12px;border-radius:50%;background:#58a6ff;border:2px solid #0d1117}
+  .event.upcoming::before{background:#d29922}
+  .event.critical::before{background:#f85149;box-shadow:0 0 6px rgba(248,81,73,.5)}
+  .event b{color:#fff}
+  .event .date{color:#8b949e;font-size:12px;margin-right:8px}
+  .event .tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:11px;margin-left:6px}
+  .tag-critical{background:#da3633;color:#fff}
+  .tag-upcoming{background:#9e6a03;color:#fff}
+  .tag-monitor{background:#1f6feb;color:#fff}
+  .checklist{list-style:none}
+  .checklist li{padding:6px 0;font-size:13px;color:#c9d1d9}
+  .checklist li::before{content:"☐ ";color:#8b949e;margin-right:6px}
+</style>
+</head>
+<body>
+
+<h1>猪周期配置方案 <span class="stamp">10万 | 2026-09-30</span></h1>
+<div class="meta">
+  数据基准日：2026-09-30 14:21 盘中实时 · 资金规模：<b>10万元</b> · 报告生成日：2026-09-30 14:25
+</div>
+
+<div class="tldr">
+<h3 style="margin-top:0">📋 配置总览</h3>
+<p><b>资金分配</b>：投入<b>46,559元（46.56%）</b>+ 现金<b>55,000元（53.44%）</b>（不预设投完）</p>
+<p><b>4只标的</b>：牧原40% + 海大25% + 温氏20% + 新希望15%</p>
+<p><b>3批建仓</b>：第1档20,000元（立即） → 第2档12,000元 → 第3档13,000元</p>
+<p><b>定权依据</b>：PB历史分位实算（1,392交易日样本）+ 完全成本 + 盈利质量</p>
+<p><b>止损体系</b>：3轨（防极端+逻辑止损+估值止盈）+ 阶梯止盈12/13.5/15</p>
+</div>
+
+<div class="kpi">
+<div class="kpi-card">
+<div class="label">总资金</div>
+<div class="value">10万</div>
+<div class="sub">100,000元</div>
+</div>
+<div class="kpi-card">
+<div class="label">最大仓位</div>
+<div class="value good">46.56%</div>
+<div class="sub">45,000元</div>
+</div>
+<div class="kpi-card">
+<div class="label">现金保留</div>
+<div class="value warn">53.44%</div>
+<div class="sub">55,000元（等待期权）</div>
+</div>
+<div class="kpi-card">
+<div class="label">最大单票敞口</div>
+<div class="value">18.0%</div>
+<div class="sub">牧原40%×46.56%</div>
+</div>
+</div>
+
+<!-- ============ 一、第1档执行清单（可立即下单） ============ -->
+<h2>一、第1档执行清单（9-30 尾盘 · 可立即下单）</h2>
+
+<table>
+<thead>
+<tr>
+<th>标的</th><th>代码</th><th class="c">权重</th><th class="r">第1档金额</th><th class="r">实时价</th><th class="c">下单股数</th><th class="r">实际成交</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="lt"><b>牧原股份</b></td>
+<td>002714</td>
+<td class="c"><b>40%</b></td>
+<td class="r">8,000</td>
+<td class="r">42.42</td>
+<td class="c"><b>200股</b></td>
+<td class="r">8,484</td>
+</tr>
+<tr>
+<td class="lt"><b>海大集团</b></td>
+<td>002311</td>
+<td class="c"><b>25%</b></td>
+<td class="r">5,000</td>
+<td class="r">42.06</td>
+<td class="c"><b>100股</b></td>
+<td class="r">4,206</td>
+</tr>
+<tr>
+<td class="lt"><b>温氏股份</b></td>
+<td>300498</td>
+<td class="c"><b>20%</b></td>
+<td class="r">4,000</td>
+<td class="r">15.16</td>
+<td class="c"><b>300股</b></td>
+<td class="r">4,548</td>
+</tr>
+<tr>
+<td class="lt"><b>新希望</b></td>
+<td>000876</td>
+<td class="c"><b>15%</b></td>
+<td class="r">3,000</td>
+<td class="r">6.91</td>
+<td class="c"><b>400股</b></td>
+<td class="r">2,764</td>
+</tr>
+<tr class="t">
+<td colspan="3"><b>合计</b></td>
+<td class="r"><b>20,000</b></td>
+<td class="r">—</td>
+<td class="c"><b>1,000股</b></td>
+<td class="r"><b>20,002</b></td>
+</tr>
+<tr style="background:rgba(255,152,0,.08)">
+<td colspan="3" style="padding:9px 12px"><b style="color:#d29922">现金余额</b></td>
+<td colspan="4" class="r" style="padding:9px 12px"><b style="color:#d29922;font-variant-numeric:tabular-nums">79,998 元</b></td>
+</tr>
+<tr>
+<td colspan="7" style="padding:6px 12px;font-size:11px;color:#8b949e;border-bottom:none">尾盘价格若变动，按"金额优先、股数向下取整到100股"执行</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout">
+<strong>执行规则</strong>：
+<ul style="margin-top:6px;margin-left:20px">
+<li><b>金额是唯一源头</b>：先按权重算出目标金额，再除以实时价得股数，<b>向下取整到100股整数倍</b></li>
+<li><b>四只必须同时下单</b>：不允许"先买一只再说"——分散执行是本方案核心</li>
+<li><b>尾盘价格变动</b>：若尾盘价与14:21偏离超±2%，按同一比例调整股数，权重偏差控制在±1%内</li>
+</ul>
+</div>
+
+<!-- ============ 二、4只标的完整配置 ============ -->
+<h2>二、4只标的完整配置（46,559元投入部分）</h2>
+
+<table>
+<thead>
+<tr>
+<th>标的</th><th>代码</th><th class="c">权重</th><th class="r">目标金额</th><th class="r">参考价</th><th class="r">目标股数</th><th>依据（PB分位实算+成本+盈利）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="lt"><b>牧原股份</b></td>
+<td>002714</td>
+<td class="c"><b>40%</b></td>
+<td class="r">18,000</td>
+<td class="r">41.71</td>
+<td class="r"><b>400股</b></td>
+<td class="lt">PB 3.08 分位 <b class="ok">16.7%</b>（猪股最低）+ 完全成本 <b>11.5元/kg</b>（行业最低） + 波动率30.9%（最低）</td>
+</tr>
+<tr>
+<td class="lt"><b>海大集团</b></td>
+<td>002311</td>
+<td class="c"><b>25%</b></td>
+<td class="r">11,250</td>
+<td class="r">42.06</td>
+<td class="r"><b>300股</b></td>
+<td class="lt">PB 2.88 分位 <b class="ok">1.9%</b>（全组合最低）+ <b class="ok">PE(TTM) 20.99为正</b>（真在盈利）+ 唯一负相关腿</td>
+</tr>
+<tr>
+<td class="lt"><b>温氏股份</b></td>
+<td>300498</td>
+<td class="c"><b>20%</b></td>
+<td class="r">9,000</td>
+<td class="r">14.91</td>
+<td class="r"><b>700股</b></td>
+<td class="lt">PB 2.87 分位 <b class="warn">39.9%</b>（偏高，下调权重）+ 流动性最好（日均7.35亿）</td>
+</tr>
+<tr>
+<td class="lt"><b>新希望</b></td>
+<td>000876</td>
+<td class="c"><b>15%</b></td>
+<td class="r">6,750</td>
+<td class="r">6.82</td>
+<td class="r"><b>1,000股</b></td>
+<td class="lt">PB 1.90 分位 <b class="ok">23.9%</b>（次低）+ 饲料业务对冲 + 波动率34.1%（最高）→ 权重最小</td>
+</tr>
+<tr style="background:rgba(255,152,0,.08);">
+<td class="lt"><b>现金</b></td>
+<td>—</td>
+<td class="c">—</td>
+<td class="r"><b>55,000</b></td>
+<td class="r">—</td>
+<td class="r">—</td>
+<td class="lt warn">53.44%缓冲，不预设投完（应对12个月磨底期）</td>
+</tr>
+<tr class="t">
+<td colspan="3"><b>合计</b></td>
+<td class="r">100,000</td>
+<td colspan="3">45,000（投入）+ 55,000（现金）= 100,000</td>
+</tr>
+</tbody>
+</table>
+
+<!-- ============ 三、PB分位实算定权依据 ============ -->
+<h2>三、PB 历史分位实算（1,392交易日样本）</h2>
+
+<table>
+<thead>
+<tr><th>标的</th><th class="r">当前PB<br>(9-29)</th><th class="r">5.7年分位</th><th class="r">近3年分位</th><th class="r">近3年min</th><th class="r">近3年max</th><th class="r">PE(TTM)</th><th class="c">权重</th></tr></thead>
+<tbody>
+<tr style="background:rgba(63,185,80,.06)">
+<td class="lt"><b>海大集团</b></td><td class="r">2.88</td>
+<td class="r good"><b>1.9%</b></td><td class="r good"><b>2.6%</b></td><td class="r">—</td><td class="r">4.59</td>
+<td class="r good"><b>+20.99</b></td><td class="c"><b>25%</b></td>
+</tr>
+<tr style="background:rgba(63,185,80,.06)">
+<td class="lt"><b>牧原股份</b></td><td class="r">3.08</td>
+<td class="r good"><b>16.7%</b></td><td class="r">32.1%</td><td class="r">2.17</td><td class="r">4.48</td>
+<td class="r bad">-217.82</td><td class="c"><b>40%</b></td>
+</tr>
+<tr>
+<td class="lt"><b>温氏股份</b></td><td class="r">2.87</td><td class="r warn">39.9%</td><td class="r warn">49.4%</td><td class="r">1.97</td><td class="r">4.77</td><td class="r bad">-38.98</td><td class="c"><b>20%</b></td>
+</tr>
+<tr>
+<td class="lt"><b>新希望</b></td><td class="r">1.90</td><td class="r good">23.9%</td><td class="r">32.7%</td><td class="r">1.42</td><td class="r">2.48</td><td class="r bad">-8.06</td><td class="c"><b>15%</b></td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout-good">
+<strong>定权逻辑：PB分位低 + 盈利质量好 → 权重高</strong>
+<ul style="margin-top:6px;margin-left:20px">
+<li><b>牧原40%</b>：PB分位16.7%最低（猪股中）+ 完全成本11.5最低 + 波动率30.9%最低</li>
+<li><b>海大25%</b>：PB分位<b>1.9%全组合最低</b> + PE为正 + 唯一负相关腿（饲料需求与猪价不同步）</li>
+<li><b>温氏20%</b>：PB分位39.9%（近3年49.4%）偏高 → 权重下调，但流动性最好</li>
+<li><b>新希望15%</b>：PB分位23.9%次低，但波动率34.1%最高 → 权重最小</li>
+</ul>
+</div>
+
+<!-- ============ 四、为什么海大替代ETF ============ -->
+<h2>四、为什么海大替代ETF</h2>
+
+<div class="callout">
+<table>
+<thead><tr><th>对比项</th><th>ETF 159865（中证畜牧）</th><th class="ok">海大集团 002311</th></tr></thead>
+<tbody>
+<tr><td>与持仓重叠</td><td class="bad">28.16%（重复加仓）</td><td class="ok">0%（独立主体）</td></tr>
+<tr><td>非养殖属性</td><td>饲料/动保约30%</td><td class="ok">100% 饲料（猪价下行时防御性更强）</td></tr>
+<tr><td>PB 5.7年分位</td><td>不适用</td><td class="ok good"><b>1.9%</b>（历史极低位）</td></tr>
+<tr><td>PE(TTM)</td><td>不适用</td><td class="ok good"><b>+20.99 为正</b>（真在盈利）</td></tr>
+<tr><td>当前PB</td><td>不适用</td><td class="ok">2.88</td></tr>
+<tr><td>股息率</td><td>不适用</td><td class="ok">滚动3.02%</td></tr>
+<tr><td>市值/日均成交</td><td>—</td><td class="ok">682.69亿 / 约2.5亿，流动性充足</td></tr>
+</tbody>
+</table>
+<div style="margin-top:6px">
+<b>海大是组合里唯一的负相关腿</b>：饲料需求随生猪存栏走（存栏高→饲料需求大），但饲料价格受豆粕玉米成本驱动，与猪价不同步。猪价跌破10元时，养殖股是重灾区，饲料股反而受益。
+</div>
+</div>
+
+<!-- ============ 五、3批建仓节奏 ============ -->
+<h2>五、3批建仓节奏（53.44%现金不预设投完）</h2>
+
+<table>
+<thead>
+<tr><th class="c">档位</th><th>时间</th><th class="r">投入</th><th class="c">累计仓位</th><th>触发类别</th><th class="r">现金余额</th></tr></thead>
+<tbody>
+<tr>
+<td class="c"><b>第1档</b></td>
+<td><b>今天 9-30 尾盘</b></td>
+<td class="r"><b>20,000</b></td>
+<td class="c"><b>20%</b></td>
+<td class="lt good"><b>价值触发已达成 → 立即执行</b>（PB分位+去化数据）</td>
+<td class="r ok">80,000</td>
+</tr>
+<tr>
+<td class="c"><b>第2档</b></td>
+<td>10 月内</td>
+<td class="r"><b>12,000</b></td>
+<td class="c"><b>32%</b></td>
+<td class="lt">确认触发任一：猪价止跌企稳≥5日 / Q3能繁<3,750万 / 涌益9月<-1.5%</td>
+<td class="r ok">68,000</td>
+</tr>
+<tr>
+<td class="c"><b>第3档</b></td>
+<td>11 月内</td>
+<td class="r"><b>13,000</b></td>
+<td class="c"><b>46.56%</b></td>
+<td class="lt">确认触发任一：猪价站上11.0/kg并持稳3日 / 涌益连续2月<-1.5%</td>
+<td class="r ok">55,000</td>
+</tr>
+<tr style="background:rgba(255,152,0,.08)">
+<td colspan="5" style="padding:9px 12px"><b style="color:#d29922">55,000元现金为最终缓冲，不预设必须投完</b>。若 2026Q4 猪价继续下行且去化停滞，允许长期停留在 20% 仓位。<b>现金是"等待验证"的头寸，不是待完成的额度。</b></td>
+<td class="r ok" style="padding:9px 12px"><b>55,000</b></td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout">
+<strong>两类触发信号分离</strong>：
+<ul style="margin-top:6px;margin-left:20px">
+<li><b>价值触发</b>（已达成）：PB分位+去化数据 → 回答"现在能不能买"——已经可以</li>
+<li><b>确认触发</b>（未达成）：Q3能繁<3750万 / 猪价企稳 / 涌益<-1.5% → 回答"能不能加码"——还没到，留子弹</li>
+</ul>
+</div>
+
+<div class="callout">
+<strong>现金曲线</strong>：100,000 → 第1档后 <b>80,000</b> → 第2档后 <b>68,000</b> → 第3档后 <b>55,000</b>。第2/3档按第1档的四只标的<b>同比例</b>加仓，不改变权重结构。
+</div>
+
+<!-- ============ 六、加仓触发条件 ============ -->
+<h2>六、加仓触发条件</h2>
+
+<div class="callout-good">
+<strong>价值触发（已达成，驱动第1档）</strong>：
+<ul style="margin-top:6px;margin-left:20px">
+<li>✅ 牧原PB分位<b>16.7%</b>、新希望<b>23.9%</b>、海大<b>1.9%</b> → 三只处历史低位</li>
+<li>✅ 涌益8月样本<b>-2.30%</b>（7月-0.21%，加速10倍），去化加速</li>
+</ul>
+</div>
+
+<div class="callout">
+<strong>确认触发（未达成，驱动第2/3档）</strong>：
+<ul style="margin-top:6px;margin-left:20px">
+<li>⏳ 官方Q3能繁 &lt;3,750万头（10-15公布）</li>
+<li>⏳ 猪价止跌企稳 ≥5个交易日</li>
+<li>⏳ 涌益9月环比 &lt;-1.5%</li>
+</ul>
+</div>
+
+<!-- ============ 七、止损体系（3轨） ============ -->
+<h2>七、止损体系（3轨）</h2>
+
+<div class="callout-warn">
+<strong>为什么不能用固定价格止损</strong>
+三票年化波动率<b>30-34%</b>，意味着1年1标准差约±1/3。<b>用6-10%止损管理30%波动率，是把风控变成随机数发生器。</b>
+</div>
+
+<h3>轨道A · 防极端（价格破位）</h3>
+<ul>
+<li>周线收盘跌破<b>52周新低</b>，或单周跌幅<b>&gt;18%</b>（约6倍日均振幅）</li>
+<li>动作：<b>减仓1/3，不清仓</b>（周期底部正常波动常超15%，清仓会把暂时回撤变永久错失）</li>
+</ul>
+
+<h3>轨道B · 逻辑止损（主力）</h3>
+<ul>
+<li>猪价跌破<b>9.0元/kg</b>持续1月</li>
+<li>官方能繁<b>连续2月环比转正</b>（去化终止）</li>
+<li>猪粮比跌破<b>4.0</b></li>
+<li>牧原/温氏完全成本<b>连续2季不降反升</b>（降本能力证伪）</li>
+<li>动作：减仓至半仓；逻辑完全证伪则清仓</li>
+</ul>
+
+<h3>轨道C · 估值止盈（PB阈值实算）</h3>
+<table>
+<thead>
+<tr><th>标的</th><th class="r">当前PB</th><th class="r">近3年95%分位</th><th class="r">5.7年90%分位</th><th>触发动作</th></tr></thead>
+<tbody>
+<tr><td>牧原</td><td class="r">3.08</td><td class="r good">4.06</td><td class="r good">6.65</td><td class="lt">PB &gt;4.06 或 &gt;6.65 → 分批兑现</td></tr>
+<tr><td>温氏</td><td class="r">2.87</td><td class="r good">4.31</td><td class="r good">4.28</td><td class="lt">PB &gt;4.28 → 分批兑现</td></tr>
+<tr><td>新希望</td><td class="r">1.90</td><td class="r good">2.24</td><td class="r good">2.61</td><td class="lt">PB &gt;2.24 或 &gt;2.61 → 分批兑现</td></tr>
+<tr><td>海大</td><td class="r">2.88</td><td class="r good">4.26</td><td class="r good">6.10</td><td class="lt">PB &gt;4.26 → 分批兑现（90%分位远高于当前，长期不触发）</td></tr>
+</tbody>
+</table>
+
+<!-- ============ 八、止盈阶梯 ============ -->
+<h2>八、止盈阶梯</h2>
+
+<table>
+<thead>
+<tr><th class="c">档位</th><th>猪价触发</th><th>动作</th><th>累计保留</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td class="c"><b>1</b></td><td class="lt"><b>12.0 元/kg</b></td><td class="lt good">减仓 <b>20%</b></td><td class="r">80%</td><td class="lt">+19% 涨幅，第一批保护落地</td></tr>
+<tr><td class="c"><b>2</b></td><td class="lt"><b>13.5 元/kg</b></td><td class="lt good">再减 <b>30%</b></td><td class="r">50%</td><td class="lt">+34% 涨幅，接近周期历史中枢</td></tr>
+<tr><td class="c"><b>3</b></td><td class="lt"><b>15.0 元/kg</b></td><td class="lt good">再减 <b>30%</b></td><td class="r">20%</td><td class="lt">+49%，行业普盈，产能开始回补</td></tr>
+<tr><td class="c"><b>4</b></td><td class="lt">任一只 PB 触轨道C阈值</td><td class="lt good">再减至 <b>底仓 10%</b></td><td class="r">10%</td><td class="lt">估值兜底，不依赖猪价预测</td></tr>
+<tr><td class="c"><b>5</b></td><td class="lt">能繁同比转正 + 猪价滞涨</td><td class="lt good">清仓</td><td class="r">0%</td><td class="lt">双条件确认才清，避免单信号误判</td></tr>
+</tbody>
+</table>
+
+<div class="callout-good">
+<b>从10.06到15元全程4道保护</b>，累计减仓20%→30%→30%→至10%底仓。<b>即使猪价在13元附近见顶回落，组合已减掉50%，保住大部分利润。</b>
+</div>
+
+<!-- ============ 九、周期位置 ============ -->
+<h2>九、周期位置（2026-09-30 14:21）</h2>
+
+<div class="callout-good">
+<table style="margin-top:0">
+<thead><tr><th>口径</th><th>时点</th><th class="r">能繁母猪</th><th class="r">环比</th><th>来源</th></tr></thead>
+<tbody>
+<tr><td>官方季度</td><td>2025-09-30</td><td class="r">4,035 万头</td><td class="r">-0.20%</td><td>国家统计局</td></tr>
+<tr><td>官方季度</td><td>2025-12-31</td><td class="r">3,961 万头</td><td class="r">-1.83%</td><td>国家统计局</td></tr>
+<tr><td>官方季度</td><td>2026-03-31</td><td class="r">3,904 万头</td><td class="r">-1.44%</td><td>国家统计局</td></tr>
+<tr><td>官方季度</td><td class="r"><b>2026-06-30</b></td><td class="r"><b>3,780 万头</b></td><td class="r bad"><b>-3.18%</b></td><td>国家统计局</td></tr>
+<tr><td>涌益样本</td><td>2026-07-31</td><td class="r">1,113,807 头</td><td class="r">-0.21%</td><td>涌益</td></tr>
+<tr><td>涌益样本</td><td class="r"><b>2026-08-31</b></td><td class="r"><b>1,088,223 头</b></td><td class="r bad"><b>-2.30%</b></td><td>涌益</td></tr>
+</tbody>
+</table>
+<div style="margin-top:6px">官方Q2<b>-3.18%</b> = 2025-03以来最大单季降幅；涌益8月<b>-2.30%</b>，较7月（-0.21%）加速10倍。<b>两个独立口径同向确认去化提速</b>——这是v25判断左侧可建的核心依据。</div>
+</div>
+
+<div class="callout-warn">
+<strong>但位置仍偏早，不可满仓</strong>
+<ul style="margin-top:6px;margin-left:20px">
+<li>猪价9-01的11.16 → 9-30的<b>10.06</b>，月内<b>-9.9%</b></li>
+<li>低于三家成本线（牧原11.5、温氏12.1）→ 猪股当期全部亏损</li>
+<li>猪粮比4.55-4.71（9-23），远低于7.0平衡线</li>
+<li>时滞10-12个月：当前去化对应<b>2027年中</b>才体现为供给收缩</li>
+</ul>
+<div style="margin-top:6px"><b>结论：左侧可建，46.56%封顶，53.44%现金买12个月的等待期权。</b></div>
+</div>
+
+<!-- ============ 十、关键事件时点 ============ -->
+<h2>十、关键事件时点（Reminders.app已设）</h2>
+
+<div class="timeline">
+
+<div class="event critical">
+<span class="date">2026-09-30 尾盘（今天）</span>
+<b>第1档建仓 20,000元 · 四只全买</b>
+<span class="tag tag-critical">执行</span>
+<div style="margin-top:4px;color:#8b949e;font-size:12px">
+牧原200股 / 海大100股 / 温氏300股 / 新希望400股<br>
+按14:21实时价：42.42 / 42.06 / 15.16 / 6.91，合计20,002元
+</div>
+</div>
+
+<div class="event critical">
+<span class="date">2026-10-15 前后</span>
+<b>国家统计局Q3末能繁母猪存栏</b>
+<span class="tag tag-critical">关键先行指标</span>
+<div style="margin-top:4px;color:#8b949e;font-size:12px">
+验证Q2的-3.18%是否延续。<b>&lt;3,750万头 → 第2档触发</b>；≥3,800万头 → 去化停滞，暂停加仓
+</div>
+</div>
+
+<div class="event upcoming">
+<span class="date">2026-10-10 前后</span>
+<b>牧原9月销售简报</b>
+<span class="tag tag-monitor">业绩验证</span>
+<div style="margin-top:4px;color:#8b949e;font-size:12px">
+完全成本是否守住11.5、出栏量、销售均价 → 轨道B条件④检验时点
+</div>
+</div>
+
+<div class="event">
+<span class="date">2026-10-31</span>
+<b>三季报披露截止</b>
+<span class="tag tag-monitor">关注</span>
+<div style="margin-top:4px;color:#8b949e;font-size:12px">
+牧原/温氏Q3亏损幅度、资产负债率。
+</div>
+</div>
+
+<div class="event">
+<span class="date">2026-11 上旬</span>
+<b>涌益9/10月能繁数据</b>
+<span class="tag tag-monitor">第2/3档验证</span>
+<div style="margin-top:4px;color:#8b949e;font-size:12px">连续2月环比&lt;-1.5% → 第3档触发</div>
+</div>
+
+<div class="event">
+<span class="date">2026-11-09 / 10-15 / 10-23</span>
+<b>天邦重整系列节点</b>
+<span class="tag tag-monitor">情绪观察</span>
+<div style="margin-top:4px;color:#8b949e;font-size:12px">
+产业投资人9-22退出、新一轮招募。<b>仅作情绪观察，不作为建仓/减仓开关</b></div>
+</div>
+
+<div class="event">
+<span class="date">2027-01 中旬</span>
+<b>Q4末能繁 + 2027出栏预期</b>
+<span class="tag tag-monitor">观察</span>
+<div style="margin-top:4px;color:#8b949e;font-size:12px">当前去化对应<b>2027年中</b>供给收缩</div>
+</div>
+
+</div>
+
+<!-- ============ 十一、本周行动清单 ============ -->
+<h2>十一、本周立即行动</h2>
+
+<ul class="checklist">
+<li>准备100,000元可用资金（T+0）</li>
+<li><b>9-30 尾盘 执行第1档 20,000元 建仓（4只同时下单）</b></li>
+<li>关注10-1前后头部企业能繁母猪调减公告</li>
+<li><b>10-15 09:30 关注国家统计局Q3末能繁母猪数据（核心先行指标）</b></li>
+<li>关注10-10牧原9月销售简报（完全成本验证）</li>
+</ul>
+
+<!-- ============ 十二、当前判断 ============ -->
+<h2>十二、当前判断（2026-09-30 14:25）</h2>
+
+<div class="callout-warn">
+<strong>当前核心数据状态</strong>：
+<ul style="margin-top:6px;margin-left:20px">
+<li>外三元<b>10.06元/公斤</b>（9-30），月内-9.9%</li>
+<li>能繁母猪<b>3,780万头</b>（Q2末），10-15左右公布Q3末</li>
+<li>猪粮比<b>4.55-4.71</b>（9-23周度）</li>
+<li>涌益8月样本<b>-2.30%</b>（7月-0.21%→加速10倍）</li>
+</ul>
+</div>
+
+<div class="callout-good">
+<strong>建议</strong>：第1档建仓（20,000元）<b>立即执行</b>（PB分位+去化数据已构成依据），后续档位等待10-15国家统计局数据。
+</div>
+
+<!-- ============ 十三、已知局限 ============ -->
+<h2>十三、已知局限（诚实披露）</h2>
+
+<table>
+<thead><tr><th>局限</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td class="lt">海大权重25%是分散化选择</td><td class="lt">若本轮周期顺利，海大会跑输牧原。25%是"低估"与"弹性"的权衡，不是最优收益选择。</td></tr>
+<tr><td class="lt">三只猪股仍占75%</td><td class="lt">高度相关，单赛道押注。25%海大只能部分对冲。真正分散需引入非周期板块。</td></tr>
+<tr><td class="lt">完全成本数据为季度频率</td><td class="lt">牧原11.5、温氏12.1元/kg 来自公司披露，季度更新。需等10-10/10-31验证。</td></tr>
+<tr><td class="lt">止盈阶梯PB对应值是估算</td><td class="lt">"猪价12元 → 牧原PB约3.6"是线性估算，PB与猪价非线性。实际以轨道C的PB阈值为准。</td></tr>
+<tr><td class="lt">10万规模下的执行摩擦</td><td class="lt">最小交易单位100股导致的取整误差约±3%。对总资产影响可忽略，权重有小幅偏离。</td></tr>
+</tbody>
+</table>
+
+<!-- ============ 免责声明 ============ -->
+<footer style="margin-top:48px;padding-top:16px;border-top:1px solid #30363d;color:#8b949e;font-size:11px;line-height:1.7">
+<strong>免责声明</strong>：本报告基于公开数据独立分析，仅供参考，不构成投资建议。市场有风险，投资需谨慎。任何投资决策应结合个人风险承受能力、资金状况和投资目标独立判断，必要时咨询持牌专业机构。过往表现不预示未来收益。<br>
+<strong>数据来源</strong>：行情 = 同花顺实时（9-30 14:21）；估值/PB/PE/股息率/波动率 = 聚源（前复权；猪股1,392交易日、海大1,000交易日，样本期2021-01~2026-09）；能繁母猪 = 国家统计局季度+涌益月度；猪价 = 中国养猪网日频；猪粮比 = 博亚和讯+发改委周度；成交额 = 聚源区间行情（6-30~9-29）。<br>
+<strong>数据基准日</strong>：2026-09-30 14:21盘中实时
+</footer>
+
+</body>
+</html>
