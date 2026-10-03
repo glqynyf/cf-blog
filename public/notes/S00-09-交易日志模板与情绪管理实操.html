@@ -540,6 +540,61 @@
   @media (min-width: 1440px) {
     .note-sidenav { display: block; }
   }
+  /* 视频讲解：B 站播放器外链嵌入
+     B 站给的 iframe 不带宽高（默认 300×150），必须用 aspect-ratio 容器 + absolute
+     撑满才能自适应；直接把 iframe 放进正文在窄屏会撑破版面。 */
+  .video-embed {
+    margin-bottom: 48px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    box-shadow: var(--shadow);
+  }
+  .video-embed__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .video-embed__label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: 4px;
+    padding: 3px 8px;
+    white-space: nowrap;
+  }
+  .video-embed__title {
+    font-size: 13.5px;
+    color: var(--text-dim);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .video-embed__frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+  }
+  .video-embed__frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+  @media (max-width: 640px) {
+    .video-embed { border-radius: 6px; }
+    .video-embed__head { padding: 10px 12px; gap: 8px; }
+    .video-embed__title { font-size: 12.5px; }
+  }
 </style>
 
   <link rel="canonical" href="https://stock-blog.duckuno.com/notes/S00-09-%E4%BA%A4%E6%98%93%E6%97%A5%E5%BF%97%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%83%85%E7%BB%AA%E7%AE%A1%E7%90%86%E5%AE%9E%E6%93%8D">
@@ -581,6 +636,16 @@
 <div class="summary-card">
   <h3>一句话核心</h3>
   <p>散户最常见的"我学了很多但还是亏"，根因不是技术不够，而是<span class="hl">没有可量化的反馈循环</span>。知识是输入，但<span class="hl-red">没有记录就没有数据</span>，没有数据就没有复盘，没有复盘就没有迭代，没有迭代就永远在同一个错误里打转。交易日志不是给自己看的"成绩单"，而是给未来的自己看的<span class="hl">"病历本"</span>。</p>
+</div>
+
+<div class="video-embed">
+  <div class="video-embed__head">
+    <span class="video-embed__label">▶ 视频讲解</span>
+    <span class="video-embed__title">交易日志：散户最该写却最不想写的"病历本"</span>
+  </div>
+  <div class="video-embed__frame">
+    <iframe src="//player.bilibili.com/player.html?isOutside=true&amp;aid=117374258776538&amp;bvid=BV1NXHh69EKe&amp;cid=42413064504&amp;p=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" title="交易日志：散户最该写却最不想写的"病历本"（视频讲解）"></iframe>
+  </div>
 </div>
 
 <nav class="toc">

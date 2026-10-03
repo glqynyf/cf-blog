@@ -656,6 +656,61 @@
   @media (min-width: 1440px) {
     .note-sidenav { display: block; }
   }
+  /* 视频讲解：B 站播放器外链嵌入
+     B 站给的 iframe 不带宽高（默认 300×150），必须用 aspect-ratio 容器 + absolute
+     撑满才能自适应；直接把 iframe 放进正文在窄屏会撑破版面。 */
+  .video-embed {
+    margin-bottom: 48px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    box-shadow: var(--shadow);
+  }
+  .video-embed__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .video-embed__label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: 4px;
+    padding: 3px 8px;
+    white-space: nowrap;
+  }
+  .video-embed__title {
+    font-size: 13.5px;
+    color: var(--text-dim);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .video-embed__frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+  }
+  .video-embed__frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+  @media (max-width: 640px) {
+    .video-embed { border-radius: 6px; }
+    .video-embed__head { padding: 10px 12px; gap: 8px; }
+    .video-embed__title { font-size: 12.5px; }
+  }
 </style>
 
   <link rel="canonical" href="https://stock-blog.duckuno.com/notes/S00-06-%E6%8A%80%E6%9C%AF%E6%B4%BE%E4%B8%8E%E5%9F%BA%E6%9C%AC%E9%9D%A2%E6%B4%BE%EF%BC%8C%E4%B8%BA%E4%BD%95%E6%80%BB%E6%98%AF%E4%BA%92%E7%9B%B8%E7%9C%8B%E4%B8%8D%E6%83%AF">
@@ -696,6 +751,16 @@
 <div class="summary-card">
   <h3>一句话核心</h3>
   <p>技术派和基本面派看的是<span class="hl">两套完全不同的「宇宙规则」</span>——一个在算「明天的天气是下雨还是打雷」，一个在测「明年的气候是变暖还是变冷」。<strong>真正能长期盈利的高手，从不偏执一派</strong>，而是用基本面选股、用技术面择时，在「认知差」与「时机差」重叠的那个点上重仓下注。</p>
+</div>
+
+<div class="video-embed">
+  <div class="video-embed__head">
+    <span class="video-embed__label">▶ 视频讲解</span>
+    <span class="video-embed__title">技术派与基本面派，为何总是互相看不惯</span>
+  </div>
+  <div class="video-embed__frame">
+    <iframe src="//player.bilibili.com/player.html?isOutside=true&amp;aid=117374241999771&amp;bvid=BV1PRHh6pEYS&amp;cid=42412936267&amp;p=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" title="技术派与基本面派，为何总是互相看不惯（视频讲解）"></iframe>
+  </div>
 </div>
 
 <nav class="toc">
