@@ -221,7 +221,7 @@
   .bars__legend{margin-top:12px;font-size:12px;color:#8b949e}
   .dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle}
   .stack{display:flex;height:34px;border-radius:6px;overflow:hidden;margin:14px 0 6px;border:1px solid #30363d}
-  .stack div{display:flex;align-items:center;justify-content:center;font-size:12.5px;color:#0d1117;font-weight:700}
+  .stack div{display:flex;align-items:center;justify-content:center;white-space:nowrap;font-size:12.5px;color:#0d1117;font-weight:700}
   .stack__legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:#8b949e;margin-top:8px}
   .srcnote{font-size:12.5px;color:#8b949e;text-align:center;margin:6px 0 4px}
 
@@ -367,11 +367,11 @@
 
 <table>
   <tr><th>标的</th><th class="c">成本</th><th class="r">H1 归母净利</th><th class="c">负债率</th><th class="r">经营现金流</th><th>定位与结论</th></tr>
-  <tr><td class="lt"><b>牧原股份</b><br>002714</td><td class="c">5.85 元/斤<br>（11.7 元/公斤）</td><td class="r" style="color:#f85149">-60.78 亿</td><td class="c">54.18%</td><td class="r" style="color:#f85149">-22.24 亿</td><td class="lt">成本最低梯队、纯养殖弹性最大、货币资金 165 亿最厚；唯一隐忧是现金流转负。<b>核心仓</b></td></tr>
-  <tr><td class="lt"><b>温氏股份</b><br>300498</td><td class="c">5.90 元/斤<br>（11.8 元/公斤）</td><td class="r" style="color:#f85149">-43.66 亿</td><td class="c">58.94%</td><td class="r" style="color:#3fb950">+4.22 亿</td><td class="lt">成本第二、「养鸡」第二增长曲线对冲、现金流为正、负债可控。<b>核心仓（稳健）</b></td></tr>
-  <tr><td class="lt"><b>神农集团</b><br>605296</td><td class="c">5.95 元/斤<br>（11.9，6 月单月）</td><td class="r" style="color:#f85149">-8.09 亿</td><td class="c">40.75%</td><td class="r" style="color:#f85149">-3.75 亿</td><td class="lt">成本第一梯队、云南区域龙头，负债率为候选最低；但经营现金流转负、规模小。<b>卫星仓</b></td></tr>
-  <tr><td class="lt">新希望<br>000876</td><td class="c">6.10 元/斤</td><td class="r" style="color:#f85149">-17.02 亿</td><td class="c" style="color:#f85149;font-weight:700">70.70%</td><td class="r" style="color:#3fb950">+16.46 亿</td><td class="lt">成本尚可，但负债率最高 + 参股公司连环违约代偿 + 债券破面值，<b>信用风险不满足「风险可控」，剔除</b></td></tr>
-  <tr><td class="lt">海大集团<br>002311</td><td class="c">饲料为主</td><td class="r" style="color:#3fb950">+16.11 亿</td><td class="c">—（盈利）</td><td class="r" style="color:#3fb950">+39.24 亿</td><td class="lt">饲料龙头（饲料营收 87.59%），<b>不是猪周期标的，移出本组合</b>（可另行立项）</td></tr>
+  <tr><td class="lt"><b>牧原股份</b><br>002714</td><td class="c">5.85 元/斤<br>（11.7 元/公斤）</td><td class="r" style="color:#3fb950">-60.78 亿</td><td class="c">54.18%</td><td class="r" style="color:#3fb950">-22.24 亿</td><td class="lt">成本最低梯队、纯养殖弹性最大、货币资金 165 亿最厚；唯一隐忧是现金流转负。<b>核心仓</b></td></tr>
+  <tr><td class="lt"><b>温氏股份</b><br>300498</td><td class="c">5.90 元/斤<br>（11.8 元/公斤）</td><td class="r" style="color:#3fb950">-43.66 亿</td><td class="c">58.94%</td><td class="r" style="color:#f85149">+4.22 亿</td><td class="lt">成本第二、「养鸡」第二增长曲线对冲、现金流为正、负债可控。<b>核心仓（稳健）</b></td></tr>
+  <tr><td class="lt"><b>神农集团</b><br>605296</td><td class="c">5.95 元/斤<br>（11.9，6 月单月）</td><td class="r" style="color:#3fb950">-8.09 亿</td><td class="c">40.75%</td><td class="r" style="color:#3fb950">-3.75 亿</td><td class="lt">成本第一梯队、云南区域龙头，负债率为候选最低；但经营现金流转负、规模小。<b>卫星仓</b></td></tr>
+  <tr><td class="lt">新希望<br>000876</td><td class="c">6.10 元/斤</td><td class="r" style="color:#3fb950">-17.02 亿</td><td class="c" style="color:#f85149;font-weight:700">70.70%</td><td class="r" style="color:#f85149">+16.46 亿</td><td class="lt">成本尚可，但负债率最高 + 参股公司连环违约代偿 + 债券破面值，<b>信用风险不满足「风险可控」，剔除</b></td></tr>
+  <tr><td class="lt">海大集团<br>002311</td><td class="c">饲料为主</td><td class="r" style="color:#f85149">+16.11 亿</td><td class="c">—（盈利）</td><td class="r" style="color:#f85149">+39.24 亿</td><td class="lt">饲料龙头（饲料营收 87.59%），<b>不是猪周期标的，移出本组合</b>（可另行立项）</td></tr>
   <tr><td class="lt">天邦食品</td><td class="c">第二梯队</td><td class="r" style="color:#f85149">深度亏损</td><td class="c" style="color:#f85149;font-weight:700">91.22%</td><td class="c">—</td><td class="lt">逼近资不抵债，<b>绝对规避</b></td></tr>
 </table>
 
@@ -393,7 +393,7 @@
 <div class="stack" title="目标仓位配置（10 万元）">
   <div style="width:30%;background:#3fb950">牧原 30%</div>
   <div style="width:30%;background:#2ea043">温氏 30%</div>
-  <div style="width:10%;background:#58a6ff"></div>
+  <div style="width:10%;background:#58a6ff;font-size:11px;color:#0d1117" title="神农集团 10,000 元">神农</div>
   <div style="width:30%;background:#30363d;color:#8b949e">现金 30%</div>
 </div>
 <div class="stack__legend">
