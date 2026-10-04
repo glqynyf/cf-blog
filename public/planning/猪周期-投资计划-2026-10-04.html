@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>猪周期投资计划 | 10万 | 2026-10-04</title>
+<style>
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Helvetica Neue",Arial,sans-serif;background:#0d1117;color:#e6edf3;line-height:1.7;padding:24px;max-width:1200px;margin:0 auto}
+  h1{font-size:24px;color:#fff;margin-bottom:8px;border-bottom:1px solid #30363d;padding-bottom:12px}
+  h2{font-size:18px;color:#fff;margin:32px 0 12px;border-left:3px solid #58a6ff;padding-left:12px}
+  h3{font-size:15px;color:#79c0ff;margin:16px 0 8px}
+  h4{font-size:14px;color:#e6edf3;margin:12px 0 6px}
+  .meta{color:#8b949e;font-size:13px;margin-bottom:16px}
+  .meta b{color:#fff}
+  .stamp{background:#238636;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;margin-left:8px}
+  .tldr{background:rgba(56,139,253,.08);border:1px solid rgba(56,139,253,.3);border-radius:8px;padding:16px;margin:16px 0}
+  .tldr p{margin:6px 0;color:#c9d1d9;font-size:14px}
+  .tldr strong{color:#79c0ff}
+  .kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:16px 0}
+  .kpi-card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px;text-align:center}
+  .kpi-card .label{color:#8b949e;font-size:11px;text-transform:uppercase;letter-spacing:1px}
+  .kpi-card .value{color:#fff;font-size:24px;font-weight:600;margin-top:4px;font-variant-numeric:tabular-nums}
+  .kpi-card .sub{color:#8b949e;font-size:11px;margin-top:4px}
+  .kpi-card .value.good{color:#3fb950}
+  .kpi-card .value.warn{color:#d29922}
+  table{width:100%;border-collapse:collapse;margin:12px 0;background:#161b22;font-size:13px}
+  th{background:#21262d;color:#fff;padding:10px 8px;text-align:left;border-bottom:1px solid #30363d;font-weight:600}
+  td{padding:9px 8px;border-bottom:1px solid #21262d;color:#c9d1d9}
+  td.num,td.r{text-align:right;font-variant-numeric:tabular-nums}
+  td.c{text-align:center}
+  td.lt{text-align:left}
+  tr.t{background:#21262d;font-weight:600}
+  tr.t td{color:#fff;border-top:1px solid #30363d}
+  tr:hover td{background:#1c2128}
+  .ok{color:#3fb950}
+  .warn{color:#d29922}
+  .bad{color:#f85149}
+  .neutral{color:#8b949e}
+  .callout{background:rgba(56,139,253,.06);border-left:3px solid #58a6ff;padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:13px;color:#c9d1d9}
+  .callout strong{color:#79c0ff}
+  .callout-warn{background:rgba(210,153,34,.06);border-left-color:#d29922}
+  .callout-warn strong{color:#d29922}
+  .callout-good{background:rgba(63,185,80,.06);border-left-color:#3fb950}
+  .callout-good strong{color:#3fb950}
+  ul,ol{margin-left:20px;margin-bottom:8px}
+  li{padding:4px 0;color:#c9d1d9}
+  code{background:#21262d;color:#79c0ff;padding:1px 6px;border-radius:3px;font-size:12px;font-family:"SF Mono",Menlo,monospace}
+  .timeline{position:relative;padding-left:24px}
+  .timeline::before{content:"";position:absolute;left:6px:top:8px;bottom:8px;width:2px;background:#30363d}
+  .event{position:relative;padding:8px 0 8px 16px;margin-bottom:8px;color:#c9d1d9;font-size:13px}
+  .event::before{content:"";position:absolute;left:-22px;top:14px;width:12px;height:12px;border-radius:50%;background:#58a6ff;border:2px solid #0d1117}
+  .event.upcoming::before{background:#d29922}
+  .event.critical::before{background:#f85149;box-shadow:0 0 6px rgba(248,81,73,.5)}
+  .event b{color:#fff}
+  .event .date{color:#8b949e;font-size:12px;margin-right:8px}
+  .event .tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:11px;margin-left:6px}
+  .tag-critical{background:#da3633;color:#fff}
+  .tag-upcoming{background:#9e6a03;color:#fff}
+  .tag-monitor{background:#1f6feb;color:#fff}
+  .checklist{list-style:none}
+  .checklist li{padding:6px 0;font-size:13px;color:#c9d1d9}
+  .checklist li::before{content:"☐ ";color:#8b949e;margin-right:6px}
+  /* ---------- 返回入口（由 add-planning-toc.py 注入） ---------- */
+  .doc-nav { margin-bottom: 18px; }
+  .doc-nav__back:hover {
+    background: rgba(56,139,253,.12) !important;
+    border-color: #58a6ff !important;
+    color: #58a6ff !important;
+    text-decoration: none !important;
+  }
+
+  /* ---------- 本文目录（窄屏主力，宽屏与侧栏并存） ---------- */
+  .doc-toc {
+    position: relative; margin-bottom: 40px; padding: 18px 22px 16px;
+    background: radial-gradient(120% 130% at 0% 0%, rgba(56,139,253,.12), transparent 55%), #161b22;
+    border: 1px solid #30363d; border-radius: 10px;
+  }
+  .doc-toc::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px;
+    background: linear-gradient(90deg, #58a6ff, transparent 72%);
+  }
+  .doc-toc h4 {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+    font-size: 12px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: #58a6ff;
+  }
+  .doc-toc h4::before {
+    content: ''; width: 4px; height: 13px; flex-shrink: 0;
+    border-radius: 2px; background: #58a6ff;
+  }
+  .doc-toc__count {
+    margin-left: auto; padding: 2px 9px; border-radius: 999px;
+    background: rgba(56,139,253,.12); border: 1px solid rgba(56,139,253,.3);
+    color: #58a6ff; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: none;
+  }
+  .doc-toc ol {
+    position: relative; list-style: none; counter-reset: dtoc;
+    margin: 0; padding: 0;
+  }
+  .doc-toc ol::before {
+    content: ''; position: absolute; left: 25px; top: 18px; bottom: 18px; width: 1px;
+    background: linear-gradient(180deg, #30363d 0%, #30363d 70%, transparent 100%);
+  }
+  .doc-toc li { counter-increment: dtoc; position: relative; margin: 0; padding: 0; }
+  .doc-toc a {
+    display: flex; align-items: center; gap: 12px; padding: 6px 12px;
+    border-radius: 8px; color: #c9d1d9; font-size: 14px; line-height: 1.5;
+    text-decoration: none; transition: background .18s, color .18s, box-shadow .18s;
+  }
+  .doc-toc a::before {
+    content: counter(dtoc, decimal-leading-zero);
+    position: relative; z-index: 1; display: inline-flex;
+    align-items: center; justify-content: center; flex-shrink: 0;
+    width: 24px; height: 18px; border-radius: 5px;
+    background: #21262d; border: 1px solid #30363d;
+    color: #8b949e; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 10px; font-weight: 700;
+  }
+  .doc-toc a:hover { background: #21262d; color: #e6edf3; text-decoration: none; }
+  .doc-toc a:hover::before { border-color: #58a6ff; color: #58a6ff; }
+  .doc-toc a.is-active {
+    background: rgba(56,139,253,.12); box-shadow: inset 3px 0 0 #58a6ff; color: #e6edf3;
+  }
+  .doc-toc a.is-active::before {
+    background: #58a6ff; border-color: #58a6ff; color: #0d1117;
+  }
+
+  /* ---------- 左侧悬浮目录（视口足够宽才显示，否则会压住正文） ---------- */
+  .doc-sidenav { display: none; }
+  .doc-sidenav::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px;
+    border-radius: 8px 8px 0 0;
+    background: linear-gradient(90deg, #58a6ff, transparent 78%);
+  }
+  .doc-sidenav__title {
+    display: flex; align-items: center; gap: 6px;
+    margin: 0 0 10px; padding-bottom: 8px;
+    border-bottom: 1px solid #30363d;
+    font-size: 11px; font-weight: 700; color: #58a6ff;
+    letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .doc-sidenav__title::before {
+    content: ''; width: 3px; height: 11px; flex-shrink: 0;
+    border-radius: 2px; background: #58a6ff;
+  }
+  .doc-sidenav__count {
+    margin-left: auto; padding: 1px 7px; border-radius: 999px;
+    background: rgba(56,139,253,.12); border: 1px solid rgba(56,139,253,.3);
+    color: #58a6ff;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: none;
+  }
+  .doc-sidenav ol {
+    position: relative; list-style: none; margin: 0; padding: 0;
+    counter-reset: dsnav;
+  }
+  .doc-sidenav ol::before {
+    content: ''; position: absolute; left: 9px; top: 12px; bottom: 12px; width: 1px;
+    background: linear-gradient(180deg, #30363d 0%, #30363d 70%, transparent 100%);
+  }
+  .doc-sidenav li { margin: 0; }
+  .doc-sidenav ol a {
+    position: relative; display: flex; align-items: center; gap: 8px;
+    padding: 5px 6px; border-radius: 6px;
+    border-left: 2px solid transparent; color: #c9d1d9;
+    font-size: 12.5px; line-height: 1.5; text-decoration: none;
+    transition: background .18s, color .18s, border-color .18s;
+  }
+  .doc-sidenav ol a::before {
+    counter-increment: dsnav; content: counter(dsnav, decimal-leading-zero);
+    position: relative; z-index: 1;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0; width: 18px; height: 18px; border-radius: 5px;
+    background: #21262d; border: 1px solid #30363d;
+    color: #8b949e; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 9.5px; font-weight: 700;
+  }
+  .doc-sidenav ol a:hover {
+    background: #21262d; color: #e6edf3; text-decoration: none;
+  }
+  .doc-sidenav ol a.is-active {
+    background: rgba(56,139,253,.12); border-left-color: #58a6ff; color: #e6edf3;
+  }
+  .doc-sidenav ol a.is-active::before {
+    background: #58a6ff; border-color: #58a6ff; color: #0d1117;
+  }
+  .doc-sidenav__foot {
+    margin-top: 10px; padding-top: 10px; border-top: 1px solid #30363d;
+  }
+  .doc-sidenav__top {
+    display: block; text-align: center; padding: 5px 0; border-radius: 5px;
+    color: #8b949e; text-decoration: none; font-size: 11.5px;
+  }
+  .doc-sidenav__top:hover { background: #21262d; color: #58a6ff; text-decoration: none; }
+
+  /* 锚点跳转时给标题留出上方余量 */
+  h2[id] { scroll-margin-top: 24px; }
+
+  @media (max-width: 640px) {
+    .doc-toc { padding: 14px 14px 12px; }
+    .doc-toc a { font-size: 13.5px; padding: 5px 8px; gap: 8px; }
+    .doc-toc ol::before { left: 21px; }
+  }
+  /* 正文 1200px 居中，留出 200px 侧栏 + 24px 间隙需要视口 ≥1680px */
+  @media (min-width: 1680px) {
+    .doc-sidenav { display: block; }
+  }
+
+  /* 成本梯队 / 仓位配置：纯 CSS 条形，不引外部图表库 */
+  .bars{margin:14px 0 6px;border:1px solid #30363d;border-radius:8px;background:#161b22;padding:16px 18px}
+  .bars__title{font-size:13px;color:#8b949e;margin-bottom:12px}
+  .bar{display:flex;align-items:center;gap:10px;margin:7px 0;font-size:13px}
+  .bar__name{width:74px;color:#c9d1d9;flex-shrink:0}
+  .bar__track{display:block;flex:1;background:#21262d;border-radius:4px;height:16px;overflow:hidden}
+  /* fill 必须是块级：span 默认 inline，inline 元素不接受 width，条宽会被整个忽略 */
+  .bar__fill{display:block;height:100%;border-radius:4px}
+  .bar__val{width:66px;text-align:right;font-variant-numeric:tabular-nums;color:#8b949e;flex-shrink:0}
+  .bars__legend{margin-top:12px;font-size:12px;color:#8b949e}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle}
+  .stack{display:flex;height:34px;border-radius:6px;overflow:hidden;margin:14px 0 6px;border:1px solid #30363d}
+  .stack div{display:flex;align-items:center;justify-content:center;font-size:12.5px;color:#0d1117;font-weight:700}
+  .stack__legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:#8b949e;margin-top:8px}
+  .srcnote{font-size:12.5px;color:#8b949e;text-align:center;margin:6px 0 4px}
+
+</style>
+</head>
+<body>
+
+<nav class="doc-sidenav" style="position:fixed;left:calc(50vw - 824px);top:96px;width:200px;z-index:20;max-height:calc(100vh - 140px);overflow-y:auto;background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px 12px;font-size:12.5px;line-height:1.6;box-shadow:0 8px 30px rgba(0,0,0,.4);" aria-label="本文目录">
+  <h4 class="doc-sidenav__title">本文目录<span class="doc-sidenav__count">9</span></h4>
+  <ol>
+      <li><a href="#sec-1">一、投资逻辑：为什么现在布局猪周期</a></li>
+      <li><a href="#sec-2">二、供给端"减母不减肉"：拐点会不会迟到</a></li>
+      <li><a href="#sec-3">三、标的筛选：成本与现金流才是生死线</a></li>
+      <li><a href="#sec-4">四、仓位配置（10 万元）</a></li>
+      <li><a href="#sec-5">五、建仓节奏（分批，左侧为主）</a></li>
+      <li><a href="#sec-6">六、风控体系（止损 + 止盈）</a></li>
+      <li><a href="#sec-7">七、每周监控清单（约 20 分钟）</a></li>
+      <li><a href="#sec-8">八、失效条件（整套方案的作废开关）</a></li>
+      <li><a href="#sec-9">九、风险提示</a></li>
+  </ol>
+  <div class="doc-sidenav__foot">
+    <a class="doc-sidenav__top" href="#">↑ 回到顶部</a>
+  </div>
+</nav>
+<div class="doc-nav">
+  <a class="doc-nav__back" href="/planning/" style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:6px;background:#21262d;border:1px solid #30363d;color:#c9d1d9;text-decoration:none;font-size:13px;font-weight:600;line-height:1.4;transition:all .2s;">← 返回规划</a>
+</div>
+<h1>猪周期投资计划 <span class="stamp">10万 | 2026-10-04</span></h1>
+<div class="meta">
+  资金性质：<b>10 万元为猪周期专项布局资金，非账户总资产</b>，持有周期全覆盖（中间不抽离）｜ 风险偏好：中性<br>
+  报告基准日：<b>2026-10-04</b> ｜ 数据来源：农业农村部 / 国家统计局、上市公司 2026 半年报、中国养猪网、Mysteel 钢联、卓创 / 涌益咨询、券商研报（非一手来源）
+</div>
+
+<div class="tldr">
+<h3 style="margin-top:0">📋 投资逻辑一句话</h3>
+<p>生猪是强周期品，本轮行业已<b>深度亏损超 11 个月</b>、能繁母猪连续去化 15 个月并接近政策红线，正处于<b>周期底部左侧</b>。此时以<b>成本优势明确的龙头</b>为标的、以<b>分批 + 严格逻辑止损</b>为纪律，赚取 2027 年猪价反转带来的「猪价上涨 × 盈利修复 × 估值修复」戴维斯双击。</p>
+<p>核心矛盾不是「要不要投」，而是<b>「用哪几只票、留多少子弹、何时认错」</b>。</p>
+</div>
+
+<div class="kpi">
+<div class="kpi-card">
+<div class="label">周期位置</div>
+<div class="value">底部左侧</div>
+<div class="sub">去化确认中，拐点未到</div>
+</div>
+<div class="kpi-card">
+<div class="label">目标仓位</div>
+<div class="value good">70%</div>
+<div class="sub">股票 7 万 + 现金 3 万</div>
+</div>
+<div class="kpi-card">
+<div class="label">核心标的</div>
+<div class="value">牧原 · 温氏</div>
+<div class="sub">神农作卫星仓</div>
+</div>
+<div class="kpi-card">
+<div class="label">预期拐点</div>
+<div class="value warn">2027Q2</div>
+<div class="sub">机构共识，可能顺延</div>
+</div>
+<div class="kpi-card">
+<div class="label">最大回撤容忍</div>
+<div class="value">约 15%</div>
+<div class="sub">组合级 1.5 万</div>
+</div>
+</div>
+
+<!-- ============ 一 ============ -->
+<nav class="doc-toc" aria-label="本文目录">
+  <h4>本文目录<span class="doc-toc__count">9</span></h4>
+  <ol>
+    <li><a href="#sec-1">一、投资逻辑：为什么现在布局猪周期</a></li>
+    <li><a href="#sec-2">二、供给端"减母不减肉"：拐点会不会迟到</a></li>
+    <li><a href="#sec-3">三、标的筛选：成本与现金流才是生死线</a></li>
+    <li><a href="#sec-4">四、仓位配置（10 万元）</a></li>
+    <li><a href="#sec-5">五、建仓节奏（分批，左侧为主）</a></li>
+    <li><a href="#sec-6">六、风控体系（止损 + 止盈）</a></li>
+    <li><a href="#sec-7">七、每周监控清单（约 20 分钟）</a></li>
+    <li><a href="#sec-8">八、失效条件（整套方案的作废开关）</a></li>
+    <li><a href="#sec-9">九、风险提示</a></li>
+  </ol>
+</nav>
+
+<h2 id="sec-1">一、投资逻辑：为什么现在布局猪周期</h2>
+
+<h3>1. 猪周期的本质：供给的滞后性</h3>
+<p>猪周期的核心驱动力是<b>产能决策与出栏结果的时滞</b>——母猪配种到商品猪出栏约 10 个月。所以「能繁母猪存栏」是领先指标，「猪价」是同步结果，「出栏量」是滞后兑现：行业盈利 → 扩产 → 10 个月后供给过剩 → 猪价下跌 → 亏损 → 去产能 → 10 个月后供给收缩 → 猪价上涨，如此循环。</p>
+
+<h3>2. 当前所处位置：周期底部左侧</h3>
+<table>
+  <tr><th>指标类型</th><th>指标</th><th class="c">当前值</th><th>含义</th></tr>
+  <tr><td class="lt">领先指标</td><td class="lt">能繁母猪存栏</td><td class="r">3,780 万头（Q2 末）</td><td class="lt">同比 -6.5%，连续去化约 15 个月，8 月环比 -2.9%（年内最大），距 3,750 万头目标仅差 0.8%</td></tr>
+  <tr><td class="lt">同步指标</td><td class="lt">外三元猪价</td><td class="r">约 10.2 元/公斤</td><td class="lt">接近行业现金成本线，9 月「金九」落空、月内跌破 10.1；10 月初短暂反弹至 10.25 后又回落至 10.2（猪粮比 4.7:1）</td></tr>
+  <tr><td class="lt">盈利指标</td><td class="lt">自繁自养头均亏损</td><td class="r">约 -150～160 元/头</td><td class="lt">全行业亏损已超 11 个月，H1 三家头部合计亏 121 亿</td></tr>
+  <tr><td class="lt">情绪指标</td><td class="lt">仔猪价 / 淘汰母猪价</td><td class="r">130 元/头 / 约 7.6 元/公斤</td><td class="lt">仔猪价同比 -44.9% 创年内新低、与 2023 年最低点持平；淘汰母猪价 8 月末曾骤降至 6.8 元/公斤——均被视为周期情绪见底的前瞻信号</td></tr>
+  <tr><td class="lt">估值指标</td><td class="lt">牧原 / 温氏 PB</td><td class="r">3.10 / 2.87</td><td class="lt">处于历史低位区间（牧原 PB 历史中枢约 6.7 倍，2022 年周期顶约 6.9 倍，当前 3.10 倍处近 10 年低位分位）</td></tr>
+</table>
+
+<div class="callout">
+<b>关键判断</b>：多项领先与情绪指标同时指向「底部区域」，但<b>拐点尚未确认</b>——机构一致判断（中金、华创、广发期货）把猪价反转时点指向 <b>2027 年二季度</b>，而非当下。因此这是一个<b>「逻辑清晰、时点未定」的左侧机会</b>：适合分批埋伏，不适合一把梭赌拐点。
+</div>
+
+<h3>3. 收益来源：三重修复的戴维斯双击</h3>
+<p>周期股在底部左侧布局的收益，来自三件事同时兑现：<b>① 猪价上涨</b>（去化传导至出栏收缩）→ <b>② 盈利修复</b>（头均从亏损 150 元转为盈利）→ <b>③ 估值修复</b>（PB 从底部向周期均值回归）。三者叠加，是周期龙头主升浪（历史上一轮完整猪周期龙头涨幅常达 +100%～+300%）的来源。</p>
+
+<h2 id="sec-2">二、供给端必须正视的「减母不减肉」</h2>
+<p>本轮周期与历史最大的不同，是<b>「减母不减肉」</b>——这决定了拐点可能比预期更晚，也是左侧布局必须留足子弹的原因。</p>
+<table>
+  <tr><th>供给结构变量</th><th class="c">当前状态</th><th>对拐点的影响</th></tr>
+  <tr><td class="lt">PSY（单头母猪年供仔猪）</td><td class="c">23.4 头（头部 28～33）</td><td class="lt">母猪数量降了，但单头产肉量提升，对冲去化效果，<b>推迟供给收缩</b></td></tr>
+  <tr><td class="lt">冻品库容率</td><td class="c">32.2%～32.6%</td><td class="lt">同比高约 15 个百分点，猪价一反弹就有冻肉出库封顶，<b>压制上方空间</b></td></tr>
+  <tr><td class="lt">出栏均重</td><td class="c">124 公斤+</td><td class="lt">压栏增重 → 隐性供给放大，<b>短期供给不降反增</b></td></tr>
+  <tr><td class="lt">逆势扩张主体</td><td class="c">正邦 +60%、傲农 +68% 等</td><td class="lt">部分高负债主体「赌别人先出清」而增产，<b>抵消行业去化</b></td></tr>
+  <tr><td class="lt">饲料成本</td><td class="c">9 月猪料上调 50～150 元/吨</td><td class="lt">猪价跌 + 成本涨，<b>亏损加深 → 加速去化（中期利好）</b></td></tr>
+</table>
+<div class="callout-warn">
+<b>结论</b>：能繁去化的方向确定，但「减母不减肉」会拉长磨底时间。这意味着<b>拐点可能从 2027Q2 顺延至 2027 下半年</b>。好在资金周期全覆盖、无中途抽离压力，这正是左侧布局能成立的先决条件——用「分批 + 留 30% 现金」来消化这个时间不确定性。
+</div>
+
+<h2 id="sec-3">三、标的筛选：成本与现金流才是生死线</h2>
+<p>筛选标准（按重要性排序）：<b>① 成本优势</b>（周期反转时确定性最高）→ <b>② 现金流安全</b>（能熬过磨底期）→ <b>③ 无信用 / 退市风险</b> → <b>④ 猪价弹性</b>。行业正处「淘汰成本高的、现金流绷不住的」阶段，标准 ①②③ 是硬门槛。</p>
+
+<h3>头部猪企成本梯队（完全成本，元/斤）</h3>
+<div class="bars">
+<div class="bars__title">图 1　A 股头部猪企生猪养殖完全成本（元/斤）　<span style="color:#484f58">｜ 口径：各企业 4–5 月，神农为 6 月单月值</span></div>
+  <div class="bar"><span class="bar__name">立华</span><span class="bar__track"><span class="bar__fill" style="width:29.2%;background:#484f58"></span></span><span class="bar__val">5.75</span></div>
+  <div class="bar"><span class="bar__name">牧原</span><span class="bar__track"><span class="bar__fill" style="width:37.5%;background:#3fb950"></span></span><span class="bar__val">5.85</span></div>
+  <div class="bar"><span class="bar__name">温氏</span><span class="bar__track"><span class="bar__fill" style="width:41.7%;background:#3fb950"></span></span><span class="bar__val">5.90</span></div>
+  <div class="bar"><span class="bar__name">德康</span><span class="bar__track"><span class="bar__fill" style="width:45.8%;background:#484f58"></span></span><span class="bar__val">5.95</span></div>
+  <div class="bar"><span class="bar__name">大北农</span><span class="bar__track"><span class="bar__fill" style="width:50.0%;background:#484f58"></span></span><span class="bar__val">6.00</span></div>
+  <div class="bar"><span class="bar__name">神农</span><span class="bar__track"><span class="bar__fill" style="width:45.8%;background:#58a6ff"></span></span><span class="bar__val">5.95</span></div>
+  <div class="bar"><span class="bar__name">新希望</span><span class="bar__track"><span class="bar__fill" style="width:58.3%;background:#f85149"></span></span><span class="bar__val">6.10</span></div>
+  <div class="bar"><span class="bar__name">天康</span><span class="bar__track"><span class="bar__fill" style="width:62.5%;background:#484f58"></span></span><span class="bar__val">6.15</span></div>
+  <div class="bar"><span class="bar__name">巨星</span><span class="bar__track"><span class="bar__fill" style="width:75.0%;background:#484f58"></span></span><span class="bar__val">6.30</span></div>
+<div class="bars__legend">
+  <span><i class="dot" style="background:#3fb950"></i>选定（核心仓）</span>
+  <span><i class="dot" style="background:#58a6ff"></i>卫星仓</span>
+  <span><i class="dot" style="background:#f85149"></i>剔除</span>
+  <span><i class="dot" style="background:#484f58"></i>仅作参照</span>
+</div>
+</div>
+<p class="srcnote">来源：猪场动力网汇总各企业月度简报 / 财报 / 投资者交流（2026 年）</p>
+
+<table>
+  <tr><th>标的</th><th class="c">成本</th><th class="r">H1 归母净利</th><th class="c">负债率</th><th class="r">经营现金流</th><th>定位与结论</th></tr>
+  <tr><td class="lt"><b>牧原股份</b><br>002714</td><td class="c">5.85 元/斤<br>（11.7 元/公斤）</td><td class="r" style="color:#f85149">-60.78 亿</td><td class="c">54.18%</td><td class="r" style="color:#f85149">-22.24 亿</td><td class="lt">成本最低梯队、纯养殖弹性最大、货币资金 165 亿最厚；唯一隐忧是现金流转负。<b>核心仓</b></td></tr>
+  <tr><td class="lt"><b>温氏股份</b><br>300498</td><td class="c">5.90 元/斤<br>（11.8 元/公斤）</td><td class="r" style="color:#f85149">-43.66 亿</td><td class="c">58.94%</td><td class="r" style="color:#3fb950">+4.22 亿</td><td class="lt">成本第二、「养鸡」第二增长曲线对冲、现金流为正、负债可控。<b>核心仓（稳健）</b></td></tr>
+  <tr><td class="lt"><b>神农集团</b><br>605296</td><td class="c">5.95 元/斤<br>（11.9，6 月单月）</td><td class="r" style="color:#f85149">-8.09 亿</td><td class="c">40.75%</td><td class="r" style="color:#f85149">-3.75 亿</td><td class="lt">成本第一梯队、云南区域龙头，负债率为候选最低；但经营现金流转负、规模小。<b>卫星仓</b></td></tr>
+  <tr><td class="lt">新希望<br>000876</td><td class="c">6.10 元/斤</td><td class="r" style="color:#f85149">-17.02 亿</td><td class="c" style="color:#f85149;font-weight:700">70.70%</td><td class="r" style="color:#3fb950">+16.46 亿</td><td class="lt">成本尚可，但负债率最高 + 参股公司连环违约代偿 + 债券破面值，<b>信用风险不满足「风险可控」，剔除</b></td></tr>
+  <tr><td class="lt">海大集团<br>002311</td><td class="c">饲料为主</td><td class="r" style="color:#3fb950">+16.11 亿</td><td class="c">—（盈利）</td><td class="r" style="color:#3fb950">+39.24 亿</td><td class="lt">饲料龙头（饲料营收 87.59%），<b>不是猪周期标的，移出本组合</b>（可另行立项）</td></tr>
+  <tr><td class="lt">天邦食品</td><td class="c">第二梯队</td><td class="r" style="color:#f85149">深度亏损</td><td class="c" style="color:#f85149;font-weight:700">91.22%</td><td class="c">—</td><td class="lt">逼近资不抵债，<b>绝对规避</b></td></tr>
+</table>
+
+<div class="callout-warn">
+<b>新希望、海大为何不纳入</b>：新希望虽成本尚可，但负债率 70.7%、参股公司连环违约代偿、债券「26 希望 KEB1」跌至 90.48 元，信用风险不满足「风险可控」——<b>周期股可以赌周期，不能赌一家公司不爆雷</b>。海大则是定位不符——它是饲料龙头（饲料占 87.59%），不是猪价弹性标的，纳入会稀释方向纯度。二者都不符合「风险可控 + 收益可观」的双重要求。
+</div>
+
+<h2 id="sec-4">四、仓位配置（10 万元，风险可控）</h2>
+<p>仓位配置遵循「风险预算 + 相关性修正」原则：<b>回避信用风险标的 + 保留 30% 现金缓冲左侧深跌 + 聚焦成本优势龙头</b>。</p>
+<table>
+  <tr><th>标的</th><th class="c">目标占比</th><th class="r">金额</th><th class="c">角色</th><th>逻辑</th></tr>
+  <tr><td class="lt"><b>牧原股份</b><br>002714</td><td class="c"><b>30%</b></td><td class="r">30,000</td><td class="c">进攻核心</td><td class="lt">成本最低 + 弹性最大 + 行业绝对龙头</td></tr>
+  <tr><td class="lt"><b>温氏股份</b><br>300498</td><td class="c"><b>30%</b></td><td class="r">30,000</td><td class="c">稳健核心</td><td class="lt">现金流正 + 养鸡对冲 + 负债可控</td></tr>
+  <tr><td class="lt"><b>神农集团</b><br>605296</td><td class="c"><b>10%</b></td><td class="r">10,000</td><td class="c">弹性卫星</td><td class="lt">低成本 + 区域龙头，补充弹性（PB 约 3.98，估值高于核心两只）</td></tr>
+  <tr class="t"><td class="lt"><b>现金</b></td><td class="c"><b>30%</b></td><td class="r">30,000</td><td class="c">分批弹药</td><td class="lt">左侧深跌的缓冲 + 右侧确认加仓</td></tr>
+</table>
+<p style="font-size:13px;color:#8b949e">买入价位不定死：分批建仓、条件触发，实际买入价由建仓时的市场价决定，<b>不与任何历史价位锚定</b>（避免因锚定过时价格而追高或空等）。</p>
+
+<div class="stack" title="目标仓位配置（10 万元）">
+  <div style="width:30%;background:#3fb950">牧原 30%</div>
+  <div style="width:30%;background:#2ea043">温氏 30%</div>
+  <div style="width:10%;background:#58a6ff"></div>
+  <div style="width:30%;background:#30363d;color:#8b949e">现金 30%</div>
+</div>
+<div class="stack__legend">
+  <span><i class="dot" style="background:#3fb950"></i>牧原股份 30,000 元</span>
+  <span><i class="dot" style="background:#2ea043"></i>温氏股份 30,000 元</span>
+  <span><i class="dot" style="background:#58a6ff"></i>神农集团 10,000 元</span>
+  <span><i class="dot" style="background:#30363d"></i>现金 30,000 元</span>
+</div>
+<p class="srcnote">图 2　目标仓位配置（10 万元）</p>
+
+<div class="callout-good">
+<b>为什么是 70% 股票 + 30% 现金</b>：中性偏好下，70% 的猪周期暴露能在反转兑现时获得充分收益；30% 现金承担三重功能——(1) 左侧磨底若超预期延后，有余地摊低核心标的成本；(2) 拐点右侧确认时用来加仓；(3) 极端行情下作为心理安全垫，避免底部被迫砍仓。若对回撤更敏感，可把现金提到 40%、股票压到 60%。
+</div>
+
+<h2 id="sec-5">五、建仓节奏（分批，左侧为主、右侧为辅）</h2>
+<table>
+  <tr><th>批次</th><th class="r">金额</th><th class="c">累计仓位</th><th>触发条件</th><th>动作</th></tr>
+  <tr><td class="lt"><b>第 1 批</b></td><td class="r">40,000</td><td class="c">40%</td><td class="lt">Q3 末能繁数据公布，<b>环比仍为负</b>（去化未终止）</td><td class="lt">牧原 2 万 + 温氏 2 万，各建一半目标仓</td></tr>
+  <tr><td class="lt"><b>第 2 批</b></td><td class="r">20,000</td><td class="c">60%</td><td class="lt">猪价企稳回升，或能繁单月去化 &gt; 2%（去化加速）</td><td class="lt">牧原 1 万 + 神农 1 万</td></tr>
+  <tr><td class="lt"><b>第 3 批</b></td><td class="r">10,000</td><td class="c">70%</td><td class="lt">右侧确认：猪价站稳成本线（约 12 元/公斤）且出栏量同比转负</td><td class="lt">温氏 1 万，补足目标仓</td></tr>
+  <tr class="t"><td class="lt"><b>现金保留</b></td><td class="r">30,000</td><td class="c">30%</td><td colspan="2" class="lt">常态保留，用于摊低成本或应对极端行情，不一次性打光</td></tr>
+</table>
+<div class="callout-warn">
+<b>若第 1 批条件不满足</b>（Q3 末能繁环比转正、去化终止）：<b>放弃建仓</b>，等待能繁重新转负再启动。这是最省钱的退出方式——逻辑没了，钱还没进，全身而退。
+</div>
+
+<h2 id="sec-6">六、风控体系（止损 + 止盈 + 极端保护）</h2>
+
+<h3>1. 逻辑止损（核心，真正的卖出依据）</h3>
+<p>周期投资卖出的第一依据是「<b>逻辑是否被证伪</b>」，而不是股价波动。触发即执行，不找替代理由。</p>
+<table>
+  <tr><th>触发条件</th><th>动作</th></tr>
+  <tr><td class="lt"><b>能繁母猪存栏连续 2 个月环比转正</b></td><td class="lt">去化终止 = 周期反转逻辑消失，<b>全部清仓</b></td></tr>
+  <tr><td class="lt"><b>政策明确转向鼓励扩产</b>（停止产能调控、放开窗口指导）</td><td class="lt">政策托底逻辑失效，<b>全部清仓</b></td></tr>
+  <tr><td class="lt"><b>持仓个股出现信用风险事件</b>（违约、代偿失控、ST 风险、债券异常）</td><td class="lt">该标的<b>无条件清仓</b>，不赌公司求生</td></tr>
+  <tr><td class="lt"><b>持仓个股完全成本连续 2 季不降反升</b></td><td class="lt">清仓该标的（成本优势是买入理由）</td></tr>
+</table>
+
+<h3>2. 价格止损（辅助，防个股尾部风险）</h3>
+<p>周期左侧不做「机械价格止损」（容易被底部 whipsaw 扫出），但设个股级别的极端保护：</p>
+<table>
+  <tr><th>层级</th><th>触发条件</th><th>动作</th></tr>
+  <tr><td class="lt">个股级</td><td class="lt">单只标的<b>浮亏超 30%</b></td><td class="lt">该标的减半，全面复盘基本面是否破坏</td></tr>
+  <tr><td class="lt">组合级</td><td class="lt">组合总浮亏<b>达 15%（约 1.5 万）</b></td><td class="lt">降仓至半仓，重查逻辑是否被证伪</td></tr>
+</table>
+<div class="callout-warn">
+<b>关于价格止损的设计说明</b>：周期左侧不做机械价格止损（容易被底部 whipsaw 反复扫出），而是<b>明确承认左侧要承受 30% 级个股回撤</b>，用「逻辑止损 + 个股 30% 极端保护」两级来实现真实、可执行的保护。
+</div>
+
+<h3>3. 止盈（周期反转兑现后，阶梯式兑现）</h3>
+<p>止盈档位锚定两个可验证的客观锚点——<b>行业成本线</b>与<b>历史周期价格中枢</b>，<b>不依赖单一机构预测</b>（机构分歧大、且易被现实证伪）。</p>
+<table>
+  <tr><th>档位</th><th>触发条件（外三元猪价）</th><th>定价依据</th><th>动作</th></tr>
+  <tr><td class="lt">阶梯 1</td><td class="lt">站稳 <b>13.5 元/公斤</b></td><td class="lt">行业平均完全成本（16 家头部约 12.42 元/公斤）之上，行业转向全面盈利；贴近历史常规周期中枢（约 14.3 元）下方</td><td class="lt">减仓 20%</td></tr>
+  <tr><td class="lt">阶梯 2</td><td class="lt">站稳 <b>15.0 元/公斤</b></td><td class="lt">历史常规周期价格中枢（阶段Ⅰ 14.27 元、阶段Ⅳ 14.54 元，国盛证券口径）附近，价格回到并略超历史中枢</td><td class="lt">再减 30%</td></tr>
+  <tr><td class="lt">阶梯 3</td><td class="lt">站稳 <b>17.0 元/公斤</b></td><td class="lt">上一轮回归周期中枢（阶段Ⅲ 17.08 元，国盛证券口径）附近</td><td class="lt">再减 30%，保留底仓吃主升浪</td></tr>
+  <tr class="t"><td class="lt">逻辑清仓</td><td class="lt"><b>能繁同比转正 + 猪价滞涨（顶背离）</b></td><td class="lt">周期见顶的领先信号（不依赖具体价位）</td><td class="lt">清仓剩余全部</td></tr>
+</table>
+
+<div class="callout-good">
+<b>档位依据与使用说明</b><br>
+① <b>12 元/公斤</b> = 头部龙头完全成本（牧原 11.5～11.7、温氏 11.8、神农 11.9 元/公斤），是「龙头回本、反转确认」的<b>建仓完成线</b>，不在此止盈。<br>
+② 止盈三档锚定 <b>历史周期价格中枢</b>（国盛证券·同花顺数据）：2015-2018 常规周期中枢 14.27 元、2024 年至今阶段中枢 14.54 元、2022-2024 回归周期中枢 17.08 元。<br>
+③ 机构对 2027 年猪价预测<b>分歧极大</b>（卓创最悲观约 12～12.5 元、正大猪博士最乐观 17～19 元），且已有多家预测被现实证伪——<b>高盛 2026-04-16 研报预测「2026 下半年达 15 元」，而 9-10 月实际仅约 10.2 元</b>。故本方案止盈锚定历史周期中枢而非单一机构预测；17 元档属<b>偏乐观情景</b>，若到不了则由「逻辑清仓」兜底退出。<br>
+④ <b>历史中枢本身是下行序列</b>：国盛证券 2026-06-17 报告的核心论点是「中枢逐级下移 + 低中枢、弱弹性、长低迷」。<b>直接取历史数值当目标，等于假设回到猪瘟后的修复期水平</b>。因此 13.5 / 15 / 17 元是<b>基准框架而非死数字</b>：每档触发前须先复盘基本面（能繁存栏、出栏量同比、冻品库容率、PSY 变化、消费成色），判断这轮反转的「成色」，再决定该档上调（让利润多跑）还是下调（及时兑现）。若「减母不减肉」持续、冻品出清缓慢，本轮高点可能<b>显著低于 17 元</b>。
+</div>
+
+<h2 id="sec-7">七、每周监控清单（约 20 分钟）</h2>
+<ul class="checklist">
+  <li><b>外三元猪价</b>：对照止盈 / 止损各档位，判断「站稳 / 跌破」；临近止盈档位时，同步复盘基本面以动态校准档位。</li>
+  <li><b>能繁母猪存栏</b>：月度 / 季度数据，重点看<b>环比方向</b>（连续 2 个月转正 = 清仓）。</li>
+  <li><b>猪粮比</b>：跌破 4.0 关注政策收储动向。</li>
+  <li><b>冻品库容率 + 出栏均重</b>：判断「减母不减肉」是否缓解（拐点的前置确认）。</li>
+  <li><b>仔猪价 + 淘汰母猪价</b>：情绪见底 / 反转的前瞻信号。</li>
+  <li><b>豆粕 / 玉米价格</b>：饲料成本对头均盈利的影响。</li>
+  <li><b>持仓个股月度出栏量 + 完全成本</b>：验证成本优势是否维持。</li>
+  <li><b>持仓个股公告</b>：代偿、担保、定增、评级变动等信用信号。</li>
+</ul>
+
+<h2 id="sec-8">八、失效条件（整套方案的「作废开关」）</h2>
+<div class="callout-warn">
+<ol style="margin-left:16px">
+  <li><b>能繁母猪连续 2 个月环比转正</b> → 去化终止，清仓离场，不找替代。</li>
+  <li><b>政策明确转向鼓励扩产</b> → 调控逻辑消失，清仓离场。</li>
+  <li><b>持仓个股爆发信用事件</b>（新希望式代偿、ST、资不抵债）→ 该标的无条件清仓。</li>
+  <li><b>核心标的成本优势丧失</b>（连续 2 季成本不降反升）→ 清仓该标的。</li>
+  <li><b>2027 年下半年猪价仍无反转迹象且能繁重新扩张</b> → 全面重估，不恋战。</li>
+</ol>
+</div>
+
+<h2 id="sec-9">九、风险提示（必须正视的负面情形）</h2>
+<ul>
+  <li><b>拐点迟到</b>：若「减母不减肉」持续，反转可能延后至 2027 下半年甚至更晚，资金占用期拉长（资金周期全覆盖可承受，但需有耐心）。</li>
+  <li><b>周期弹性减弱</b>：规模化率突破 70% 后，行业产能「易增难减」，本轮猪价高点可能显著低于上一轮超级周期，<b>收益弹性要打折扣预期</b>。</li>
+  <li><b>需求长期走弱</b>：猪肉在肉类消费占比已从 62%（2018）降至 58%（2025），禽肉 / 牛羊肉持续分流，长期需求天花板下移。</li>
+  <li><b>疫病双向冲击</b>：非瘟、点状疫病冬季高发，既可能加速去化（利好），也可能冲击持仓个股出栏（利空），方向不确定。</li>
+  <li><b>政策不确定性</b>：收储 / 放储、进口调控、环保政策均可能改变供需节奏。</li>
+  <li><b>个股黑天鹅</b>：即便成本最优的龙头，也可能遭遇单点经营 / 财务 / 治理风险，故不重仓单一标的。</li>
+</ul>
+
+<div class="callout-warn">
+<b>免责声明</b>：本报告基于公开数据和量化 / 逻辑分析，仅为研究性投资计划参考，<b>不构成任何投资建议、理财建议或交易邀约</b>。市场有风险，投资需谨慎。文中所涉标的、价位、仓位、策略均仅供研究参考，不保证分析准确性或完整性，不代表对任何投资结果的承诺。投资者应根据自身风险承受能力、投资目标和财务状况独立做出决策并承担相应风险。过往表现不预示未来收益。部分数据为媒体 / 第三方平台二次引用（已标注来源与时点），需以交易所公告、公司年报、官方统计为准。
+</div>
+
+<h4>数据来源与时点</h4>
+<p style="font-size:12.5px;color:#8b949e">猪价（腾讯网·生猪行情，2026-10-04）；能繁母猪存栏（农业农村部，2026Q2 末）；财务数据（上市公司 2026 半年报，合并报表口径）；成本梯队（猪场动力网汇总，2026 年 4-5 月，神农为 6 月单月值）；历史周期价格中枢（国盛证券 2026-06-17 报告 · 同花顺数据）；估值与行情（westock-data，2026-09-30 收盘；神农集团 605296 为腾讯自选股 / 证券时报，2026-09-30 收盘）；行业研判（中金、华创、广发期货、国信证券等研报，非一手来源）。<br>报告生成时间：2026-10-04。</p>
+
+</body>
+</html>
