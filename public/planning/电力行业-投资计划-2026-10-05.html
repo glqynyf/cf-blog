@@ -1,0 +1,882 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>电力行业投资计划 | 5万 | 2026-10-05</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Helvetica Neue",Arial,sans-serif;background:#0d1117;color:#e6edf3;line-height:1.7;padding:24px;max-width:1200px;margin:0 auto}
+  h1{font-size:24px;color:#fff;margin-bottom:8px;border-bottom:1px solid #30363d;padding-bottom:12px}
+  h2{font-size:18px;color:#fff;margin:32px 0 12px;border-left:3px solid #58a6ff;padding-left:12px}
+  h3{font-size:15px;color:#79c0ff;margin:16px 0 8px}
+  h4{font-size:14px;color:#e6edf3;margin:12px 0 6px}
+  p{margin:8px 0;color:#c9d1d9;font-size:14px}
+  .meta{color:#8b949e;font-size:13px;margin-bottom:16px}
+  .meta b{color:#fff}
+  .stamp{background:#238636;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;margin-left:8px}
+  .tldr{background:rgba(56,139,253,.08);border:1px solid rgba(56,139,253,.3);border-radius:8px;padding:16px;margin:16px 0}
+  .tldr h3{margin-top:0}
+  .tldr p{margin:6px 0;color:#c9d1d9;font-size:14px}
+  .tldr strong{color:#79c0ff}
+  .kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:16px 0}
+  .kpi-card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px;text-align:center}
+  .kpi-card .label{color:#8b949e;font-size:11px;text-transform:uppercase;letter-spacing:1px}
+  .kpi-card .value{color:#fff;font-size:24px;font-weight:600;margin-top:4px;font-variant-numeric:tabular-nums}
+  .kpi-card .sub{color:#8b949e;font-size:11px;margin-top:4px}
+  .kpi-card .value.good{color:#3fb950}
+  .kpi-card .value.warn{color:#d29922}
+  table{width:100%;border-collapse:collapse;margin:12px 0;background:#161b22;font-size:13px}
+  th{background:#21262d;color:#fff;padding:10px 8px;text-align:left;border-bottom:1px solid #30363d;font-weight:600}
+  /* 表头必须 nowrap：1200px 正文里塞 10 列的表（本文件最宽的一张），
+     允许换行会让「子板块」被拆成「子/板/块」逐字竖排。nowrap 把表撑宽，
+     溢出交给 .tw 的横向滚动条处理。 */
+  th{white-space:nowrap}
+  /* 宽表横向滚动层：没有它，10 列表格会被硬挤到逐字换行而不是溢出。
+     刻意不设 min-width —— 让 th 的 nowrap 自然决定最小宽度：
+     窄表正好铺满不滚动，只有真正挤不下的宽表才出现滚动条。 */
+  .tw{overflow-x:auto;margin:12px 0}
+  .tw table{margin:0}
+  /* 名称列与数值列不折行：否则「长江电力」会断成两行、「400 股」会断成「400/股」。
+     长文本列（说明、含义、口径）不加这条，保持自然折行。 */
+  .tw td:first-child,.tw th:first-child,
+  .tw td.r,.tw th.r,.tw td.c,.tw th.c,.tw td.num{white-space:nowrap}
+  td{padding:9px 8px;border-bottom:1px solid #21262d;color:#c9d1d9}
+  td.num,td.r{text-align:right;font-variant-numeric:tabular-nums}
+  td.c{text-align:center}
+  td.lt{text-align:left}
+  tr.t{background:#21262d;font-weight:600}
+  tr.t td{color:#fff;border-top:1px solid #30363d}
+  tr:hover td{background:#1c2128}
+  .ok{color:#3fb950}
+  .warn{color:#d29922}
+  .bad{color:#f85149}
+  .neutral{color:#8b949e}
+  .callout{background:rgba(56,139,253,.06);border-left:3px solid #58a6ff;padding:12px 16px;border-radius:0 6px 6px 0;margin:12px 0;font-size:13px;color:#c9d1d9}
+  .callout strong{color:#79c0ff}
+  .callout-warn{background:rgba(210,153,34,.06);border-left-color:#d29922}
+  .callout-warn strong{color:#d29922}
+  .callout-good{background:rgba(63,185,80,.06);border-left-color:#3fb950}
+  .callout-good strong{color:#3fb950}
+  .callout-bad{background:rgba(248,81,73,.06);border-left-color:#f85149}
+  .callout-bad strong{color:#f85149}
+  ul,ol{margin-left:20px;margin-bottom:8px}
+  li{padding:4px 0;color:#c9d1d9;font-size:14px}
+  code{background:#21262d;color:#79c0ff;padding:1px 6px;border-radius:3px;font-size:12px;font-family:"SF Mono",Menlo,monospace}
+  .timeline{position:relative;padding-left:24px}
+  .timeline::before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:2px;background:#30363d}
+  .event{position:relative;padding:8px 0 8px 16px;margin-bottom:8px;color:#c9d1d9;font-size:13px}
+  .event::before{content:"";position:absolute;left:-22px;top:14px;width:12px;height:12px;border-radius:50%;background:#58a6ff;border:2px solid #0d1117}
+  .event.upcoming::before{background:#d29922}
+  .event.critical::before{background:#f85149;box-shadow:0 0 6px rgba(248,81,73,.5)}
+  .event b{color:#fff}
+  .event .date{color:#8b949e;font-size:12px;margin-right:8px}
+  .event .tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:11px;margin-left:6px}
+  .tag-critical{background:#da3633;color:#fff}
+  .tag-upcoming{background:#9e6a03;color:#fff}
+  .tag-monitor{background:#1f6feb;color:#fff}
+  .checklist{list-style:none}
+  .checklist li{padding:6px 0;font-size:13px;color:#c9d1d9}
+  .checklist li::before{content:"☐ ";color:#8b949e;margin-right:6px}
+
+  /* 横向条形（成本梯队 / 盈利分化 / 估值分位）：纯 CSS，不引外部图表库 */
+  .bars,.dbars{margin:14px 0 6px;border:1px solid #30363d;border-radius:8px;background:#161b22;padding:16px 18px;position:relative}
+  .bars__title{font-size:13px;color:#8b949e;margin-bottom:12px}
+  .bar{display:flex;align-items:center;gap:10px;margin:7px 0;font-size:13px}
+  .bar__name{width:74px;color:#c9d1d9;flex-shrink:0}
+  .bar__track{display:block;flex:1;background:#21262d;border-radius:4px;height:16px;overflow:hidden}
+  .bar__fill{display:block;height:100%;border-radius:4px}
+  .bar__val{width:66px;text-align:right;font-variant-numeric:tabular-nums;color:#8b949e;flex-shrink:0}
+  .bars__legend{margin-top:12px;font-size:12px;color:#8b949e;display:flex;gap:18px;flex-wrap:wrap}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle}
+
+  /* 发散条形：正负分居零轴两侧，零轴用一条竖线 */
+  .dbar{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:13px}
+  .dbar__name{width:82px;color:#c9d1d9;flex-shrink:0;text-align:right}
+  .dbar__track{position:relative;display:block;flex:1;height:18px;background:#21262d;border-radius:3px}
+  .dbar__fill{position:absolute;top:0;bottom:0;border-radius:3px;display:block}
+  .dbar__val{width:72px;text-align:right;font-variant-numeric:tabular-nums;flex-shrink:0}
+  .dbar__zero{position:absolute;top:30px;bottom:12px;width:1px;background:#484f58;z-index:1}
+  .dbar__mid{position:absolute;top:-4px;bottom:-4px;width:0;border-left:1px dashed #8b949e;z-index:1}
+
+  /* 纵向柱形（煤价 / 情景），可带阈值线与零轴 */
+  .cols{margin:14px 0 6px;border:1px solid #30363d;border-radius:8px;background:#161b22;padding:16px 18px 14px}
+  .cols__plot{position:relative;height:210px;margin-bottom:6px}
+  .cols__slot{position:absolute;top:0;bottom:0;display:block}
+  .cols__bar{position:absolute;left:14%;right:14%;border-radius:4px 4px 0 0;display:block}
+  .cols__bar.neg{border-radius:0 0 4px 4px}
+  .cols__v{position:absolute;left:-8px;right:-8px;text-align:center;font-size:11.5px;color:#c9d1d9;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .cols__names{display:flex;font-size:12px;color:#8b949e;text-align:center}
+  .cols__names span{flex:1;min-width:0}
+  .cols__mark{position:absolute;left:0;right:0;border-top:1px dashed #d29922;z-index:2}
+  /* 标签靠左：煤价图最高的柱在右边，靠右会和它的数值标签叠在一起 */
+  .cols__mark span{position:absolute;left:0;top:-17px;font-size:10.5px;white-space:nowrap}
+  .cols__zero{position:absolute;left:0;right:0;border-top:1px solid #484f58;z-index:2}
+
+  /* 仓位配置堆叠条 */
+  .stack{display:flex;height:34px;border-radius:6px;overflow:hidden;margin:14px 0 6px;border:1px solid #30363d}
+  .stack div{display:flex;align-items:center;justify-content:center;white-space:nowrap;font-size:12.5px;color:#0d1117;font-weight:700}
+  .stack__legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:#8b949e;margin-top:8px}
+  .srcnote{font-size:12.5px;color:#8b949e;text-align:center;margin:6px 0 4px}
+  /* ---------- 返回入口（由 add-planning-toc.py 注入） ---------- */
+  .doc-nav { margin-bottom: 18px; }
+  .doc-nav__back:hover {
+    background: rgba(56,139,253,.12) !important;
+    border-color: #58a6ff !important;
+    color: #58a6ff !important;
+    text-decoration: none !important;
+  }
+
+  /* ---------- 本文目录（窄屏主力，宽屏与侧栏并存） ---------- */
+  .doc-toc {
+    position: relative; margin-bottom: 40px; padding: 18px 22px 16px;
+    background: radial-gradient(120% 130% at 0% 0%, rgba(56,139,253,.12), transparent 55%), #161b22;
+    border: 1px solid #30363d; border-radius: 10px;
+  }
+  .doc-toc::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px;
+    background: linear-gradient(90deg, #58a6ff, transparent 72%);
+  }
+  .doc-toc h4 {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+    font-size: 12px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: #58a6ff;
+  }
+  .doc-toc h4::before {
+    content: ''; width: 4px; height: 13px; flex-shrink: 0;
+    border-radius: 2px; background: #58a6ff;
+  }
+  .doc-toc__count {
+    margin-left: auto; padding: 2px 9px; border-radius: 999px;
+    background: rgba(56,139,253,.12); border: 1px solid rgba(56,139,253,.3);
+    color: #58a6ff; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: none;
+  }
+  .doc-toc ol {
+    position: relative; list-style: none; counter-reset: dtoc;
+    margin: 0; padding: 0;
+  }
+  .doc-toc ol::before {
+    content: ''; position: absolute; left: 25px; top: 18px; bottom: 18px; width: 1px;
+    background: linear-gradient(180deg, #30363d 0%, #30363d 70%, transparent 100%);
+  }
+  .doc-toc li { counter-increment: dtoc; position: relative; margin: 0; padding: 0; }
+  .doc-toc a {
+    display: flex; align-items: center; gap: 12px; padding: 6px 12px;
+    border-radius: 8px; color: #c9d1d9; font-size: 14px; line-height: 1.5;
+    text-decoration: none; transition: background .18s, color .18s, box-shadow .18s;
+  }
+  .doc-toc a::before {
+    content: counter(dtoc, decimal-leading-zero);
+    position: relative; z-index: 1; display: inline-flex;
+    align-items: center; justify-content: center; flex-shrink: 0;
+    width: 24px; height: 18px; border-radius: 5px;
+    background: #21262d; border: 1px solid #30363d;
+    color: #8b949e; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 10px; font-weight: 700;
+  }
+  .doc-toc a:hover { background: #21262d; color: #e6edf3; text-decoration: none; }
+  .doc-toc a:hover::before { border-color: #58a6ff; color: #58a6ff; }
+  .doc-toc a.is-active {
+    background: rgba(56,139,253,.12); box-shadow: inset 3px 0 0 #58a6ff; color: #e6edf3;
+  }
+  .doc-toc a.is-active::before {
+    background: #58a6ff; border-color: #58a6ff; color: #0d1117;
+  }
+
+  /* ---------- 左侧悬浮目录（视口足够宽才显示，否则会压住正文） ---------- */
+  .doc-sidenav { display: none; }
+  .doc-sidenav::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px;
+    border-radius: 8px 8px 0 0;
+    background: linear-gradient(90deg, #58a6ff, transparent 78%);
+  }
+  .doc-sidenav__title {
+    display: flex; align-items: center; gap: 6px;
+    margin: 0 0 10px; padding-bottom: 8px;
+    border-bottom: 1px solid #30363d;
+    font-size: 11px; font-weight: 700; color: #58a6ff;
+    letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .doc-sidenav__title::before {
+    content: ''; width: 3px; height: 11px; flex-shrink: 0;
+    border-radius: 2px; background: #58a6ff;
+  }
+  .doc-sidenav__count {
+    margin-left: auto; padding: 1px 7px; border-radius: 999px;
+    background: rgba(56,139,253,.12); border: 1px solid rgba(56,139,253,.3);
+    color: #58a6ff;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: none;
+  }
+  .doc-sidenav ol {
+    position: relative; list-style: none; margin: 0; padding: 0;
+    counter-reset: dsnav;
+  }
+  .doc-sidenav ol::before {
+    content: ''; position: absolute; left: 9px; top: 12px; bottom: 12px; width: 1px;
+    background: linear-gradient(180deg, #30363d 0%, #30363d 70%, transparent 100%);
+  }
+  .doc-sidenav li { margin: 0; }
+  .doc-sidenav ol a {
+    position: relative; display: flex; align-items: center; gap: 8px;
+    padding: 5px 6px; border-radius: 6px;
+    border-left: 2px solid transparent; color: #c9d1d9;
+    font-size: 12.5px; line-height: 1.5; text-decoration: none;
+    transition: background .18s, color .18s, border-color .18s;
+  }
+  .doc-sidenav ol a::before {
+    counter-increment: dsnav; content: counter(dsnav, decimal-leading-zero);
+    position: relative; z-index: 1;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0; width: 18px; height: 18px; border-radius: 5px;
+    background: #21262d; border: 1px solid #30363d;
+    color: #8b949e; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 9.5px; font-weight: 700;
+  }
+  .doc-sidenav ol a:hover {
+    background: #21262d; color: #e6edf3; text-decoration: none;
+  }
+  .doc-sidenav ol a.is-active {
+    background: rgba(56,139,253,.12); border-left-color: #58a6ff; color: #e6edf3;
+  }
+  .doc-sidenav ol a.is-active::before {
+    background: #58a6ff; border-color: #58a6ff; color: #0d1117;
+  }
+  .doc-sidenav__foot {
+    margin-top: 10px; padding-top: 10px; border-top: 1px solid #30363d;
+  }
+  .doc-sidenav__top {
+    display: block; text-align: center; padding: 5px 0; border-radius: 5px;
+    color: #8b949e; text-decoration: none; font-size: 11.5px;
+  }
+  .doc-sidenav__top:hover { background: #21262d; color: #58a6ff; text-decoration: none; }
+
+  /* 锚点跳转时给标题留出上方余量 */
+  h2[id] { scroll-margin-top: 24px; }
+
+  @media (max-width: 640px) {
+    .doc-toc { padding: 14px 14px 12px; }
+    .doc-toc a { font-size: 13.5px; padding: 5px 8px; gap: 8px; }
+    .doc-toc ol::before { left: 21px; }
+  }
+  /* 正文 1200px 居中，留出 200px 侧栏 + 24px 间隙需要视口 ≥1680px */
+  @media (min-width: 1680px) {
+    .doc-sidenav { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="doc-sidenav" style="position:fixed;left:calc(50vw - 824px);top:96px;width:200px;z-index:20;max-height:calc(100vh - 140px);overflow-y:auto;background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px 12px;font-size:12.5px;line-height:1.6;box-shadow:0 8px 30px rgba(0,0,0,.4);" aria-label="本文目录">
+  <h4 class="doc-sidenav__title">本文目录<span class="doc-sidenav__count">9</span></h4>
+  <ol>
+      <li><a href="#sec-1">一、执行摘要：值得买，但是有条件的分批配置</a></li>
+      <li><a href="#sec-2">二、行业投资逻辑：需求 · 电改 · 电价 · 煤价 · 估值 · 分化</a></li>
+      <li><a href="#sec-3">三、5 万元配置方案（含穿透与现金流验证）</a></li>
+      <li><a href="#sec-4">四、买入依据（分批建仓 + 技术择时增强）</a></li>
+      <li><a href="#sec-5">五、卖出依据（息差止盈 · 基本面止损 · 组合风控）</a></li>
+      <li><a href="#sec-6">六、收益预期与情景分析</a></li>
+      <li><a href="#sec-7">七、风险提示与失效情形</a></li>
+      <li><a href="#sec-8">八、执行清单与监测仪表盘</a></li>
+      <li><a href="#sec-9">九、附录 · 数据来源与口径</a></li>
+  </ol>
+  <div class="doc-sidenav__foot">
+    <a class="doc-sidenav__top" href="#">↑ 回到顶部</a>
+  </div>
+</nav>
+<div class="doc-nav">
+  <a class="doc-nav__back" href="/planning/" style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:6px;background:#21262d;border:1px solid #30363d;color:#c9d1d9;text-decoration:none;font-size:13px;font-weight:600;line-height:1.4;transition:all .2s;">← 返回规划</a>
+</div>
+<h1>A 股电力行业投资计划 <span class="stamp">5万 | 2026-10-05</span></h1>
+<div class="meta">
+资金性质：<b>5 万元为电力行业专项配置资金，非账户总资产</b>，持有期 1–3 年及以上｜ 风险偏好：中性，回撤容忍 <b>-20% 以内</b><br>
+报告基准日：<b>2026-10-05</b>｜ 行情基准：<b>2026-09-30 收盘</b>｜ 数据来源：国家能源局 / 中电联、发改委政策文件、上市公司 2025 年报与 2026 半年报、东方财富与腾讯行情接口、新华财经 / Mysteel、券商研报（非一手来源）
+</div>
+
+<div class="callout-warn">
+<b>⚠️ 风险提示与免责声明</b>：本报告为基于公开信息的研究性分析，不构成投资建议、理财建议或交易邀约，不保证分析准确性与完整性，不代表对任何投资结果的承诺。证券市场存在本金损失风险，历史业绩与回测结果均不预示未来表现。报告所涉价位、权重、策略仅供研究参考。投资者应根据自身风险承受能力、资金性质与投资目标独立决策并自担风险。
+</div>
+
+<div class="tldr">
+<h3 style="margin-top:0">📋 投资逻辑一句话</h3>
+<p><b>决策结论：值得买入，但是有条件的「分批配置」</b>——买的是<b>「利率下行期的类债现金流 + 火电政策地板 + 核电成长期权」</b>，而非「抄底」、更非「追 AI 情绪」。</p>
+<p><b>核心判断</b>：2026 年是电力板块的<b>盈利低谷年，但不是现金流低谷年</b>。买入的依据不是 2026 年的利润，而是<b>「利润最差、现金分红最好」</b>这个组合——水电 2026H1 净利 +6.95% 是唯一双增子板块、火电分红金额同比 +11.6%、板块自由现金流改善。</p>
+<p><b>方案定位</b>：<b>水电压舱 38% + 火电修复期权 24.6% + 核电视期权 5% + 板块 ETF 18% + 现金 14%</b>。用长江电力 70% 分红承诺锁定现金流底仓，用低估值火电博取 2027 年「煤价回落 + 长协企稳」双击弹性，用 ETF 分散个股风险。</p>
+<p><b>核心矛盾不是「要不要投」，而是「用哪几只票、留多少子弹、何时认错」。</b></p>
+</div>
+
+<div class="kpi">
+<div class="kpi-card">
+<div class="label">静态股息率</div>
+<div class="value">3.46%</div>
+<div class="sub">FY2025 已实施分红 ÷ 本金</div>
+</div>
+<div class="kpi-card">
+<div class="label">2026E 前瞻股息率</div>
+<div class="value">3.18%</div>
+<div class="sub">盈利低谷期的推算值</div>
+</div>
+<div class="kpi-card">
+<div class="label">中性年化（3 年）</div>
+<div class="value good">5.1%</div>
+<div class="sub">相对国债 +3.4pp</div>
+</div>
+<div class="kpi-card">
+<div class="label">现金比例</div>
+<div class="value warn">14.26%</div>
+<div class="sub">加仓弹药 · 行业集中对冲</div>
+</div>
+<div class="kpi-card">
+<div class="label">板块位置</div>
+<div class="value">盈利低谷</div>
+<div class="sub">现金流未入低谷</div>
+</div>
+</div>
+
+<nav class="doc-toc" aria-label="本文目录">
+  <h4>本文目录<span class="doc-toc__count">9</span></h4>
+  <ol>
+    <li><a href="#sec-1">一、执行摘要：值得买，但是有条件的分批配置</a></li>
+    <li><a href="#sec-2">二、行业投资逻辑：需求 · 电改 · 电价 · 煤价 · 估值 · 分化</a></li>
+    <li><a href="#sec-3">三、5 万元配置方案（含穿透与现金流验证）</a></li>
+    <li><a href="#sec-4">四、买入依据（分批建仓 + 技术择时增强）</a></li>
+    <li><a href="#sec-5">五、卖出依据（息差止盈 · 基本面止损 · 组合风控）</a></li>
+    <li><a href="#sec-6">六、收益预期与情景分析</a></li>
+    <li><a href="#sec-7">七、风险提示与失效情形</a></li>
+    <li><a href="#sec-8">八、执行清单与监测仪表盘</a></li>
+    <li><a href="#sec-9">九、附录 · 数据来源与口径</a></li>
+  </ol>
+</nav>
+<h2 id="sec-1">一、执行摘要：值得买，但是有条件的分批配置</h2>
+
+<p><b>必须同时接受的三件事</b>（这三条决定了「怎么买」，而不是「买不买」）：</p>
+<ol>
+<li>板块估值<b>不便宜</b>——PB(LF) 1.69× 处长期 45.01% 分位、PE(TTM) 18.78× 处 57.82% 分位，均在中位偏上，故<b>分批建仓、留足现金</b>。</li>
+<li>火电 2026 年盈利急剧恶化，静态 5.68% 股息率<b>不可信</b>，前瞻约 4.29%。</li>
+<li>来水与煤价两条风险<b>正在同时实现</b>——长江上游 6–8 月来水偏少近三成、秦皇岛 5500 大卡煤价已至 983.8 元/吨。</li>
+</ol>
+
+<div class="callout">
+<b>本方案为什么不是「抄底」叙事</b>：按长期口径，板块估值既非低估也非泡沫；近 5 年窗口之所以显示极低分位（20%），是 2021–2026 年估值中枢系统性上移所致。本方案采用的是<b>「以合理价格买入可验证现金流」</b>——即把利润预测的不确定性，用仓位和纪律对冲掉，而不是赌一个估值均值回归。
+</div>
+
+<h2 id="sec-2">二、行业投资逻辑：需求 · 电改 · 电价 · 煤价 · 估值 · 分化</h2>
+
+<h3>2.1 需求侧：用电增长换了引擎，但增速正在走弱</h3>
+<div class="tw"><table>
+<tr><th>期间</th><th class="r">全社会用电量</th><th class="c">同比</th><th>说明</th></tr>
+<tr><td class="lt">2025 年全年</td><td class="r">103,682 亿千瓦时</td><td class="c ok">+5.0%</td><td class="lt">国家能源局，2026-01-17</td></tr>
+<tr><td class="lt">2026 年上半年</td><td class="r">50,999 亿千瓦时</td><td class="c ok">+5.3%</td><td class="lt">国家能源局，2026-07-15</td></tr>
+<tr><td class="lt">2026 年 1–8 月</td><td class="r">71,730 亿千瓦时</td><td class="c ok">+4.3%</td><td class="lt">国家能源局，2026-09-20</td></tr>
+<tr><td class="lt">2026 年 8 月单月</td><td class="r">10,332 亿千瓦时</td><td class="c warn">+1.7%</td><td class="lt">增速显著走弱</td></tr>
+</table></div>
+<p>结构变化真实：2026 上半年互联网数据服务用电 <b>494 亿千瓦时、同比 +44.0%</b>，充换电服务业 <b>810 亿千瓦时、同比 +56.9%</b>。中电联预计 2030 年数据中心用电达 8,000 亿千瓦时、占全社会约 6%。</p>
+
+<div class="callout-warn">
+<b>关键提醒：不要把「AI 用电」直接当成买入理由</b>。用电增速逐月走弱（+5.3% → +4.3% → 单月 +1.7%）。更重要的是，<b>用电量增长不直接等于发电企业利润增长</b>——市场化电价下，电量增长往往伴随电价下行。<b>本方案的投资逻辑建立在现金流质量、股息与估值上，而非用电量弹性上。</b>
+</div>
+
+<h3>2.2 供给侧与电改：四个正在改变行业定价的机制</h3>
+
+<div class="callout">
+<h4>机制一：容量电价（2026 年最重要政策变量，需正确解读）</h4>
+<p>发改价格〔2026〕114 号文要求煤电通过容量电价回收固定成本比例提升至<b>不低于 50%</b>（约 165 元/千瓦·年）。但该安排在 2023 年 1501 号文<b>已明确</b>，114 号文属重申与扩展，<b>不宜当全新政策刺激解读</b>——其意义在「没有退坡安排」，构成火电盈利的<b>政策下限</b>，而非新增增量。</p>
+<p><b>落地兑现（比文件本身更有说服力）</b>：① 陕西合规在运<b>公用煤电机组</b>容量电价自 2026-10-01 起调整为 <b>165 元/千瓦·年</b>（含税，陕发改 2026-08-31 通知），直接兑现 114 号文「约 165 元/千瓦」目标值；② 河南<b>应急备用煤电</b>机组 188 元/千瓦·年（豫发改价管〔2026〕539 号）；③ 安徽电网侧独立储能 165 元/千瓦·年。三个省级落地案例证明「政策地板」已从文件走向执行。</p>
+</div>
+
+<div class="callout">
+<h4>机制二：全国统一电力市场（2026 年 2 月国办《实施意见》）</h4>
+<p>目标 2030 年基本建成；2026 上半年市场交易电量 36,848 亿千瓦时、同比 +24.2%。<b>对水电与核电是双刃剑</b>——市场化提高有利低成本电源，但也意味着电价更多由供需而非政府定价决定。</p>
+</div>
+
+<div class="callout">
+<h4>机制三：新能源全面入市（2025 年 136 号文）</h4>
+<p>执行结果省际分化极大（上海机制电价 0.4155 元/千瓦时 vs 山东光伏 0.225 元/千瓦时）。直接后果是绿电盈利崩塌——2026 上半年新能源板块归母净利 <b class="bad">-39.44%</b>。<b>这是回避绿电的量化依据。</b></p>
+</div>
+
+<div class="callout">
+<h4>机制四：电力市场风险防控（2026-09-30 发改委征求意见，节后新变量）</h4>
+<p>《电力市场风险防控管理办法（征求意见稿）》首次以部委规章形式系统性规范电力市场风险，明确<b>价格上下限</b>、防范操纵价格 / 持留容量，5 种情形可直接停市。含义：给全国统一电力市场装「安全阀」，电价极端波动被制度性约束——<b>进一步强化火电「有政策地板」的判断</b>，对恶性压价的防范直接利好火电结算环境。</p>
+</div>
+
+<h3>2.3 电价：三个口径必须分开看</h3>
+<div class="tw"><table>
+<tr><th>口径</th><th>最新数值</th><th class="c">方向</th><th>含义</th></tr>
+<tr><td class="lt"><b>月度交易电价</b></td><td class="lt">江苏 10 月 0.395 元（同比 +16.0%）；广东 0.457 元（环比 +5.3 分）</td><td class="c ok">转正</td><td class="lt">反映真实成交环境，<b>判断收入应以此为准</b></td></tr>
+<tr><td class="lt"><b>年度长协电价</b></td><td class="lt">2026 年度约 0.372 元；江苏 -16.55%、浙江 -16.4%</td><td class="c bad">大跌</td><td class="lt">年初锁定，尚未反映月度改善</td></tr>
+<tr><td class="lt"><b>电网代购电价</b></td><td class="lt">9 月同比 -11.1%</td><td class="c bad">下行</td><td class="lt">含大量低价水电 / 新能源，<b>不代表火电结算价</b></td></tr>
+</table></div>
+
+<div class="callout-good">
+<b>投资含义</b>：自 5–6 月起月度电价持续高于年度长协，说明实际结算环境已改善但尚未反映在长协里。<b>2027 年长协电价是本方案最关键的单一变量</b>，公示窗口在每年 11–12 月。
+</div>
+
+<h3>2.4 成本侧：煤价反转是 2026 年最大的边际变化</h3>
+<div class="cols">
+<div class="bars__title">图 2　秦皇岛港 5500 大卡动力煤价格（元/吨）<span style="color:#484f58">｜ 名义价格，不含税</span></div>
+<div class="cols__plot">
+  <span class="cols__mark" style="bottom:88.89%;border-top-color:#d29922"><span style="color:#d29922">1,000 元/吨 警戒线</span></span>
+    <span class="cols__slot" style="left:0.000%;width:19.000%"><span class="cols__bar" style="bottom:0;height:54.89%;background:#58a6ff"></span><span class="cols__v" style="top:38.61%">847</span></span>
+    <span class="cols__slot" style="left:27.000%;width:19.000%"><span class="cols__bar" style="bottom:0;height:21.56%;background:#58a6ff"></span><span class="cols__v" style="top:71.94%">697</span></span>
+    <span class="cols__slot" style="left:54.000%;width:19.000%"><span class="cols__bar" style="bottom:0;height:37.56%;background:#58a6ff"></span><span class="cols__v" style="top:55.94%">769</span></span>
+    <span class="cols__slot" style="left:81.000%;width:19.000%"><span class="cols__bar" style="bottom:0;height:85.29%;background:#d29922"></span><span class="cols__v" style="top:8.21%">983.8</span></span>
+</div>
+<div class="cols__names"><span>2024 均价</span><span>2025 均价</span><span>2026H1 均价</span><span>2026-09 月末</span></div>
+</div>
+
+<p class="srcnote">来源：新华财经《债市日报》 / Mysteel 秦皇岛港 Q5500 报价（截至 2026-09-30）</p>
+<p>口径提示：2026H1 均价 769 元/吨<b>同比 +13.88%</b>（对同期口径，非对 2025 全年均价）；2026-09 月末 983.8 元/吨<b>同比 +39.9%</b>。若按图中相邻均价直接比较，2024 → 2025 为 -17.7%、2025 → 2026H1 为 +10.3%、2026H1 → 9 月末为 +27.9%。</p>
+
+<div class="callout-warn">
+<h4>两层影响 + 一条缓冲 + 一个正循环</h4>
+<ul>
+<li><b>利空</b>：现货煤价上涨挤压 2026H2–2027H1 火电利润。</li>
+<li><b>缓冲</b>：长协煤占比高，2026H1 入炉煤价同比仅 -2.8%~+1.0%，明显优于现货涨幅。<b>成本冲击会延迟，但不会消失。</b></li>
+<li><b>正循环</b>：煤价走高推升现货电价，传导至 2027 长协谈判。若 2027 长协上调而煤价回落，火电迎「量价双升」双击；若同向走高则利润被两头挤压。<b>这是火电仓位的核心不确定性。</b></li>
+</ul>
+</div>
+
+<h3>2.5 估值与利率：定价锚是「息差」而非「绝对股息率」</h3>
+<div class="dbars">
+<div class="bars__title">图 3　中证全指电力公用事业指数估值历史分位<span style="color:#484f58">｜ 长期口径，截至 2026-09-30</span></div>
+  <div class="dbar"><span class="dbar__name" style="width:112px">PE(TTM) 18.78×</span><span class="dbar__track"><span class="dbar__fill" style="left:0;width:57.82%;background:#d29922"></span><span class="dbar__mid" style="left:50%"></span></span><span class="dbar__val" style="color:#d29922">57.82%</span></div>
+  <div class="dbar"><span class="dbar__name" style="width:112px">PB(LF) 1.69×</span><span class="dbar__track"><span class="dbar__fill" style="left:0;width:45.01%;background:#39c5cf"></span><span class="dbar__mid" style="left:50%"></span></span><span class="dbar__val" style="color:#39c5cf">45.01%</span></div>
+<div class="bars__legend"><span><i class="dot" style="background:#484f58"></i>中位线 50%</span><span>两项均处中位偏上，既非低估也非泡沫</span></div>
+</div>
+
+<p class="srcnote">来源：中证全指电力公用事业指数（59 只成分股）· 2026-09-30 收盘</p>
+<p>指数层面：PE(TTM) 18.78×、PB(LF) 1.69×、滚动股息率 <b>2.81%</b>。个股层面相对 10 年国债（<b>1.675%</b>）的息差如下：</p>
+<div class="tw"><table>
+<tr><th>标的</th><th class="r">收益率 / 股息率</th><th class="r">相对 10 年国债息差</th><th>说明</th></tr>
+<tr><td class="lt">长江电力</td><td class="r">3.50%</td><td class="r ok">+1.83pp</td><td class="lt">70% 分红承诺保底，用静态 DPS</td></tr>
+<tr><td class="lt">国投电力</td><td class="r">3.33%</td><td class="r ok">+1.66pp</td><td class="lt">55% 分红承诺保底，用静态 DPS</td></tr>
+<tr><td class="lt">申能股份</td><td class="r">5.24%</td><td class="r ok">+3.56pp</td><td class="lt">火电无分红承诺，高息差来自盈利低谷</td></tr>
+<tr><td class="lt">华能国际</td><td class="r">5.68%</td><td class="r ok">+4.01pp</td><td class="lt">同上；2026E 前瞻息差收窄至 +2.62pp</td></tr>
+<tr><td class="lt">中国广核</td><td class="r">2.03%</td><td class="r warn">+0.36pp</td><td class="lt">息差过低，止盈改用 PB / 股息率双阈值</td></tr>
+</table></div>
+<p style="font-size:12.5px;color:#8b949e">息差口径：<b>每股分红 ÷ 现价 − 1.675%</b>，用未取整的股息率计算后保留两位（例：华能 0.4000 ÷ 7.040 = 5.6818%，减 1.675% 得 4.0068pp → <b>+4.01pp</b>）。原文按已显示的 5.68% 相减写作 +4.00pp，差 0.01pp 的四舍五入噪声，本文统一采用可复算的口径。</p>
+
+<div class="callout">
+<b>为什么看息差而不是绝对股息率</b>：长电 3.50% 的绝对股息率在其自身历史仅中位数附近（约 43% 分位），但股息率与国债的利差处 2023 年以来<b>约 95% 分位</b>——因为国债收益率下行得比股息率更快。三年间 10 年国债从 <b>2.56% 降至 1.68%（约 -90bp）</b>。<b>若利率反转上行，该逻辑反向运转</b>，这是本方案最脆弱的宏观假设。
+</div>
+
+<div class="callout-bad">
+<b>必须澄清：板块估值不便宜</b>。按长期口径，PB(LF) 1.69× 处 <b>45.01% 分位</b>、PE(TTM) 处 <b>57.82% 分位</b>，均在中位偏上。既非低估，也非泡沫——所以本方案不采用「抄底」叙事，而是<b>分批建仓、留足现金</b>。
+</div>
+
+<h3>2.6 子板块分化：2026 中报的严酷答案</h3>
+<div class="dbars">
+<div class="bars__title">图 1　A 股电力主要标的 2026H1 归母净利润同比（%）<span style="color:#484f58">｜ 基准：2026 年半年报</span></div>
+<span class="dbar__zero" style="left:77.78%"></span>
+  <div class="dbar"><span class="dbar__name">长江电力</span><span class="dbar__track"><span class="dbar__fill" style="left:77.78%;width:14.47%;background:#f85149"></span></span><span class="dbar__val" style="color:#f85149">+13.02%</span></div>
+  <div class="dbar"><span class="dbar__name">中国广核</span><span class="dbar__track"><span class="dbar__fill" style="left:77.78%;width:2.96%;background:#f85149"></span></span><span class="dbar__val" style="color:#f85149">+2.66%</span></div>
+  <div class="dbar"><span class="dbar__name">国投电力</span><span class="dbar__track"><span class="dbar__fill" style="left:70.22%;width:7.56%;background:#3fb950"></span></span><span class="dbar__val" style="color:#3fb950">-6.80%</span></div>
+  <div class="dbar"><span class="dbar__name">申能股份</span><span class="dbar__track"><span class="dbar__fill" style="left:56.67%;width:21.11%;background:#3fb950"></span></span><span class="dbar__val" style="color:#3fb950">-19.00%</span></div>
+  <div class="dbar"><span class="dbar__name">国电电力</span><span class="dbar__track"><span class="dbar__fill" style="left:57.50%;width:20.28%;background:#3fb950"></span></span><span class="dbar__val" style="color:#3fb950">-18.25%</span></div>
+  <div class="dbar"><span class="dbar__name">华能国际</span><span class="dbar__track"><span class="dbar__fill" style="left:45.68%;width:32.10%;background:#3fb950"></span></span><span class="dbar__val" style="color:#3fb950">-28.89%</span></div>
+  <div class="dbar"><span class="dbar__name">浙能电力</span><span class="dbar__track"><span class="dbar__fill" style="left:14.22%;width:63.56%;background:#3fb950"></span></span><span class="dbar__val" style="color:#3fb950">-57.20%</span></div>
+  <div class="dbar"><span class="dbar__name">龙源电力</span><span class="dbar__track"><span class="dbar__fill" style="left:45.44%;width:32.33%;background:#3fb950"></span></span><span class="dbar__val" style="color:#3fb950">-29.10%</span></div>
+  <div class="dbar"><span class="dbar__name">三峡能源</span><span class="dbar__track"><span class="dbar__fill" style="left:2.17%;width:75.61%;background:#3fb950"></span></span><span class="dbar__val" style="color:#3fb950">-68.05%</span></div>
+<div class="bars__legend"><span><i class="dot" style="background:#f85149"></i>利润正增长</span><span><i class="dot" style="background:#3fb950"></i>利润下滑</span><span><i class="dot" style="background:#484f58"></i>零轴</span></div>
+</div>
+
+<p class="srcnote">来源：各公司 2026 年半年报（合并报表口径）</p>
+<div class="tw"><table>
+<tr><th>子板块</th><th class="c">2026H1 归母净利同比</th><th>核心原因</th><th class="c">本方案仓位</th></tr>
+<tr><td class="lt"><b>水电</b></td><td class="c ok">+6.95%（唯一双增）</td><td class="lt">来水改善、折旧到期、财务费用下降</td><td class="c ok">超配 38%</td></tr>
+<tr><td class="lt"><b>火电</b></td><td class="c bad">-18.5% ~ -21.0%</td><td class="lt">长协电价大跌 + 煤价上行</td><td class="c warn">标配 24.6%</td></tr>
+<tr><td class="lt"><b>核电</b></td><td class="c">中国核电 -35.7%；广核 +2.7%</td><td class="lt">市场化电量提升、电价下降</td><td class="c neutral">小仓位 5%</td></tr>
+<tr><td class="lt"><b>绿电（风光）</b></td><td class="c bad">-39.44%</td><td class="lt">电价市场化 + 消纳恶化 + 补贴退坡</td><td class="c bad">明确回避</td></tr>
+</table></div>
+<p>板块整体（中国银河样本口径）：2026H1 归母净利润 <b>920.95 亿元、同比 -18.19%</b>。<b>指数级机会不存在，超额收益只能来自选对子板块和选对公司。</b></p>
+
+<h2 id="sec-3">三、5 万元配置方案（含穿透与现金流验证）</h2>
+
+<h3>3.1 设计原则（五条硬约束）</h3>
+<ol>
+<li>单一标的 ≤ 总资产 <b>30%</b>；<b>直接持仓</b>火电 ≤ <b>25%</b>；<b>穿透后</b>火电 ≤ <b>35%</b>；现金 ≥ <b>10%</b>。</li>
+<li>以水电为压舱石——2026 中报唯一利润正增长子板块，长电 70% 分红承诺覆盖全周期。</li>
+<li>火电用于获取高股息与公用事业化重估期权，仓位必须控制在盈利下行周期可承受的范围内。</li>
+<li>用 ETF 承担分散功能，权重不超过 20%（因其含 21.6% 风光权重，与「回避绿电」原则冲突）。</li>
+<li>分批建仓——核心标的处 5 年价格高位（长电现价处近 5 年 <b>90% 分位</b>），必须为下跌留弹药。</li>
+</ol>
+
+<h3>3.2 目标配置表（满仓状态，2026-09-30 收盘价）</h3>
+<div class="stack" style="margin-top:14px"><div style="flex:0 0 22.83%;background:#58a6ff;color:#0d1117" title="长江电力（水电）｜11,416 元｜22.83%">长江电力</div><div style="flex:0 0 17.97%;background:#a371f7;color:#0d1117" title="电力ETF广发（板块）｜8,987 元｜17.97%">电力ETF</div><div style="flex:0 0 15.24%;background:#39c5cf;color:#0d1117" title="国投电力（水电）｜7,620 元｜15.24%">国投电力</div><div style="flex:0 0 14.08%;background:#f85149;color:#0d1117" title="华能国际（火电）｜7,040 元｜14.08%">华能国际</div><div style="flex:0 0 10.54%;background:#db6d28;color:#0d1117" title="申能股份（火电）｜5,268 元｜10.54%">申能股份</div><div style="flex:0 0 5.08%;background:#3fb950;color:#0d1117" title="中国广核（核电）｜2,538 元｜5.08%">广核</div><div style="flex:0 0 14.26%;background:#6e7681;color:#e6edf3" title="现金/货基（机动）｜7,131 元｜14.26%">现金</div></div>
+<div class="stack__legend" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px 18px"><span><i class="dot" style="background:#58a6ff"></i>长江电力 <b style="color:#c9d1d9">22.83%</b> <span style="color:#6e7681">11,416 元</span></span><span><i class="dot" style="background:#a371f7"></i>电力ETF <b style="color:#c9d1d9">17.97%</b> <span style="color:#6e7681">8,987 元</span></span><span><i class="dot" style="background:#39c5cf"></i>国投电力 <b style="color:#c9d1d9">15.24%</b> <span style="color:#6e7681">7,620 元</span></span><span><i class="dot" style="background:#f85149"></i>华能国际 <b style="color:#c9d1d9">14.08%</b> <span style="color:#6e7681">7,040 元</span></span><span><i class="dot" style="background:#db6d28"></i>申能股份 <b style="color:#c9d1d9">10.54%</b> <span style="color:#6e7681">5,268 元</span></span><span><i class="dot" style="background:#3fb950"></i>广核 <b style="color:#c9d1d9">5.08%</b> <span style="color:#6e7681">2,538 元</span></span><span><i class="dot" style="background:#6e7681"></i>现金 <b style="color:#c9d1d9">14.26%</b> <span style="color:#6e7681">7,131 元</span></span></div>
+
+<div class="tw"><table>
+<tr><th>标的</th><th class="c">代码</th><th class="c">子板块</th><th class="r">现价</th><th class="r">数量</th><th class="r">金额</th><th class="r">权重</th><th class="r">静态股息率</th><th class="r">2026E 前瞻</th><th class="r">年分红</th></tr>
+<tr><td class="lt"><b>长江电力</b></td><td class="c">600900</td><td class="c ok">水电</td><td class="r">28.540</td><td class="r">400 股</td><td class="r">11,416</td><td class="r"><b>22.83%</b></td><td class="r ok">3.50%</td><td class="r">3.58%</td><td class="r">400</td></tr>
+<tr><td class="lt"><b>电力ETF广发</b></td><td class="c">159611</td><td class="c">板块</td><td class="r">1.033</td><td class="r">8,700 份</td><td class="r">8,987</td><td class="r"><b>17.97%</b></td><td class="r ok">2.76%</td><td class="r">2.76%</td><td class="r">248</td></tr>
+<tr><td class="lt"><b>国投电力</b></td><td class="c">600886</td><td class="c ok">水电</td><td class="r">15.240</td><td class="r">500 股</td><td class="r">7,620</td><td class="r"><b>15.24%</b></td><td class="r ok">3.33%</td><td class="r">3.24%</td><td class="r">254</td></tr>
+<tr><td class="lt"><b>华能国际</b></td><td class="c">600011</td><td class="c warn">火电</td><td class="r">7.040</td><td class="r">1,000 股</td><td class="r">7,040</td><td class="r"><b>14.08%</b></td><td class="r ok">5.68%</td><td class="r warn">4.29%</td><td class="r">400</td></tr>
+<tr><td class="lt"><b>申能股份</b></td><td class="c">600642</td><td class="c warn">火电</td><td class="r">8.780</td><td class="r">600 股</td><td class="r">5,268</td><td class="r"><b>10.54%</b></td><td class="r ok">5.24%</td><td class="r warn">4.40%</td><td class="r">276</td></tr>
+<tr><td class="lt"><b>中国广核</b></td><td class="c">003816</td><td class="c">核电</td><td class="r">4.230</td><td class="r">600 股</td><td class="r">2,538</td><td class="r"><b>5.08%</b></td><td class="r">2.03%</td><td class="r">2.03%</td><td class="r">52</td></tr>
+<tr><td class="lt"><b>现金 / 货基</b></td><td class="c">—</td><td class="c">机动</td><td class="c">—</td><td class="c">—</td><td class="r">7,131</td><td class="r"><b>14.26%</b></td><td class="r">1.40%</td><td class="r">1.40%</td><td class="r">100</td></tr>
+<tr class="t"><td class="lt">合计</td><td class="c">—</td><td class="c">—</td><td class="c">—</td><td class="c">—</td><td class="r">50,000</td><td class="r">100%</td><td class="r">3.46%</td><td class="r">3.18%</td><td class="r">1,729</td></tr>
+</table></div>
+<p>权益合计 <b>42,869 元（85.74%）</b>，现金 <b>7,131 元（14.26%）</b>。数量均已按 A 股 <b>100 股</b> / 场内基金 <b>100 份</b>整手取整，可直接下单。</p>
+
+<h3>3.3 三个股息率口径（不可混用）</h3>
+<div class="tw"><table>
+<tr><th>口径</th><th class="c">对本金</th><th>定义</th></tr>
+<tr><td class="lt"><b>A · 静态股息率</b></td><td class="c ok">3.46%</td><td class="lt">FY2025 已实施分红 ÷ 现价，含现金利息。<b>用于判断安全边际</b></td></tr>
+<tr><td class="lt"><b>B · 前瞻股息率（2026E）</b></td><td class="c">3.18%</td><td class="lt">按 2026 年预期盈利与派息率推算。<b>用于收益预期</b></td></tr>
+<tr><td class="lt"><b>C · 实际到账现金</b></td><td class="c">2.96%</td><td class="lt">剔除 ETF（159611 目前不派现），约 1,481 元 / 年。<b>用于现金流规划</b></td></tr>
+</table></div>
+
+<div class="callout">
+<b>为什么三个口径都列出</b>：静态（3.46%）高于前瞻（3.18%）<b>不是计算错误</b>，而是 2026 年正处盈利与分红低谷——静态值是景气高点，前瞻值是低谷。取中值 3.30% 作可持续中枢。另需说明：ETF 约 2.76% 的股息收益体现在<b>净值增长</b>而非现金到账；<b>持股满 1 年免征股息红利个人所得税</b>，上述现金分红为税后净额。
+</div>
+
+<h3>3.4 子板块穿透暴露（含 ETF 成分分解）</h3>
+<div class="tw"><table>
+<tr><th>子板块</th><th class="r">直接持仓</th><th class="r">经 ETF 穿透</th><th class="r">合计</th><th>约束核对</th></tr>
+<tr><td class="lt">水电</td><td class="r">38.07%</td><td class="r">4.00%</td><td class="r ok">42.07%</td><td class="lt">压舱石，无上限约束</td></tr>
+<tr><td class="lt">火电</td><td class="r">24.62%</td><td class="r">7.91%</td><td class="r warn">32.53%</td><td class="lt">直接 ≤25% ✓ / 穿透 ≤35% ✓</td></tr>
+<tr><td class="lt">核电</td><td class="r">5.08%</td><td class="r">1.90%</td><td class="r">6.98%</td><td class="lt">成长期权仓</td></tr>
+<tr><td class="lt">风光</td><td class="r">0%</td><td class="r">3.88%</td><td class="r bad">3.88%</td><td class="lt">ETF 的已知拖累，不可再直接增配</td></tr>
+<tr><td class="lt">其他 / 电网类</td><td class="r">0%</td><td class="r">0.28%</td><td class="r">0.28%</td><td class="lt">ETF 成分余项</td></tr>
+<tr class="t"><td class="lt">现金</td><td class="r">14.26%</td><td class="r">—</td><td class="r">14.26%</td><td class="lt">≥10% ✓</td></tr>
+</table></div>
+<p><b>ETF（159611）成分结构</b>：火电 43.99%、水电 22.25%、风电 13.58%、核电 10.58%、光伏 8.02%、其他 / 电网类约 1.58%（合计 100%）。选 159611 因其是同类电力 ETF 中规模最大（约 87–90 亿）、流动性最好（2026-09-30 成交 1.95 亿）的一只，费率约 <b>0.6%/年</b>。</p>
+
+<h3>3.5 分红能力验证：分红付得起吗？</h3>
+<div class="tw"><table>
+<tr><th>标的</th><th class="r">2025 归母（亿）</th><th class="r">加权 ROE</th><th class="r">资产负债率</th><th class="r">每股经营现金流</th><th class="r">每股分红</th><th class="r">现金流 / 分红覆盖</th></tr>
+<tr><td class="lt">长江电力</td><td class="r">345.03（+6.17%）</td><td class="r">15.90%</td><td class="r">58.27%</td><td class="r">2.4752</td><td class="r">1.0000</td><td class="r ok"><b>2.5 倍</b></td></tr>
+<tr><td class="lt">国投电力</td><td class="r">73.93（+11.30%）</td><td class="r">11.35%</td><td class="r">60.52%</td><td class="r">3.9440</td><td class="r">0.5081</td><td class="r ok"><b>7.8 倍</b></td></tr>
+<tr><td class="lt">华能国际</td><td class="r">144.10（+42.17%）</td><td class="r">19.04%</td><td class="r">65.26%</td><td class="r">4.2816</td><td class="r">0.4000</td><td class="r ok"><b>10.7 倍</b></td></tr>
+<tr><td class="lt">申能股份</td><td class="r">40.13（+1.75%）</td><td class="r">10.79%</td><td class="r">54.77%</td><td class="r">1.7769</td><td class="r">0.4600</td><td class="r ok"><b>3.9 倍</b></td></tr>
+</table></div>
+<div class="callout-good">
+<b>四家现金流对分红的覆盖倍数在 2.5–10.7 倍，安全垫很厚。</b>这正是为什么即使 2026 年火电利润下滑 19%–29%，分红仍大概率维持——<b>利润下滑削弱的是「增长」，不是「支付能力」</b>。（华能国际 2025 年「营收降但净利 +42.17%」是火电典型特征，但这一顺风 2026 年已反转。）
+</div>
+
+<h2 id="sec-4">四、买入依据（分批建仓 + 技术择时增强）</h2>
+<p><b>买入依据 = 基本面（分红承诺 + 现金流覆盖 + 估值分位）+ 价格纪律（分批 + 触发价）。</b>技术指标仅作为「触发价附近择时微调」的辅助，<b>不作为长期配置的建仓主依据</b>。</p>
+
+<h3>4.1 分批建仓表（已按 100 股 / 100 份整手取整）</h3>
+
+<h4>① 首批建仓（现价附近，约 54.6%）</h4>
+<div class="tw"><table>
+<tr><th>标的</th><th class="r">首批价</th><th class="r">数量</th><th class="r">金额</th><th>买入依据</th></tr>
+<tr><td class="lt">长江电力</td><td class="r">28.54</td><td class="r">300 股</td><td class="r">8,562</td><td class="lt">70% 分红承诺 + 大股东增持均价 27.84 元锚定</td></tr>
+<tr><td class="lt">国投电力</td><td class="r">15.24</td><td class="r">300 股</td><td class="r">4,572</td><td class="lt">55% 分红承诺，回撤小于纯火电</td></tr>
+<tr><td class="lt">华能国际</td><td class="r">7.04</td><td class="r">600 股</td><td class="r">4,224</td><td class="lt">PB 分位 12.4%，火电中估值最低的大盘股</td></tr>
+<tr><td class="lt">申能股份</td><td class="r">8.78</td><td class="r">400 股</td><td class="r">3,512</td><td class="lt">PB 1.17×，H1 跌幅 -19.0% 小于同业</td></tr>
+<tr><td class="lt">电力ETF广发</td><td class="r">1.033</td><td class="r">5,000 份</td><td class="r">5,165</td><td class="lt">流动性最好的电力 ETF，免印花税</td></tr>
+<tr><td class="lt">中国广核</td><td class="r">4.23</td><td class="r">300 股</td><td class="r">1,269</td><td class="lt">核电中唯一 H1 正增长，5% 成长期权仓</td></tr>
+<tr class="t"><td class="lt">首批合计</td><td class="c">—</td><td class="c">—</td><td class="r">27,304</td><td class="lt">占总资金 54.61%</td></tr>
+</table></div>
+
+<h4>② 第二批加仓（触发价 ≈ 首批价 × 0.92，下跌约 8%）</h4>
+<div class="tw"><table>
+<tr><th>标的</th><th class="r">触发价</th><th class="r">加仓数量</th><th class="r">需动用资金</th></tr>
+<tr><td class="lt">长江电力</td><td class="r ok">≤ 26.26</td><td class="r">100 股</td><td class="r">2,626</td></tr>
+<tr><td class="lt">国投电力</td><td class="r ok">≤ 14.02</td><td class="r">100 股</td><td class="r">1,402</td></tr>
+<tr><td class="lt">华能国际</td><td class="r ok">≤ 6.48</td><td class="r">200 股</td><td class="r">1,296</td></tr>
+<tr><td class="lt">申能股份</td><td class="r ok">≤ 8.08</td><td class="r">100 股</td><td class="r">808</td></tr>
+<tr><td class="lt">电力ETF广发</td><td class="r ok">≤ 0.950</td><td class="r">2,000 份</td><td class="r">1,900</td></tr>
+<tr><td class="lt">中国广核</td><td class="r ok">≤ 3.89</td><td class="r">300 股</td><td class="r">1,167</td></tr>
+<tr class="t"><td class="lt">二批合计</td><td class="c">—</td><td class="c">—</td><td class="r">9,199</td></tr>
+</table></div>
+
+<h4>③ 第三批加仓（触发价 ≈ 首批价 × 0.85，下跌约 15%）</h4>
+<div class="tw"><table>
+<tr><th>标的</th><th class="r">触发价</th><th class="r">加仓数量</th><th class="r">需动用资金</th></tr>
+<tr><td class="lt">国投电力</td><td class="r ok">≤ 12.95</td><td class="r">100 股</td><td class="r">1,295</td></tr>
+<tr><td class="lt">华能国际</td><td class="r ok">≤ 5.98</td><td class="r">200 股</td><td class="r">1,196</td></tr>
+<tr><td class="lt">申能股份</td><td class="r ok">≤ 7.46</td><td class="r">100 股</td><td class="r">746</td></tr>
+<tr><td class="lt">电力ETF广发</td><td class="r ok">≤ 0.878</td><td class="r">2,000 份</td><td class="r">1,756</td></tr>
+<tr class="t"><td class="lt">三批合计</td><td class="c">—</td><td class="c">—</td><td class="r">4,993</td></tr>
+</table></div>
+<p style="font-size:12.5px;color:#8b949e">注：原文第三批 ETF 数量写作「1,700 份」，但 1,700 × 0.878 = 1,493 元，与所列资金 1,756 元及三批合计 4,993 元均不符；<b>1,756 = 2,000 × 0.878</b>，且与第二批同为 2,000 份，故本文已订正为 <b>2,000 份</b>。</p>
+
+<div class="callout">
+<b>资金安排</b>：三批全部执行需 27,304 + 9,199 + 4,993 = <b>41,496 元</b>，剩余约 <b>8,504 元（17.01%）</b>作长期现金储备。长江电力（400 股）与广核（600 股）的目标仓位在「首批 + 二批」已建满，三批不再加仓——避免突破单一标的 30% 上限。
+</div>
+
+<div class="callout">
+<h4>【增强】技术择时微调：让「触发价」附近买得更优</h4>
+<p>整合版不使用技术指标作为建仓主依据，这是对的——均线 / MACD 在 2–4 周后即失效，与 1–3 年持有期不匹配。但技术面可作为<b>「触发价附近的入场时机微调」</b>：当价格跌入加仓触发价区间时，参考下方支撑位判断「立即买 vs 再等」，优化具体成交点。参考值（2026-09-30）：</p>
+<ul>
+<li><b>长江电力</b>：MA20 ≈ 28.31、前低 27.85 为强支撑——若跌向二批触发价 26.26 途中，可观察是否在 27.85 附近缩量企稳。</li>
+<li><b>华能国际</b>：年线 7.10 / 半年线 7.06 为压力，MA20 6.88、前低 6.73 为支撑——回调至 <b>6.85–6.92</b> 是更优的首批接多点。</li>
+<li><b>中国广核</b>：MA60 4.09 / MA120 4.21 支撑区（4.16–4.22），KDJ 已低位，是唯一可现价试买标的。</li>
+</ul>
+<p><b>原则</b>：技术面只决定「同一价位附近买早一点还是买晚一点」，<b>不改变「是否买」「买多少」的基本面决策</b>。</p>
+</div>
+
+<h3>4.2 加仓触发条件（满足其一即可执行）</h3>
+<ol>
+<li><b>价格触发</b>：个股价格触及上表加仓触发价。</li>
+<li><b>系统性下跌触发</b>：沪深 300 自建仓日起累计回撤 ≥ <b>10%</b> → 执行全部第二批；≥ <b>17%</b> → 执行全部第三批。</li>
+<li><b>股息率触发</b>：个股静态股息率较建仓时提升 ≥ <b>0.3 个百分点</b>（等价价格下跌约 8%）。</li>
+<li><b>基本面解锁触发（仅第三批）</b>：2027 长协电价较 2026 持平或上行；或煤价回落至 <b>850 元/吨以下</b>；或三季报火电净利同比降幅收窄至 10% 以内。</li>
+</ol>
+
+<h3>4.3 买入禁令</h3>
+<ol>
+<li>个股 <b>5 个交易日涨幅超 15%</b> → 暂停该股全部加仓。</li>
+<li>加仓资金只能来自预留现金与货基，<b>不得卖出其他持仓筹措</b>。</li>
+<li>年度分红方案分红率下调、或每股分红同比下降超 <b>10%</b> → 取消全部后续加仓，转入卖出评估。</li>
+<li>直接持仓火电已达 25%，即使触发加仓也<b>不再加火电</b>，资金转向水电或现金。</li>
+<li><b>不在分红方案公布前抢跑</b>——止盈价位必须以已实施分红计算。</li>
+</ol>
+
+<h3>4.4 建仓执行细节</h3>
+<ul>
+<li>券商：佣金万 2.5 以下、<b>无最低 5 元限制</b>；每笔不低于 5,000 元。</li>
+<li>首批建议 <b>2–3 个交易日内分笔完成</b>，不在大幅高开时追单。</li>
+<li>现金部分放货币基金或国债逆回购；<b>全年计划交易不超过 10 笔</b>。</li>
+</ul>
+
+<h2 id="sec-5">五、卖出依据（息差止盈 · 基本面止损 · 组合风控）</h2>
+<p>卖出分四类，任一触发即执行。<b>不采用 ATR / 均线作为主力止损</b>——低波动电力股（日 ATR 1.2%–2.1%）的 2×ATR 会被日常噪音频繁触发，与长期持有互斥。</p>
+
+<h3>5.1 第一类：估值止盈（息差法，分批减仓）</h3>
+<p>触发基准：<b>息差 = 个股股息率 − 10 年国债收益率（当前 1.675%）</b>。每年 4–6 月年报分红方案公布后重算一次。<b>口径统一说明：水电（长电 70% / 国投 55% 分红承诺保底）用静态 DPS；火电（华能 / 申能，无分红承诺、2026 年盈利下滑）改用 2026E 前瞻 DPS。</b></p>
+<div class="tw"><table>
+<tr><th>标的</th><th class="r">当前息差</th><th class="c">减仓 1/3 触发价位</th><th class="c">再减 1/3 触发价位</th><th>计算方法</th></tr>
+<tr><td class="lt">长江电力</td><td class="r ok">+1.83pp</td><td class="c"><b>≥ 31.50 元</b>（息差收窄至 1.5pp）</td><td class="c">≥ 40.40 元（息差 0.8pp）</td><td class="lt">DPS 1.000 ÷ 3.175% / 2.475%</td></tr>
+<tr><td class="lt">国投电力</td><td class="r ok">+1.66pp</td><td class="c"><b>≥ 16.00 元</b>（息差 1.5pp）</td><td class="c">≥ 20.53 元（息差 0.8pp）</td><td class="lt">DPS 0.508 ÷ 3.175% / 2.475%</td></tr>
+<tr><td class="lt">华能国际</td><td class="r ok">+4.01pp</td><td class="c"><b>≥ 8.22 元</b>（息差 2.0pp）</td><td class="c">≥ 10.50 元（息差 1.2pp）</td><td class="lt">2026E DPS 0.302 ÷ 3.675% / 2.875%</td></tr>
+<tr><td class="lt">申能股份</td><td class="r ok">+3.56pp</td><td class="c"><b>≥ 10.50 元</b>（息差 2.0pp）</td><td class="c">≥ 13.43 元（息差 1.2pp）</td><td class="lt">2026E DPS 0.386 ÷ 3.675% / 2.875%</td></tr>
+<tr><td class="lt">中国广核</td><td class="r warn">+0.36pp</td><td class="c"><b>≥ 5.38 元</b>（PB ≥ 2.2× 或股息率 ≤ 1.6%）</td><td class="c">≥ 5.38 元直接减 1/2</td><td class="lt">息差过低，改用 PB / 股息率双阈值</td></tr>
+<tr><td class="lt">电力ETF广发</td><td class="c neutral">—</td><td class="c">板块 PE(TTM) &gt; 26×</td><td class="c">或相对沪深 300 累计超额 &gt; 50%</td><td class="lt">不设固定价位</td></tr>
+</table></div>
+<p style="font-size:12.5px;color:#8b949e">火电 2026E DPS 假设：<b>派息率维持 2025 年水平不变，DPS 随归母净利润同比下滑</b>——华能国际约 -24.5%（趋近 2026 中报 -28.9%）、申能股份约 -16%（趋近中报 -19%）。由此华能 2026E DPS 0.302 元、申能 0.386 元，与 3.2 表前瞻股息率（4.29% / 4.40%）口径自洽。水电因有 70% / 55% 分红承诺保底，继续用静态 DPS。若 2026 年报实际分红与上述假设偏离，止盈价按 5.2 条规则重算。</p>
+
+<div class="callout">
+<b>规则细化</b>
+<ul>
+<li>单次减仓不超过该持仓 <b>1/3</b>；减仓后仍保留底仓，除非触发 5.2 基本面卖出。</li>
+<li><b>水电用较低息差阈值（1.5pp / 0.8pp），火电用较高阈值（2.0pp / 1.2pp）</b>——火电盈利波动大，需更高风险补偿。</li>
+<li>某标的 12 个月内涨幅超 <b>50%</b> 但未触发价位，仍减仓 1/3。</li>
+</ul>
+</div>
+
+<h3>5.2 第二类：基本面卖出（硬性条件，优先级最高）</h3>
+<p>出现任一情形，<b>立即减仓 1/2</b>；下个报告期继续存在则<b>清仓</b>：</p>
+<ol>
+<li><b>分红恶化</b>：年度每股分红同比下降超 <b>10%</b>，或分红率较承诺 / 历史明显下调。</li>
+<li><b>长江电力专项</b>：调整 2026–2030 分红规划、下调 70% 分红率承诺 → <b>无条件清仓</b>。</li>
+<li><b>来水</b>：连续 <b>2 个完整年度</b>发电量同比下降，且来水偏枯超 10%（趋势性变化）。</li>
+<li><b>火电盈利</b>：连续 <b>2 个季度</b>归母净利同比下滑超 <b>40%</b>。</li>
+<li><b>重大风险事件</b>：财务造假、大股东占款、重大安全事故、被立案调查 → <b>无条件清仓</b>。</li>
+<li><b>行业定价机制根本性不利变化</b>：水电 / 核电全面市场化竞价且电价中枢下移超 <b>10%</b>。</li>
+<li><b>核电专项</b>：广核等级以上核安全事故，或核准节奏连续两年低于 <b>6 台 / 年</b> → 清仓。</li>
+</ol>
+
+<h3>5.3 第三类：组合风控</h3>
+<ol>
+<li>任何标的因上涨权重超 <b>30%</b>，下一交易周内减至 25% 以下。</li>
+<li>直接持仓火电 &gt; 25% → 减至 25%；穿透后火电 &gt; 35% → 减 ETF 或直接持仓。</li>
+<li>整体回撤：<b>10%–15%</b> 且基本面未变 → 不动，按 4.2 加仓；<b>&gt; 20%</b> → 逐笔核对是否触发 5.2；<b>&gt; 25%</b> 且基本面恶化 → 整体减至 50% 以下。</li>
+<li>年度再平衡：每年 <b>5–6 月</b>检视，偏离目标权重超 <b>8 个百分点</b>的标的调回。</li>
+</ol>
+
+<h3>5.4 第四类：机会成本检验</h3>
+<p>持有满 <b>2 年</b>后，某标的实际年化回报（股息 + 价格）低于 <b>4%</b>，且前瞻股息率低于国债 + 1.0pp，或存在更优替代标的（前瞻股息率高出 1.5pp 以上）→ 换股。</p>
+
+<div class="callout">
+<h4>【增强】ATR 作为「短期预警参考」（非主力止损）</h4>
+<p>主力止损以 5.2 基本面条款为准。ATR 仅作辅助预警：若某标的在买入后 <b>3–5 个交易日内</b>快速跌破「买入价 − 2×ATR」（长电 0.72 元、国投约 0.25 元、华能 0.24 元、申能 0.22 元、广核 0.16 元），提示「短期买点可能偏早」，可放缓后续加仓节奏、等待企稳——<b>但不触发卖出</b>。</p>
+</div>
+
+<h3>5.5 绝对不做的四件事</h3>
+<ol>
+<li><b>不因「股价跌了」卖出基本面未恶化的持仓</b>——本策略收益来自股息与现金流，价格下跌反而提高股息率。</li>
+<li><b>不因「股价涨了」全部卖出</b>——分批减仓是为保留持有优质现金流资产的权利。</li>
+<li><b>不在分红方案公布前抢跑。</b></li>
+<li><b>不做短线择时</b>——全年计划交易不超过 10 笔。</li>
+</ol>
+
+<h2 id="sec-6">六、收益预期与情景分析</h2>
+
+<h3>6.1 三情景推演（3 年持有期）</h3>
+<div class="cols">
+<div class="bars__title">图 5　三情景年化回报 vs 固收基准（%）<span style="color:#484f58">｜ 3 年持有期，含股息再投</span></div>
+<div class="cols__plot">
+  <span class="cols__zero" style="bottom:15.38%"></span>
+    <span class="cols__slot" style="left:0.000%;width:14.400%"><span class="cols__bar neg" style="bottom:6.92%;height:8.46%;background:#3fb950"></span><span class="cols__v" style="top:78.12%">-1.1%</span></span>
+    <span class="cols__slot" style="left:21.400%;width:14.400%"><span class="cols__bar" style="bottom:15.38%;height:39.23%;background:#f85149"></span><span class="cols__v" style="top:38.88%">5.1%</span></span>
+    <span class="cols__slot" style="left:42.800%;width:14.400%"><span class="cols__bar" style="bottom:15.38%;height:73.08%;background:#f85149"></span><span class="cols__v" style="top:5.04%">9.5%</span></span>
+    <span class="cols__slot" style="left:64.200%;width:14.400%"><span class="cols__bar" style="bottom:15.38%;height:12.88%;background:#6e7681"></span><span class="cols__v" style="top:65.23%">1.675%</span></span>
+    <span class="cols__slot" style="left:85.600%;width:14.400%"><span class="cols__bar" style="bottom:15.38%;height:8.46%;background:#484f58"></span><span class="cols__v" style="top:69.65%">1.1%</span></span>
+</div>
+<div class="cols__names"><span>悲观情景</span><span>中性情景</span><span>乐观情景</span><span>10 年国债</span><span>1 年定存</span></div>
+</div>
+
+<div class="tw"><table>
+<tr><th>情景</th><th class="r">股息贡献</th><th class="r">盈利增长（3 年均）</th><th class="r">估值变动</th><th class="r">年化回报</th><th class="r">3 年后 5 万变为</th><th class="r">累计</th></tr>
+<tr><td class="lt"><b>悲观</b></td><td class="r">2.80%</td><td class="r bad">-2.37%</td><td class="r bad">-1.5%</td><td class="r bad"><b>-1.1%</b></td><td class="r">48,412 元</td><td class="r bad">-3.2%</td></tr>
+<tr><td class="lt"><b>中性</b></td><td class="r">3.30%</td><td class="r ok">+1.75%</td><td class="r">0%</td><td class="r ok"><b>+5.1%</b></td><td class="r">57,964 元</td><td class="r ok">+15.9%</td></tr>
+<tr><td class="lt"><b>乐观</b></td><td class="r">3.40%</td><td class="r ok">+4.63%</td><td class="r ok">+1.5%</td><td class="r ok"><b>+9.5%</b></td><td class="r">65,701 元</td><td class="r ok">+31.4%</td></tr>
+</table></div>
+<p style="font-size:12.5px;color:#8b949e">盈利增长加权拆解：2026E 权益部分盈利同比约 -9.10%（深谷）、2027E +9.35%、2028E +5.0%，三年算术平均 <b>+1.75%</b>。股息假设取 <b>3.30%</b>——静态 3.46% 是景气高点、前瞻 3.18% 是低谷，取中值作可持续中枢。</p>
+
+<div class="callout-bad">
+<b>必须诚实：中性 5.1% 低于多数「拍脑袋」的预期</b>。原因是 2026 年盈利测算更保守——按中报实际值与一致预期加权，2026 年权益盈利同比约 -9.10%，把三年平均拉到 +1.75%。<b>5.1% 的年化（相对 10 年国债 1.675% 有 +3.4pp 超额）在「中性风险」定位下已是合理赔率，且约 3.0%/年 为现金到账、不依赖股价。</b>若 2027 年长协电价确认上行，组合滑向乐观（+9.5%/年）。
+</div>
+
+<h3>6.2 与固收对比</h3>
+<div class="tw"><table>
+<tr><th>项目</th><th class="c">本组合（中性）</th><th class="c">1 年定存</th><th class="c">10 年国债</th><th class="c">银行理财 R2</th></tr>
+<tr><td class="lt">预期年化</td><td class="c ok"><b>约 5.1%</b></td><td class="c">约 1.1%</td><td class="c">1.675%</td><td class="c">约 2.0%–2.8%</td></tr>
+<tr><td class="lt">现金流</td><td class="lt">年约 1,729 元（到账现金约 1,481 元，满 1 年免税）</td><td class="lt">利息</td><td class="lt">利息</td><td class="lt">到期收益</td></tr>
+<tr><td class="lt">最大回撤</td><td class="lt bad">需承受 -20% 以内</td><td class="lt ok">无</td><td class="lt ok">持有到期无</td><td class="lt ok">极小</td></tr>
+<tr><td class="lt">流动性</td><td class="lt">T+1</td><td class="lt">提前支取损失利息</td><td class="lt">好</td><td class="lt">封闭期限制</td></tr>
+</table></div>
+
+<div class="callout">
+<b>本组合本质：用可承受的净值波动，换取显著高于固收的长期现金流。</b>若无法接受某一年 -15% 的账面回撤，本方案不适合你。
+</div>
+
+<h2 id="sec-7">七、风险提示与失效情形</h2>
+
+<h3>7.1 风险清单（按重要性排序）</h3>
+<div class="tw"><table>
+<tr><th>风险</th><th>当前状态</th><th>监测指标</th><th>警戒阈值</th></tr>
+<tr><td class="lt"><b>① 电价下行超预期</b></td><td class="lt bad">已发生（2026 长协 -5% ~ -16.4%）</td><td class="lt">每年 11–12 月各省长协电价公示</td><td class="lt">2027 长协同比再跌 &gt; 5%</td></tr>
+<tr><td class="lt"><b>② 煤价持续高企</b></td><td class="lt warn">983.8 元/吨，逼近千元</td><td class="lt">秦皇岛 Q5500 周度价格、原煤产量</td><td class="lt">&gt; 1,000 元/吨持续 3 个月</td></tr>
+<tr><td class="lt"><b>③ 来水偏枯</b></td><td class="lt warn">已发生（上游 6–8 月偏少近三成）</td><td class="lt">长江委来水预测、三峡入库流量</td><td class="lt">连续 2 季度偏枯 &gt; 15%</td></tr>
+<tr><td class="lt"><b>④ 利率上行</b></td><td class="lt">10Y 国债 1.675%（历史低位）</td><td class="lt">10 年国债收益率、货币政策</td><td class="lt bad">上行突破 2.5%</td></tr>
+<tr><td class="lt"><b>⑤ 估值分位偏高</b></td><td class="lt">核心标的多处 5 年 80–90 分位</td><td class="lt">个股 PE / PB 五年分位</td><td class="lt">触发 5.1 止盈价位</td></tr>
+<tr><td class="lt"><b>⑥ 绿电拖累 ETF</b></td><td class="lt">绿电 H1 -39.44%</td><td class="lt">ETF 成分权重</td><td class="lt">ETF 风光权重升至 25% 以上则减持</td></tr>
+<tr><td class="lt"><b>⑦ 风格切换</b></td><td class="lt">2025 年跑输沪深 300 约 20pp</td><td class="lt">红利 vs 成长相对表现</td><td class="lt">连续 2 年跑输 &gt; 15pp 则检讨</td></tr>
+<tr><td class="lt"><b>⑧ 行业集中度（结构性）</b></td><td class="lt warn">组合 100% 集中单一行业</td><td class="lt">—</td><td class="lt bad"><b>无法分散对冲，只能靠仓位与现金管理</b></td></tr>
+</table></div>
+
+<div class="callout-bad">
+<b>风险八必须单独强调</b>：行业性利空（容量电价退坡、水电全面市场化竞价、重大安全事故）<b>无法通过组合内分散对冲</b>。这是本方案最大的结构性风险，也是现金维持 14.26% 的核心理由。若无法接受，应使用红利低波 ETF（512890）或宽基替代部分仓位。
+</div>
+
+<h3>7.2 可能失败的四种情形</h3>
+<ol>
+<li><b>火电盈利持续恶化，2026 年度分红大幅下调</b>（H1 华能已 -28.9%、Q2 单季 -51.0%）。</li>
+<li><b>水电来水连续两年偏枯</b>（2026 已发生第一年；2022 年长电发电量 -10.92% 是先例）。</li>
+<li><b>利率快速上行 + 风格切向成长</b>，红利资产遭「戴维斯双杀」。</li>
+<li><b>政策超预期变化</b>（容量电价退坡、水电全面市场化竞价）。</li>
+</ol>
+<p>单种情形出现时组合仍有现金缓冲；<b>若两种以上同时出现，应启动 5.3 第 3 条整体减仓规则。</b></p>
+
+<h2 id="sec-8">八、执行清单与监测仪表盘</h2>
+
+<div class="callout-warn">
+<b>国庆节后消息面更新（2026-10-08 复盘，不影响既定配置与规则）</b>
+<ul>
+<li><b>核电主线强化</b>：谷歌签 20 年核电采购协议（锁定 890 兆瓦供 AI 数据中心）、摩根士丹利称美数据中心 2028 年或面临 32GW 缺口、港股核电逆势上扬——<b>属情绪催化，广核维持 5% 期权仓，不因情绪追高</b>。</li>
+<li><b>三季报前瞻</b>：长江证券《电力行业三季度前瞻》提出「业绩底部明晰、预期反转先行」，10 月下旬三季报是「业绩底」的关键验证点。</li>
+<li><b>海外风险</b>：美股收跌、美联储年底加息共识、霍尔木兹地缘扰动——若节后低开，是按触发价分批建仓的机会，<b>仍不追高</b>。</li>
+</ul>
+</div>
+
+<h3>8.1 未来 12 个月动作时间表</h3>
+<div class="timeline">
+<div class="event critical"><span class="date">2026-11 – 12</span><b>最关键窗口</b>：各省 2027 长协电价公示 → 判断火电收入方向；同步跟踪煤价是否回落。<span class="tag tag-critical">最关键变量</span><br>长协持平或上行，则<b>不等价格触发，直接执行第三批</b>。</div>
+<div class="event"><span class="date">2026-10（立即）</span><b>首批建仓 27,304 元</b>（2–3 个交易日内分笔完成）；剩余资金转入货币基金 / 国债逆回购。<span class="tag tag-monitor">立即执行</span></div>
+<div class="event"><span class="date">2026-10 下旬</span><b>三季报</b>（华能 / 申能扣非净利，核对 5.2 第 4 条）；长电三季度发电量公告（验证来水影响）。<span class="tag tag-monitor">业绩验证</span></div>
+<div class="event upcoming"><span class="date">2026-12 – 2027-01</span><b>长电年度发电量公告</b> → 验证全年业绩与 357 亿利润预测的偏离度。<span class="tag tag-upcoming">业绩验证</span></div>
+<div class="event upcoming"><span class="date">2027-03 – 04</span><b>年报季</b>：分红方案公布 → <b>重算第五章全部止盈价位</b>；执行年度再平衡（偏离 &gt; 8pp 调回）。<span class="tag tag-upcoming">重算止盈</span></div>
+<div class="event upcoming"><span class="date">2027-05 – 06</span><b>分红到账</b> → 决定再投资或留存现金（当年是 1,729 元静态 / 约 1,481 元到账现金）。<span class="tag tag-upcoming">现金到账</span></div>
+<div class="event"><span class="date">全年触发式</span>价格触及加仓 / 止盈价位即执行；触发基本面卖出条件<b>立即执行</b>，不等季度窗口。<span class="tag tag-monitor">触发式</span></div>
+</div>
+
+<h3>8.2 监测仪表盘（每月约 30 分钟核对）</h3>
+<div class="tw"><table>
+<tr><th class="c">优先级</th><th>指标</th><th class="c">频率</th><th>警戒阈值</th></tr>
+<tr><td class="c bad">★★★</td><td class="lt">秦皇岛 5500 大卡动力煤价格</td><td class="c">周</td><td class="lt">&gt; 1,000 元/吨持续 3 个月</td></tr>
+<tr><td class="c bad">★★★</td><td class="lt">各省 2027 年度长协电价</td><td class="c">年（11–12 月）</td><td class="lt">同比再跌 &gt; 5%</td></tr>
+<tr><td class="c bad">★★★</td><td class="lt">长江委来水预测与三峡入库流量</td><td class="c">月</td><td class="lt">连续 2 季度偏枯 &gt; 15%</td></tr>
+<tr><td class="c bad">★★★</td><td class="lt">长江电力季度发电量公告</td><td class="c">季</td><td class="lt">同比跌 &gt; 8%</td></tr>
+<tr><td class="c warn">★★☆</td><td class="lt">10 年期国债收益率</td><td class="c">月</td><td class="lt">上行突破 2.5%</td></tr>
+<tr><td class="c warn">★★☆</td><td class="lt">全社会用电量增速</td><td class="c">月</td><td class="lt">单月增速转负</td></tr>
+<tr><td class="c warn">★★☆</td><td class="lt">个股年度分红方案</td><td class="c">年</td><td class="lt">每股分红同比降 &gt; 10%</td></tr>
+</table></div>
+
+<h3>8.3 每季度三条自检问题</h3>
+<ul class="checklist">
+<li><b>长江电力的 70% 分红承诺是否仍然有效？</b>（整个组合的基石）</li>
+<li><b>持有的每只股票，最新年度分红是否覆盖买入时的假设？</b>（若否，进入卖出评估）</li>
+<li><b>是否有单一标的权重超 30%、直接火电超 25%、穿透火电超 35%？</b>（若有，执行再平衡）</li>
+</ul>
+
+<h2 id="sec-9">九、附录 · 数据来源与口径</h2>
+
+<h3>9.1 数据来源</h3>
+<div class="tw"><table>
+<tr><th>数据类型</th><th>来源</th><th>截止日期</th></tr>
+<tr><td class="lt">个股价格、PE、PB、市值</td><td class="lt">东方财富行情接口、腾讯行情接口（交叉验证）</td><td class="lt">2026-09-30 收盘</td></tr>
+<tr><td class="lt">分红方案与每股分红</td><td class="lt">东方财富数据中心（转载自公司公告）</td><td class="lt">FY2025 已实施</td></tr>
+<tr><td class="lt">长电分红承诺、大股东增持</td><td class="lt">公司公告原文</td><td class="lt">2025-08-15、2026-08-25</td></tr>
+<tr><td class="lt">2026 中报财务数据</td><td class="lt">东方财富数据中心</td><td class="lt">2026-06-30</td></tr>
+<tr><td class="lt">板块指数历史涨跌</td><td class="lt">中证全指电力公用事业指数 H30199（代理口径，价格不含分红）</td><td class="lt">2026-09-30</td></tr>
+<tr><td class="lt">长电来水与目标发电量</td><td class="lt">长江水利委员会、公司公告</td><td class="lt">2026-09</td></tr>
+<tr><td class="lt">10 年国债收益率</td><td class="lt">新华财经《债市日报》</td><td class="lt">2026-09-30</td></tr>
+<tr><td class="lt">动力煤价格</td><td class="lt">新华财经、Mysteel</td><td class="lt">2026-09-30</td></tr>
+<tr><td class="lt">用电量、电改政策</td><td class="lt">国家能源局、中电联、发改价格〔2026〕114 号文、〔2023〕1501 号文</td><td class="lt">2026-07 至 09</td></tr>
+<tr><td class="lt">ETF 规模、费率</td><td class="lt">天天基金网、腾讯行情</td><td class="lt">2026-09-30</td></tr>
+</table></div>
+
+<h3>9.2 数据口径的重要提醒</h3>
+<ol>
+<li><b>静态股息率</b> = FY2025 已实施分红 ÷ 现价，是历史数据，不代表未来。</li>
+<li><b>前瞻股息率（2026E）</b>为本报告基于中报同比增速与历史分红率的推算，属<b>估算值，非公司指引</b>。</li>
+<li><b>估值分位冲突</b>：板块 PB 分位在不同窗口下为 20%（近 5 年）与 45.01%（长期）。<b>本报告采用长期口径</b>，理由见 2.5 节。</li>
+<li><b>已知数据冲突</b>：2026H1 电力板块整体业绩，中国银河样本口径 -18.19% vs 另一口径 -8.87%，差异源于样本范围，<b>本报告采用前者并在此注明</b>。</li>
+<li>本报告未对底层行情数据做公告级独立核验（仅长电分红承诺与大股东增持两项核对原文）。<b>实施交易前，请以交易所与上市公司公告原始数据为准。</b></li>
+</ol>
+
+<div class="callout-warn">
+<b>免责声明</b>：本报告是基于公开信息的研究性分析，用于辅助个人投资决策，<b>不构成任何形式的投资建议、证券买卖推荐或收益承诺</b>。报告中的所有估值判断、价位测算与情景推演均基于特定假设，实际结果可能与假设存在重大差异。证券市场存在本金损失风险，历史业绩不代表未来表现，回测结果不代表实盘收益。投资者应根据自身的风险承受能力、资金性质与投资目标独立决策，并自行承担投资结果。
+</div>
+
+<h4>数据来源与时点</h4>
+<p style="font-size:12.5px;color:#8b949e">个股行情（东方财富 / 腾讯行情接口，2026-09-30 收盘，交叉验证）；分红方案（东方财富数据中心，转载自公司公告，FY2025 已实施）；长电分红承诺与大股东增持（公司公告原文，2025-08-15 / 2026-08-25）；2026 中报财务数据（上市公司 2026 年半年报，合并报表口径）；板块估值（中证全指电力公用事业指数 H30199，2026-09-30）；动力煤价格（新华财经、Mysteel 秦皇岛 Q5500，2026-09-30）；用电量与政策（国家能源局、中电联、发改委价格文件）；10 年国债收益率（新华财经《债市日报》，2026-09-30）；ETF 规模与费率（天天基金网、腾讯行情，2026-09-30）。<br>报告生成时间：2026-10-05。
+</p>
+<script>
+
+(function () {
+  var groups = [document.querySelector('.doc-sidenav'), document.querySelector('.doc-toc')];
+  var targets = [];
+  var map = {};
+  groups.forEach(function (nav) {
+    if (!nav) return;
+    nav.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      var id = a.getAttribute('href').slice(1);
+      if (map[id]) return;
+      var el = document.getElementById(id);
+      if (el) { map[id] = a; targets.push(el); }
+    });
+  });
+  if (!targets.length) return;
+
+  function clear() {
+    Object.keys(map).forEach(function (id) { map[id].classList.remove('is-active'); });
+  }
+  function onScroll() {
+    var best = null, bestTop = -Infinity;
+    for (var i = 0; i < targets.length; i++) {
+      var t = targets[i].getBoundingClientRect().top;
+      if (t <= 140 && t > bestTop) { bestTop = t; best = targets[i]; }
+    }
+    if (!best && targets.length) best = targets[0];
+    if (!best) return;
+    var active = map[best.id];
+    if (!active) return;
+    clear();
+    active.classList.add('is-active');
+    // 同一个 id 在两个目录里各有一个链接，上面只记了第一个
+    var links = document.querySelectorAll('a[href="#' + best.id + '"]');
+    links.forEach(function (a) { a.classList.add('is-active'); });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>
